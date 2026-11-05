@@ -2,8 +2,9 @@
 Which archive site a link or file server belongs to, which sites are switched off, and which
 login cookie may be sent where.
 
-Kemono and Coomer are currently in limbo (mostly not working), so they are switched off: their
-code is kept, and removing an entry from DISABLED_PROVIDERS turns a site back on.
+Kemono and Coomer are not supported. Their identifiers stay because Pawchive reuses Kemono's
+service / creator / post IDs and the general cookie is stored in the "kemono" slot, but every
+Kemono or Coomer link is refused.
 """
 
 from typing import Dict, Optional
@@ -22,13 +23,13 @@ PROVIDER_NAMES = {KEMONO: "Kemono", COOMER: "Coomer", PAWCHIVE: "Pawchive", CUMS
 DISABLED_PROVIDERS: Dict[str, Dict[str, str]] = {
     KEMONO: {
         "alternative": PAWCHIVE,
-        "message": "Kemono isn't working reliably right now, so it's turned off in Pawchive Downloader. "
+        "message": "Kemono links aren't supported. "
                    "Pawchive (pawchive.pw) has the same creators and posts — open the same link on "
                    "pawchive.pw instead.",
     },
     COOMER: {
         "alternative": CUMST,
-        "message": "Coomer isn't working reliably right now, so it's turned off in Pawchive Downloader. "
+        "message": "Coomer links aren't supported. "
                    "Use cum.st instead: it hosts the same kind of creators (OnlyFans, Fansly, CandFans…).",
     },
 }

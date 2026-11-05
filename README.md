@@ -1,5 +1,14 @@
 # Pawchive Downloader
 
+> **About this fork.** Based on [Pawchive Downloader](https://github.com/whyamihere773/Pawchive-Downloader)
+> by whyamihere773 and contributors. Changes in this fork:
+> - a new desktop interface in [`desktop/`](desktop/README.md) — Tauri (Rust) + React, shadcn-style UI with
+>   Lucide icons — that replaces the Qt / QML interface;
+> - the original Python engine runs in the background as a sidecar ([`server/`](server/sidecar.py));
+> - Kemono and Coomer are not supported (their links are refused and they're gone from the UI).
+>
+> The rest of this README describes the original app. The original license applies (see `LICENSE`).
+
 <p align="center">
   <img src="assets/icon.png" alt="Pawchive Downloader Logo" width="96" height="96" />
 </p>

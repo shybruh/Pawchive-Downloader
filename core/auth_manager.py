@@ -492,9 +492,13 @@ class AuthManager:
         }
 
     def get_all_providers_summary(self) -> List[Dict[str, Any]]:
-        """Returns ordered list of summaries for all supported providers."""
+        """Ordered summaries of the account providers people can use (Kemono and Coomer are
+        not supported: their entries stay only as internal storage slots)."""
+        from core.providers import is_disabled
         summaries = []
         for pid in SUPPORTED_PROVIDERS:
+            if is_disabled(pid):
+                continue
             summaries.append(self.get_provider_summary(pid))
         return summaries
 

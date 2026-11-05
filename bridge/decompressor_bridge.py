@@ -975,6 +975,32 @@ class DecompressorBridge(QObject):
                 self.locationsChanged.emit()
             self.scanLocations()
 
+    @Slot(str)
+    def addCustomFolder(self, folder: str):
+        """Add a folder chosen elsewhere (the desktop app's own picker) and re-scan."""
+        if not folder or not os.path.isdir(folder):
+            return
+        norm = os.path.normcase(os.path.normpath(folder))
+        if not any(os.path.normcase(os.path.normpath(c["path"])) == norm for c in self._custom_locations):
+            self._custom_locations.append({
+                "path": folder,
+                "creator": os.path.basename(os.path.normpath(folder)) or "Custom",
+                "source": "custom"
+            })
+            logger.info(f"Added custom folder to decompressor: {folder}", category="decompressor")
+            self.locationsChanged.emit()
+        self.scanLocations()
+
+    @Slot(str)
+    def removeCustomFolder(self, folder: str):
+        """Remove a custom folder by its path."""
+        norm = os.path.normcase(os.path.normpath(folder or ""))
+        before = len(self._custom_locations)
+        self._custom_locations = [c for c in self._custom_locations
+                                  if os.path.normcase(os.path.normpath(c["path"])) != norm]
+        if len(self._custom_locations) != before:
+            self.locationsChanged.emit()
+
     @Slot(int)
     def removeCustomLocation(self, index: int):
         """Remove a custom folder at index."""
