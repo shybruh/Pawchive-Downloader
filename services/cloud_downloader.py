@@ -11,7 +11,6 @@ import base64
 import time
 import zipfile
 import struct
-import hashlib
 from typing import List, Dict, Any, Optional, Callable, Union, Tuple
 from urllib.parse import urlparse, parse_qs
 from threading import Lock, Event
@@ -399,7 +398,7 @@ def download_mega_link(
         return False
 
     session = requests.Session()
-    session.headers.update({'User-Agent': 'Kemono-Downloader/1.0'})
+    session.headers.update({'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'})
 
     folder_match = re.search(r'mega(?:\.co)?\.nz/folder/([a-zA-Z0-9]+)#([a-zA-Z0-9_.-]+)', url)
     file_match = re.search(r'mega(?:\.co)?\.nz/(?:file/|#!)?([a-zA-Z0-9]+)(?:#|!)([a-zA-Z0-9_.-]+)', url)
@@ -939,6 +938,10 @@ def download_dropbox_link(
         return False
 
 
+GOFILE_NEEDS_PREMIUM = ("GoFile only lets apps download with a GoFile Premium account's API token. Add yours in "
+                        "Settings → Accounts, or open the link in your browser.")
+
+
 def download_gofile_link(
     url: str,
     target_folder: str,
@@ -962,33 +965,55 @@ def download_gofile_link(
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
     })
 
+    # GoFile only lets apps read folders through its official API with a Premium account's token
+    # (Settings → Accounts → GoFile). The website's own token is deliberately off limits: GoFile
+    # rotates it and bans IPs that send an old one, so it's never generated here.
+    from core.auth_manager import auth_manager
+    token = auth_manager.get_credential("gofile", "token")
+    if not token:
+        log_func(f"   [GoFile] ❌ {GOFILE_NEEDS_PREMIUM}")
+        return False
+    session.headers["Authorization"] = f"Bearer {token}"
+    session.cookies.set("accountToken", token, domain=".gofile.io")    # the file servers check it
+
     try:
-        log_func("   [GoFile] Requesting guest token...")
-        resp = session.post("https://api.gofile.io/accounts", timeout=20)
-        resp.raise_for_status()
-        token_data = resp.json()
-        if token_data.get("status") != "ok":
-            log_func("   [GoFile] ❌ Failed to get guest token.")
-            return False
+        children, folder_info, page = {}, None, 1
+        while True:
+            res = session.get(f"https://api.gofile.io/contents/{content_id}",
+                              params={"page": page, "pageSize": 1000, "sortField": "createTime", "sortDirection": 1},
+                              timeout=30)
+            try:
+                data = res.json()
+            except ValueError:
+                data = {}
+            status = data.get("status")
+            if status == "error-notPremium":
+                log_func("   [GoFile] ❌ This GoFile account isn't Premium: GoFile only lets apps read folders with a "
+                         "Premium account. Open the link in your browser instead.")
+                return False
+            if status == "error-notFound":
+                log_func("   [GoFile] ❌ This GoFile link doesn't exist (or was deleted).")
+                return False
+            if status == "error-passwordRequired" or status == "error-passwordWrong":
+                log_func("   [GoFile] ❌ This GoFile folder has a password. Open it in your browser.")
+                return False
+            if res.status_code == 401 or status in ("error-auth", "error-token"):
+                log_func("   [GoFile] ❌ GoFile didn't accept your API token. Copy it again from gofile.io/myprofile.")
+                return False
+            if res.status_code != 200 or status != "ok":
+                log_func(f"   [GoFile] ❌ GoFile answered {status or ('HTTP ' + str(res.status_code))}.")
+                return False
+            folder_info = data["data"]
+            if folder_info.get("type") == "file":          # a link to one file
+                children = {folder_info.get("id", content_id): folder_info}
+                break
+            batch = folder_info.get("children", {}) or {}
+            children.update(batch)
+            if len(batch) < 1000:
+                break
+            page += 1
+        folder_info["children"] = children
 
-        token = token_data["data"]["token"]
-        session.headers.update({"Authorization": f"Bearer {token}"})
-
-        user_agent = session.headers.get('User-Agent', 'Mozilla/5.0')
-        lang = "en-US"
-        raw_sig = f"{user_agent}::{lang}::{token}::{int(time.time() / 14400)}::5d4f7g8sd45fsd"
-        wt_token = hashlib.sha256(raw_sig.encode()).hexdigest()
-
-        api_url = f"https://api.gofile.io/contents/{content_id}?cache=true&sortField=createTime&sortDirection=1"
-        res = session.get(api_url, headers={"X-Website-Token": wt_token, "X-BL": lang}, timeout=30)
-        res.raise_for_status()
-        data = res.json()
-
-        if data.get("status") != "ok":
-            log_func(f"   [GoFile] ❌ API error: {data.get('status')}")
-            return False
-
-        folder_info = data["data"]
         files = [c for c in folder_info.get("children", {}).values() if c.get("type") == "file"]
 
         if not files:

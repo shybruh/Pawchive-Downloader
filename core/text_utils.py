@@ -1,7 +1,7 @@
 """
 Text formatting and cleaning utilities.
 Handles mojibake repair, invisible unicode stripping, HTML entity unescaping,
-and filesystem name sanitization across Kemono, Coomer, Bunkr, and third-party providers.
+and filesystem name sanitization across the archive sites, Bunkr and third-party providers.
 """
 import html
 import re

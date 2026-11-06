@@ -28,6 +28,10 @@ function detectSource(url: string): { label: string; tone: "info" | "success" | 
   if (u.includes("bunkr")) return { label: "Bunkr", tone: "secondary" };
   if (u.includes("erome")) return { label: "Erome", tone: "secondary" };
   if (u.includes("nhentai")) return { label: "nHentai", tone: "secondary" };
+  if (u.includes("gofile.io")) return { label: "GoFile", tone: "secondary" };
+  if (/mega\.(nz|co\.nz|io)/.test(u)) return { label: "MEGA", tone: "secondary" };
+  if (/drive\.google\.com|docs\.google\.com|drive\.usercontent\.google\.com/.test(u)) return { label: "Google Drive", tone: "secondary" };
+  if (u.includes("dropbox.com")) return { label: "Dropbox", tone: "secondary" };
   if (/^https?:\/\//.test(u)) return { label: "Link", tone: "secondary" };
   return null;
 }
@@ -120,7 +124,7 @@ function LinkCard() {
         </div>
         {blocked && (
           <Alert tone="destructive" icon={TriangleAlertIcon}>
-            Kemono and Coomer links aren't supported. Pawchive (pawchive.pw) has the same creators and posts — open the link there instead.
+            This site isn't supported. Pawchive (pawchive.pw) has the same creators and posts — open the link there instead.
           </Alert>
         )}
         <div className="flex flex-wrap items-center gap-2">

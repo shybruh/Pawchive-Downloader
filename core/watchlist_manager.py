@@ -1054,9 +1054,9 @@ class WatchlistManager:
         raise_on_error: a page that couldn't be fetched raises instead of ending the list early (the
         creator's updates found earlier are then kept).
         """
-        from core.parser import KemonoURLParser
+        from core.parser import LinkParser
 
-        parsed = KemonoURLParser.parse(entry.url)
+        parsed = LinkParser.parse(entry.url)
         if not parsed.is_valid:
             logger.warning(
                 f"Watchlist: could not parse URL for {entry.creator_name!r}: {entry.url}",

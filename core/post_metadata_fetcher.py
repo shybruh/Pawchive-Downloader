@@ -1,6 +1,6 @@
 """
 Post Metadata Fetcher & Synchronizer
-Fetches full post metadata (captions, descriptions, tags, published dates) from Pawchive / Kemono
+Fetches full post metadata (captions, descriptions, tags, published dates) from Pawchive / cum.st
 APIs for local files and saves them to disk as post_info.txt and post_metadata.json.
 """
 
@@ -177,7 +177,7 @@ class PostMetadataFetcher:
         save_to_documents_subfolder: bool = False
     ) -> Dict[str, Any]:
         """
-        Discovers posts in the specified folder, queries Pawchive / Kemono APIs for each post,
+        Discovers posts in the specified folder, queries Pawchive / cum.st APIs for each post,
         writes post_info.txt and post_metadata.json, and returns details including clean captions.
         """
         results = {

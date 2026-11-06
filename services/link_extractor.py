@@ -113,7 +113,7 @@ class LinkExtractor:
         except Exception:
             return None
 
-        # 7. Ignore internal Kemono / Pawchive / Coomer platform domains
+        # 7. Ignore the archive sites' own domains
         internal_domains = [
             "kemono.cr", "kemono.su", "kemono.party", "coomer.st", "coomer.su", "coomer.party",
             "pawchive.pw", "cum.st", "localhost", "127.0.0.1"
@@ -179,7 +179,7 @@ class LinkExtractor:
         """
         found_urls = set()
 
-        # 1. Check post.embed object (Kemono / Coomer / Pawchive API)
+        # 1. Check post.embed object (archive-site API)
         embed_obj = post.get("embed")
         if isinstance(embed_obj, dict):
             embed_url = embed_obj.get("url") or embed_obj.get("src")
@@ -631,7 +631,7 @@ class LinkExtractor:
         """
         1-Hop Cross-Post Resolver:
         If a post body contains references or links to another post (e.g. pinned master post,
-        rules post, or cross-post on Patreon, Fanbox, Fantia, Boosty, Kemono, Pawchive):
+        rules post, or cross-post on Patreon, Fanbox, Fantia, Boosty, Pawchive):
         Fetches the target post text and comments from OP, and harvests additional credentials.
         """
         if not isinstance(post, dict) or not api_client:
@@ -648,14 +648,14 @@ class LinkExtractor:
         text_to_scan = f"{post.get('content', '') or ''}\n{post.get('description', '') or ''}\n{post.get('caption', '') or ''}"
 
         # Import parser safely
-        from core.parser import KemonoURLParser
+        from core.parser import LinkParser
 
         # Find all URLs mentioned in post text
         urls = re.findall(r'https?://[^\s"\'<>]+', text_to_scan, re.IGNORECASE)
         target_results: List[Dict[str, Any]] = []
 
         for raw_u in urls:
-            parsed = KemonoURLParser.parse(raw_u)
+            parsed = LinkParser.parse(raw_u)
             if not parsed.is_valid:
                 continue
 

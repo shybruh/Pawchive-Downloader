@@ -1991,7 +1991,7 @@ class ArchiveManager:
 
         base_dirs: the download folder(s). Only folders between a download folder and the creator
         folder are franchise / character folders (otherwise the download folder itself, e.g.
-        "KemonoDownloads", was taken for a franchise).
+        "Pawchive", was taken for a franchise).
         """
         bases = [os.path.abspath(b) for b in (base_dirs or []) if b]
         clean_svc = str(service or "").strip().lower()
@@ -2077,7 +2077,7 @@ class ArchiveManager:
                             valid_hierarchy = [
                                 h for h in hierarchy
                                 if not re.match(r"^[a-zA-Z]:$", h)
-                                and h.lower() not in {"downloads", "kemono", "pawchive", "other", "content"}
+                                and h.lower() not in {"downloads", "pawchive", "other", "content"}
                             ]
                             if len(valid_hierarchy) >= 2:
                                 fr = valid_hierarchy[-2]

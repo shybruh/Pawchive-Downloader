@@ -254,7 +254,7 @@ function CollectDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o
           <div className="flex flex-col gap-2">
             <Label>Creator link</Label>
             <Input autoFocus placeholder="https://pawchive.pw/patreon/user/…" value={url} onChange={(e) => setUrl(e.target.value)} className={cn(blocked && "border-destructive/60")} />
-            {blocked && <p className="text-xs text-destructive">Kemono and Coomer links aren't supported.</p>}
+            {blocked && <p className="text-xs text-destructive">This site isn't supported.</p>}
           </div>
           <div className="flex items-end gap-4">
             <div className="flex flex-col gap-2">

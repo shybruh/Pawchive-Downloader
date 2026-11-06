@@ -110,6 +110,24 @@ SUPPORTED_PROVIDERS: Dict[str, Dict[str, Any]] = {
         "supports_browser_import": True,
         "supports_test_connection": True,
         "help_tip": "Log in with your Pawchive username and password, or use 1-Click Browser Import."
+    },
+    "gofile": {
+        "id": "gofile",
+        "name": "GoFile",
+        "domain": "gofile.io",
+        "mirror_domains": ["gofile.io"],
+        "icon": "📁",
+        "category": "Cloud Host",
+        "auth_type": "token",
+        "supports_credentials_login": False,
+        "fields": [
+            {"key": "token", "label": "API token", "placeholder": "From gofile.io/myprofile", "is_secret": True}
+        ],
+        "features": ["Download GoFile links (needs a GoFile Premium account)"],
+        "supports_browser_import": False,
+        "supports_test_connection": True,
+        "help_tip": "GoFile only lets apps read folders with a Premium account's API token (gofile.io/myprofile). "
+                    "Without one, open GoFile links in your browser."
     }
 }
 
@@ -413,6 +431,7 @@ class AuthManager:
             "category": meta["category"],
             "auth_type": meta["auth_type"],
             "supports_credentials_login": bool(meta.get("supports_credentials_login", False)),
+            "help_tip": meta.get("help_tip", "") if meta["auth_type"] == "token" else "",
             "is_logged_in": logged_in,
             "status_text": status_text,
             "status_color": status_color,
@@ -584,6 +603,27 @@ class AuthManager:
             return False, disabled_message(provider_id), {}
         if not self.is_logged_in(provider_id):
             return False, "Not connected. Please log in or import cookies first.", {}
+
+        # GoFile: the official API, with the account's own token
+        if provider_id == "gofile":
+            token = self.get_credential(provider_id, "token")
+            headers = {"Authorization": f"Bearer {token}"}
+            try:
+                r = requests.get("https://api.gofile.io/accounts/getid", headers=headers, timeout=15)
+                data = r.json() if r.headers.get("content-type", "").startswith("application/json") else {}
+                if r.status_code != 200 or data.get("status") != "ok":
+                    return False, "GoFile didn't accept this token. Copy it again from gofile.io/myprofile.", {}
+                acc_id = data["data"]["id"]
+                r = requests.get(f"https://api.gofile.io/accounts/{acc_id}", headers=headers, timeout=15)
+                info = (r.json() or {}).get("data", {}) if r.status_code == 200 else {}
+                tier = str(info.get("tier", "")).lower()
+                self.set_credential(provider_id, {"last_verified": int(time.time())})
+                if tier == "premium":
+                    return True, "GoFile Premium token works: GoFile links will download.", {"tier": tier}
+                return False, (f"This GoFile account is {tier or 'not Premium'}. GoFile only lets apps read folders "
+                               "with a Premium account; open GoFile links in your browser instead."), {"tier": tier}
+            except Exception as e:
+                return False, f"Couldn't reach GoFile: {e}", {}
 
         # 2. Pawchive
         if provider_id == "pawchive":

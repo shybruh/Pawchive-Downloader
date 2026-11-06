@@ -53,10 +53,9 @@ def _provider(e) -> str:
     dom = (getattr(e, "domain", "") or "").lower()
     if "cum.st" in dom or "cumst" in dom:
         return "cumst"
-    if "coomer" in dom:
-        return "coomer"
-    if "kemono" in dom:
-        return "kemono"
+    from core.providers import is_disabled
+    if is_disabled(dom):
+        return "unsupported"
     return "pawchive"
 
 

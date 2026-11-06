@@ -24,9 +24,9 @@ like a modern app.
   sidebar layout, light and dark themes, and layouts that fit any window size without overflowing.
 - **The engine runs as a background process** (`server/`): the Rust shell starts it, talks to it over a local,
   token-protected connection, and shuts the whole process tree down with the app.
-- **Kemono and Coomer are gone**: their links are refused and they no longer appear anywhere in the app. Use
-  Pawchive (same creators and IDs as Kemono) or cum.st instead. Kemono creators in the Watchlist can be moved to
-  Pawchive in one click.
+- **Pawchive and cum.st**, plus Telegram, Bunkr, Erome, nHentai and cloud links (GoFile, MEGA, Google Drive,
+  Dropbox). Links from unsupported archive sites are refused with a pointer to Pawchive or cum.st, and Watchlist
+  creators from them can be moved to Pawchive in one click.
 - **Feels like an app, not a web page**: no browser right-click menu or browser shortcuts; text fields get their own
   Cut / Copy / Paste menu.
 

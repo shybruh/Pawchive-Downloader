@@ -320,7 +320,7 @@ class QueueGroupsModel(QAbstractListModel):
                     "batchId": bid,
                     "creatorName": t.creator_name or "Unknown Creator",
                     "postTitle": post_title,
-                    "service": t.service or "kemono",
+                    "service": t.service or "",
                     "postId": t.post_id or "",
                 })
             lst.append(t)
@@ -409,7 +409,7 @@ class QueueGroupsModel(QAbstractListModel):
                     "batchId": bid,
                     "creatorName": sample_t.creator_name or "Unknown Creator",
                     "postTitle": post_title,
-                    "service": sample_t.service or "kemono",
+                    "service": sample_t.service or "",
                     "postId": sample_t.post_id or "",
                 }
                 new_groups_to_insert.append((bid, g, b_tasks))
@@ -471,7 +471,7 @@ class QueueGroupsModel(QAbstractListModel):
                 "batchId": bid,
                 "creatorName": task.creator_name or "Unknown Creator",
                 "postTitle": post_title,
-                "service": task.service or "kemono",
+                "service": task.service or "",
                 "postId": task.post_id or "",
             }
             self._calc_group_stats(g, self._tasks_by_id[bid])

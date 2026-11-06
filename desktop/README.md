@@ -2,7 +2,7 @@
 
 > Based on [Pawchive Downloader](https://github.com/whyamihere773/Pawchive-Downloader). This fork replaces
 > the Qt / QML interface with a Tauri + React one, keeps the original Python engine running in the
-> background, and drops Kemono and Coomer support. See the root `LICENSE`.
+> background. See the root `LICENSE`.
 
 A small Rust shell (Tauri) starts the existing Python engine in the background, and the React UI
 talks to it over a local WebSocket.
@@ -96,7 +96,7 @@ For a local build, run `python build_desktop.py` from the repository root (see t
 |---|---|
 | Downloader | link + source detection, folder and pages, file types, filters & options, post picker, session, live log |
 | Queue | by post (pause / resume / retry / remove a post) or by file, status filters, import / export |
-| Watchlist | search, filters, check now / on startup, download new posts, favorites, Kemono → Pawchive switch |
+| Watchlist | search, filters, check now / on startup, download new posts, favorites, move unsupported-site creators to Pawchive |
 | Activity log | live, searchable, filter by level, export |
 | Gallery | places & drives, breadcrumbs, grid / list, thumbnails, multi-select, rename / move / delete (Recycle Bin) with undo, new folder, search inside subfolders, duplicate finder, image viewer and video player |
 | History, Known series | ✓ |

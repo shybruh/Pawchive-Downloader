@@ -44,8 +44,9 @@ export function WatchlistView() {
   useSignal("appBridge", "watchlistCheckStarted", () => setChecking(true));
   useSignal("appBridge", "watchlistCheckFinished", () => setChecking(false));
 
-  const { data: kemonoCount, reload: reloadKemono } = useQuery<number>("appBridge", "kemonoWatchlistCount");
-  useSignal("appBridge", "watchlistChanged", () => reloadKemono());
+  // Creators on an unsupported site that Pawchive also has (same IDs)
+  const { data: movableCount, reload: reloadMovable } = useQuery<number>("appBridge", "movableWatchlistCount");
+  useSignal("appBridge", "watchlistChanged", () => reloadMovable());
 
   return (
     <>
@@ -83,7 +84,7 @@ export function WatchlistView() {
         ]} />
       </PageHeader>
 
-      {(updated > 0 || (kemonoCount ?? 0) > 0) && (
+      {(updated > 0 || (movableCount ?? 0) > 0) && (
         <div className="flex flex-col gap-2 px-6 pt-4">
           {updated > 0 && (
             <Alert tone="info" icon={BellRingIcon}
@@ -91,10 +92,10 @@ export function WatchlistView() {
               {newPosts} new post{newPosts === 1 ? "" : "s"} from {updated} creator{updated === 1 ? "" : "s"}.
             </Alert>
           )}
-          {(kemonoCount ?? 0) > 0 && (
+          {(movableCount ?? 0) > 0 && (
             <Alert tone="warning" icon={TriangleAlertIcon}
-              action={<Button size="xs" variant="outline" onClick={async () => { await call("appBridge", "switchWatchlistToPawchive"); reloadKemono(); }}>Switch to Pawchive</Button>}>
-              {kemonoCount} creator{kemonoCount === 1 ? " uses" : "s use"} Kemono, which isn't supported. Pawchive has the same creators.
+              action={<Button size="xs" variant="outline" onClick={async () => { await call("appBridge", "switchWatchlistToPawchive"); reloadMovable(); }}>Switch to Pawchive</Button>}>
+              {movableCount} creator{movableCount === 1 ? " is" : "s are"} on a site that isn't supported. Pawchive has the same creators.
             </Alert>
           )}
         </div>
@@ -180,7 +181,7 @@ function AddDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o: bo
           <Label htmlFor="wl-url">Creator link</Label>
           <Input id="wl-url" autoFocus placeholder="https://pawchive.pw/patreon/user/…" value={url} onChange={(e) => setUrl(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter" && url.trim() && !blocked) submit(); }} className={cn(blocked && "border-destructive/60")} />
-          {blocked && <p className="text-xs text-destructive">Kemono and Coomer links aren't supported.</p>}
+          {blocked && <p className="text-xs text-destructive">This site isn't supported.</p>}
         </div>
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>

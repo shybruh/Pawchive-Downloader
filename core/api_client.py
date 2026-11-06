@@ -1,6 +1,6 @@
 """
 API Client & Network Engine
-Handles communication with Kemono, Pawchive, Coomer, and Cum.st REST endpoints
+Handles communication with the Pawchive and cum.st REST endpoints
 with exponential backoff, rate limiting recovery, and diagnostic logging.
 """
 
@@ -45,7 +45,7 @@ except ImportError:
     except ImportError:
         _ACCEPT_ENCODING = "gzip, deflate"
 
-# Services that live on Coomer / cum.st rather than Kemono / Pawchive
+# Services that live on cum.st rather than Pawchive
 _CUMST_SERVICES = {"onlyfans", "fansly", "candfans"}
 
 
@@ -92,9 +92,9 @@ HTTP_STATUS_HINTS = {
 }
 
 
-class KemonoApiClient:
+class ApiClient:
     """
-    HTTP REST Client for Kemono / Pawchive / Coomer APIs.
+    HTTP REST client for the Pawchive and cum.st APIs.
     Features: automatic retries with exponential backoff, rate-limiting,
     Cloudflare-aware headers, cookie injection, and rich diagnostic logging.
     """
@@ -102,7 +102,7 @@ class KemonoApiClient:
     DEFAULT_USER_AGENT = (
         "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
         "AppleWebKit/537.36 (KHTML, like Gecko) "
-        "Chrome/124.0.0.0 Safari/537.36 KemonoSuite/2.0"
+        "Chrome/124.0.0.0 Safari/537.36"
     )
 
     def __init__(self, cookie_string: str = "", custom_user_agent: str = "", proxy_url: str = ""):
@@ -184,17 +184,9 @@ class KemonoApiClient:
             sess.headers.pop("Cookie", None)
             sess.headers.update(headers)
 
-    @staticmethod
-    def is_kemono_family(domain_or_url: str) -> bool:
-        """Kemono / Coomer run the same software (new API path rules and the text/css header)."""
-        d = (domain_or_url or "").lower()
-        return "kemono." in d or "coomer." in d
-
     @classmethod
     def posts_list_url(cls, domain: str, service: str, user_id: str, offset: int) -> str:
-        """A creator's post list. Kemono / Coomer moved it to /posts (the old path answers 404)."""
-        if cls.is_kemono_family(domain):
-            return f"https://{domain}/api/v1/{service}/user/{user_id}/posts?o={offset}"
+        """A creator's post list."""
         return f"https://{domain}/api/v1/{service}/user/{user_id}?o={offset}"
 
     def _get_with_log(self, url: str, timeout: int = 20, extra_headers: dict = None,
@@ -213,9 +205,6 @@ class KemonoApiClient:
         cookie = cookie_for_url(url, self.cookie_string)
         if cookie:
             req_headers["Cookie"] = cookie
-        # Kemono / Coomer refuse API calls (HTTP 403) unless they ask for "text/css"
-        if "/api/" in url and self.is_kemono_family(url.split("://")[-1].split("/")[0]):
-            req_headers["Accept"] = "text/css"
         if extra_headers:
             req_headers.update(extra_headers)
 
@@ -273,7 +262,7 @@ class KemonoApiClient:
     # ── API Methods ───────────────────────────────────────────────────────────
 
     def _extract_creator_from_html(self, html_text: str, user_id: str) -> Optional[str]:
-        """Extract creator display name from Kemono/Pawchive/Coomer HTML page metadata."""
+        """Extract creator display name from the site's HTML page metadata."""
         if not html_text:
             return None
         import re
@@ -1394,7 +1383,7 @@ class KemonoApiClient:
         cancel_event: Optional[threading.Event] = None
     ) -> List[Dict[str, Any]]:
         """
-        Fetches authenticated user favorites (posts or artists) from Kemono/Coomer/Pawchive/cum.st favorites API.
+        Fetches authenticated user favorites (posts or artists) from Pawchive / cum.st favorites API.
         Endpoint: https://{domain}/api/v1/favorites?type={fav_type}&o={offset}
         """
         # The account cookie for this site is attached per request (core.providers.cookie_for_url)

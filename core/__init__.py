@@ -1,1 +1,1 @@
-# Core package for Kemono / Pawchive Downloader
+# Core package for Pawchive Downloader

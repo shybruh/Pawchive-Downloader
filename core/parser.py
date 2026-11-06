@@ -1,7 +1,7 @@
 """
 URL Parsing Engine
 Decodes and validates creator URLs, single posts, and third-party media endpoints
-across Kemono, Coomer, Pawchive, Cum.st, Bunkr, Erome, and nHentai.
+across Pawchive, cum.st, Telegram, Bunkr, Erome and nHentai.
 """
 
 import re
@@ -9,17 +9,14 @@ from urllib.parse import urlparse
 from typing import Optional, Dict, Any
 
 
-# Current Kemono / Coomer domains. The old kemono.su / coomer.su / .party addresses no longer
-# resolve, so every Kemono / Coomer link is normalised to these.
-KEMONO_DOMAIN = "kemono.cr"
-COOMER_DOMAIN = "coomer.st"
-
-
 def _canonical_archive_domain(domain: str) -> str:
-    """The domain to use for an archive site link, or '' if the domain isn't one of them."""
-    from core.providers import provider_for_host, KEMONO, COOMER, PAWCHIVE, CUMST
-    return {KEMONO: KEMONO_DOMAIN, COOMER: COOMER_DOMAIN, PAWCHIVE: "pawchive.pw", CUMST: "cum.st"}.get(
-        provider_for_host(domain), "")
+    """The domain to use for an archive site link, or '' if the domain isn't one of them. Links to
+    the unsupported sites keep their own domain (they're refused right after)."""
+    from core.providers import provider_for_host, PAWCHIVE, CUMST
+    p = provider_for_host(domain)
+    if not p:
+        return ""
+    return {PAWCHIVE: "pawchive.pw", CUMST: "cum.st"}.get(p, (domain or "").lower())
 
 
 class URLParseResult:
@@ -32,7 +29,7 @@ class URLParseResult:
         raw_url: str = "",
         is_valid: bool = True,
         error_msg: str = "",
-        provider: str = "kemono",
+        provider: str = "archive",
         extra_data: Optional[Dict[str, Any]] = None
     ):
         self.domain = domain
@@ -53,7 +50,7 @@ class URLParseResult:
 
     @property
     def is_external_provider(self) -> bool:
-        return self.provider != "kemono"
+        return self.provider != "archive"
 
     @property
     def api_base_url(self) -> str:
@@ -88,8 +85,8 @@ class URLParseResult:
         }
 
 
-class KemonoURLParser:
-    KEMONO_PATTERN = re.compile(
+class LinkParser:
+    ARCHIVE_PATTERN = re.compile(
         r"https?://(?:www\.)?([^/]+)/([^/]+)/user/([^/?#]+)(?:/(?:post|posts|dm|dms)(?:/([^/?#]+))?)?",
         re.IGNORECASE
     )
@@ -316,8 +313,8 @@ class KemonoURLParser:
                 provider="erome"
             )
 
-        # Kemono-style links (/{service}/user/{id}) — only on the archive sites themselves
-        match = cls.KEMONO_PATTERN.match(url)
+        # Archive-site links (/{service}/user/{id}) — only on the archive sites themselves
+        match = cls.ARCHIVE_PATTERN.match(url)
         if match and not _canonical_archive_domain(match.group(1)):
             match = None
         if not match:
@@ -338,7 +335,7 @@ class KemonoURLParser:
                     post_id=post_id,
                     raw_url=url,
                     is_valid=True,
-                    provider="kemono"
+                    provider="archive"
                 )
 
         if match:
@@ -361,7 +358,7 @@ class KemonoURLParser:
                 post_id=post_id,
                 raw_url=url,
                 is_valid=True,
-                provider="kemono",
+                provider="archive",
                 extra_data=extra_data
             )
 
@@ -444,5 +441,5 @@ class KemonoURLParser:
             "", "", "",
             raw_url=url,
             is_valid=False,
-            error_msg="URL does not match supported formats (Kemono, Pawchive, Coomer, Cum.st, Bunkr, Erome, nHentai, Patreon, Fanbox)."
+            error_msg="Not a supported link (Pawchive, cum.st, Telegram, Bunkr, Erome, nHentai, GoFile, MEGA, Google Drive or Dropbox)."
         )

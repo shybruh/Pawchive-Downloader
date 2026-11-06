@@ -33,7 +33,7 @@ marks, AI tagging, storage breakdown.
 | Python workarounds | `memory_collector`, `hang_detector` |
 | The Qt / QML interface | `qml/`, `main.py`, `updater.py`, the old build script and PyInstaller specs |
 | Translations | `locales/` (15 languages + tutorials), `translation_manager`, the Language setting; the interface is English-only |
-| Kemono / Coomer fallbacks | mirror and file-server fallbacks, metadata fallbacks, a `Referer: kemono.cr` header sent to every other host |
+| Unsupported archive sites | their mirror, file-server and metadata fallbacks, a `Referer` header for them sent to every other host, their accounts and every mention in the interface |
 | Qt Quick / QML in the engine | the thumbnail code no longer uses QML image providers; the packaged engine leaves out Qt Quick, QML, PDF, OpenGL and other unused Qt modules (486 MB → 124 MB) |
 | Upstream repo files | `SECURITY.md`, `.github/FUNDING.yml` |
 
@@ -88,6 +88,6 @@ directly as Tauri commands.
   filter) were deleted first.
 - Browser cookie import only works with Firefox: Chrome, Edge and Brave encrypt cookies with
   app-bound keys. Signing in inside the app (`src-tauri/src/site_login.rs`) is the main way to log in.
-- Kemono / Coomer names remain only where they're harmless: link recognition (so their links are
-  refused with a clear message), the "kemono" credential slot that stores the general cookie, and
-  internal class names. Drop them in the Rust version.
+- The unsupported archive sites' domains appear only where they must: recognising their links (to
+  refuse them with a pointer to Pawchive / cum.st), migrating an old saved login, and mapping old
+  image links in post text to Pawchive.

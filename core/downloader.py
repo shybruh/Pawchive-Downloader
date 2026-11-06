@@ -40,7 +40,7 @@ from core.archive_manager import ArchiveManager
 from core.bandwidth_limiter import bandwidth_limiter
 from core.video_probe import VideoProbe
 
-# Services hosted on Coomer rather than Kemono (used to pick the right mirror for Pawchive files)
+# Services hosted on cum.st rather than Pawchive
 
 
 # Sites that embed Vimeo players: domain-locked embeds only play for the creator's own site
@@ -443,7 +443,7 @@ class DownloadTask:
         return t
 
 
-class KemonoDownloader:
+class FileDownloader:
     """
     Multi-threaded, resumable download engine with progress telemetry,
     smart 429 rate limit backoff, adaptive thread throttling, and yt-dlp embedded media support.
@@ -574,7 +574,7 @@ class KemonoDownloader:
         except Exception:
             pass
 
-        # 2. Instantly abort all active multipart downloads (Bunkr, Kemono, Coomer, Erome, etc.)
+        # 2. Instantly abort all active multipart downloads (Bunkr, Pawchive, cum.st, Erome, etc.)
         try:
             from services.multipart_downloader import cancel_all_multipart
             cancel_all_multipart()
@@ -1754,7 +1754,7 @@ class KemonoDownloader:
                             if is_thumbnail_url and original_url and original_url not in candidate_urls:
                                 candidate_urls.append(f"{original_url}?f={_fq(sanitized_name)}")
 
-                # Kemono / Coomer are never contacted
+                # Unsupported sites are never contacted
                 candidate_urls = [u for u in candidate_urls if not is_disabled(u)]
                 file_url = candidate_urls[0] if candidate_urls else f"https://file.pawchive.pw/data{clean_rel}?f={_fq(sanitized_name)}"
                 target_dest_dir = _get_dest_folder(sanitized_name)
@@ -3398,7 +3398,7 @@ class KemonoDownloader:
                 )
         resumed = existing_size > 0
 
-        # Switched-off sites (Kemono / Coomer) are skipped, also for files queued before
+        # Unsupported sites are skipped, also for files queued before
         # Automatically migrate any legacy e1.cum.st URLs to the modern cdn.cum.st endpoint
         raw_urls = [task.url] + list(task.fallback_urls)
         all_urls = [
@@ -3798,7 +3798,7 @@ class KemonoDownloader:
                         if task.file_size > 0:
                             spd_bps = max(0.0, bytes_diff / max(0.1, dt_poll))
                             task.speed_bps = int(spd_bps)
-                            task.speed_str = KemonoDownloader.format_speed(task.speed_bps)
+                            task.speed_str = FileDownloader.format_speed(task.speed_bps)
                             if task.speed_bps > 0:
                                 rem = max(0, task.file_size - curr_bytes)
                                 s = int(rem / task.speed_bps)
@@ -4012,7 +4012,7 @@ class KemonoDownloader:
                         delta_speed = now - last_speed_time
                         if delta_speed >= 0.5:
                             task.speed_bps = int(bytes_since_speed / delta_speed)
-                            task.speed_str = KemonoDownloader.format_speed(task.speed_bps)
+                            task.speed_str = FileDownloader.format_speed(task.speed_bps)
                             if task.file_size > 0:
                                 rem_bytes = max(0, task.file_size - task.downloaded_bytes)
                                 task.progress_pct = int(task.downloaded_bytes / task.file_size * 100)
@@ -4173,7 +4173,7 @@ class KemonoDownloader:
         """
         path = path or task.target_path
         raw_hash = (task.expected_sha256 or "").strip().lower()
-        # Kemono / Pawchive / Coomer file names are the content's SHA-256: the most reliable hash
+        # Pawchive / cum.st file names are the content's SHA-256: the most reliable hash
         url_hash = content_hash_from_url(task.url)
         if url_hash:
             raw_hash = url_hash

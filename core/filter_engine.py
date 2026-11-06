@@ -1033,7 +1033,7 @@ class FilterEngine:
     ) -> Tuple[str, str]:
         """
         Extract clean post title and caption text from post metadata dictionary.
-        Supports standard kemono/coomer fields, cum.st (caption/captionHtml), and
+        Supports the archive-site fields, cum.st (caption/captionHtml), and
         Fansly/OnlyFans (captionText, content, text).
         If the post has no explicit title (or title is null/empty/generic), falls back
         to the caption / content text.

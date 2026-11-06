@@ -142,9 +142,9 @@ class GalleryUpdates(QObject):
     # ── Which creator is this folder? ───────────────────────────────────────
     @staticmethod
     def _parse(url: str):
-        from core.parser import KemonoURLParser
-        parsed = KemonoURLParser.parse((url or "").strip())
-        if not parsed.is_valid or parsed.provider != "kemono" or not parsed.user_id or parsed.post_id:
+        from core.parser import LinkParser
+        parsed = LinkParser.parse((url or "").strip())
+        if not parsed.is_valid or parsed.provider != "archive" or not parsed.user_id or parsed.post_id:
             return None
         return parsed
 

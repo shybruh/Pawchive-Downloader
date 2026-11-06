@@ -180,7 +180,7 @@ function ScheduleForm({ initial, onClose }: { initial: Schedule | null; onClose:
           {target === "creator" && (
             <>
               <Input placeholder="https://pawchive.pw/patreon/user/…" value={url} onChange={(e) => setUrl(e.target.value)} className={cn(blocked && "border-destructive/60")} />
-              {blocked && <p className="text-xs text-destructive">Kemono and Coomer links aren't supported.</p>}
+              {blocked && <p className="text-xs text-destructive">This site isn't supported.</p>}
             </>
           )}
         </div>

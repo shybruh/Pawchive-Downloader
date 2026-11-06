@@ -268,6 +268,7 @@ function ProviderCard({ p }: { p: Provider }) {
           {connected ? <Badge variant="success"><CircleCheckIcon />{p.status_text || "Connected"}</Badge> : <Badge variant="outline">Not connected</Badge>}
         </CardTitle>
         <CardDescription>{p.domain || p.category}</CardDescription>
+        {p.help_tip && <p className="text-xs text-muted-foreground">{p.help_tip}</p>}
       </CardHeader>
       {p.id !== "telegram" && (
         <CardContent className="flex flex-col gap-3">
@@ -404,7 +405,7 @@ function AboutSection() {
           <p>
             Based on <button className="font-medium underline underline-offset-4" onClick={() => openExternal(UPSTREAM)}>Pawchive Downloader</button> by
             whyamihere773 and contributors. This version replaces the original Qt / QML interface with a new Tauri + React
-            interface, runs the original Python engine in the background, and drops Kemono and Coomer support.
+            interface and runs the original Python engine in the background.
           </p>
           <p className="text-muted-foreground">
             The original project credits Yuvi9587's Kemono Downloader as its inspiration. It's shared under a custom

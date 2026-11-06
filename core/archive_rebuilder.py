@@ -33,7 +33,7 @@ IGNORED_DIRNAMES = {
 
 KNOWN_SERVICES = {
     "patreon", "fanbox", "fantia", "subscribestar", "boosty",
-    "gumroad", "discord", "dlsite", "afdian", "bunkr", "coomer", "kemono"
+    "gumroad", "discord", "dlsite", "afdian", "bunkr"
 }
 
 
@@ -356,7 +356,7 @@ class ArchiveRebuilder:
 
             # DEDUCE METADATA
             meta = self._deduce_metadata(file_path, dir_meta_cache, file_meta_cache)
-            service = meta.get("service") or "kemono"
+            service = meta.get("service") or "unknown"
             creator_id = meta.get("creator_id") or ""
             creator_name = meta.get("creator_name") or "Unknown Creator"
             post_id = meta.get("post_id") or ""
@@ -388,7 +388,7 @@ class ArchiveRebuilder:
                 except OSError:
                     file_hash = ""
 
-            # Standard Kemono attachment ID convention: use hash or fallback to clean filename
+            # Archive-site attachment ID convention: use hash or fallback to clean filename
             file_id = file_hash if file_hash else re.sub(r"[^\w\-.]", "_", fn)
 
             # Check if duplicate in archive
@@ -505,7 +505,7 @@ class ArchiveRebuilder:
             post_id = id_match.group(1)
 
         # Check if creator folder or higher folder has a service hint, e.g. "Patreon"
-        service = "kemono"
+        service = "unknown"
         creator_name = creator_folder_name or "Unknown Creator"
 
         for part in file_path.replace("\\", "/").split("/"):
@@ -538,7 +538,7 @@ class ArchiveRebuilder:
                 params = []
                 for r in records:
                     params.append((
-                        r.get("service", "kemono").lower(),
+                        r.get("service", "unknown").lower(),
                         str(r.get("creator_id", "")),
                         str(r.get("creator_name", "")),
                         str(r.get("post_id", "")),

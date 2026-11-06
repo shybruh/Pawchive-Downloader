@@ -15,7 +15,7 @@ from PySide6.QtCore import QObject, Property, Qt, QUrl, Signal, Slot
 
 from bridge.archive_creators_model import RecordListModel
 from core.logger import logger
-from core.parser import KemonoURLParser
+from core.parser import LinkParser
 from core.text_utils import clean_text
 from services.link_extractor import LinkExtractor
 
@@ -211,7 +211,7 @@ class LinkVaultBridge(QObject):
             self.changed.emit()
             api = self._app.api_client
             try:
-                parsed = KemonoURLParser.parse(clean_url)
+                parsed = LinkParser.parse(clean_url)
                 if not parsed.is_valid:
                     logger.error(f"Link vault: not a creator link: '{clean_url}'", category="vault")
                     self.harvestFinished.emit(False, "Invalid URL", 0, 0)

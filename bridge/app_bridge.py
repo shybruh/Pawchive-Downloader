@@ -53,11 +53,11 @@ def watchlist_cutoff(done_posts, unfinished_posts):
     day_ids = sorted({p for d, p in done if d == newest_date and p})
     return newest_pid, newest_date, day_ids
 from core.logger import logger
-from core.parser import KemonoURLParser, URLParseResult
+from core.parser import LinkParser, URLParseResult
 from core.filter_engine import FilterEngine, FilterOptions, FILTER_PROFILES, REMOVE_WORDS_PROFILES
 from core.file_order import normalize_file_order
-from core.api_client import KemonoApiClient
-from core.downloader import KemonoDownloader, DownloadTask, is_permanent_failure
+from core.api_client import ApiClient
+from core.downloader import FileDownloader, DownloadTask, is_permanent_failure
 from core.cloud_links import cloud_platform, PLATFORM_NAMES
 from core.session_manager import SessionManager
 from core.known_manager import KnownManager
@@ -252,7 +252,7 @@ class AppBridge(QObject):
     # Slow folder scans run in the background; QML gets the answer here: (request id, result)
     asyncResultReady = Signal(str, 'QVariant')
     _callOnGui = Signal(object)      # a function to run on the window thread (from background jobs)
-    # A switched-off site (Kemono / Coomer) was used: (message, same link on the replacement site or "", context)
+    # An unsupported site was used: (message, same link on the replacement site or "", context)
     providerDisabled = Signal(str, str, str)
 
     def __init__(self, parent=None):
@@ -273,13 +273,13 @@ class AppBridge(QObject):
             enabled=self._enable_download_archive
         )
         self.archive_manager.on_repair_finished = self._on_archive_repaired
-        self.downloader = KemonoDownloader(
+        self.downloader = FileDownloader(
             known_manager=self.known_manager,
             session_manager=self.session_manager,
             max_workers=4,
             archive_manager=self.archive_manager
         )
-        self.api_client = KemonoApiClient()
+        self.api_client = ApiClient()
 
         # Models
         self._log_model = LogModel(self)
@@ -574,7 +574,7 @@ class AppBridge(QObject):
 
             val_clean = val.strip()
             if val_clean:
-                parsed = KemonoURLParser.parse(val_clean)
+                parsed = LinkParser.parse(val_clean)
                 if parsed.is_valid:
                     initial_name = parsed.user_id if parsed.user_id not in ("bunkr_user", "erome_user") else parsed.domain
                     self._creator_name = initial_name
@@ -599,7 +599,7 @@ class AppBridge(QObject):
         if url:
             if re.search(r'(?:https?://)?(?:www\.)?(?:t(?:elegram)?\.(?:me|dog)|telegram\.org)/', url, re.I) or url.startswith("tg://"):
                 return True
-            parsed = KemonoURLParser.parse(url)
+            parsed = LinkParser.parse(url)
             if parsed.is_valid and parsed.provider == "telegram":
                 return True
         if hasattr(self, "downloader") and self.downloader.tasks:
@@ -1919,9 +1919,17 @@ class AppBridge(QObject):
         """
         url_input = (self._current_url or "").strip()
 
+        cloud = [u for u in url_input.replace(",", "\n").split() if cloud_platform(u)]
+        if cloud and len(cloud) == len(url_input.replace(",", "\n").split()):
+            # GoFile / MEGA / Google Drive / Dropbox links download straight from their host
+            self._current_url = ""
+            self.currentUrlChanged.emit()
+            self.startCloudDownloads(cloud, "")
+            return
+
         if self._is_downloading:
             if url_input:
-                parsed_cur = KemonoURLParser.parse(url_input)
+                parsed_cur = LinkParser.parse(url_input)
                 if not parsed_cur.is_valid:
                     logger.error(f"Invalid URL: {parsed_cur.error_msg} ({url_input})", category="parser")
                     return
@@ -1956,7 +1964,7 @@ class AppBridge(QObject):
         url_is_already_queued = False
         parsed_current = None
         if url_input:
-            parsed_current = KemonoURLParser.parse(url_input)
+            parsed_current = LinkParser.parse(url_input)
             if parsed_current.is_valid and self._refuse_if_disabled(url_input):
                 return
             if parsed_current.is_valid:
@@ -2117,13 +2125,22 @@ class AppBridge(QObject):
             logger.warning("Please enter a URL to add to queue.", category="parser")
             return
 
+        cloud = [u for u in raw_urls if cloud_platform(u)]
+        if cloud:
+            self.startCloudDownloads(cloud, "")     # cloud links download straight from their host
+            raw_urls = [u for u in raw_urls if not cloud_platform(u)]
+            if not raw_urls:
+                self._current_url = ""
+                self.currentUrlChanged.emit()
+                return
+
         self._scan_cancel_event.clear()
 
         def _batch_queue_worker():
             for u in raw_urls:
                 if self._scan_cancel_event.is_set():
                     break
-                parsed = KemonoURLParser.parse(u)
+                parsed = LinkParser.parse(u)
                 if not parsed.is_valid:
                     logger.error(f"Invalid URL: {parsed.error_msg} ({u})", category="parser")
                     continue
@@ -2390,7 +2407,10 @@ class AppBridge(QObject):
             self.postSelectionError.emit("Please enter a creator or post URL first.")
             return
 
-        parsed = KemonoURLParser.parse(url_input)
+        if cloud_platform(url_input):
+            self.postSelectionError.emit("GoFile, MEGA, Google Drive and Dropbox links have no posts to choose from: use Download.")
+            return
+        parsed = LinkParser.parse(url_input)
         if not parsed.is_valid:
             self.postSelectionError.emit(parsed.error_msg or "Invalid URL")
             return
@@ -2628,7 +2648,7 @@ class AppBridge(QObject):
                     if f and isinstance(f, dict) and (f.get("path") or f.get("storageKey")):
                         mf_name = f.get("name") or os.path.basename(f.get("path", "") or "main_file")
                         mf_path = f.get("path") or ""
-                        mf_key = KemonoDownloader.extract_norm_rel_key(f) or mf_path.lower()
+                        mf_key = FileDownloader.extract_norm_rel_key(f) or mf_path.lower()
                         if mf_key:
                             seen_selection_keys.add(mf_key)
                         mf_thumb = ""
@@ -2654,9 +2674,9 @@ class AppBridge(QObject):
                     # 2. Attachments
                     for att in p.get("attachments", []) or []:
                         if isinstance(att, dict) and (att.get("path") or att.get("storageKey")):
-                            att_key = KemonoDownloader.extract_norm_rel_key(att) or (att.get("path") or "").lower()
+                            att_key = FileDownloader.extract_norm_rel_key(att) or (att.get("path") or "").lower()
                             if att_key and att_key in seen_selection_keys:
-                                # Identical file already listed from post.file (Kemono API schema duplicate)
+                                # Identical file already listed from post.file (the API lists it twice)
                                 att_name = att.get("name") or os.path.basename(att.get("path", "") or "")
                                 if att_name and not att_name.lower().startswith("cover") and not att_name.lower().startswith("preview") and post_files:
                                     if post_files[0].get("is_main"):
@@ -2808,7 +2828,7 @@ class AppBridge(QObject):
         creator_name = clean_text(channel_title) or "Telegram Channel"
         self._selection_cached_posts = list(messages)
         parsed_url = raw_url or (self._current_url or "")
-        self._selection_parsed = KemonoURLParser.parse(parsed_url)
+        self._selection_parsed = LinkParser.parse(parsed_url)
         self._selection_creator_name = creator_name
 
         cards = []
@@ -3121,7 +3141,7 @@ class AppBridge(QObject):
                 self.creatorNameChanged.emit()
 
             else:
-                # ── Standard Kemono / Coomer / Pawchive Provider ───────────────
+                # ── Archive sites (Pawchive / cum.st) ───────────────
                 # 1. Fetch profile
                 profile = self.api_client.fetch_creator_profile(parsed)
                 creator_name = clean_text(profile.get("name", parsed.user_id) or parsed.user_id)
@@ -3692,7 +3712,7 @@ class AppBridge(QObject):
         ids = [str(i) for i in (selected_ids or []) if i]
         if self._skip_retry_404 and ids:
             queue_tasks = self._queue_model.getTasks() if self._queue_model else []
-            key = KemonoDownloader.task_key
+            key = FileDownloader.task_key
             non_404_ids = set()
             for t in (queue_tasks or self.downloader.tasks):
                 k = key(t)
@@ -3733,7 +3753,7 @@ class AppBridge(QObject):
             try:
                 if (not base or len(base) < len(queue_tasks)) and queue_tasks:
                     base = queue_tasks
-                key = KemonoDownloader.task_key
+                key = FileDownloader.task_key
                 if selected is None:
                     need_saved = not any(t.status in ("failed", "cancelled") for t in base)
                 else:
@@ -4155,9 +4175,12 @@ class AppBridge(QObject):
                             "files_count_text": f"{file_idx}/{file_tot}" if file_tot > 1 else "1/1",
                             "status_text": f"[{PLATFORM_NAMES.get(platform, platform)}] {fname}"})
 
+            problem = {"text": ""}
+
             def _cloud_log(msg):
                 text = str(msg)
                 if "❌" in text:
+                    problem["text"] = text.split("❌", 1)[1].strip()     # shown on the queue row
                     logger.error(text, category="cloud", details=f"link: {url}")
                 elif "⚠" in text:
                     logger.warning(text, category="cloud", details=f"link: {url}")
@@ -4187,7 +4210,7 @@ class AppBridge(QObject):
                 _set(task, "cancelled")
             else:
                 logger.warning(f"☁️ [{platform.upper()}] didn't finish: {url}", category="cloud")
-                _set(task, "failed", "The download didn't finish (details in the Activity log)")
+                _set(task, "failed", problem["text"] or "The download didn't finish (details in the Activity log)")
 
         def _worker():
             from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
@@ -4230,7 +4253,7 @@ class AppBridge(QObject):
         wanted = set(keys) if keys is not None else None
         tasks = [t for t in self._queue_model.getTasks()
                  if cloud_platform(t.url) and t.status in statuses
-                 and (wanted is None or KemonoDownloader.task_key(t) in wanted)
+                 and (wanted is None or FileDownloader.task_key(t) in wanted)
                  and (not batch_id or t.batch_id == batch_id)]
         for t in tasks:
             if not getattr(t, "cloud_item", None):     # a row read back from a saved queue
@@ -4356,7 +4379,7 @@ class AppBridge(QObject):
 
         logger.info(f"Loaded {len(urls)} URLs for batch processing.", category="batch")
         for u in urls:
-            parsed = KemonoURLParser.parse(u)
+            parsed = LinkParser.parse(u)
             if parsed.is_valid and self._refuse_if_disabled(u):
                 continue
             if parsed.is_valid:
@@ -5298,7 +5321,7 @@ class AppBridge(QObject):
                             if not existing:
                                 t_uid = (getattr(t0, "user_id", "") or uid).strip()
                                 t_svc = (getattr(t0, "service", "") or svc).strip()
-                                is_external = getattr(t0, "is_ytdlp", False) or getattr(t0, "is_telegram", False) or t_svc.lower() in ("bunkr", "coomer_bunkr", "kemono_bunkr", "external")
+                                is_external = getattr(t0, "is_ytdlp", False) or getattr(t0, "is_telegram", False) or t_svc.lower() in ("bunkr", "external")
                                 if t_uid and t_svc and not is_external:
                                     t_name = getattr(t0, "creator_name", "").strip() or t_uid
                                     t_domain = getattr(t0, "domain", "") or ("cum.st" if t_svc.lower() in ("onlyfans", "fansly", "candfans") else "pawchive.pw")
@@ -5510,8 +5533,8 @@ class AppBridge(QObject):
         def _run():
             try:
                 # Auto-heal creator name if profile resolves to a different name
-                from core.parser import KemonoURLParser
-                parsed = KemonoURLParser.parse(entry.url or f"https://{entry.domain}/{entry.service}/user/{entry.user_id}")
+                from core.parser import LinkParser
+                parsed = LinkParser.parse(entry.url or f"https://{entry.domain}/{entry.service}/user/{entry.user_id}")
                 if parsed.is_valid and hasattr(self.api_client, "resolve_creator_name"):
                     try:
                         resolved = self.api_client.resolve_creator_name(parsed)
@@ -5844,8 +5867,8 @@ class AppBridge(QObject):
         raw_url = (url or "").strip()
         if not raw_url:
             return False
-        from core.parser import KemonoURLParser
-        parsed = KemonoURLParser.parse(raw_url)
+        from core.parser import LinkParser
+        parsed = LinkParser.parse(raw_url)
         if not parsed.is_valid:
             logger.warning(f"Cannot add to watchlist: invalid URL ({raw_url})", category="watchlist")
             return False
@@ -5956,7 +5979,7 @@ class AppBridge(QObject):
         entry = self._watchlist_manager._find(userId, service)
         if not entry:
             return
-        parsed = KemonoURLParser.parse(entry.url or "")
+        parsed = LinkParser.parse(entry.url or "")
         if not parsed.is_valid:
             logger.error(f"Can't re-download {entry.creator_name or userId}: {parsed.error_msg}", category="watchlist")
             return
@@ -6281,13 +6304,12 @@ class AppBridge(QObject):
                     + disabled_message(skipped_off[0].url or skipped_off[0].domain), category="watchlist")
                 if not getattr(self, "_warned_disabled_watchlist", False):
                     self._warned_disabled_watchlist = True      # once per run
-                    kemono_n = self.kemonoWatchlistCount()
-                    msg = (f"Kemono and Coomer are turned off for now because they mostly aren't working, so "
-                           f"{len(skipped_off)} Watchlist artist(s) on those sites weren't checked.")
-                    if kemono_n:
-                        msg += " Pawchive has the same creators as Kemono: you can move your Kemono artists there."
-                    if len(skipped_off) > kemono_n:
-                        msg += " For Coomer artists, look them up on cum.st and add them again."
+                    movable = self.movableWatchlistCount()
+                    msg = f"{len(skipped_off)} Watchlist artist(s) are on a site that isn't supported and weren't checked."
+                    if movable:
+                        msg += " Pawchive has the same creators: you can move them there."
+                    if len(skipped_off) > movable:
+                        msg += " Look the others up on cum.st and add them again."
                     self.providerDisabled.emit(msg, "", "watchlist")
             off = {id(e) for e in skipped_off}
             to_check = [e for e in entries if id(e) not in off and (e.auto_check or not automatic)]
@@ -7041,7 +7063,7 @@ class AppBridge(QObject):
 
     def _refuse_if_disabled(self, url_or_domain: str, context: str = "link") -> bool:
         """True (after telling the user) when the link belongs to a switched-off site.
-        Kemono and Coomer are switched off for now; the message points to Pawchive / cum.st."""
+        The message points to Pawchive / cum.st."""
         from core.providers import is_disabled, disabled_message, alternative_url
         if not url_or_domain or not is_disabled(url_or_domain):
             return False
@@ -7052,14 +7074,14 @@ class AppBridge(QObject):
         return True
 
     @Slot(result=int)
-    def kemonoWatchlistCount(self) -> int:
+    def movableWatchlistCount(self) -> int:
         from core.providers import provider_for_host, KEMONO
         return sum(1 for e in list(self._watchlist_manager.entries)
                    if provider_for_host(e.domain) == KEMONO or provider_for_host(e.url) == KEMONO)
 
     @Slot(result=int)
     def switchWatchlistToPawchive(self) -> int:
-        """Moves the Watchlist's Kemono artists to Pawchive (it uses the same creator IDs)."""
+        """Moves the Watchlist's artists on the unsupported site with Pawchive's IDs to Pawchive."""
         from core.providers import provider_for_host, alternative_url, KEMONO
         changed = 0
         with self._watchlist_manager._lock:
@@ -7072,7 +7094,7 @@ class AppBridge(QObject):
             if changed:
                 self._watchlist_manager.save()
         if changed:
-            logger.success(f"Moved {changed} Watchlist artist(s) from Kemono to Pawchive.", category="watchlist")
+            logger.success(f"Moved {changed} Watchlist artist(s) to Pawchive.", category="watchlist")
             self._watchlist_model.refresh()
             self.watchlistChanged.emit()
         return changed

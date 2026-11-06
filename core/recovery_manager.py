@@ -52,7 +52,7 @@ class RecoveryManager:
 
     @staticmethod
     def _detect_platform(service: str, domain: str = "", url: str = "") -> str:
-        """Derives a friendly platform name (e.g. Kemono, Coomer, Patreon, Fanbox, OnlyFans, Bunkr, Erome, nHentai)."""
+        """Derives a friendly platform name (e.g. Pawchive, cum.st, Patreon, Fanbox, OnlyFans, Bunkr, Erome, nHentai)."""
         svc = (service or "").lower()
         dom = (domain or "").lower()
         u = (url or "").lower()
@@ -66,19 +66,14 @@ class RecoveryManager:
             return "nHentai"
 
         # Check domain first
-        if "coomer" in dom or "coomer" in u:
-            platform_base = "Coomer"
-        elif "kemono" in dom or "kemono" in u:
-            platform_base = "Kemono"
-        elif "pawchive" in dom or "pawchive" in u:
+        if "pawchive" in dom or "pawchive" in u:
             platform_base = "Pawchive"
         elif "cum.st" in dom or "cum.st" in u:
             platform_base = "cum.st"
+        elif svc in ("onlyfans", "fansly", "candfans"):
+            platform_base = "cum.st"
         else:
-            if svc in ("onlyfans", "fansly", "candfans"):
-                platform_base = "Coomer"
-            else:
-                platform_base = "Kemono"
+            platform_base = "Pawchive"
 
         service_labels = {
             "patreon": "Patreon",
