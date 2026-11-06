@@ -27,12 +27,24 @@ async fn engine_restart(engine: State<'_, Arc<Engine>>) -> Result<(), String> {
         .map_err(|e| e.to_string())?
 }
 
+/// Stops the engine before an update replaces its files (the installer can't overwrite them while
+/// it runs).
+#[tauri::command]
+async fn engine_shutdown(engine: State<'_, Arc<Engine>>) -> Result<(), String> {
+    let engine = Arc::clone(&engine);
+    tauri::async_runtime::spawn_blocking(move || engine.stop())
+        .await
+        .map_err(|e| e.to_string())
+}
+
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
     let app = tauri::Builder::default()
         .plugin(tauri_plugin_opener::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_clipboard_manager::init())
+        .plugin(tauri_plugin_updater::Builder::new().build())
+        .plugin(tauri_plugin_process::init())
         .setup(|app| {
             let log_dir = app.path().app_log_dir().ok();
             let engine = Arc::new(Engine::new(log_dir));
@@ -40,7 +52,7 @@ pub fn run() {
             app.manage(engine);
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![engine_info, engine_restart])
+        .invoke_handler(tauri::generate_handler![engine_info, engine_restart, engine_shutdown])
         .build(tauri::generate_context!())
         .expect("error while building the Pawchive shell");
 

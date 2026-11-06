@@ -7,6 +7,7 @@ import {
 import { toast } from "sonner";
 import { call, mediaUrl, useProp, useSignal } from "@/lib/engine";
 import { useNav } from "@/lib/nav";
+import { MediaPlayer } from "@/components/media-player";
 import { useElementWidth } from "@/lib/hooks";
 import { clipboard, pickFolder } from "@/lib/native";
 import {
@@ -472,9 +473,13 @@ function Viewer({ items, index, onIndex, onClose, onDelete }: {
   useEffect(() => setBroken(false), [e.path]);
   useEffect(() => {
     const onKey = (ev: KeyboardEvent) => {
-      if (ev.key === "Escape") onClose();
-      else if (ev.key === "ArrowRight" && index < items.length - 1) onIndex(index + 1);
-      else if (ev.key === "ArrowLeft" && index > 0) onIndex(index - 1);
+      // ← → move between items (the video player takes them for seeking while a video is open);
+      // Page Up / Page Down always move
+      const next = ev.key === "ArrowRight" || ev.key === "PageDown";
+      const prev = ev.key === "ArrowLeft" || ev.key === "PageUp";
+      if (ev.key === "Escape" && !document.fullscreenElement) onClose();
+      else if (next && index < items.length - 1) onIndex(index + 1);
+      else if (prev && index > 0) onIndex(index - 1);
       else if (ev.key === "Delete") onDelete(e.path);
     };
     window.addEventListener("keydown", onKey);
@@ -509,7 +514,7 @@ function Viewer({ items, index, onIndex, onClose, onDelete }: {
             <Button variant="secondary" size="sm" onClick={() => call("appBridge", "openPathInSystem", e.path)}><ExternalLinkIcon />Open with the default app</Button>
           </div>
         ) : k === "video" ? (
-          <video key={e.path} src={mediaUrl("file", e.path)} controls autoPlay className="max-h-full max-w-full rounded-md" onError={() => setBroken(true)} />
+          <MediaPlayer key={e.path} src={mediaUrl("file", e.path)} onError={() => setBroken(true)} className="h-full w-full" />
         ) : (
           <img key={e.path} src={mediaUrl("image", e.path)} draggable={false} className="max-h-full max-w-full object-contain" onError={() => setBroken(true)} alt={e.name} />
         )}

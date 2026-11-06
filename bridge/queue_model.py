@@ -601,6 +601,8 @@ class QueueModel(QAbstractListModel):
     batchRemoveRequested = Signal(str)
     batchPauseRequested = Signal(str)
     batchResumeRequested = Signal(str)
+    taskPauseRequested = Signal(str)     # file_id
+    taskResumeRequested = Signal(str)    # file_id
     cleared = Signal()
     _guiCall = Signal(object)
     IMMEDIATE_REMOVAL_ROWS = 2000
@@ -1195,6 +1197,43 @@ class QueueModel(QAbstractListModel):
             self._groups_model.rebuild(self._tasks)
             self.groupsChanged.emit()
         self.batchResumeRequested.emit(batch_id)
+
+    def _set_task_status(self, file_id: str, from_states: tuple, to_state: str) -> bool:
+        """Moves one file between states (pause / resume) and refreshes the views."""
+        target = next((t for t in self._tasks if str(getattr(t, "file_id", "")) == str(file_id)), None)
+        if target is None or target.status not in from_states:
+            return False
+        self.beginResetModel()
+        self._counts_timer.stop()
+        target.status = to_state
+        if to_state == "paused":
+            target.speed_bps = 0
+            target.speed_str = "0 KB/s"
+            target.eta_str = "--"
+        else:
+            target.error_msg = ""
+        self._task_last_status[id(target)] = to_state
+        self._recalculate_counts()
+        self._last_counts = (self._pending_count, self._downloading_count, self._completed_count, self._skipped_count, self._failed_count)
+        self._rebuild_visible()
+        self.endResetModel()
+        self.countChanged.emit()
+        self.countsChanged.emit()
+        if self._groups_model:
+            self._groups_model.rebuild(self._tasks)
+            self.groupsChanged.emit()
+        return True
+
+    @Slot(str)
+    def pauseTask(self, file_id: str):
+        """Pauses a single file; a file mid-download stops and keeps what it has so far."""
+        if self._set_task_status(file_id, ("pending", "downloading", "retrying"), "paused"):
+            self.taskPauseRequested.emit(file_id)
+
+    @Slot(str)
+    def resumeTask(self, file_id: str):
+        if self._set_task_status(file_id, ("paused",), "pending"):
+            self.taskResumeRequested.emit(file_id)
 
     @Slot(str, result=bool)
     def isBatchPaused(self, batch_id: str) -> bool:

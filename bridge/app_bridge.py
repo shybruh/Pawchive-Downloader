@@ -143,6 +143,7 @@ class AppBridge(QObject):
     adaptiveThreadingChanged = Signal()
     autoRetryAtEndChanged = Signal()
     skipRetry404Changed = Signal()
+    autoDeleteFailedChanged = Signal()
     mangaModeChanged = Signal()
     filenameStyleChanged = Signal()
     filenameTemplateChanged = Signal()
@@ -397,6 +398,7 @@ class AppBridge(QObject):
             self._adaptive_threading = False
         self._auto_retry_at_end = saved_settings.get("auto_retry_at_end", False)
         self._skip_retry_404 = bool(saved_settings.get("skip_retry_404", False))
+        self._auto_delete_failed = bool(saved_settings.get("auto_delete_failed", False))
         self._privacy_pin = str(saved_settings.get("privacy_pin", "") or "")
         self._privacy_mode_active = False  # NEVER remains active on app restart
         self._failed_pin_attempts = 0
@@ -632,6 +634,8 @@ class AppBridge(QObject):
         self._queue_model.batchRemoveRequested.connect(self._handle_batch_remove)
         self._queue_model.batchPauseRequested.connect(self._handle_batch_pause)
         self._queue_model.batchResumeRequested.connect(self._handle_batch_resume)
+        self._queue_model.taskPauseRequested.connect(self._handle_task_pause)
+        self._queue_model.taskResumeRequested.connect(self._handle_task_resume)
         self._queue_model.cleared.connect(self._handle_queue_cleared)
         self._queued_links: set[str] = set()
 
@@ -1416,6 +1420,43 @@ class AppBridge(QObject):
             else:
                 self.autoRetryAtEnd = False
 
+    @Property(bool, notify=autoDeleteFailedChanged)
+    def autoDeleteFailed(self) -> bool:
+        """Remove the leftovers of failed and cancelled downloads when the queue finishes."""
+        return self._auto_delete_failed
+
+    @autoDeleteFailed.setter
+    def autoDeleteFailed(self, val: bool):
+        val = bool(val)
+        if self._auto_delete_failed != val:
+            self._auto_delete_failed = val
+            self.autoDeleteFailedChanged.emit()
+            self.saveSettings()
+
+    @Slot(result=int)
+    def deleteFailedLeftovers(self) -> int:
+        """Deletes the partly downloaded files (".part") of failed and cancelled downloads.
+        Paused and waiting files keep theirs so they can resume. Returns how many were removed."""
+        from core.downloader import PART_SUFFIX
+        removed = 0
+        tasks = self._queue_model.getTasks() if hasattr(self, "_queue_model") and self._queue_model else []
+        for t in tasks:
+            if getattr(t, "status", "") not in ("failed", "cancelled"):
+                continue
+            target = getattr(t, "target_path", "") or ""
+            if not target:
+                continue
+            part = target + PART_SUFFIX
+            try:
+                if os.path.isfile(part):
+                    os.remove(part)
+                    removed += 1
+            except OSError as e:
+                logger.debug(f"Couldn't remove {part}: {e}", category="downloader")
+        if removed:
+            logger.info(f"Removed {removed} unfinished file(s) from failed downloads.", category="downloader")
+        return removed
+
     @Property(bool, notify=skipRetry404Changed)
     def skipRetry404(self) -> bool:
         return self._skip_retry_404
@@ -1705,7 +1746,7 @@ class AppBridge(QObject):
     def statusText(self) -> str:
         return self._status_text
 
-    @Property(int, notify=overallProgressChanged)
+    @Property(float, notify=overallProgressChanged)
     def overallProgress(self) -> int:
         return self._overall_progress
 
@@ -5922,6 +5963,7 @@ class AppBridge(QObject):
             "telegram_safety_acknowledged": self._telegram_safety_acknowledged,
             "telegram_liability_acknowledged": self._telegram_liability_acknowledged,
             "skip_retry_404": self._skip_retry_404,
+            "auto_delete_failed": getattr(self, "_auto_delete_failed", False),
             "group_file_type": self._group_file_type,
             "file_order": self._file_order,
             "watchlist_apply_global_settings": self._watchlist_apply_global_settings,
@@ -6125,6 +6167,18 @@ class AppBridge(QObject):
         resumed_count = self.downloader.resume_batch(batch_id, options=options, cookie_str=self._cookie_string)
         if resumed_count > 0:
             logger.info(f"Resumed batch '{batch_id}' ({resumed_count} tasks restored).", category="downloader")
+
+    @Slot(str)
+    def _handle_task_pause(self, file_id: str):
+        self.downloader.pause_task(file_id)
+
+    @Slot(str)
+    def _handle_task_resume(self, file_id: str):
+        if not self.downloader.tasks and self._queue_model.tasks:
+            self.downloader.tasks = self._queue_model.getTasks()
+        self._is_downloading = True
+        self.isDownloadingChanged.emit()
+        self.downloader.resume_task(file_id, options=self._get_filter_options(), cookie_str=self._cookie_string)
 
     @Slot(str)
     def _handle_batch_retry(self, batch_id: str):
@@ -6582,6 +6636,11 @@ class AppBridge(QObject):
         self._is_downloading = False
         self._active_queue_model.clear()
         self._scheduled_sweep_retry = False
+        if self._auto_delete_failed:
+            try:
+                self.deleteFailedLeftovers()
+            except Exception as e:
+                logger.debug(f"Cleaning up failed downloads failed: {e}", category="downloader")
         # Links that finished can be queued again (e.g. to fetch a creator's newer posts later)
         self._queued_links.clear()
 

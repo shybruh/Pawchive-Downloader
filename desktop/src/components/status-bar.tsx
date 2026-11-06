@@ -2,7 +2,7 @@ import { CircleIcon, GaugeIcon, PauseIcon, PlayIcon, SquareIcon, TimerIcon } fro
 import { call, useProp } from "@/lib/engine";
 import { navigate } from "@/lib/nav";
 import { Button, Progress, Tip } from "@/components/ui";
-import { pct } from "@/lib/utils";
+import { percent } from "@/lib/utils";
 
 /** Always-visible footer: what the engine is doing right now, with transport controls. */
 export function StatusBar() {
@@ -14,7 +14,7 @@ export function StatusBar() {
   const speed = useProp<string>("appBridge", "speedText", "");
   const eta = useProp<string>("appBridge", "etaText", "");
   const files = useProp<string>("appBridge", "filesCountText", "");
-  const value = pct(progress);
+  const value = percent(progress);
 
   return (
     <footer className="flex h-11 shrink-0 items-center gap-4 border-t bg-sidebar px-4 text-xs">

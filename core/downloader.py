@@ -2238,6 +2238,44 @@ class KemonoDownloader:
         logger.info(f"Batch paused: {batch_id} ({paused} tasks paused)", category="downloader")
         return paused
 
+    def pause_task(self, file_id: str) -> bool:
+        """Pauses one file. A download in progress notices the status and stops; the bytes it has
+        are kept, so resuming continues from there where the server allows it."""
+        for t in self.tasks:
+            if str(getattr(t, "file_id", "")) == str(file_id):
+                if t.status in ("pending", "downloading", "retrying", "paused"):
+                    t.status = "paused"
+                    t.speed_bps = 0
+                    t.speed_str = "0 KB/s"
+                    t.eta_str = "--"
+                    if self.on_task_status_changed:
+                        self.on_task_status_changed(t)
+                    logger.info(f"Paused {t.filename}", category="downloader")
+                    return True
+                return False
+        return False
+
+    def resume_task(self, file_id: str, options: Optional[FilterOptions] = None, cookie_str: str = "") -> bool:
+        """Puts one paused file back in line and makes sure the queue is running."""
+        target = None
+        for t in self.tasks:
+            if str(getattr(t, "file_id", "")) == str(file_id):
+                target = t
+                break
+        if target is None or target.status not in ("paused", "pending"):
+            return False
+        target.status = "pending"
+        target.error_msg = ""
+        if self.on_task_status_changed:
+            self.on_task_status_changed(target)
+        self._dispatch_cursor = 0
+        self._last_full_scan = 0.0
+        logger.info(f"Resumed {target.filename}", category="downloader")
+        if not self._is_running:
+            opts = options or self.current_options or FilterOptions()
+            self.start_download_queue(self.tasks, opts, cookie_str or self._clean_cookie)
+        return True
+
     def resume_batch(self, batch_id: str, options: Optional[FilterOptions] = None, cookie_str: str = "") -> int:
         """Resumes a paused batch and wakes/starts the download loop if necessary."""
         if not batch_id:
@@ -4702,10 +4740,15 @@ class KemonoDownloader:
         eta_str = self._calculate_smart_eta(completed, failed, total, speed, active_elapsed)
 
         # Calculate progress percent
+        # Finished files count whole; files being downloaded count by how far along they are, so the
+        # percentage moves during a single large file instead of jumping when it completes.
         if total > 0:
-            task_ratio = (completed + failed) / total
-            percent = int(task_ratio * 100)
-            percent = max(0, min(100, percent))
+            in_flight = 0.0
+            for t in self.tasks:
+                if t.status == "downloading" and t.file_size > 0:
+                    in_flight += min(1.0, t.downloaded_bytes / t.file_size)
+            task_ratio = (completed + failed + in_flight) / total
+            percent = round(max(0.0, min(100.0, task_ratio * 100)), 1)
         else:
             percent = 0
 

@@ -11,7 +11,7 @@ import { useElementWidth } from "@/lib/hooks";
 import { Alert, Badge, Button, Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle, Input, Label, Progress, Select, Separator, Switch, Tip } from "@/components/ui";
 import { PageHeader, Stat } from "@/components/page";
 import { LogList } from "@/components/log-list";
-import { cn, pct } from "@/lib/utils";
+import { cn, percent } from "@/lib/utils";
 
 const UNSUPPORTED = /(^|\.|\/\/)(kemono|coomer)\./i;
 
@@ -323,7 +323,7 @@ function SessionCard() {
   const paused = useProp<boolean>("appBridge", "isPaused", false);
   const status = useProp<string>("appBridge", "statusText", "Idle");
   const creator = useProp<string>("appBridge", "creatorName", "");
-  const progress = pct(useProp<number>("appBridge", "overallProgress", 0));
+  const progress = percent(useProp<number>("appBridge", "overallProgress", 0));
   const speed = useProp<string>("appBridge", "speedText", "—");
   const eta = useProp<string>("appBridge", "etaText", "—");
   const elapsed = useProp<string>("appBridge", "elapsedTimeText", "—");

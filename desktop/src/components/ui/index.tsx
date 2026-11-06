@@ -225,9 +225,9 @@ export function DialogFooter({ className, ...props }: React.ComponentProps<"div"
 // ── Dropdown menu ──
 export const DropdownMenu = DropdownPrimitive.Root;
 export const DropdownMenuTrigger = DropdownPrimitive.Trigger;
-export function DropdownMenuContent({ className, align = "end", ...props }: React.ComponentProps<typeof DropdownPrimitive.Content>) {
+export function DropdownMenuContent({ className, align = "end", container, ...props }: React.ComponentProps<typeof DropdownPrimitive.Content> & { container?: HTMLElement | null }) {
   return (
-    <DropdownPrimitive.Portal>
+    <DropdownPrimitive.Portal container={container ?? undefined}>
       <DropdownPrimitive.Content align={align} sideOffset={4}
         className={cn("z-50 min-w-[10rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-md", className)} {...props} />
     </DropdownPrimitive.Portal>

@@ -71,6 +71,25 @@ PAWCHIVE_ENGINE_PORT=47321 PAWCHIVE_ENGINE_TOKEN=devtoken npm run tauri dev
 VITE_ENGINE_PORT=47321 VITE_ENGINE_TOKEN=devtoken npx vite --port 1430
 ```
 
+## Releases and updates
+
+`.github/workflows/release.yml` builds and publishes a release whenever a version tag is pushed:
+
+```bash
+git tag v2.0.1
+git push origin v2.0.1
+```
+
+It packages the engine with PyInstaller, builds the app, and uploads an installer, a portable zip
+and `latest.json` to the GitHub release. The installed app checks `latest.json` a few seconds after
+it starts (Settings → Updates also checks on demand) and can update and restart itself.
+
+Updates are signed. The workflow needs the private signing key as the repository secret
+`TAURI_SIGNING_PRIVATE_KEY`; the matching public key is in `src-tauri/tauri.conf.json`. Keep a
+backup of the private key: without it, already-installed copies can't verify new releases.
+
+For a local build, run `python build_desktop.py` from the repository root (see the script).
+
 ## Screens
 
 | Screen | |

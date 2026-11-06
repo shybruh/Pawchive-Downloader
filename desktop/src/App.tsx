@@ -6,7 +6,9 @@ import { engine, resolveConnection, useEngineState, useSignal } from "@/lib/engi
 import { Button, TooltipProvider } from "@/components/ui";
 import { AppSidebar } from "@/components/app-sidebar";
 import { AppGuards } from "@/components/app-guards";
+import { PostActionCountdown, RecoveryDialog } from "@/components/session-dialogs";
 import { navigate, useNav } from "@/lib/nav";
+import { checkForUpdate, loadVersion } from "@/lib/updater";
 import { StatusBar } from "@/components/status-bar";
 import { DownloaderView } from "@/views/downloader";
 import { QueueView } from "@/views/queue";
@@ -98,6 +100,17 @@ function Splash({ status, error }: { status: string; error: string }) {
 function Shell() {
   const { view } = useNav();
 
+  useEffect(() => {
+    loadVersion();
+    if (!import.meta.env.PROD) return;
+    const t = setTimeout(async () => {
+      if (await checkForUpdate()) {
+        toast.info("A new version is available", { action: { label: "View", onClick: () => navigate("settings", { section: "updates" }) } });
+      }
+    }, 5000);
+    return () => clearTimeout(t);
+  }, []);
+
   // Engine-wide notifications
   useSignal("appBridge", "providerDisabled", (msg: string) => toast.warning(String(msg)));
   useSignal("appBridge", "exportCompleted", (msg: string) => toast.success(String(msg || "Export complete")));
@@ -135,6 +148,8 @@ function Shell() {
         <StatusBar />
       </div>
       <PostSelectionDialog />
+      <RecoveryDialog />
+      <PostActionCountdown />
       <AppGuards />
     </div>
   );

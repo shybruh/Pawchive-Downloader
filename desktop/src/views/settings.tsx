@@ -1,14 +1,16 @@
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   CircleCheckIcon, CookieIcon, DownloadCloudIcon, ExternalLinkIcon, FolderOpenIcon, GaugeIcon, KeyRoundIcon,
   InfoIcon, Loader2Icon, LogOutIcon, PaletteIcon, RefreshCwIcon, ShieldIcon, TypeIcon, UserRoundIcon,
 } from "lucide-react";
 import { openExternal } from "@/lib/native";
+import { useNav } from "@/lib/nav";
+import { checkForUpdate, installUpdate, useUpdater } from "@/lib/updater";
 import logo from "@/assets/logo.png";
 import { toast } from "sonner";
 import { call, useProp, useQuery, useSetting, useSignal } from "@/lib/engine";
 import { pickFolder } from "@/lib/native";
-import { Alert, Badge, Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Input, Select, Separator, Switch } from "@/components/ui";
+import { Alert, Badge, Button, Card, Progress, CardContent, CardDescription, CardHeader, CardTitle, Input, Select, Separator, Switch } from "@/components/ui";
 import { Field, PageHeader } from "@/components/page";
 import { cn } from "@/lib/utils";
 
@@ -25,7 +27,9 @@ const SECTIONS: { id: Section; label: string; icon: typeof GaugeIcon }[] = [
 ];
 
 export function SettingsView() {
-  const [section, setSection] = useState<Section>("downloads");
+  const { params } = useNav();
+  const [section, setSection] = useState<Section>((params.section as Section) || "downloads");
+  useEffect(() => { if (params.section) setSection(params.section as Section); }, [params.section]);
   return (
     <>
       <PageHeader title="Settings" description="Changes are saved automatically." />
@@ -96,6 +100,7 @@ function DownloadsSection() {
       <Group title="Behaviour">
         <Field label="Retry failed files at the end"><SwitchSetting prop="autoRetryAtEnd" /></Field>
         <Field label="Don't retry files that are gone (404)"><SwitchSetting prop="skipRetry404" /></Field>
+        <Field label="Delete failed downloads' leftovers" hint="Removes the unfinished part of failed or cancelled files when the queue ends."><SwitchSetting prop="autoDeleteFailed" /></Field>
         <Field label="Re-download files that look too small"><SwitchSetting prop="redownloadSmallFiles" /></Field>
         <Field label="Keep a download archive" hint="Skips files you already have, even after moving them."><SwitchSetting prop="enableDownloadArchive" /></Field>
         <Field label="When the queue finishes">
@@ -336,24 +341,28 @@ function AppearanceSection() {
 type Json = any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 function UpdatesSection() {
-  const version = useProp<string>("updaterBridge", "currentVersion", "");
-  const checking = useProp<boolean>("updaterBridge", "isChecking", false);
-  const available = useProp<boolean>("updaterBridge", "updateAvailable", false);
-  const latest = useProp<string>("updaterBridge", "latestVersion", "");
-  const status = useProp<string>("updaterBridge", "statusMessage", "");
-  const notes = useProp<string>("updaterBridge", "releaseNotes", "");
+  const u = useUpdater();
+  const busy = u.phase === "checking" || u.phase === "downloading" || u.phase === "installing";
+  const label = u.phase === "available" ? `Version ${u.latest} is available`
+    : u.phase === "downloading" ? `Downloading ${u.latest}…`
+    : u.phase === "installing" ? "Installing — the app will restart"
+    : u.phase === "none" ? "You're up to date" : "Check for updates";
   return (
-    <Group title="Updates" description={`You're on version ${version || "—"}.`}>
-      <Field label={available ? `Version ${latest} is available` : "Check for updates"} hint={status}>
-        <Button variant="outline" size="sm" disabled={checking} onClick={() => call("updaterBridge", "checkForUpdates")}>
-          {checking ? <Loader2Icon className="animate-spin" /> : <RefreshCwIcon />}Check now
-        </Button>
-        {available && <Button size="sm" onClick={() => call("updaterBridge", "openReleasePage")}><ExternalLinkIcon />Release page</Button>}
+    <Group title="Updates" description={`You're on version ${u.version || "—"}.`}>
+      <Field label={label} hint={u.phase === "error" ? <span className="text-destructive">{u.error}</span> : undefined}>
+        {u.phase === "available" ? (
+          <Button size="sm" onClick={installUpdate}><DownloadCloudIcon />Update and restart</Button>
+        ) : (
+          <Button variant="outline" size="sm" disabled={busy} onClick={checkForUpdate}>
+            {busy ? <Loader2Icon className="animate-spin" /> : <RefreshCwIcon />}Check now
+          </Button>
+        )}
       </Field>
-      {available && notes && (
+      {u.phase === "downloading" && <div className="py-3"><Progress value={u.progress} /></div>}
+      {(u.phase === "available" || u.phase === "downloading") && u.notes && (
         <>
           <Separator className="my-1" />
-          <pre className="max-h-64 overflow-y-auto py-3 font-sans text-[13px] whitespace-pre-wrap text-muted-foreground" data-selectable>{notes}</pre>
+          <pre className="max-h-64 overflow-y-auto py-3 font-sans text-[13px] whitespace-pre-wrap text-muted-foreground" data-selectable>{u.notes}</pre>
         </>
       )}
     </Group>
@@ -363,7 +372,8 @@ function UpdatesSection() {
 const UPSTREAM = "https://github.com/whyamihere773/Pawchive-Downloader";
 
 function AboutSection() {
-  const version = useProp<string>("updaterBridge", "currentVersion", "");
+  const engineVersion = useProp<string>("updaterBridge", "currentVersion", "");
+  const { version } = useUpdater();
   return (
     <>
       <Card>
@@ -371,7 +381,7 @@ function AboutSection() {
           <img src={logo} alt="" className="size-12 rounded-xl" />
           <div className="min-w-0 flex-1">
             <div className="font-semibold">Pawchive Downloader</div>
-            <div className="text-sm text-muted-foreground">Desktop app {version ? `· engine v${version}` : ""}</div>
+            <div className="text-sm text-muted-foreground">Version {version || "—"}{engineVersion ? ` · engine ${engineVersion.split(" ")[0]}` : ""}</div>
           </div>
         </CardContent>
       </Card>

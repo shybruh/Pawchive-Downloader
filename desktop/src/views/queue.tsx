@@ -1,7 +1,8 @@
 import {
-  ArrowLeftIcon, CircleCheckIcon, CircleDashedIcon, CircleXIcon, EllipsisIcon, FileDownIcon, FileUpIcon, FilesIcon,
+  ArrowLeftIcon, CircleCheckIcon, EraserIcon, CircleDashedIcon, CircleXIcon, EllipsisIcon, FileDownIcon, FileUpIcon, FilesIcon,
   FolderTreeIcon, ListOrderedIcon, Loader2Icon, PauseIcon, PlayIcon, RotateCwIcon, SkipForwardIcon, SquareIcon, TrashIcon,
 } from "lucide-react";
+import { toast } from "sonner";
 import { call, useModel, useProp, useSetting } from "@/lib/engine";
 import {
   Badge, Button, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger,
@@ -74,6 +75,10 @@ export function QueueView() {
               <DropdownMenuItem onSelect={() => call("appBridge", "importQueueState")}><FileUpIcon />Import queue…</DropdownMenuItem>
               <DropdownMenuItem disabled={!failed} onSelect={() => call("appBridge", "exportFailedTasks")}><FileDownIcon />Export failed list…</DropdownMenuItem>
               <DropdownMenuSeparator />
+              <DropdownMenuItem disabled={!failed} onSelect={async () => {
+                const n = await call<number>("appBridge", "deleteFailedLeftovers");
+                toast.success(n ? `Deleted ${n} unfinished file${n === 1 ? "" : "s"}` : "Nothing to clean up");
+              }}><EraserIcon />Delete failed files' leftovers</DropdownMenuItem>
               <DropdownMenuItem variant="destructive" disabled={!failed} onSelect={() => call("appBridge", "clearFailedTasks")}><TrashIcon />Clear failed</DropdownMenuItem>
               <DropdownMenuItem variant="destructive" disabled={!isDownloading} onSelect={() => call("appBridge", "cancelDownload")}><SquareIcon />Stop all</DropdownMenuItem>
             </DropdownMenuContent>
@@ -140,10 +145,20 @@ function FileList({ emptyAll }: { emptyAll: boolean }) {
                   : t.fileSize || "—"}
               </span>
             </div>
-            <div className="w-7">
+            <div className="flex w-7 justify-end">
               {(t.status === "failed" || t.status === "cancelled") && (
                 <Tip content="Retry this file">
                   <Button variant="ghost" size="icon-xs" onClick={() => call("appBridge", "retrySingleTask", t.fileId)}><RotateCwIcon /></Button>
+                </Tip>
+              )}
+              {(t.status === "pending" || t.status === "downloading" || t.status === "retrying") && (
+                <Tip content="Pause this file">
+                  <Button variant="ghost" size="icon-xs" onClick={() => call(Q, "pauseTask", t.fileId)}><PauseIcon /></Button>
+                </Tip>
+              )}
+              {t.status === "paused" && (
+                <Tip content="Resume this file">
+                  <Button variant="ghost" size="icon-xs" onClick={() => call(Q, "resumeTask", t.fileId)}><PlayIcon /></Button>
                 </Tip>
               )}
             </div>

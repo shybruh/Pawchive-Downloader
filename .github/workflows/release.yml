@@ -1,0 +1,118 @@
+name: Release
+
+# Push a version tag to build and publish a release:
+#   git tag v2.0.1
+#   git push origin v2.0.1
+# The app checks these releases for updates (latest.json), so every release must be signed:
+# add the private key as the repository secret TAURI_SIGNING_PRIVATE_KEY.
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Version from tag
+        shell: pwsh
+        run: |
+          $v = "${{ github.ref_name }}".TrimStart("v")
+          if ($v -notmatch '^\d+\.\d+\.\d+([-+].+)?$') { throw "Tag must look like v1.2.3 (got ${{ github.ref_name }})" }
+          "APP_VERSION=$v" >> $env:GITHUB_ENV
+
+      # ── Engine (Python) ──────────────────────────────────────────────────────────────────
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Python dependencies
+        run: python -m pip install -r requirements.txt
+
+      - name: Helper programs (yt-dlp, 7-Zip)
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dependencies | Out-Null
+          Invoke-WebRequest https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe -OutFile dependencies/yt-dlp.exe
+          Invoke-WebRequest https://www.7-zip.org/a/7z2409-extra.7z -OutFile 7z-extra.7z
+          7z e 7z-extra.7z x64/7za.exe x64/7za.dll x64/7zxa.dll -odependencies -y | Out-Null
+          Get-ChildItem dependencies
+
+      - name: Build engine
+        shell: pwsh
+        run: |
+          python -m PyInstaller --noconfirm --clean --distpath dist --workpath build/engine server/engine.spec
+          Copy-Item version.json dist/pawchive-engine/version.json
+
+      # ── App (Tauri + React) ──────────────────────────────────────────────────────────────
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: desktop/package-lock.json
+
+      - name: Frontend dependencies
+        working-directory: desktop
+        run: npm ci
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: desktop/src-tauri -> target
+
+      - name: Release settings (version, installer, engine, update signatures)
+        shell: pwsh
+        run: |
+          $path = "desktop/src-tauri/tauri.conf.json"
+          $conf = Get-Content $path -Raw | ConvertFrom-Json
+          $conf.version = $env:APP_VERSION
+          $conf.bundle.targets = @("nsis")
+          $conf.bundle | Add-Member -Force -NotePropertyName resources -NotePropertyValue @{ "../../dist/pawchive-engine/" = "engine/" }
+          $conf.bundle | Add-Member -Force -NotePropertyName createUpdaterArtifacts -NotePropertyValue $true
+          $conf | ConvertTo-Json -Depth 32 | Set-Content $path -Encoding utf8
+
+      - name: Build and publish
+        uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAURI_SIGNING_PRIVATE_KEY: ${{ secrets.TAURI_SIGNING_PRIVATE_KEY }}
+          TAURI_SIGNING_PRIVATE_KEY_PASSWORD: ""
+        with:
+          projectPath: desktop
+          tagName: ${{ github.ref_name }}
+          releaseName: Pawchive Downloader ${{ github.ref_name }}
+          releaseBody: |
+            **Download:** the `…_x64-setup.exe` installer (keeps itself up to date),
+            or `Pawchive-Downloader-${{ env.APP_VERSION }}-portable.zip` (unzip and run).
+
+            Already installed? The app will offer this update by itself.
+          releaseDraft: false
+          prerelease: false
+          includeUpdaterJson: true
+          updaterJsonPreferNsis: true
+
+      - name: Portable zip
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $dir = "portable/Pawchive Downloader"
+          New-Item -ItemType Directory -Force $dir | Out-Null
+          Copy-Item desktop/src-tauri/target/release/pawchive.exe "$dir/Pawchive Downloader.exe"
+          Copy-Item dist/pawchive-engine "$dir/engine" -Recurse
+          Copy-Item LICENSE "$dir/LICENSE.txt"
+          $zip = "Pawchive-Downloader-$env:APP_VERSION-portable.zip"
+          Compress-Archive -Path "portable/Pawchive Downloader" -DestinationPath $zip
+          gh release upload "${{ github.ref_name }}" $zip --clobber

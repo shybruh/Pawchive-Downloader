@@ -5,6 +5,7 @@ import {
 } from "lucide-react";
 import { useProp } from "@/lib/engine";
 import { navigate, useNav, type ViewId } from "@/lib/nav";
+import { useUpdater } from "@/lib/updater";
 import { cn } from "@/lib/utils";
 import logo from "@/assets/logo.png";
 
@@ -45,8 +46,8 @@ export function AppSidebar() {
   const queueActive = useProp<number>("appBridge.queueModel", "downloadingCount", 0);
   const queuePending = useProp<number>("appBridge.queueModel", "pendingCount", 0);
   const newPosts = useProp<number>("appBridge.watchlistModel", "totalNewPosts", 0);
-  const version = useProp<string>("updaterBridge", "currentVersion", "");
-  const updateAvailable = useProp<boolean>("updaterBridge", "updateAvailable", false);
+  const { version, phase } = useUpdater();
+  const updateAvailable = phase === "available";
   const queued = queueActive + queuePending;
 
   return (
@@ -55,7 +56,7 @@ export function AppSidebar() {
         <img src={logo} alt="" className="size-7 rounded-md" />
         <div className="flex min-w-0 flex-col leading-tight">
           <span className="text-sm font-semibold tracking-tight">Pawchive</span>
-          <span className="text-[11px] text-muted-foreground">Downloader {version ? `v${version.split(" ")[0]}` : ""}</span>
+          <span className="text-[11px] text-muted-foreground">Downloader {version && version !== "dev" ? `v${version}` : ""}</span>
         </div>
       </div>
 
@@ -81,7 +82,7 @@ export function AppSidebar() {
 
       <div className="border-t border-sidebar-border p-3">
         <NavItem item={{ id: "settings", label: "Settings", icon: SettingsIcon, badge: updateAvailable ? "Update" : undefined }}
-          active={view === "settings"} onClick={() => onNavigate("settings")} />
+          active={view === "settings"} onClick={() => (updateAvailable ? navigate("settings", { section: "updates" }) : onNavigate("settings"))} />
       </div>
     </aside>
   );
