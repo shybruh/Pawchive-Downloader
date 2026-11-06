@@ -5,6 +5,7 @@
 
 mod engine;
 mod host;
+mod media;
 mod proc_group;
 mod site_login;
 
@@ -55,7 +56,9 @@ pub fn run() {
             let log_dir = app.path().app_log_dir().ok();
             let engine = Arc::new(Engine::new(log_dir));
             engine.start()?;
-            let host = Host::start(engine.clone(), app.package_info().version.to_string())?;
+            // Thumbnails, pictures and files for the UI
+            let media = media::start()?;
+            let host = Host::start(engine.clone(), media, app.package_info().version.to_string())?;
             app.manage(engine);
             app.manage(host);
             app.manage(site_login::LoginSite::default());

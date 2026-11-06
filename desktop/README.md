@@ -20,7 +20,7 @@ talks to it over a local WebSocket.
 │ shadcn-style components,     │      │ same bridges as the old QML app, │
 │ lucide icons, Tailwind v4    │ ←──  │ reflected automatically          │
 └──────────────────────────────┘ HTTP └──────────────────────────────────┘
-          thumbnails / images / video   (server/media.py)
+          thumbnails / images / video   (src-tauri/src/media/, Rust)
 ```
 
 The engine is being ported to Rust one object at a time through the host; see `docs/AUDIT.md`.

@@ -12,6 +12,7 @@
 pub mod native;
 
 use crate::engine::Engine;
+use crate::media::MediaInfo;
 use futures_util::{SinkExt, StreamExt};
 use native::{Events, NativeObject, Natives, Shell};
 use serde_json::{json, Value};
@@ -37,7 +38,7 @@ pub struct Host {
 enum Patch {
     /// `describe`: add the Rust objects
     Describe,
-    /// `info`: add the media server's secret (the Python engine's own)
+    /// `info`: the media server (Rust's) instead of Python's
     Info,
 }
 
@@ -49,7 +50,7 @@ fn natives(app_version: &str) -> Natives {
 impl Host {
     /// Starts listening. A fixed port / secret can be given for development tooling
     /// (PAWCHIVE_HOST_PORT / PAWCHIVE_HOST_TOKEN), like the engine's own.
-    pub fn start(engine: Arc<Engine>, app_version: String) -> Result<Arc<Host>, String> {
+    pub fn start(engine: Arc<Engine>, media: MediaInfo, app_version: String) -> Result<Arc<Host>, String> {
         let port: u16 = std::env::var("PAWCHIVE_HOST_PORT").ok().and_then(|p| p.parse().ok()).unwrap_or(0);
         let token = std::env::var("PAWCHIVE_HOST_TOKEN")
             .ok()
@@ -73,9 +74,10 @@ impl Host {
             };
             loop {
                 let Ok((stream, _)) = listener.accept().await else { continue };
-                let (engine, natives, events, token) = (engine.clone(), natives.clone(), events.clone(), token.clone());
+                let (engine, natives, events, token, media) =
+                    (engine.clone(), natives.clone(), events.clone(), token.clone(), media.clone());
                 tauri::async_runtime::spawn(async move {
-                    if let Err(e) = serve(stream, engine, natives, events, token).await {
+                    if let Err(e) = serve(stream, engine, natives, events, token, media).await {
                         eprintln!("[host] connection ended: {e}");
                     }
                 });
@@ -90,7 +92,14 @@ impl Host {
 }
 
 /// One UI connection, and its matching connection to the Python engine.
-async fn serve(stream: TcpStream, engine: Arc<Engine>, natives: Natives, events: Events, token: String) -> Result<(), String> {
+async fn serve(
+    stream: TcpStream,
+    engine: Arc<Engine>,
+    natives: Natives,
+    events: Events,
+    token: String,
+    media: MediaInfo,
+) -> Result<(), String> {
     let check = |req: &Request, resp: Response| -> Result<Response, ErrorResponse> {
         let ok = req.uri().query().map(|q| q.split('&').any(|kv| kv == format!("token={token}"))).unwrap_or(false);
         if ok {
@@ -139,12 +148,12 @@ async fn serve(stream: TcpStream, engine: Arc<Engine>, natives: Natives, events:
     let patches: Arc<Mutex<HashMap<i64, Patch>>> = Arc::default();
 
     // Python → UI
-    let (py_out, py_patches, py_natives, media_token) = (out_tx.clone(), patches.clone(), natives.clone(), py.token.clone());
+    let (py_out, py_patches, py_natives) = (out_tx.clone(), patches.clone(), natives.clone());
     let from_python = tauri::async_runtime::spawn(async move {
         while let Some(Ok(msg)) = py_rx.next().await {
             let Message::Text(text) = msg else { continue };
             let text = text.to_string();
-            let patched = patch_answer(&text, &py_patches, &py_natives, &media_token);
+            let patched = patch_answer(&text, &py_patches, &py_natives, &media);
             if py_out.send(patched.unwrap_or(text)).is_err() {
                 break;
             }
@@ -191,7 +200,7 @@ async fn serve(stream: TcpStream, engine: Arc<Engine>, natives: Natives, events:
 }
 
 /// Adds what the host knows to Python's answers to `describe` and `info`.
-fn patch_answer(text: &str, patches: &Mutex<HashMap<i64, Patch>>, natives: &Natives, media_token: &str) -> Option<String> {
+fn patch_answer(text: &str, patches: &Mutex<HashMap<i64, Patch>>, natives: &Natives, media: &MediaInfo) -> Option<String> {
     // Answers start with {"id": …; events don't. Only parse what may need patching.
     if !text.starts_with("{\"id\"") {
         return None;
@@ -207,7 +216,8 @@ fn patch_answer(text: &str, patches: &Mutex<HashMap<i64, Patch>>, natives: &Nati
             }
         }
         Patch::Info => {
-            result.insert("mediaToken".into(), json!(media_token));
+            result.insert("mediaPort".into(), json!(media.port));
+            result.insert("mediaToken".into(), json!(media.token));
         }
     }
     Some(msg.to_string())

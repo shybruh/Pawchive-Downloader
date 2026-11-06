@@ -154,7 +154,6 @@ class GalleryToolsBridge(QObject):
     tagsReady = Signal(int, 'QVariantMap')      # token, {path: [character / series names]}
     tagsProgress = Signal(int, int, int)        # token, current, total
     tagsCancelled = Signal(int, 'QVariantMap')  # token, partial {path: [names]}
-    animationReady = Signal(str, 'QVariantMap') # path, {frames, durations} (frames 0 = not animated)
     storageProgress = Signal(int, 'QVariantMap')  # token, {files, bytes, folder}
     storageReady = Signal(int, 'QVariantMap')     # token, breakdown (see _run_storage)
     # Moves and undo run in the background (across drives a move is a copy: minutes on the window
@@ -482,18 +481,6 @@ class GalleryToolsBridge(QObject):
             mime.setImageData(img)
         QGuiApplication.clipboard().setMimeData(mime)
         return True
-
-    # ── Animated images (APNG, animated AVIF, …) ───────────────────────────
-    @Slot(str)
-    def prepareAnimation(self, path: str):
-        """Decode an animation's frames in the background; answers with animationReady."""
-        from bridge.thumbnail_provider import load_animation
-
-        def work():
-            info = load_animation(path) if path and os.path.isfile(path) else {"frames": 0, "durations": []}
-            self.animationReady.emit(path, info)
-
-        threading.Thread(target=work, daemon=True, name="AnimDecode").start()
 
     # ── Live refresh ────────────────────────────────────────────────────────
     @Slot(str)

@@ -29,7 +29,7 @@ hidden_imports = [
     "Crypto.Util.strxor", "Crypto.Random",
     "gdown", "requests", "urllib3", "brotli", "bs4", "psutil", "mutagen", "telethon", "qrcode",
     "PIL", "PIL.Image", "PIL.WebPImagePlugin", "PIL.AvifImagePlugin",
-    "server", "server.sidecar", "server.media",
+    "server", "server.sidecar",
 ]
 # Every engine module: much of it is imported lazily inside functions
 for pkg in ("core", "bridge", "services"):

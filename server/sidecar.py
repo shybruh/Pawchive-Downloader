@@ -445,12 +445,7 @@ def main():
     for name, obj in objects.items():
         hub.expose(name, obj)
 
-    # Local files (thumbnails, images, video) for the Gallery and post previews
-    from server.media import MediaServer
-    media = MediaServer(args.token)
-    media.start()
-    hub.media_port = media.port
-
+    # Thumbnails, pictures and files for the UI are served by the desktop shell (Rust), not here
 
     from services.telegram_service import TelegramService
 
@@ -476,7 +471,7 @@ def main():
         threading.Thread(target=_watch_stdin, name="stdin-watch", daemon=True).start()
 
     logger.success("Engine ready (headless sidecar).", category="system")
-    print("PAWCHIVE_SIDECAR_READY " + json.dumps({"port": hub.port, "mediaPort": media.port, "objects": len(hub.exposed)}), flush=True)
+    print("PAWCHIVE_SIDECAR_READY " + json.dumps({"port": hub.port, "objects": len(hub.exposed)}), flush=True)
     sys.exit(app.exec())
 
 
