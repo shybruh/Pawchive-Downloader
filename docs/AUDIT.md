@@ -40,31 +40,49 @@ marks, AI tagging, storage breakdown.
 Kept on purpose: `ffmpeg_manager` (the video-length filter needs ffprobe), `franchise_resolver`
 (plain keyword matching from Known.txt), keyword tagging in the gallery tools.
 
-## 3. What the Rust engine should contain
+## 3. Porting the engine to Rust
 
-Port in this order; each step can replace its Python counterpart while the rest keeps running in
-the sidecar.
+The goal is no Python at all. Nothing in the engine needs Python: PySide6 / Qt goes away with the
+host below, the helper programs (yt-dlp, 7-Zip, ffmpeg) are separate executables, and every library
+has a Rust counterpart (`reqwest` + `tokio`, `rusqlite`, `aes` / `ctr` for MEGA, `image` for
+thumbnails, the `windows` crate for the DPAPI credential vault). The one open question is Telegram:
+the `grammers` crate has to cover QR sign-in, two-step passwords and large media downloads; if it
+can't, Telegram alone stays a small Python helper.
 
-1. **Downloader + queue** — `core/downloader.py`, `services/multipart_downloader.py`,
-   `bridge/queue_model.py`, `core/queue_journal.py`, `core/recovery_manager.py`.
-   Parallel, resumable downloads (`.part` files), per-file and per-post pause, retries, bandwidth
-   limit, crash journal. Crates: `reqwest`, `tokio`, `rusqlite`.
-2. **Site clients** — `core/api_client.py`, `core/parser.py`, `core/providers.py`,
-   `core/auth_manager.py`, `services/cookie_importer.py`.
-3. **Filters and naming** — `core/filter_engine.py`, `core/folder_naming.py`.
-4. **Archive** — `core/archive_manager.py`, `core/archive_index.py` (SQLite).
-5. **Watchlist + scheduler** — `core/watchlist_manager.py`, `core/watchlist_checker.py`,
-   `core/task_scheduler.py`.
-6. **Link vault + cloud hosts** — `core/link_vault_manager.py`, `services/link_extractor.py`,
-   `services/cloud_downloader.py` (MEGA needs AES; `aes` / `ctr` crates).
-7. **Decompressor** — `services/bulk_decompressor.py`; keep calling 7-Zip as an external program.
-8. **Other hosts** — Bunkr, Erome, nHentai clients; embeds keep using the `yt-dlp` program.
-9. **Telegram** — the hardest (Telethon). Options: the `grammers` crate, or a small Python helper
-   just for Telegram.
+### How: the engine host
 
-The engine API the UI uses (`src/lib/engine.ts`) doesn't need to change: a Rust engine can expose
-the same objects, properties and methods over the same WebSocket, or the shell can call it
-directly as Tauri commands.
+The UI talks to one engine through `src/lib/engine.ts`. Since step 1 that connection goes to the
+**engine host** in the Rust shell (`src-tauri/src/host/`), not to Python:
+
+- objects implemented in Rust (`host/native.rs`, registered in `host::natives()`) are answered there;
+- every other request is passed through to the Python engine untouched, and its answers and events
+  flow back; `describe` gets the Rust objects merged in, so the UI sees one engine.
+
+Porting a part means writing its object in Rust with the same name, properties, methods and signals,
+registering it, and deleting the Python object. The UI doesn't change.
+
+### Shared data while both engines run
+
+A ported object owns its data files from then on (same files, same format, so updates lose nothing).
+Until everything that reads those files is ported too, the Python code that still reads them must
+re-read a file when it changes on disk instead of keeping its own copy, or the two will overwrite
+each other. Port a part together with everything that writes its data.
+
+### Order
+
+| Step | Part | Status |
+|---|---|---|
+| 1 | Engine host in the shell (pass-through, `shell` object) | done |
+| 2 | Media server (thumbnails, images and files for the Gallery and previews) | next: self-contained, no shared state |
+| 3 | Accounts and the credential vault (`accounts`, `core/auth_manager.py`, `services/cookie_importer.py`); the downloader reads cookies from the vault, so it must re-read it | |
+| 4 | Scheduler with its runner (`scheduler`, `core/task_scheduler.py`) | |
+| 5 | Link vault (`linkVault`, `core/link_vault_manager.py`) and cloud hosts (`services/cloud_downloader.py`) | |
+| 6 | Downloader core: link parsing, site clients, filters and naming, downloader and queue (`core/parser.py`, `api_client.py`, `filter_engine.py`, `folder_naming.py`, `downloader.py`, `bridge/queue_model.py`) — the largest part | |
+| 7 | Archive, watchlist, Known series (SQLite and JSON) | |
+| 8 | Gallery tools, Decompressor (still runs 7-Zip), Bunkr / Erome / nHentai, embeds (still run yt-dlp) | |
+| 9 | Telegram, then remove the Python engine and PyInstaller from the build | |
+
+Each step is checked against the running app before its Python code is deleted.
 
 ## 4. Still to fix regardless of the port
 

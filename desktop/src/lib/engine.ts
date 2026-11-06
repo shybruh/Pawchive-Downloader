@@ -39,6 +39,8 @@ class EngineClient {
   private asyncSeq = 0;
   token = "";
   mediaPort = 0;
+  /** The media server's secret (the Python engine's own when the UI talks through the host). */
+  mediaToken = "";
 
   async connect(info: ConnectionInfo): Promise<void> {
     this.setState("connecting");
@@ -62,8 +64,9 @@ class EngineClient {
     this.objects = described;
     this.token = info.token;
     try {
-      const meta = await this.request<{ mediaPort: number }>({ op: "info" });
+      const meta = await this.request<{ mediaPort: number; mediaToken?: string }>({ op: "info" });
       this.mediaPort = meta.mediaPort || 0;
+      this.mediaToken = meta.mediaToken || info.token;
     } catch { this.mediaPort = 0; }
     for (const [name, info] of Object.entries(described)) {
       for (const [p, pi] of Object.entries(info.props)) this.values.set(`${name}.${p}`, pi.value);
@@ -168,7 +171,7 @@ class EngineClient {
 
   mediaUrl(kind: "thumb" | "image" | "file", path: string): string {
     if (!this.mediaPort || !path) return "";
-    return `http://127.0.0.1:${this.mediaPort}/${kind}?path=${encodeURIComponent(path)}&token=${this.token}`;
+    return `http://127.0.0.1:${this.mediaPort}/${kind}?path=${encodeURIComponent(path)}&token=${this.mediaToken || this.token}`;
   }
 
   rows<T = Json>(obj: string, start = 0, count?: number): Promise<{ total: number; start: number; rows: T[] }> {

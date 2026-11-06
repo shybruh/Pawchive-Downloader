@@ -8,19 +8,22 @@ A small Rust shell (Tauri) starts the existing Python engine in the background, 
 talks to it over a local WebSocket.
 
 ```
-┌──────────── Tauri shell (Rust, src-tauri/) ─────────────┐
-│ starts  python -m server.sidecar --port 0 --token …     │
-│ hands {port, token} to the UI; the engine runs in a job │
-│ object, so its whole process tree ends with the app     │
-└───────────────┬─────────────────────────────────────────┘
-                │ ws://127.0.0.1:<port>/?token=…   (JSON RPC + live events)
-┌───────────────┴──────────────┐      ┌──────────────────────────────────┐
-│ React UI (src/)              │ ←──→ │ Python engine (server/sidecar.py)│
+┌──────────────── Tauri shell (Rust, src-tauri/) ────────────────┐
+│ starts  python -m server.sidecar --port 0 --token …            │
+│ (in a job object, so its whole process tree ends with the app) │
+│ engine host (src/host/): answers the objects ported to Rust,   │
+│ passes everything else through to the Python engine            │
+└──────┬──────────────────────────────────────────────┬──────────┘
+       │ ws://127.0.0.1:<host port>/?token=…           │ ws (same protocol)
+┌──────┴───────────────────────┐      ┌───────────────┴──────────────────┐
+│ React UI (src/)              │      │ Python engine (server/sidecar.py)│
 │ shadcn-style components,     │      │ same bridges as the old QML app, │
 │ lucide icons, Tailwind v4    │ ←──  │ reflected automatically          │
 └──────────────────────────────┘ HTTP └──────────────────────────────────┘
-          thumbnails / images / video   (server/media.py, same token)
+          thumbnails / images / video   (server/media.py)
 ```
+
+The engine is being ported to Rust one object at a time through the host; see `docs/AUDIT.md`.
 
 The sidecar exposes every Qt property, slot and signal of the engine's bridge objects
 (`appBridge`, `decompressorBridge`, `telegramBridge`, `updaterBridge`, the queue / log / watchlist
@@ -64,11 +67,12 @@ The shell finds the engine in this order: `PAWCHIVE_ENGINE` (a built engine exec
 
 ### Drive the same engine from a browser
 
-Handy for UI work: give the engine a fixed port and token, and point a second Vite at it.
+Handy for UI work: give the host (and the engine behind it) a fixed port and token, and point a
+second Vite at the host.
 
 ```bash
-PAWCHIVE_ENGINE_PORT=47321 PAWCHIVE_ENGINE_TOKEN=devtoken npm run tauri dev
-VITE_ENGINE_PORT=47321 VITE_ENGINE_TOKEN=devtoken npx vite --port 1430
+PAWCHIVE_HOST_PORT=47322 PAWCHIVE_HOST_TOKEN=devtoken PAWCHIVE_ENGINE_PORT=47321 PAWCHIVE_ENGINE_TOKEN=enginetoken npm run tauri dev
+VITE_ENGINE_PORT=47322 VITE_ENGINE_TOKEN=devtoken npx vite --port 1430
 ```
 
 ## Releases and updates

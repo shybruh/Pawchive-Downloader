@@ -4,20 +4,25 @@
 //! port and secret token to the React UI, and stops the engine when the app exits.
 
 mod engine;
+mod host;
 mod proc_group;
 mod site_login;
 
-use engine::{Engine, EngineInfo};
+use engine::Engine;
+use host::{Host, HostInfo};
 use std::sync::Arc;
 use tauri::{Manager, RunEvent, State};
 
-// Both commands wait on the engine process, so they run off the main (window) thread.
+/// Where the UI connects: the engine host, which answers for the Rust parts of the engine and
+/// passes the rest to the Python engine. Waits until the Python engine is up, so it runs off the
+/// main (window) thread.
 #[tauri::command]
-async fn engine_info(engine: State<'_, Arc<Engine>>) -> Result<EngineInfo, String> {
+async fn engine_info(engine: State<'_, Arc<Engine>>, host: State<'_, Arc<Host>>) -> Result<HostInfo, String> {
     let engine = Arc::clone(&engine);
     tauri::async_runtime::spawn_blocking(move || engine.wait_ready(std::time::Duration::from_secs(60)))
         .await
-        .map_err(|e| e.to_string())?
+        .map_err(|e| e.to_string())??;
+    Ok(host.info())
 }
 
 #[tauri::command]
@@ -50,7 +55,9 @@ pub fn run() {
             let log_dir = app.path().app_log_dir().ok();
             let engine = Arc::new(Engine::new(log_dir));
             engine.start()?;
+            let host = Host::start(engine.clone(), app.package_info().version.to_string())?;
             app.manage(engine);
+            app.manage(host);
             app.manage(site_login::LoginSite::default());
             Ok(())
         })

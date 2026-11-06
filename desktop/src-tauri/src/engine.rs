@@ -217,7 +217,7 @@ impl Engine {
     }
 }
 
-fn new_token() -> String {
+pub fn new_token() -> String {
     let mut bytes = [0u8; 24];
     getrandom::fill(&mut bytes).expect("OS random source");
     bytes.iter().map(|b| format!("{b:02x}")).collect()
