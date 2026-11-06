@@ -55,7 +55,13 @@ jobs:
         shell: pwsh
         run: |
           python -m PyInstaller --noconfirm --clean --distpath dist --workpath build/engine server/engine.spec
-          Copy-Item version.json dist/pawchive-engine/version.json
+          # The engine reports this version (logs, User-Agent)
+          $info = Get-Content version.json -Raw | ConvertFrom-Json
+          $info.version = $env:APP_VERSION
+          $info.commit = "${{ github.sha }}"
+          $info.short_commit = "${{ github.sha }}".Substring(0, 7)
+          $info.date = (Get-Date -Format "yyyy-MM-dd")
+          $info | ConvertTo-Json | Set-Content dist/pawchive-engine/version.json -Encoding utf8
 
       # ── App (Tauri + React) ──────────────────────────────────────────────────────────────
       - uses: actions/setup-node@v4

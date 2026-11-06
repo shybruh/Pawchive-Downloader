@@ -186,6 +186,22 @@ def get_data_dir() -> str:
     return app_data
 
 
+_app_version = None
+
+
+def get_app_version() -> str:
+    """The app's version, from version.json (the release build writes the tag's version into it)."""
+    global _app_version
+    if _app_version is None:
+        try:
+            import json
+            with open(os.path.join(get_base_dir(), "version.json"), encoding="utf-8") as f:
+                _app_version = str(json.load(f).get("version") or "0.0.0")
+        except Exception:
+            _app_version = "0.0.0"
+    return _app_version
+
+
 def get_app_root() -> str:
     """The folder the user sees: next to the .exe / binary, or the folder holding main.py."""
     if getattr(sys, "frozen", False):

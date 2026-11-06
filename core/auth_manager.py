@@ -29,84 +29,11 @@ VAULT_CONTEXT = "pawchive_auth_vault"
 SESSION_FIELDS = ("cookie", "token", "api_key")
 
 
-# Provider definitions registry — Kemono, Coomer, Cum.st, and Pawchive
+# The general session cookie (Downloader → Cookie) is kept in the vault under this name
+GENERAL_COOKIE_SLOT = "general"
+
+# Provider definitions registry — cum.st and Pawchive
 SUPPORTED_PROVIDERS: Dict[str, Dict[str, Any]] = {
-    "kemono": {
-        "id": "kemono",
-        "name": "Kemono",
-        "domain": "kemono.cr",
-        "mirror_domains": ["kemono.cr"],
-        "icon": "🐱",
-        "category": "Primary Platform",
-        "auth_type": "account",
-        "supports_credentials_login": True,
-        "fields": [
-            {
-                "key": "username",
-                "label": "Username or Email",
-                "placeholder": "Username or email...",
-                "is_secret": False
-            },
-            {
-                "key": "password",
-                "label": "Password",
-                "placeholder": "Account password...",
-                "is_secret": True
-            },
-            {
-                "key": "cookie",
-                "label": "Session Cookie / JWT",
-                "placeholder": "e.g. session=eyJhbGciOi... or raw JWT",
-                "is_secret": True
-            }
-        ],
-        "features": [
-            "Favorite Mode account post downloads",
-            "Access to paywalled artist attachments",
-            "Cloudflare clearance bypass"
-        ],
-        "supports_browser_import": True,
-        "supports_test_connection": True,
-        "help_tip": "Log in with your username/email and password, or use 1-Click Browser Import."
-    },
-    "coomer": {
-        "id": "coomer",
-        "name": "Coomer",
-        "domain": "coomer.st",
-        "mirror_domains": ["coomer.st", "coomer.cr"],
-        "icon": "💎",
-        "category": "Primary Platform",
-        "auth_type": "account",
-        "supports_credentials_login": True,
-        "fields": [
-            {
-                "key": "username",
-                "label": "Username or Email",
-                "placeholder": "Username or email...",
-                "is_secret": False
-            },
-            {
-                "key": "password",
-                "label": "Password",
-                "placeholder": "Account password...",
-                "is_secret": True
-            },
-            {
-                "key": "cookie",
-                "label": "Session Cookie / JWT",
-                "placeholder": "e.g. session=eyJhbGciOi... or raw JWT",
-                "is_secret": True
-            }
-        ],
-        "features": [
-            "Favorite Mode account post downloads",
-            "Access to locked media attachments",
-            "Priority Cloudflare clearance"
-        ],
-        "supports_browser_import": True,
-        "supports_test_connection": True,
-        "help_tip": "Log in with your username/email and password, or use 1-Click Browser Import."
-    },
     "cumst": {
         "id": "cumst",
         "name": "Cum.st",
@@ -235,9 +162,19 @@ class AuthManager:
                     self._data = payload
                 else:
                     self._data = {"version": 1, "providers": {}}
+                # Older versions kept the general cookie in a "kemono" slot (and had a "coomer" one)
+                provs = self._data["providers"]
+                migrated = False
+                if "kemono" in provs:
+                    if GENERAL_COOKIE_SLOT not in provs:
+                        provs[GENERAL_COOKIE_SLOT] = provs["kemono"]
+                    del provs["kemono"]
+                    migrated = True
+                if provs.pop("coomer", None) is not None:
+                    migrated = True
                 from core.crypto_utils import needs_reencrypt
-                if needs_reencrypt(raw_encrypted):
-                    self.save()     # move off the old MAC-address key
+                if migrated or needs_reencrypt(raw_encrypted):
+                    self.save()     # move off the old MAC-address key / store the migrated slots
                 logger.debug(f"[AuthManager] Decrypted vault loaded ({len(self._data.get('providers', {}))} providers configured).", category="auth")
             except Exception as e:
                 logger.error(f"[AuthManager] Failed to decrypt credentials vault: {e}", category="auth")
@@ -299,9 +236,9 @@ class AuthManager:
                 legacy_cookie = str(settings_dict.get("cookie", "") or "").strip()
                 if not legacy_cookie:
                     continue
-                # Keep it in the encrypted vault (the general cookie lives in the "kemono" slot)
-                if not self.get_provider_data("kemono").get("cookie"):
-                    self.set_credential("kemono", {"cookie": legacy_cookie})
+                # Keep it in the encrypted vault
+                if not self.get_provider_data(GENERAL_COOKIE_SLOT).get("cookie"):
+                    self.set_credential(GENERAL_COOKIE_SLOT, {"cookie": legacy_cookie})
                     logger.info("🔒 [AuthManager] Moved the session cookie from settings.json into the encrypted vault.", category="auth")
                 settings_dict.pop("cookie", None)
                 atomic_write_json(settings_path, settings_dict, indent=2)
@@ -347,7 +284,7 @@ class AuthManager:
                 c_val = str(creds["cookie"]).strip()
                 if c_val and c_val.startswith("eyJ") and "session=" not in c_val:
                     c_val = f"session={c_val}"
-                elif c_val and "=" not in c_val and provider_id in ("kemono", "coomer"):
+                elif c_val and "=" not in c_val and provider_id == GENERAL_COOKIE_SLOT:
                     c_val = f"session={c_val}"
                 creds["cookie"] = c_val
 
@@ -492,8 +429,7 @@ class AuthManager:
         }
 
     def get_all_providers_summary(self) -> List[Dict[str, Any]]:
-        """Ordered summaries of the account providers people can use (Kemono and Coomer are
-        not supported: their entries stay only as internal storage slots)."""
+        """Ordered summaries of the account providers people can use."""
         from core.providers import is_disabled
         summaries = []
         for pid in SUPPORTED_PROVIDERS:
@@ -529,67 +465,6 @@ class AuthManager:
 
         domains = meta.get("mirror_domains", [meta["domain"]])
 
-
-        # ── 1. Kemono / Coomer ──
-        if provider_id in ("kemono", "coomer"):
-            api_headers = {
-                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
-                "Accept": "text/css",   # Kemono / Coomer answer API calls only for text/css
-                "Content-Type": "application/json"
-            }
-            last_err = ""
-            for dom in domains:
-                url = f"https://{dom}/api/v1/authentication/login"
-                api_headers["Referer"] = f"https://{dom}/account/login"
-                try:
-                    resp = requests.post(url, json={"username": username, "password": password}, headers=api_headers, timeout=12)
-
-                    if resp.status_code == 200:
-                        session_cookie = resp.cookies.get("session", "")
-                        if not session_cookie:
-                            set_c = resp.headers.get("Set-Cookie", "")
-                            for part in set_c.split(";"):
-                                if "session=" in part:
-                                    session_cookie = part.strip().split("session=")[-1]
-                                    break
-                        if not session_cookie:
-                            try:
-                                session_cookie = resp.json().get("token", "")
-                            except Exception:
-                                pass
-
-                        if session_cookie:
-                            full_cookie = f"session={session_cookie}" if not session_cookie.startswith("session=") else session_cookie
-                            self.set_credential(provider_id, {
-                                "username": username,
-                                "cookie": full_cookie,
-                                "domain": dom,
-                                "last_login": int(time.time())
-                            })
-                            logger.success(f"[AuthManager] Successfully logged into {meta['name']} as {username} (DPAPI secured).", category="auth")
-                            return True, f"Successfully logged in as {username}!", {"username": username, "domain": dom}
-                        else:
-                            return False, (f"{meta['name']} accepted the login but didn't return a session cookie. "
-                                           "Use 1-Click Browser Import or paste the session cookie instead."), {}
-
-                    elif resp.status_code in (400, 401):
-                        try:
-                            err_json = resp.json()
-                            err_msg = err_json.get("error", "Username or password is incorrect.")
-                        except Exception:
-                            err_msg = "Username or password is incorrect."
-                        return False, err_msg, {}
-
-                    elif resp.status_code == 403:
-                        last_err = "Cloudflare protection active. Please use 1-Click Browser Import or paste session cookie."
-                        continue
-                    else:
-                        last_err = f"Server returned unexpected HTTP {resp.status_code}."
-                except Exception as e:
-                    last_err = f"Connection error ({dom}): {e}"
-                    continue
-
-            return False, last_err or "Login failed. Please check credentials or use 1-Click Import.", {}
 
         # ── 2. Pawchive ──
         if provider_id == "pawchive":
@@ -709,43 +584,6 @@ class AuthManager:
             return False, disabled_message(provider_id), {}
         if not self.is_logged_in(provider_id):
             return False, "Not connected. Please log in or import cookies first.", {}
-
-        # 1. Kemono / Coomer
-        if provider_id in ("kemono", "coomer"):
-            cookie = self.get_credential(provider_id, "cookie")
-            if not cookie:
-                return False, "No cookie found for provider.", {}
-
-            domains = SUPPORTED_PROVIDERS[provider_id].get("mirror_domains", [SUPPORTED_PROVIDERS[provider_id]["domain"]])
-            last_err = ""
-            for dom in domains:
-                headers = {
-                    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
-                    "Cookie": cookie,
-                    "Accept": "text/css" if ("kemono" in dom or "coomer" in dom) else "application/json, text/plain, */*",
-                    "Referer": f"https://{dom}/"
-                }
-
-                url = f"https://{dom}/api/v1/favorites?type=post&o=0"
-                try:
-                    resp = requests.get(url, headers=headers, timeout=12)
-                    if resp.status_code == 200:
-                        try:
-                            favs = resp.json()
-                            count = len(favs) if isinstance(favs, list) else 0
-                            msg = f"Session verified! ({count} favorited posts synced via {dom})"
-                            self.set_credential(provider_id, {"last_verified": int(time.time())})
-                            return True, msg, {"favorites_count": count}
-                        except Exception:
-                            return True, f"Session verified on {dom} (HTTP 200 OK)", {}
-                    elif resp.status_code in (401, 403):
-                        return False, f"Session unauthorized or expired (HTTP {resp.status_code}). Please re-login.", {}
-                    else:
-                        last_err = f"Server returned unexpected HTTP {resp.status_code} ({dom})."
-                except Exception as e:
-                    last_err = f"Connection failed ({dom}): {e}"
-
-            return False, last_err or "Connection failed.", {}
 
         # 2. Pawchive
         if provider_id == "pawchive":

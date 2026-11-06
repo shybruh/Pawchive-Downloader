@@ -331,7 +331,7 @@ class AppBridge(QObject):
         self._current_url = ""
         self._page_start = 1
         self._page_end = 999999
-        self._download_dir = saved_settings.get("download_dir", os.path.join(os.path.expanduser("~"), "Downloads", "KemonoDownloads"))
+        self._download_dir = saved_settings.get("download_dir", os.path.join(os.path.expanduser("~"), "Downloads", "Pawchive"))
         self._filter_characters = ""
         self._character_scope = saved_settings.get("character_scope", "title")
         self._skip_words = saved_settings.get("skip_words", "")
@@ -416,8 +416,8 @@ class AppBridge(QObject):
         self._threads_count = int(saved_settings.get("threads", min(8, self._max_cpu_threads)))
         self.downloader.max_workers = self._threads_count
         try:
-            from core.auth_manager import auth_manager
-            vault_cookie = auth_manager.get_credential("kemono", "cookie")
+            from core.auth_manager import auth_manager, GENERAL_COOKIE_SLOT
+            vault_cookie = auth_manager.get_credential(GENERAL_COOKIE_SLOT, "cookie")
         except Exception:
             vault_cookie = ""
         self._cookie_string = vault_cookie or saved_settings.get("cookie", "")
@@ -1211,8 +1211,6 @@ class AppBridge(QObject):
 
     def get_provider_for_domain(self, domain_or_url: str) -> str:
         d = (domain_or_url or "").lower()
-        if "coomer" in d:
-            return "coomer"
         if "pawchive" in d:
             return "pawchive"
         if "cum.st" in d or "cumst" in d:
@@ -1658,9 +1656,9 @@ class AppBridge(QObject):
     @Slot()
     def _persist_cookie(self):
         try:
-            from core.auth_manager import auth_manager
-            # The general cookie is kept in the vault's "kemono" slot (never in settings.json)
-            auth_manager.set_credential("kemono", {"cookie": self._cookie_string})
+            from core.auth_manager import auth_manager, GENERAL_COOKIE_SLOT
+            # The general cookie is kept in the encrypted vault (never in settings.json)
+            auth_manager.set_credential(GENERAL_COOKIE_SLOT, {"cookie": self._cookie_string})
             self.providersChanged.emit()
         except Exception as e:
             logger.debug(f"Could not save the cookie: {e}", category="auth")
@@ -2981,7 +2979,7 @@ class AppBridge(QObject):
                         "avatar": avatar,
                         "url": url,
                         "domain": dom,
-                        "provider": "cumst" if is_c else ("pawchive" if "pawchive" in dom else ("kemono" if "kemono" in dom else ("coomer" if "coomer" in dom else "pawchive"))),
+                        "provider": "cumst" if is_c else "pawchive",
                         "lastPostDate": entry.last_post_date if entry else "",
                         "status": status_text,
                         "newPostCount": new_count,
@@ -4937,7 +4935,7 @@ class AppBridge(QObject):
                 return
 
             lines = [
-                f"Kemono Downloader — Harvested External Links",
+                f"Pawchive Downloader — Harvested External Links",
                 f"Exported: {__import__('datetime').datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
                 "=" * 60,
                 "",
@@ -6636,7 +6634,7 @@ class AppBridge(QObject):
             elif not self._watchlist_apply_global_settings:
                 return self.resolve_artist_download_dir_for_folder(target, entry.creator_name or entry.user_id, entry.service)
 
-        base_dir = self._download_dir or os.path.join(os.path.expanduser("~"), "Downloads", "KemonoDownloads")
+        base_dir = self._download_dir or os.path.join(os.path.expanduser("~"), "Downloads", "Pawchive")
         return pick_creator_folder(base_dir, clean_c, entry.service)
 
     def resolve_artist_download_dir_for_folder(self, folder: str, creator_name: str, service: str) -> str:
@@ -7879,10 +7877,6 @@ class AppBridge(QObject):
         key = "cookie" if auth_type == "cookie" else ("token" if auth_type == "token" else ("api_key" if auth_type == "api_key" else "cookie"))
 
         ok = auth_manager.set_credential(providerId, {key: credVal.strip()})
-        if providerId == "kemono":
-            self.cookieString = credVal.strip()
-            self.saveSettings()
-            self.cookieWatchdogChanged.emit()
         self.providersChanged.emit()
         return ok
 
@@ -7890,10 +7884,6 @@ class AppBridge(QObject):
     def clearProviderCredential(self, providerId: str) -> bool:
         from core.auth_manager import auth_manager
         ok = auth_manager.clear_credential(providerId)
-        if providerId == "kemono":
-            self.cookieString = ""
-            self.saveSettings()
-            self.cookieWatchdogChanged.emit()
         self.providersChanged.emit()
         return ok
 
@@ -7923,9 +7913,6 @@ class AppBridge(QObject):
                 if not c_str:
                     raise RuntimeError("No sign-in found in your browsers.")
                 auth_manager.set_credential(providerId, {"cookie": c_str})
-                if providerId == "kemono":
-                    self.cookieString = c_str
-                    self.saveSettings()
                 self.providersChanged.emit()
                 self.cookieWatchdogChanged.emit()
                 self.cookieImportCompleted.emit(True, res.get("browser_name", "Browser"))
@@ -7944,11 +7931,6 @@ class AppBridge(QObject):
             ok, msg, details = auth_manager.login_with_credentials(providerId, username, password)
             self.providerLoginFinished.emit(providerId, ok, msg)
             if ok:
-                if providerId == "kemono":
-                    c = auth_manager.get_credential("kemono", "cookie")
-                    if c:
-                        self.cookieString = c
-                        self.saveSettings()
                 self.providersChanged.emit()
 
         threading.Thread(target=_worker, daemon=True, name=f"Login_{providerId}").start()

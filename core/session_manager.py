@@ -192,7 +192,7 @@ class SessionManager:
 
     def load_settings(self) -> Dict[str, Any]:
         default_settings = {
-            "download_dir": os.path.join(os.path.expanduser("~"), "Downloads", "KemonoDownloads"),
+            "download_dir": os.path.join(os.path.expanduser("~"), "Downloads", "Pawchive"),
             "threads": 4,
             "cookie": "",
             "user_agent": "",

@@ -1,5 +1,5 @@
 import { useEffect, useState, useSyncExternalStore } from "react";
-import { FileIcon, FilmIcon, ImageIcon, KeyRoundIcon, LayoutGridIcon, Loader2Icon, MusicIcon, PhoneIcon, QrCodeIcon, SendIcon, ShieldAlertIcon, ZapIcon } from "lucide-react";
+import { FileIcon, FilmIcon, ImageIcon, KeyRoundIcon, LayoutGridIcon, Loader2Icon, LockKeyholeIcon, MusicIcon, PhoneIcon, QrCodeIcon, SendIcon, ShieldAlertIcon, ZapIcon } from "lucide-react";
 import { toast } from "sonner";
 import { call, setProp, useProp, useSignal } from "@/lib/engine";
 import { Alert, Button, Dialog, DialogContent, DialogFooter, Input, Label, Segmented, Switch } from "@/components/ui";
@@ -31,8 +31,34 @@ export function TelegramSignIn() {
   const [advanced, setAdvanced] = useState(false);
   const [apiId, setApiId] = useState("");
   const [apiHash, setApiHash] = useState("");
+  // Two-step verification can follow any way of signing in (QR code or phone): it gets its own
+  // step, and stays there after a wrong password instead of starting over
+  const [needs2fa, setNeeds2fa] = useState(false);
+  const [checking2fa, setChecking2fa] = useState(false);
 
   useSignal("appBridge", "telegramAuthRequested", () => openTelegramSignIn(true));
+
+  useEffect(() => {
+    if (state === "need_2fa") { setNeeds2fa(true); setPassword(""); }
+    if (state === "connected" || state === "idle") setNeeds2fa(false);
+  }, [state]);
+  // Each try passes through "Contacting Telegram…", so a repeated wrong password (same state,
+  // same message) still ends the spinner
+  useEffect(() => {
+    if (!/contacting/i.test(status)) setChecking2fa(false);
+  }, [state, status]);
+
+  const submitPassword = () => {
+    if (!password || checking2fa) return;
+    setChecking2fa(true);
+    call(T, "submit2faPassword", password);
+  };
+  const startOver = () => {
+    setNeeds2fa(false);
+    setPassword("");
+    call(T, "cancelQrLogin").catch(() => {});
+    if (method === "qr") setTimeout(() => call(T, "startQrLogin").catch(() => {}), 50);
+  };
 
   // Start QR sign-in as soon as that tab is shown
   // and stop it when switching to another way of signing in
@@ -50,12 +76,38 @@ export function TelegramSignIn() {
     }
   }, [open, loggedIn]);
 
-  const close = () => { if (state.startsWith("qr")) call(T, "cancelQrLogin").catch(() => {}); closeSignIn(); };
+  const close = () => {
+    if (state.startsWith("qr") || needs2fa) call(T, "cancelQrLogin").catch(() => {});
+    setNeeds2fa(false);
+    closeSignIn();
+  };
   const busy = state === "qr_generating" || state === "checking";
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && close()}>
       <DialogContent title="Sign in to Telegram" description="Needed to read channels. Your session is stored encrypted on this computer.">
+        {needs2fa ? (
+          <div className="flex flex-col gap-3">
+            <div className="flex items-start gap-3 rounded-lg border bg-muted/40 p-3">
+              <LockKeyholeIcon className="mt-0.5 size-4 shrink-0 text-muted-foreground" />
+              <p className="text-sm text-muted-foreground">
+                This account has two-step verification. Enter your Telegram cloud password (the one you set yourself, not a code).
+              </p>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="tg-2fa">Password</Label>
+              <div className="flex gap-2">
+                <Input id="tg-2fa" autoFocus type="password" autoComplete="current-password" value={password}
+                  onChange={(e) => setPassword(e.target.value)} onKeyDown={(e) => { if (e.key === "Enter") submitPassword(); }} />
+                <Button disabled={!password || checking2fa} onClick={submitPassword}>
+                  {checking2fa && <Loader2Icon className="animate-spin" />}Continue
+                </Button>
+              </div>
+            </div>
+            {state === "error" && status && <p className="text-xs text-destructive">{status}</p>}
+            <Button variant="ghost" size="sm" className="self-start" onClick={startOver}>Start over</Button>
+          </div>
+        ) : (<>
         <Segmented value={method} onChange={setMethod} options={[
           { value: "qr", label: <><QrCodeIcon className="size-3.5" />QR code</> },
           { value: "phone", label: <><PhoneIcon className="size-3.5" />Phone number</> },
@@ -77,7 +129,7 @@ export function TelegramSignIn() {
 
         {method === "phone" && (
           <div className="flex flex-col gap-3">
-            {state !== "code_sent" && state !== "need_2fa" && (
+            {state !== "code_sent" && (
               <div className="flex flex-col gap-2">
                 <Label>Phone number (with country code)</Label>
                 <div className="flex gap-2">
@@ -93,16 +145,6 @@ export function TelegramSignIn() {
                   <Input autoFocus inputMode="numeric" placeholder="12345" value={code} onChange={(e) => setCode(e.target.value)}
                     onKeyDown={(e) => { if (e.key === "Enter" && code.trim()) call(T, "verifyPhoneCode", code.trim()); }} />
                   <Button disabled={!code.trim()} onClick={() => call(T, "verifyPhoneCode", code.trim())}>Sign in</Button>
-                </div>
-              </div>
-            )}
-            {state === "need_2fa" && (
-              <div className="flex flex-col gap-2">
-                <Label>Two-step verification password</Label>
-                <div className="flex gap-2">
-                  <Input autoFocus type="password" value={password} onChange={(e) => setPassword(e.target.value)}
-                    onKeyDown={(e) => { if (e.key === "Enter" && password) call(T, "submit2faPassword", password); }} />
-                  <Button disabled={!password} onClick={() => call(T, "submit2faPassword", password)}>Continue</Button>
                 </div>
               </div>
             )}
@@ -123,6 +165,7 @@ export function TelegramSignIn() {
         {status && (method === "qr" || !state.startsWith("qr")) && (
           <p className={cn("text-xs", state === "error" ? "text-destructive" : "text-muted-foreground")}>{status}</p>
         )}
+        </>)}
 
         <div className="border-t pt-3">
           <label className="flex items-center justify-between text-sm">

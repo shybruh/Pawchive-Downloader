@@ -42,8 +42,6 @@ class BrowserCookieImporter:
     """
 
     TARGET_DOMAINS = [
-        "kemono",
-        "coomer",
         "pawchive",
         "cum.st",
         "cum",

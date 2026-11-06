@@ -20,6 +20,7 @@ import urllib.request
 import urllib.error
 from typing import Optional, Dict, Set, List, Tuple, Any
 from core.logger import logger
+from core.path_utils import get_app_version
 
 
 _ANILIST_GRAPHQL_URL = "https://graphql.anilist.co"
@@ -514,7 +515,7 @@ class FranchiseResolver:
                 data=json.dumps({"query": _ANILIST_QUERY, "variables": {"search": clean_search}}).encode("utf-8"),
                 headers={
                     "Content-Type": "application/json",
-                    "User-Agent": "PawchiveDownloader/1.2 (Anime Franchise Resolver)"
+                    "User-Agent": f"PawchiveDownloader/{get_app_version()} (Anime Franchise Resolver)"
                 }
             )
             with urllib.request.urlopen(req, timeout=2.5) as resp:

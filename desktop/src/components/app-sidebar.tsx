@@ -46,7 +46,7 @@ export function AppSidebar() {
   const queueActive = useProp<number>("appBridge.queueModel", "downloadingCount", 0);
   const queuePending = useProp<number>("appBridge.queueModel", "pendingCount", 0);
   const newPosts = useProp<number>("appBridge.watchlistModel", "totalNewPosts", 0);
-  const { version, phase } = useUpdater();
+  const { phase } = useUpdater();
   const updateAvailable = phase === "available";
   const queued = queueActive + queuePending;
 
@@ -54,10 +54,7 @@ export function AppSidebar() {
     <aside className="flex w-60 shrink-0 flex-col border-r border-sidebar-border bg-sidebar">
       <div className="flex h-14 items-center gap-2.5 px-4">
         <img src={logo} alt="" className="size-7 rounded-md" />
-        <div className="flex min-w-0 flex-col leading-tight">
-          <span className="text-sm font-semibold tracking-tight">Pawchive</span>
-          <span className="text-[11px] text-muted-foreground">Downloader {version && version !== "dev" ? `v${version}` : ""}</span>
-        </div>
+        <span className="text-[15px] font-semibold tracking-tight">Pawchive</span>
       </div>
 
       <nav className="flex flex-1 flex-col gap-5 overflow-y-auto px-3 py-2">

@@ -47,7 +47,11 @@ def main():
     if not os.path.isfile(os.path.join(ENGINE_OUT, "pawchive-engine.exe")):
         sys.exit("The engine isn't built (dist/pawchive-engine).")
     # The engine reads its version from next to its .exe
-    shutil.copy2(os.path.join(ROOT, "version.json"), os.path.join(ENGINE_OUT, "version.json"))
+    with open(os.path.join(ROOT, "version.json"), encoding="utf-8") as f:
+        info = json.load(f)
+    info["version"] = version
+    with open(os.path.join(ENGINE_OUT, "version.json"), "w", encoding="utf-8") as f:
+        json.dump(info, f, indent=4)
 
     # 2. App + installer. The engine goes in as a resource only for this build, so day-to-day
     #    development doesn't need it.

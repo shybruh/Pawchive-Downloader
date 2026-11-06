@@ -181,6 +181,11 @@ def needs_full_size_upgrade(existing_size: int, server_size: int, target_path: s
 # real name is always a finished one (an interrupted download used to look complete on the next run)
 PART_SUFFIX = ".part"
 
+def _user_agent() -> str:
+    from core.path_utils import get_app_version
+    return f"PawchiveDownloader/{get_app_version()} (https://github.com/shybruh/Pawchive-Downloader)"
+
+
 _CONTACT_HEADERS = {
     "X-Contact": "https://github.com/shybruh/Pawchive-Downloader",
     "X-Client-Notice": (
@@ -2607,8 +2612,8 @@ class KemonoDownloader:
         clean_cookie = cookie_str.strip() if cookie_str else ""
         if not clean_cookie:
             try:
-                from core.auth_manager import auth_manager
-                clean_cookie = auth_manager.get_credential("kemono", "cookie")
+                from core.auth_manager import auth_manager, GENERAL_COOKIE_SLOT
+                clean_cookie = auth_manager.get_credential(GENERAL_COOKIE_SLOT, "cookie")
             except Exception:
                 pass
 
@@ -3466,7 +3471,7 @@ class KemonoDownloader:
                         req_headers["Referer"] = "https://nhentai.net/"
                         req_headers["Accept"] = "*/*"
                     elif "pawchive" in u_low:
-                        req_headers["User-Agent"] = "PawchiveDownloader/1.3.5 (https://github.com/shybruh/Pawchive-Downloader)"
+                        req_headers["User-Agent"] = _user_agent()
                         req_headers["Referer"] = "https://pawchive.pw/"
                         req_headers["Accept"] = "*/*"
                     elif "cum.st" in u_low:
@@ -3551,7 +3556,7 @@ class KemonoDownloader:
                             try:
                                 if "pawchive" in attempt_url.lower():
                                     clean_headers = {
-                                        "User-Agent": "PawchiveDownloader/1.3.5 (https://github.com/shybruh/Pawchive-Downloader)",
+                                        "User-Agent": _user_agent(),
                                         "Referer": "https://pawchive.pw/",
                                         "Accept": "*/*",
                                         "X-Contact": "https://github.com/shybruh/Pawchive-Downloader",

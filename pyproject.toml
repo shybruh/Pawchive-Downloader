@@ -4,15 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pawchive-downloader"
-version = "1.3.8"
-description = "Universal Cross-Platform Kemono, Coomer, Bunkr & Fanbox Archival Suite"
+version = "2.0.4"
+description = "Engine of Pawchive Downloader: downloads and archives Pawchive, cum.st, Bunkr, Telegram and more"
 readme = "README.md"
 requires-python = ">=3.9"
 license = { text = "MIT" }
 authors = [
-    { name = "whyamihere773" }
+    { name = "shybruh" }
 ]
-keywords = ["kemono", "coomer", "downloader", "archival", "pyside6", "qml"]
+keywords = ["pawchive", "downloader", "archival"]
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
@@ -24,7 +24,6 @@ classifiers = [
     "Operating System :: Microsoft :: Windows",
     "Operating System :: MacOS",
     "Topic :: Internet :: WWW/HTTP",
-    "Environment :: X11 Applications :: Qt",
 ]
 
 dependencies = [
@@ -50,18 +49,13 @@ dev = [
     "pytest>=7.0.0",
     "pytest-qt>=4.0.0",
 ]
-ai = [
-    "numpy>=1.26.0",
-    "onnxruntime>=1.19.0",
-    "tokenizers>=0.19.0",
-]
 
 [project.scripts]
-pawchive = "main:main"
+pawchive-engine = "server.sidecar:main"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["bridge*", "core*", "services*", "qml*"]
+include = ["bridge*", "core*", "services*", "server*"]
 
 [tool.uv]
 dev-dependencies = [

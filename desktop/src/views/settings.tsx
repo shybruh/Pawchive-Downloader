@@ -1,7 +1,7 @@
 import { useEffect, useState, type ReactNode } from "react";
 import {
   CircleCheckIcon, CookieIcon, DownloadCloudIcon, ExternalLinkIcon, FolderOpenIcon, GaugeIcon, KeyRoundIcon,
-  InfoIcon, Loader2Icon, LogInIcon, LogOutIcon, PaletteIcon, RefreshCwIcon, ShieldIcon, TypeIcon, UserRoundIcon,
+  InfoIcon, Loader2Icon, LogInIcon, LogOutIcon, PaletteIcon, RefreshCwIcon, TypeIcon, UserRoundIcon,
 } from "lucide-react";
 import { inTauri, openExternal, siteLogin, siteLoginCancel, siteLoginDone } from "@/lib/native";
 import { openTelegramSignIn } from "@/components/telegram";
@@ -11,7 +11,7 @@ import logo from "@/assets/logo.png";
 import { toast } from "sonner";
 import { call, useProp, useQuery, useSetting, useSignal } from "@/lib/engine";
 import { pickFolder } from "@/lib/native";
-import { Alert, Badge, Button, Card, Progress, CardContent, CardDescription, CardHeader, CardTitle, Input, Select, Separator, Switch } from "@/components/ui";
+import { Badge, Button, Card, Progress, CardContent, CardDescription, CardHeader, CardTitle, Input, Select, Separator, Switch } from "@/components/ui";
 import { Field, PageHeader } from "@/components/page";
 import { cn } from "@/lib/utils";
 
@@ -201,13 +201,9 @@ type Provider = {
 function AccountsSection() {
   const { data, reload } = useQuery<Provider[]>("appBridge", "getProvidersList");
   useSignal("appBridge", "providersChanged", () => reload());
-  const cookieText = useProp<string>("appBridge", "cookieWatchdogText", "");
-  const providers = (data ?? []).filter((p) => !/kemono|coomer/i.test(p.id));
+  const providers = data ?? [];
   return (
     <>
-      {cookieText && (
-        <Alert icon={ShieldIcon}>{cookieText}</Alert>
-      )}
       {providers.filter((p) => p.id !== "telegram").map((p) => <ProviderCard key={p.id} p={p} />)}
       {providers.length === 0 && <div className="text-sm text-muted-foreground">Loading accounts…</div>}
       <Card className="gap-3">

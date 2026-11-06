@@ -173,13 +173,8 @@ class AppLogger:
         self._close_fault_dump(keep=reason != "normally")
 
     def _version_info(self) -> dict:
-        try:
-            import json
-            from core.path_utils import get_base_dir
-            with open(os.path.join(get_base_dir(), "version.json"), encoding="utf-8") as f:
-                version = str(json.load(f).get("version") or "0.0.0")
-        except Exception:
-            version = "0.0.0"
+        from core.path_utils import get_app_version
+        version = get_app_version()
         return {"version": version, "display": f"v{version}", "edition_label": ""}
 
     def _header(self, info: dict, previous_note: str) -> str:

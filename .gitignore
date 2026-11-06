@@ -23,7 +23,6 @@ htmlcov/
 .hypothesis/
 config/*
 !config/settings.example.json
-!config/archive.db
 data/
 logs/
 *.log
