@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   ArchiveIcon, ArrowLeftIcon, CheckIcon, DownloadIcon, FileIcon, FilmIcon, ImageIcon, ImageOffIcon, ListPlusIcon, MusicIcon, SearchIcon,
 } from "lucide-react";
@@ -6,7 +6,7 @@ import { call, useSignal } from "@/lib/engine";
 import { Badge, Button, Dialog, DialogContent, DialogFooter, Input } from "@/components/ui";
 import { cn, formatBytes } from "@/lib/utils";
 
-type PostFile = { name: string; path?: string; thumbnail?: string; previewUrl?: string; size?: number; is_main?: boolean };
+type PostFile = { name: string; path?: string; thumbnail?: string; previewUrl?: string; videoUrl?: string; size?: number; is_main?: boolean };
 type Post = { id: string; title: string; published?: string; thumbnail?: string; fileCount?: number; files?: PostFile[] };
 
 const VIDEO = /\.(mp4|m4v|webm|mov|mkv|avi|wmv|flv|gifv)$/i;
@@ -19,6 +19,34 @@ const extOf = (n: string) => (n.match(/\.([a-z0-9]+)$/i)?.[1] ?? "").toUpperCase
 function FileTypeIcon({ name, className }: { name: string; className?: string }) {
   const Icon = VIDEO.test(name) ? FilmIcon : IMAGE.test(name) ? ImageIcon : AUDIO.test(name) ? MusicIcon : ARCHIVE.test(name) ? ArchiveIcon : FileIcon;
   return <Icon className={className} />;
+}
+
+/**
+ * A still frame of a remote video. The video only starts loading once it scrolls into view, and
+ * then only its metadata and the frame at ~1s (a few small range requests, not the whole file).
+ */
+function VideoFrame({ src, fallback }: { src: string; fallback: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+  const [failed, setFailed] = useState(false);
+  const [ready, setReady] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setVisible(true); io.disconnect(); } }, { rootMargin: "200px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div ref={ref} className="relative flex size-full items-center justify-center">
+      {(!ready || failed) && fallback}
+      {visible && !failed && (
+        <video src={`${src}#t=1`} preload="metadata" muted playsInline disablePictureInPicture
+          onLoadedData={() => setReady(true)} onError={() => setFailed(true)}
+          className={cn("absolute inset-0 size-full object-cover", !ready && "invisible")} />
+      )}
+    </div>
+  );
 }
 
 function Check({ on }: { on: boolean }) {
@@ -144,6 +172,7 @@ export function PostSelectionDialog() {
                     className={cn("relative flex flex-col overflow-hidden rounded-lg border text-left transition-colors", on ? "border-primary/70 ring-1 ring-primary/40" : "opacity-60 hover:opacity-100")}>
                     <div className="relative flex aspect-[4/3] items-center justify-center bg-muted">
                       {thumb ? <img src={thumb} loading="lazy" className="size-full object-cover" alt="" />
+                        : f.videoUrl ? <VideoFrame src={f.videoUrl} fallback={<FileTypeIcon name={f.name} className="size-8 text-muted-foreground" />} />
                         : <FileTypeIcon name={f.name} className="size-8 text-muted-foreground" />}
                       <span className="absolute top-2 left-2"><Check on={on} /></span>
                       {extOf(f.name) && <Badge variant="secondary" className="absolute right-2 bottom-2 bg-black/65 font-mono text-[10px] text-white">{extOf(f.name)}</Badge>}
@@ -175,6 +204,8 @@ export function PostSelectionDialog() {
                 const on = selected.has(i);
                 const total = files(i).length || p.fileCount || 0;
                 const chosen = chosenCount(i);
+                const cover = !p.thumbnail ? files(i).find((f) => f.videoUrl)?.videoUrl : undefined;
+                const noCover = <div className="flex size-full items-center justify-center"><ImageOffIcon className="size-5 text-muted-foreground" /></div>;
                 return (
                   <div key={i} role="button" tabIndex={0} onClick={(e) => togglePost(i, e.shiftKey)}
                     onKeyDown={(e) => { if (e.key === " " || e.key === "Enter") { e.preventDefault(); togglePost(i, e.shiftKey); } }}
@@ -182,7 +213,8 @@ export function PostSelectionDialog() {
                       on ? "border-primary/70 ring-1 ring-primary/40" : "opacity-70 hover:opacity-100")}>
                     <div className="relative aspect-[4/3] bg-muted">
                       {p.thumbnail ? <img src={p.thumbnail} loading="lazy" className="size-full object-cover" alt="" />
-                        : <div className="flex size-full items-center justify-center"><ImageOffIcon className="size-5 text-muted-foreground" /></div>}
+                        : cover ? <VideoFrame src={cover} fallback={<FilmIcon className="size-5 text-muted-foreground" />} />
+                        : noCover}
                       <span className="absolute top-2 left-2"><Check on={on} /></span>
                       {total > 0 && (
                         <button onClick={(e) => { e.stopPropagation(); if (files(i).length) setViewing(i); }}

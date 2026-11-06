@@ -3367,6 +3367,27 @@ class AppBridge(QObject):
                                     thumb_url = f"https://img.{domain}/thumbnail/data{clean_p}"
                                     break
 
+                    _VIDEO_EXTS = (".mp4", ".m4v", ".webm", ".mov", ".mkv")
+
+                    def _video_url(fobj, fpath, fname):
+                        """A streamable link for a video file, so the picker can show a frame of it."""
+                        if not (fname.lower().endswith(_VIDEO_EXTS) or fpath.lower().split("?")[0].endswith(_VIDEO_EXTS)
+                                or str(fobj.get("mimeType") or "").startswith("video/")):
+                            return ""
+                        if fobj.get("temp_url"):
+                            return fobj["temp_url"]
+                        if fpath.startswith("http"):
+                            return fpath
+                        if fobj.get("storageKey") and "cum" in domain:
+                            ext = os.path.splitext(fname)[1].lower() or ".mp4"
+                            return f"https://cdn.cum.st/media/{fobj['storageKey']}/original{ext}"
+                        if fpath and "pawchive" in domain:
+                            clean = fpath if fpath.startswith("/") else f"/{fpath}"
+                            if clean.startswith("/data/"):
+                                clean = clean[5:]
+                            return f"https://file.pawchive.pw/data{clean}"
+                        return ""
+
                     post_files = []
                     seen_selection_keys = set()
                     # 1. Main post file
@@ -3391,6 +3412,7 @@ class AppBridge(QObject):
                             "path": mf_path,
                             "thumbnail": mf_thumb,
                             "previewUrl": mf_thumb,
+                            "videoUrl": "" if mf_thumb else _video_url(f, mf_path, mf_name),
                             "is_main": True,
                             "selected": True
                         })
@@ -3425,6 +3447,7 @@ class AppBridge(QObject):
                                 "path": att_path,
                                 "thumbnail": att_thumb,
                                 "previewUrl": att_thumb,
+                                "videoUrl": "" if att_thumb else _video_url(att, att_path, att_name),
                                 "is_main": False,
                                 "selected": True
                             })
