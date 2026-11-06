@@ -3781,24 +3781,8 @@ class KemonoDownloader:
                 category="file"
             )
 
-            # ── Storage Pool Auto-Spanning & Pre-flight disk space verification ──
+            # ── Pre-flight disk space check ──
             try:
-                from core.storage_pool_manager import storage_pool_manager
-                if storage_pool_manager.enabled and storage_pool_manager.overflow_dirs and existing_size == 0:
-                    p_dir = storage_pool_manager.primary_dir
-                    if p_dir and os.path.abspath(task.target_path).startswith(os.path.abspath(p_dir)):
-                        rel_file = os.path.relpath(task.target_path, p_dir)
-                        rel_folder = os.path.dirname(rel_file)
-                        fn = os.path.basename(rel_file)
-                        new_target, was_overflowed = storage_pool_manager.get_destination_target(
-                            subfolder=rel_folder,
-                            filename=fn,
-                            estimated_bytes=task.file_size
-                        )
-                        if was_overflowed:
-                            task.target_path = fit_path_for_windows(new_target)
-                            part_path = task.target_path + PART_SUFFIX
-
                 target_dir = os.path.dirname(os.path.abspath(task.target_path))
                 os.makedirs(target_dir, exist_ok=True)
                 usage = shutil.disk_usage(target_dir)

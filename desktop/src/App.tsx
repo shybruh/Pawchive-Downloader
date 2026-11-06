@@ -7,6 +7,9 @@ import { Button, TooltipProvider } from "@/components/ui";
 import { AppSidebar } from "@/components/app-sidebar";
 import { AppGuards } from "@/components/app-guards";
 import { PostActionCountdown, RecoveryDialog } from "@/components/session-dialogs";
+import { TelegramScope, TelegramSignIn } from "@/components/telegram";
+import { FavoritesDialog } from "@/components/favorites";
+import { CloudLinksDialog } from "@/components/cloud-links";
 import { navigate, useNav } from "@/lib/nav";
 import { checkForUpdate, loadVersion } from "@/lib/updater";
 import { StatusBar } from "@/components/status-bar";
@@ -149,6 +152,10 @@ function Shell() {
       </div>
       <PostSelectionDialog />
       <RecoveryDialog />
+      <TelegramSignIn />
+      <TelegramScope />
+      <FavoritesDialog />
+      <CloudLinksDialog />
       <PostActionCountdown />
       <AppGuards />
     </div>

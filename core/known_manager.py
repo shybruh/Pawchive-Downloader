@@ -248,29 +248,8 @@ class KnownManager:
         self.load()
 
     def enable_ai(self, enabled: bool = True, model_manager: Optional[Any] = None) -> None:
-        """Enables or disables AI-assisted character recognition (Tier 1 & Tier 2)."""
-        self._ai_enabled = bool(enabled)
-        if self._ai_enabled:
-            # Without these packages the engine never starts; say so instead of failing silently
-            import importlib.util
-            missing = [m for m in ("numpy", "onnxruntime", "tokenizers") if importlib.util.find_spec(m) is None]
-            if missing:
-                logger.warning(
-                    "AI character recognition needs these Python packages, which aren't installed: "
-                    f"{', '.join(missing)}. Install them with: pip install -r requirements-ai.txt",
-                    category="ai")
-            if not self.model_manager:
-                try:
-                    from services.model_manager import ModelManager
-                    from core.ai_semantic_matcher import SemanticMatcher
-                    from core.ai_reasoner import ContextualReasoner
-                    self.model_manager = model_manager or ModelManager()
-                    self.semantic_matcher = SemanticMatcher(self.model_manager)
-                    self.contextual_reasoner = ContextualReasoner(self.model_manager)
-                    logger.info("AI-assisted character recognition engine activated.", category="known")
-                except Exception as e:
-                    logger.warning(f"AI character recognition couldn't start: {e}", category="ai")
-        self._lru_cache.clear()
+        """AI-assisted recognition was removed; matching uses Known.txt and the character database."""
+        self._ai_enabled = False
 
     def set_ai_engine_mode(self, mode: str) -> None:
         """Sets the AI engine mode ('semantic_only' or 'hybrid')."""
@@ -1448,38 +1427,6 @@ Katarin
             res = delim_res
         else:
             res = self._find_matching_hierarchy_fast(title, tag_list, file_list, content)
-
-        # Tier 1 & Tier 2 AI-assisted fallback when fast heuristics return None or missing character
-        if self._ai_enabled and (not res or not res[1]):
-            # Tier 1: Fast Multilingual Semantic Embeddings Matcher
-            if self.semantic_matcher and self.semantic_matcher.is_available():
-                try:
-                    if self.semantic_matcher._cached_vectors is None:
-                        self.semantic_matcher.build_known_index(self)
-                    sem_match = self.semantic_matcher.find_match(title, threshold=0.82)
-                    if sem_match:
-                        fr, ch, score = sem_match
-                        logger.info(f"AI Tier 1 Semantic Match: '{ch}' ({fr}) [similarity={score:.2f}]", category="known")
-                        res = (fr, ch)
-                except Exception as ex:
-                    logger.debug(f"AI Tier 1 matching error: {ex}", category="known")
-
-            # Tier 2: Creator Archive Prior Reasoning & SLM Deduction (only in hybrid mode)
-            if getattr(self, "_ai_engine_mode", "hybrid") != "semantic_only" and self.contextual_reasoner and (not res or not res[1]):
-                try:
-                    reasoned = self.contextual_reasoner.reason_match(
-                        post_title=title,
-                        filenames=file_list,
-                        content=content,
-                        creator_profile=creator_profile,
-                        known_manager=self
-                    )
-                    if reasoned:
-                        fr, ch, conf = reasoned
-                        logger.info(f"AI Tier 2 Reasoned Match: '{ch}' ({fr}) [confidence={conf:.2f}]", category="known")
-                        res = (fr, ch)
-                except Exception as ex:
-                    logger.debug(f"AI Tier 2 reasoning error: {ex}", category="known")
 
         if len(self._lru_cache) > 10000:
             self._lru_cache.clear()

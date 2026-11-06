@@ -255,8 +255,6 @@ function OptionsDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o
   const [threads, setThreads] = useSetting<number>(D, "threadsPerArchive", 2);
   const [deleteAfter, setDeleteAfter] = useSetting<boolean>(D, "deleteAfter", false);
   const [autoPrompt, setAutoPrompt] = useSetting<boolean>(D, "autoPromptPasswords", true);
-  const [compress, setCompress] = useSetting<boolean>(D, "compressAfter", false);
-  const ffmpeg = useProp<boolean>(D, "ffmpegAvailable", false);
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent title="Decompressor options" className="max-w-xl">
@@ -265,10 +263,6 @@ function OptionsDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o
           <Field label="Threads per archive"><Input type="number" min={1} max={16} className="w-20" value={threads} onChange={(e) => setThreads(Math.max(1, Number(e.target.value) || 1))} /></Field>
           <Field label="Ask for missing passwords" hint="Otherwise locked archives are skipped."><Switch checked={autoPrompt} onCheckedChange={setAutoPrompt} /></Field>
           <Field label="Move archives to the Recycle Bin afterwards" hint="Only after a successful extraction."><Switch checked={deleteAfter} onCheckedChange={setDeleteAfter} /></Field>
-          <Field label="Compress extracted media" hint={ffmpeg ? "Shrinks pictures and videos after extracting." : "Needs ffmpeg."}>
-            {!ffmpeg && <Button size="xs" variant="outline" onClick={() => call(D, "downloadFfmpeg")}>Get ffmpeg</Button>}
-            <Switch checked={compress} disabled={!ffmpeg} onCheckedChange={setCompress} />
-          </Field>
         </div>
         <DialogFooter><Button onClick={() => onOpenChange(false)}>Done</Button></DialogFooter>
       </DialogContent>

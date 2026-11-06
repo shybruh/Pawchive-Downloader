@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import {
-  CircleIcon, ClipboardCopyIcon, CopyIcon, EllipsisIcon, ExternalLinkIcon, FileArchiveIcon, FolderOutputIcon, KeyRoundIcon,
+  CircleIcon, ClipboardCopyIcon, CopyIcon, DownloadIcon, EllipsisIcon, ExternalLinkIcon, FileArchiveIcon, FolderOutputIcon, KeyRoundIcon,
   LinkIcon, Loader2Icon, PencilIcon, PickaxeIcon, SearchIcon, ShieldCheckIcon, TrashIcon, UserRoundIcon, XIcon,
 } from "lucide-react";
 import { toast } from "sonner";
@@ -202,6 +202,7 @@ function CreatorDetail({ creator }: { creator: VaultCreator }) {
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild><Button variant="ghost" size="icon-xs"><EllipsisIcon /></Button></DropdownMenuTrigger>
                       <DropdownMenuContent>
+                        <DropdownMenuItem onSelect={() => { call("appBridge", "startCloudDownloads", [l.url], ""); toast.success("Download started"); }}><DownloadIcon />Download</DropdownMenuItem>
                         <DropdownMenuItem onSelect={() => setEditing(l)}><PencilIcon />Edit passwords</DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem variant="destructive" onSelect={() => call("appBridge", "deleteVaultLink", l.id)}><TrashIcon />Remove link</DropdownMenuItem>

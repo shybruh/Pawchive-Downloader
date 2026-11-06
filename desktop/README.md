@@ -98,7 +98,7 @@ For a local build, run `python build_desktop.py` from the repository root (see t
 | Queue | by post (pause / resume / retry / remove a post) or by file, status filters, import / export |
 | Watchlist | search, filters, check now / on startup, download new posts, favorites, Kemono → Pawchive switch |
 | Activity log | live, searchable, filter by level, export |
-| Gallery | places & drives, breadcrumbs, grid / list, thumbnails, multi-select, rename / move / delete (Recycle Bin), viewer for images and video |
+| Gallery | places & drives, breadcrumbs, grid / list, thumbnails, multi-select, rename / move / delete (Recycle Bin) with undo, new folder, search inside subfolders, duplicate finder, image viewer and video player |
 | History, Known series | ✓ |
 | Archive | stats, search & filters, creators → posts → files, check files on disk, forget missing, import / export, rebuild from a folder |
 | Link vault | creators → posts → links with health and passwords, collect links from a creator, check links, export, send passwords to the Decompressor |
@@ -111,9 +111,5 @@ text fields get a small Cut / Copy / Paste / Select all menu instead.
 
 ## Not done yet
 
-- Release packaging of the engine (`pawchive-engine.exe` via PyInstaller, shipped as a Tauri
-  resource). `npm run tauri build` currently builds the shell only.
-- Gallery extras from the old app: batch rename, cleaner, duplicate finder, media compression.
-- Telegram phone-code / 2FA / bot-token sign-in (QR sign-in is wired).
-- The updater still checks the original repository's releases.
+- Gallery extras from the old app: batch rename, ratings.
 - Moving engine modules to Rust (downloader and queue first).

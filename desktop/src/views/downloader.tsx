@@ -2,13 +2,16 @@ import { useMemo, useState } from "react";
 import {
   ArchiveIcon, ChevronDownIcon, ClipboardPasteIcon, FileIcon, FilmIcon, FolderOpenIcon, ImageIcon, LayoutGridIcon,
   LinkIcon, ListPlusIcon, Loader2Icon, MusicIcon, PauseIcon, PlayIcon, SlidersHorizontalIcon, SquareIcon,
-  Maximize2Icon, TriangleAlertIcon, XIcon, ZapIcon,
+  Maximize2Icon, TriangleAlertIcon, XIcon, ZapIcon, StarIcon, EllipsisIcon, FileTextIcon, CloudDownloadIcon,
 } from "lucide-react";
 import { call, useProp, useSetting } from "@/lib/engine";
-import { clipboard, pickFolder } from "@/lib/native";
+import { clipboard, pickFile, pickFolder } from "@/lib/native";
+import { openFavorites } from "@/components/favorites";
+import { openCloudLinks } from "@/components/cloud-links";
+import { toast } from "sonner";
 import { navigate } from "@/lib/nav";
 import { useElementWidth } from "@/lib/hooks";
-import { Alert, Badge, Button, Card, CardAction, CardContent, CardDescription, CardHeader, CardTitle, Input, Label, Progress, Select, Separator, Switch, Tip } from "@/components/ui";
+import { Alert, Badge, Button, Card, CardAction, Dialog, DialogContent, DialogFooter, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger, Textarea, CardContent, CardDescription, CardHeader, CardTitle, Input, Label, Progress, Select, Separator, Switch, Tip } from "@/components/ui";
 import { PageHeader, Stat } from "@/components/page";
 import { LogList } from "@/components/log-list";
 import { cn, percent } from "@/lib/utils";
@@ -78,6 +81,9 @@ function LinkCard() {
   const isTelegram = useProp<boolean>("appBridge", "isTelegramUrl", false);
   const favoriteMode = useProp<boolean>("appBridge", "favoriteMode", false);
   const filterType = useProp<string>("appBridge", "filterType", "all");
+  const linksFound = useProp<number>("appBridge", "harvestedLinksCount", 0);
+  const [listOpen, setListOpen] = useState(false);
+  const [listText, setListText] = useState("");
   const source = detectSource(url);
   const blocked = source?.tone === "destructive";
   const hasUrl = url.trim().length > 0;
@@ -118,21 +124,56 @@ function LinkCard() {
           </Alert>
         )}
         <div className="flex flex-wrap items-center gap-2">
-          <Button disabled={blocked || (isTelegram && !isDownloading) || (isDownloading && !hasUrl) || (!hasUrl && !favoriteMode)}
+          <Button disabled={blocked || (isDownloading && !hasUrl) || (!hasUrl && !favoriteMode)}
             onClick={() => call("appBridge", "startDownload")}>
             {isDownloading && !hasUrl ? <Loader2Icon className="animate-spin" /> : <ZapIcon />}
             {isDownloading && !hasUrl ? "Downloading…" : primaryLabel}
           </Button>
-          <Button variant="outline" disabled={blocked || selecting || (!hasUrl && !favoriteMode)}
-            onClick={() => call("appBridge", "fetchPostsForSelection")}>
-            {selecting ? <Loader2Icon className="animate-spin" /> : <LayoutGridIcon />}
-            {selecting ? "Fetching posts…" : "Select posts…"}
-          </Button>
+          {favoriteMode && !hasUrl ? (
+            <Button variant="outline" onClick={openFavorites}><StarIcon />Browse favorites…</Button>
+          ) : (
+            <Button variant="outline" disabled={blocked || selecting || !hasUrl}
+              onClick={() => call("appBridge", "fetchPostsForSelection")}>
+              {selecting ? <Loader2Icon className="animate-spin" /> : <LayoutGridIcon />}
+              {selecting ? "Fetching posts…" : "Select posts…"}
+            </Button>
+          )}
           <Button variant="ghost" disabled={blocked || !hasUrl} onClick={() => call("appBridge", "addToQueue")}>
             <ListPlusIcon />Add to queue
           </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="ml-auto"><EllipsisIcon /></Button></DropdownMenuTrigger>
+            <DropdownMenuContent className="w-60">
+              <DropdownMenuItem onSelect={() => setListOpen(true)}><ListPlusIcon />Paste a list of links…</DropdownMenuItem>
+              <DropdownMenuItem onSelect={async () => {
+                const f = await pickFile("Load links from a file", [{ name: "Text", extensions: ["txt", "csv", "list"] }]);
+                if (f) { const n = await call<number>("appBridge", "batchLoadUrls", f); toast.success(n ? `Queued ${n} link${n === 1 ? "" : "s"}` : "No links found in that file"); }
+              }}><FileTextIcon />Load links from a file…</DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onSelect={openFavorites}><StarIcon />Account favorites…</DropdownMenuItem>
+              <DropdownMenuItem onSelect={openCloudLinks}><CloudDownloadIcon />Collected links…</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-        {isTelegram && <p className="-mt-1 text-xs text-muted-foreground">Telegram links download through "Select posts…".</p>}
+        {linksFound > 0 && !isDownloading && (
+          <Alert tone="info" icon={LinkIcon} action={<Button size="xs" onClick={openCloudLinks}><CloudDownloadIcon />Review</Button>}>
+            {linksFound} external link{linksFound === 1 ? "" : "s"} found in posts.
+          </Alert>
+        )}
+        <Dialog open={listOpen} onOpenChange={setListOpen}>
+          <DialogContent title="Paste a list of links" description="One link per line. Each one is queued with the current options.">
+            <Textarea autoFocus className="min-h-40 font-mono text-[13px]" value={listText} onChange={(e) => setListText(e.target.value)} placeholder={"https://pawchive.pw/patreon/user/…\nhttps://cum.st/onlyfans/user/…"} />
+            <DialogFooter>
+              <Button variant="outline" onClick={() => setListOpen(false)}>Cancel</Button>
+              <Button disabled={!listText.trim()} onClick={async () => {
+                const n = await call<number>("appBridge", "batchLoadUrls", listText);
+                toast.success(n ? `Queued ${n} link${n === 1 ? "" : "s"}` : "No links found");
+                setListText(""); setListOpen(false);
+              }}><ListPlusIcon />Queue links</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+        {isTelegram && <p className="-mt-1 text-xs text-muted-foreground">Telegram: you'll choose how much of the channel to get.</p>}
       </CardContent>
     </Card>
   );

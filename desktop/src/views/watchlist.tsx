@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { BellRingIcon, BookmarkIcon, DownloadIcon, EllipsisIcon, FolderOpenIcon, ListChecksIcon, ListXIcon, Loader2Icon, PlusIcon, RefreshCwIcon, SearchIcon, StarIcon, TrashIcon, TriangleAlertIcon } from "lucide-react";
+import { BellRingIcon, BookmarkIcon, DownloadIcon, EllipsisIcon, EyeOffIcon, FolderOpenIcon, Settings2Icon, ListChecksIcon, ListXIcon, Loader2Icon, PlusIcon, RefreshCwIcon, SearchIcon, StarIcon, TrashIcon, TriangleAlertIcon } from "lucide-react";
 import { toast } from "sonner";
 import { call, useModel, useProp, useQuery, useSetting, useSignal } from "@/lib/engine";
+import { openFavorites } from "@/components/favorites";
+import { pickFolder } from "@/lib/native";
 import {
   Alert, Badge, Button, Dialog, DialogContent, DialogFooter, DropdownMenu, DropdownMenuContent, DropdownMenuItem,
   DropdownMenuSeparator, DropdownMenuTrigger, Empty, Input, Label, Segmented, Switch, Tip,
@@ -12,6 +14,7 @@ import { cn } from "@/lib/utils";
 type Entry = {
   url: string; creatorName: string; service: string; userId: string; lastPostDate: string; addedAt: string;
   autoCheck: boolean; newPostCount: number; downloadDir: string; isFavorite: boolean; provider: string; isOnDisk: boolean;
+  ignoredCount: number; cachedNewPosts: { id: string; title: string; published: string; fileCount: number }[];
 };
 
 const W = "appBridge.watchlistModel";
@@ -62,6 +65,7 @@ export function WatchlistView() {
               <DropdownMenuItem onSelect={() => call("appBridge", "setAllWatchlistAutoCheck", true)}><ListChecksIcon />Turn on checks for everyone</DropdownMenuItem>
               <DropdownMenuItem onSelect={() => call("appBridge", "disableAllWatchlistAutoCheck")}><ListXIcon />Turn off checks for everyone</DropdownMenuItem>
               <DropdownMenuSeparator />
+              <DropdownMenuItem onSelect={openFavorites}><StarIcon />Account favorites…</DropdownMenuItem>
               <DropdownMenuItem onSelect={() => call("appBridge", "syncPawchiveFavorites")}><StarIcon />Import Pawchive favorites</DropdownMenuItem>
               <DropdownMenuItem disabled={!updated} onSelect={() => call("appBridge", "downloadAllNewPosts")}><DownloadIcon />Download all new posts</DropdownMenuItem>
             </DropdownMenuContent>
@@ -114,6 +118,7 @@ export function WatchlistView() {
 }
 
 function Row({ e }: { e: Entry }) {
+  const [manage, setManage] = useState(false);
   return (
     <div className="group flex items-center gap-4 border-b px-4 py-3 last:border-b-0 hover:bg-accent/30">
       <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-semibold">{initials(e.creatorName)}</div>
@@ -141,6 +146,7 @@ function Row({ e }: { e: Entry }) {
       <DropdownMenu>
         <DropdownMenuTrigger asChild><Button size="icon-sm" variant="ghost"><EllipsisIcon /></Button></DropdownMenuTrigger>
         <DropdownMenuContent>
+          <DropdownMenuItem onSelect={() => setManage(true)}><Settings2Icon />Manage…</DropdownMenuItem>
           <DropdownMenuItem onSelect={() => call(W, "toggleFavorite", e.userId, e.service, !e.isFavorite)}>
             <StarIcon />{e.isFavorite ? "Remove from favorites" : "Add to favorites"}
           </DropdownMenuItem>
@@ -150,6 +156,7 @@ function Row({ e }: { e: Entry }) {
           <DropdownMenuItem variant="destructive" onSelect={() => call("appBridge", "removeFromWatchlist", e.userId, e.service)}><TrashIcon />Remove</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
+      <ManageDialog e={e} open={manage} onOpenChange={setManage} />
     </div>
   );
 }
@@ -178,6 +185,71 @@ function AddDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o: bo
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
           <Button disabled={!url.trim() || blocked || busy} onClick={submit}>{busy && <Loader2Icon className="animate-spin" />}Add</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function ManageDialog({ e, open, onOpenChange }: { e: Entry; open: boolean; onOpenChange: (o: boolean) => void }) {
+  const [move, setMove] = useState(true);
+  const [date, setDate] = useState("");
+  useEffect(() => { if (open) setDate(String(e.lastPostDate || "").slice(0, 10)); }, [open, e.lastPostDate]);
+  const posts = e.cachedNewPosts ?? [];
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-w-xl" title={e.creatorName || e.userId} description={`${e.service} · ${e.provider === "cumst" ? "cum.st" : "Pawchive"}`}>
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <Label>Download folder</Label>
+            <div className="flex gap-2">
+              <Input readOnly value={e.downloadDir || "Default (inside your download folder)"} className="font-mono text-[12px]" />
+              <Button variant="outline" onClick={async () => {
+                const d = await pickFolder(`Folder for ${e.creatorName}`, e.downloadDir);
+                if (d) { call("appBridge", "applyWatchlistFolderChange", e.userId, e.service, d, move); toast.success(move ? "Moving files to the new folder" : "Folder changed"); }
+              }}><FolderOpenIcon />Change</Button>
+            </div>
+            <label className="flex items-center gap-2 text-sm text-muted-foreground"><Switch checked={move} onCheckedChange={setMove} />Move files already downloaded</label>
+          </div>
+          <div className="flex flex-col gap-2">
+            <Label>Downloaded up to</Label>
+            <div className="flex gap-2">
+              <Input type="date" className="w-44" value={date} onChange={(ev) => setDate(ev.target.value)} />
+              <Button variant="outline" disabled={date === String(e.lastPostDate || "").slice(0, 10)} onClick={async () => {
+                const r = await call<string>("appBridge", "setWatchlistLastDownloadDate", e.userId, e.service, date);
+                if (r || !date) toast.success("Updated"); else toast.error("That date didn't work");
+              }}>Save</Button>
+            </div>
+            <p className="text-xs text-muted-foreground">Posts after this date count as new.</p>
+          </div>
+          <div className="flex flex-col gap-2">
+            <div className="flex items-center justify-between">
+              <Label>New posts {posts.length ? `(${posts.length})` : ""}</Label>
+              <div className="flex gap-1">
+                {e.ignoredCount > 0 && <Button size="xs" variant="ghost" onClick={() => call("appBridge", "unignoreAllWatchlistPosts", e.userId, e.service)}>Show {e.ignoredCount} skipped</Button>}
+                {posts.length > 0 && <Button size="xs" variant="ghost" onClick={() => call("appBridge", "ignoreCurrentNewPosts", e.userId, e.service)}>Skip all</Button>}
+              </div>
+            </div>
+            {posts.length === 0 ? (
+              <p className="text-sm text-muted-foreground">Nothing new. Use "Check now" to look again.</p>
+            ) : (
+              <div className="max-h-56 overflow-y-auto rounded-lg border">
+                {posts.map((p) => (
+                  <div key={p.id} className="group flex items-center gap-3 border-b px-3 py-2 last:border-b-0">
+                    <div className="min-w-0 flex-1">
+                      <div className="truncate text-sm">{p.title}</div>
+                      <div className="text-xs text-muted-foreground">{p.published}{p.fileCount ? ` · ${p.fileCount} files` : ""}</div>
+                    </div>
+                    <Button size="xs" variant="ghost" onClick={() => call("appBridge", "ignoreWatchlistPost", e.userId, e.service, p.id)}><EyeOffIcon />Skip</Button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+        <DialogFooter>
+          {posts.length > 0 && <Button variant="outline" onClick={() => { call("appBridge", "downloadNewPosts", e.userId, e.service); onOpenChange(false); }}><DownloadIcon />Download {posts.length}</Button>}
+          <Button onClick={() => onOpenChange(false)}>Done</Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

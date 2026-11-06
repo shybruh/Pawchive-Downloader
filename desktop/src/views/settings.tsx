@@ -4,6 +4,7 @@ import {
   InfoIcon, Loader2Icon, LogOutIcon, PaletteIcon, RefreshCwIcon, ShieldIcon, TypeIcon, UserRoundIcon,
 } from "lucide-react";
 import { openExternal } from "@/lib/native";
+import { openTelegramSignIn } from "@/components/telegram";
 import { useNav } from "@/lib/nav";
 import { checkForUpdate, installUpdate, useUpdater } from "@/lib/updater";
 import logo from "@/assets/logo.png";
@@ -288,30 +289,16 @@ function ProviderCard({ p }: { p: Provider }) {
 function TelegramAccount() {
   const loggedIn = useProp<boolean>("telegramBridge", "isLoggedIn", false);
   const user = useProp<string>("telegramBridge", "currentUsername", "");
-  const status = useProp<string>("telegramBridge", "statusMessage", "");
-  const qr = useProp<string>("telegramBridge", "qrCodeDataUrl", "");
-  const state = useProp<string>("telegramBridge", "loginState", "");
+  const phone = useProp<string>("telegramBridge", "currentPhone", "");
   return (
-    <CardContent className="flex flex-col gap-3">
+    <CardContent className="flex items-center justify-between gap-3">
+      <span className="text-sm text-muted-foreground">
+        {loggedIn ? `Signed in${user ? ` as @${user}` : phone ? ` as ${phone}` : ""}` : "Not signed in"}
+      </span>
       {loggedIn ? (
-        <div className="flex items-center justify-between">
-          <span className="text-sm">Signed in{user ? ` as @${user}` : ""}</span>
-          <Button variant="ghost" size="sm" onClick={() => call("telegramBridge", "disconnectAccount")}><LogOutIcon />Sign out</Button>
-        </div>
+        <Button variant="ghost" size="sm" onClick={() => call("telegramBridge", "disconnectAccount")}><LogOutIcon />Sign out</Button>
       ) : (
-        <>
-          {qr && state !== "idle" ? (
-            <div className="flex items-center gap-4">
-              <img src={qr} className="size-36 rounded-lg bg-white p-2" alt="Telegram login QR code" />
-              <p className="text-sm text-muted-foreground">Open Telegram on your phone → Settings → Devices → Link desktop device, then scan this code.</p>
-            </div>
-          ) : null}
-          <div className="flex gap-2">
-            <Button variant="outline" size="sm" onClick={() => call("telegramBridge", "startQrLogin")}>Sign in with QR code</Button>
-            {qr && <Button variant="ghost" size="sm" onClick={() => call("telegramBridge", "cancelQrLogin")}>Cancel</Button>}
-          </div>
-          {status && <p className="text-xs text-muted-foreground">{status}</p>}
-        </>
+        <Button variant="outline" size="sm" onClick={() => openTelegramSignIn()}>Sign in</Button>
       )}
     </CardContent>
   );
@@ -372,7 +359,6 @@ function UpdatesSection() {
 const UPSTREAM = "https://github.com/whyamihere773/Pawchive-Downloader";
 
 function AboutSection() {
-  const engineVersion = useProp<string>("updaterBridge", "currentVersion", "");
   const { version } = useUpdater();
   return (
     <>
@@ -381,7 +367,7 @@ function AboutSection() {
           <img src={logo} alt="" className="size-12 rounded-xl" />
           <div className="min-w-0 flex-1">
             <div className="font-semibold">Pawchive Downloader</div>
-            <div className="text-sm text-muted-foreground">Version {version || "—"}{engineVersion ? ` · engine ${engineVersion.split(" ")[0]}` : ""}</div>
+            <div className="text-sm text-muted-foreground">Version {version || "—"}</div>
           </div>
         </CardContent>
       </Card>

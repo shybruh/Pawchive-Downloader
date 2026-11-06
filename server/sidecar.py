@@ -401,10 +401,8 @@ def build_engine():
     from core.path_utils import get_base_dir
     from bridge.app_bridge import AppBridge
     from bridge.translation_manager import TranslationManager
-    from bridge.updater_bridge import UpdaterBridge
     from bridge.gallery_tools_bridge import GalleryToolsBridge
     from bridge.gallery_updates import GalleryUpdates
-    from bridge.gallery_archive_bridge import GalleryArchiveBridge
 
     base_dir = get_base_dir()
     app_bridge = AppBridge()
@@ -421,10 +419,8 @@ def build_engine():
         "decompressorBridge": app_bridge.decompressorBridge,
         "telegramBridge": app_bridge.telegramBridge,
         "appBridge": app_bridge,
-        "updaterBridge": UpdaterBridge(),
         "galleryTools": tools,
         "galleryUpdates": GalleryUpdates(app_bridge, wl),
-        "galleryArchiveBridge": GalleryArchiveBridge(app_bridge, tools),
         "Lang": lang,
     }
     return app_bridge, objects
@@ -456,9 +452,6 @@ def main():
     media.start()
     hub.media_port = media.port
 
-    from core.memory_collector import memory_collector
-    memory_collector.freeze_startup_objects()
-    memory_collector.start()
 
     from services.telegram_service import TelegramService
 
@@ -469,7 +462,6 @@ def main():
 
     app.aboutToQuit.connect(app_bridge.onAppClosing)
     app.aboutToQuit.connect(_arm_exit_watchdog)
-    app.aboutToQuit.connect(memory_collector.stop)
     app.aboutToQuit.connect(TelegramService.instance().stop)
 
     # The shell closes our stdin when it exits: treat that as "quit" so no engine is left behind

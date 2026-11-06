@@ -174,10 +174,13 @@ class AppLogger:
 
     def _version_info(self) -> dict:
         try:
-            from services.update_service import get_local_version_info
-            return get_local_version_info()
+            import json
+            from core.path_utils import get_base_dir
+            with open(os.path.join(get_base_dir(), "version.json"), encoding="utf-8") as f:
+                version = str(json.load(f).get("version") or "0.0.0")
         except Exception:
-            return {"version": "0.0.0", "display": "unknown version", "edition_label": ""}
+            version = "0.0.0"
+        return {"version": version, "display": f"v{version}", "edition_label": ""}
 
     def _header(self, info: dict, previous_note: str) -> str:
         try:

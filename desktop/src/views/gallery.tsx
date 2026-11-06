@@ -3,15 +3,16 @@ import {
   ArrowUpIcon, BookmarkIcon, BookmarkPlusIcon, ChevronLeftIcon, ChevronRightIcon, CopyIcon, DownloadIcon, EllipsisIcon,
   ExternalLinkIcon, FileIcon, FilmIcon, FolderIcon, FolderInputIcon, FolderOpenIcon, HardDriveIcon, ImageIcon, LayoutGridIcon,
   ListIcon, Loader2Icon, MusicIcon, PencilIcon, PlayIcon, RefreshCwIcon, SearchIcon, TrashIcon, XIcon,
+  Undo2Icon, FolderPlusIcon,
 } from "lucide-react";
 import { toast } from "sonner";
-import { call, mediaUrl, useProp, useSignal } from "@/lib/engine";
+import { call, callAsync, mediaUrl, useProp, useSignal } from "@/lib/engine";
 import { useNav } from "@/lib/nav";
 import { MediaPlayer } from "@/components/media-player";
 import { useElementWidth } from "@/lib/hooks";
 import { clipboard, pickFolder } from "@/lib/native";
 import {
-  Button, Dialog, DialogContent, DialogFooter, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
+  Badge, Switch, Button, Dialog, DialogContent, DialogFooter, DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
   DropdownMenuSeparator, DropdownMenuTrigger, Empty, Input, Segmented, Select, Tip,
 } from "@/components/ui";
 import { cn, formatBytes } from "@/lib/utils";
@@ -70,6 +71,14 @@ export function GalleryView() {
   const [renaming, setRenaming] = useState<Entry | null>(null);
   const [confirmDelete, setConfirmDelete] = useState<string[] | null>(null);
   const highlight = useRef<string>("");
+  const canUndo = useProp<boolean>("galleryTools", "canUndo", false);
+  const undoLabel = useProp<string>("galleryTools", "undoLabel", "");
+  const [newFolder, setNewFolder] = useState<string | null>(null);
+  const [dupes, setDupes] = useState<{ loading: boolean; groups: DupGroup[] } | null>(null);
+  useSignal("galleryTools", "undoFinished", (r: { success?: boolean; message?: string }) => {
+    if (r?.success) toast.success(r.message || "Undone"); else toast.error(r?.message || "Couldn't undo that");
+    load(path, { push: false });
+  });
   const back = useRef<string[]>([]);
 
   const load = useCallback(async (p: string, opts: { push?: boolean } = {}) => {
@@ -109,9 +118,30 @@ export function GalleryView() {
   useSignal("appBridge", "drivesUpdated", (d: Place[]) => setDrives(d ?? []));
   useEffect(() => { try { localStorage.setItem("gallery.view", view); } catch { /* storage off */ } }, [view]);
 
+  // "Include subfolders": the engine searches the whole tree and streams results back in batches
+  const [deep, setDeep] = useState(false);
+  const [found, setFound] = useState<Entry[] | null>(null);
+  const [searching, setSearching] = useState(false);
+  const token = useRef(0);
+  useEffect(() => {
+    const q = query.trim();
+    if (!deep || !q || !path) { setFound(null); setSearching(false); call("galleryTools", "cancelSearch").catch(() => {}); return; }
+    const t = setTimeout(async () => {
+      setFound([]); setSearching(true);
+      token.current = await call<number>("galleryTools", "startSearch", path, q, 5000);
+    }, 400);
+    return () => clearTimeout(t);
+  }, [deep, query, path]);
+  useSignal("galleryTools", "searchBatch", (tok: number, items: Entry[], done: boolean) => {
+    if (tok !== token.current) return;
+    if (items?.length) setFound((f) => [...(f ?? []), ...items]);
+    if (done) setSearching(false);
+  });
+
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const list = entries.filter((e) => (!q || e.name.toLowerCase().includes(q)) && (kind === "all" || kindOf(e) === kind || (kind !== "dir" && e.is_dir)));
+    const source = found ?? entries;
+    const list = source.filter((e) => (found !== null || !q || e.name.toLowerCase().includes(q)) && (kind === "all" || kindOf(e) === kind || (kind !== "dir" && e.is_dir)));
     const by = {
       name: (a: Entry, b: Entry) => a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: "base" }),
       newest: (a: Entry, b: Entry) => b.mtime - a.mtime,
@@ -119,7 +149,7 @@ export function GalleryView() {
       largest: (a: Entry, b: Entry) => b.size - a.size,
     }[sort] ?? (() => 0);
     return list.sort((a, b) => (a.is_dir === b.is_dir ? by(a, b) : a.is_dir ? -1 : 1));
-  }, [entries, query, kind, sort]);
+  }, [entries, found, query, kind, sort]);
   const media = useMemo(() => visible.filter((e) => kindOf(e) === "image" || kindOf(e) === "video"), [visible]);
   const folderCount = useMemo(() => visible.filter((e) => e.is_dir).length, [visible]);
   const [stats, setStats] = useState<Record<string, FolderStats>>({});
@@ -161,7 +191,7 @@ export function GalleryView() {
   const moveSelected = async () => {
     const dest = await pickFolder("Move to…", path);
     if (!dest) return;
-    const r = await call<{ moved: number; failed: number; errors: string[] }>("appBridge", "moveItems", sel.map((e) => e.path), dest);
+    const r = await call<{ moved: number; failed: number; errors: string[] }>("galleryTools", "moveItems", sel.map((e) => e.path), dest);
     if (r.failed) toast.error(r.errors?.[0] || `${r.failed} couldn't be moved`); else toast.success(`Moved ${r.moved} item${r.moved === 1 ? "" : "s"}`);
     load(path, { push: false });
   };
@@ -226,6 +256,11 @@ export function GalleryView() {
             <Tip content="Up a folder"><Button variant="ghost" size="icon-sm" onClick={() => load(parentOf(path))}><ArrowUpIcon /></Button></Tip>
             <Tip content="Refresh"><Button variant="ghost" size="icon-sm" onClick={() => load(path, { push: false })}>{loading ? <Loader2Icon className="animate-spin" /> : <RefreshCwIcon />}</Button></Tip>
             <Breadcrumbs crumbs={crumbs} max={rootWidth >= 1400 ? 6 : rootWidth >= 1050 ? 4 : 3} onOpen={(p) => load(p)} />
+            {canUndo && (
+              <Tip content={undoLabel ? `Undo: ${undoLabel}` : "Undo"}>
+                <Button variant="ghost" size="icon-sm" onClick={() => call("galleryTools", "undoLastAsync")}><Undo2Icon /></Button>
+              </Tip>
+            )}
             <Tip content={isBookmarked ? "Remove from Places" : "Add to Places"}>
               <Button variant="ghost" size="icon-sm" onClick={() => call("appBridge", isBookmarked ? "removeGalleryBookmark" : "addGalleryBookmark", path)}>
                 {isBookmarked ? <BookmarkIcon className="fill-current" /> : <BookmarkPlusIcon />}
@@ -237,14 +272,23 @@ export function GalleryView() {
                 <DropdownMenuItem onSelect={() => call("appBridge", "openFolder", path)}><FolderOpenIcon />Open in Explorer</DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => { clipboard.write(path); toast.success("Path copied"); }}><CopyIcon />Copy folder path</DropdownMenuItem>
                 <DropdownMenuItem onSelect={() => call("appBridge", "showDownloadsInGallery")}><DownloadIcon />Go to latest download</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onSelect={() => setNewFolder("")}><FolderPlusIcon />New folder…</DropdownMenuItem>
+                <DropdownMenuItem onSelect={() => setDupes({ loading: true, groups: [] })}><CopyIcon />Find duplicates here…</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
           <div className="flex flex-wrap items-center gap-2">
             <div className="relative w-full max-w-64 min-w-40 flex-1">
               <SearchIcon className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-muted-foreground" />
-              <Input className="h-8 pl-8" placeholder="Filter this folder…" value={query} onChange={(e) => setQuery(e.target.value)} />
+              <Input className="h-8 pl-8" placeholder={deep ? "Search this folder and below…" : "Filter this folder…"} value={query} onChange={(e) => setQuery(e.target.value)} />
             </div>
+            <Tip content="Also search inside subfolders">
+              <label className="flex h-8 items-center gap-2 text-xs text-muted-foreground">
+                <Switch checked={deep} onCheckedChange={setDeep} />Subfolders
+                {searching && <Loader2Icon className="size-3.5 animate-spin" />}
+              </label>
+            </Tip>
             <Segmented value={kind} onChange={setKind} options={[
               { value: "all", label: "All" }, { value: "image", label: "Images" }, { value: "video", label: "Videos" }, { value: "dir", label: "Folders" },
             ]} />
@@ -320,6 +364,8 @@ export function GalleryView() {
           onDelete={(p) => { setViewer(null); setConfirmDelete([p]); }} />
       )}
       <RenameDialog entry={renaming} onClose={(changed) => { setRenaming(null); if (changed) load(path, { push: false }); }} />
+      <NewFolderDialog parent={path} value={newFolder} onClose={(created) => { setNewFolder(null); if (created) load(path, { push: false }); }} />
+      <DuplicatesDialog root={path} state={dupes} setState={setDupes} onDeleted={() => load(path, { push: false })} />
       <Dialog open={!!confirmDelete} onOpenChange={(o) => !o && setConfirmDelete(null)}>
         <DialogContent title={`Delete ${confirmDelete?.length ?? 0} item${confirmDelete?.length === 1 ? "" : "s"}?`} description="They go to the Recycle Bin, so you can restore them.">
           <DialogFooter>
@@ -539,7 +585,7 @@ function RenameDialog({ entry, onClose }: { entry: Entry | null; onClose: (chang
   useEffect(() => { setName(entry?.name ?? ""); setError(""); }, [entry]);
   const submit = async () => {
     if (!entry) return;
-    const r = await call<{ success: boolean; error: string }>("appBridge", "renameItem", entry.path, name.trim());
+    const r = await call<{ success: boolean; error: string }>("galleryTools", "renameItem", entry.path, name.trim());
     if (r.success) { toast.success("Renamed"); onClose(true); } else setError(r.error || "Couldn't rename it");
   };
   return (
@@ -552,6 +598,96 @@ function RenameDialog({ entry, onClose }: { entry: Entry | null; onClose: (chang
         <DialogFooter>
           <Button variant="outline" onClick={() => onClose(false)}>Cancel</Button>
           <Button disabled={!name.trim() || name === entry?.name} onClick={submit}>Rename</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function NewFolderDialog({ parent, value, onClose }: { parent: string; value: string | null; onClose: (created: boolean) => void }) {
+  const [name, setName] = useState("");
+  const [error, setError] = useState("");
+  useEffect(() => { if (value !== null) { setName(""); setError(""); } }, [value]);
+  const submit = async () => {
+    const r = await call<{ success: boolean; error: string }>("galleryTools", "createFolder", parent, name.trim());
+    if (r.success) { toast.success("Folder created"); onClose(true); } else setError(r.error || "Couldn't create it");
+  };
+  return (
+    <Dialog open={value !== null} onOpenChange={(o) => !o && onClose(false)}>
+      <DialogContent title="New folder">
+        <Input autoFocus placeholder="Folder name" value={name} onChange={(e) => { setName(e.target.value); setError(""); }}
+          onKeyDown={(e) => { if (e.key === "Enter" && name.trim()) submit(); }} className={cn(error && "border-destructive/60")} />
+        {error && <p className="text-xs text-destructive">{error}</p>}
+        <DialogFooter>
+          <Button variant="outline" onClick={() => onClose(false)}>Cancel</Button>
+          <Button disabled={!name.trim()} onClick={submit}>Create</Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+type DupGroup = { hash: string; size: number; count: number; wasted_size: number; files: { path: string; name: string; rel_path: string; mtime: number }[] };
+
+function DuplicatesDialog({ root, state, setState, onDeleted }: {
+  root: string; state: { loading: boolean; groups: DupGroup[] } | null;
+  setState: (s: { loading: boolean; groups: DupGroup[] } | null) => void; onDeleted: () => void;
+}) {
+  const [remove, setRemove] = useState<Set<string>>(new Set());
+  const [confirm, setConfirm] = useState(false);
+  const loading = state?.loading;
+  useEffect(() => {
+    if (!loading) return;
+    let cancelled = false;
+    callAsync<DupGroup[]>("appBridge", "scanDuplicatesAsync", root, true).then((groups) => {
+      if (cancelled) return;
+      const g = Array.isArray(groups) ? groups : [];
+      // Keep the oldest copy of each group by default; the rest are marked to remove
+      setRemove(new Set(g.flatMap((x) => [...x.files].sort((a, b) => a.mtime - b.mtime).slice(1).map((f) => f.path))));
+      setState({ loading: false, groups: g });
+    });
+    return () => { cancelled = true; };
+  }, [loading, root, setState]);
+  const groups = state?.groups ?? [];
+  const wasted = groups.reduce((n, g) => n + g.wasted_size, 0);
+  const toggle = (p: string) => setRemove((s) => { const n = new Set(s); if (n.has(p)) n.delete(p); else n.add(p); return n; });
+  return (
+    <Dialog open={!!state} onOpenChange={(o) => !o && setState(null)}>
+      <DialogContent className="flex h-[80vh] max-w-3xl flex-col" title="Duplicates"
+        description={loading ? "Comparing files in this folder and below…" : groups.length ? `${groups.length} set${groups.length === 1 ? "" : "s"} of identical files · ${formatBytes(wasted)} could be freed` : "No duplicates found."}>
+        <div className="-mx-1 min-h-0 flex-1 overflow-y-auto px-1">
+          {loading ? (
+            <div className="flex items-center gap-2 p-4 text-sm text-muted-foreground"><Loader2Icon className="size-4 animate-spin" />Scanning…</div>
+          ) : groups.map((g) => (
+            <div key={g.hash} className="mb-3 overflow-hidden rounded-lg border">
+              <div className="flex items-center justify-between bg-muted/40 px-3 py-1.5 text-xs text-muted-foreground">
+                <span>{g.count} copies · {formatBytes(g.size)} each</span>
+              </div>
+              {g.files.map((f) => {
+                const del = remove.has(f.path);
+                return (
+                  <label key={f.path} className={cn("flex cursor-default items-center gap-3 border-t px-3 py-2", del && "bg-destructive/5")}>
+                    <input type="checkbox" className="size-4 accent-current" checked={del} onChange={() => toggle(f.path)} />
+                    <span className={cn("min-w-0 flex-1 truncate text-[13px]", del && "text-muted-foreground line-through")} title={f.path}>{f.rel_path || f.name}</span>
+                    <span className="text-xs text-muted-foreground tabular-nums">{f.mtime ? new Date(f.mtime * 1000).toLocaleDateString() : ""}</span>
+                    {!del && <Badge variant="success">Keep</Badge>}
+                  </label>
+                );
+              })}
+            </div>
+          ))}
+        </div>
+        <DialogFooter>
+          <Button variant="outline" onClick={() => setState(null)}>Close</Button>
+          {confirm ? (
+            <Button variant="destructive" onClick={async () => {
+              const r = await call<{ deleted: number; failed: number }>("appBridge", "deleteItems", [...remove]);
+              toast.success(`Moved ${r.deleted} file${r.deleted === 1 ? "" : "s"} to the Recycle Bin`);
+              setConfirm(false); setState(null); onDeleted();
+            }}><TrashIcon />Confirm: remove {remove.size}</Button>
+          ) : (
+            <Button variant="destructive" disabled={!remove.size || loading} onClick={() => setConfirm(true)}><TrashIcon />Remove {remove.size} to Recycle Bin</Button>
+          )}
         </DialogFooter>
       </DialogContent>
     </Dialog>

@@ -89,8 +89,6 @@ from core.path_utils import unique_name_in_batch, post_info_for_file, post_info_
 from core.post_metadata_index import parse_post_info_content
 from core.archive_manager import ArchiveManager
 from core.archive_rebuilder import ArchiveRebuilder, ArchiveRebuildOptions
-from services.model_manager import ModelManager, MODEL_CATALOG
-from core.hardware_detector import HardwareDetector
 
 
 
@@ -189,17 +187,11 @@ class AppBridge(QObject):
     embedCookiesBrowserChanged = Signal()
     openFolderOnCompleteChanged = Signal()
     playCompletionSoundChanged = Signal()
-    generateDesktopReportChanged = Signal()
-    saveDesktopReportChanged = Signal()
     filesCountTextChanged = Signal()
     harvestedLinksChanged = Signal()
     consoleWidthChanged = Signal()
     postDownloadActionChanged = Signal()
     knownRecognitionModeChanged = Signal()
-    aiRecognitionEnabledChanged = Signal()
-    aiEngineModeChanged = Signal()
-    aiModelProgressChanged = Signal(str, str, float, str, str)  # (model_key, status, percent, speed_str, error)
-    aiHardwareInfoChanged = Signal()
     languageChanged = Signal()
     postActionCountdownStarted = Signal(str)  # carries human label e.g. "Shutdown"
     exportCompleted = Signal(str, bool)       # (filePath, wasDownloading)
@@ -255,15 +247,8 @@ class AppBridge(QObject):
 
 
     # Storage Pool signals
-    storagePoolChanged        = Signal()
 
     # Privacy Mode & Shield signals
-    privacyModeActiveChanged    = Signal()
-    privacyPinConfiguredChanged = Signal()
-    privacyFailedAttemptsChanged = Signal()
-    privacyLockoutActiveChanged = Signal()
-    safeModeActiveChanged       = Signal()
-    privacyIdleMinutesChanged   = Signal()
 
     # Cookie Watchdog signals
     cookieWatchdogChanged     = Signal()
@@ -399,13 +384,6 @@ class AppBridge(QObject):
         self._auto_retry_at_end = saved_settings.get("auto_retry_at_end", False)
         self._skip_retry_404 = bool(saved_settings.get("skip_retry_404", False))
         self._auto_delete_failed = bool(saved_settings.get("auto_delete_failed", False))
-        self._privacy_pin = str(saved_settings.get("privacy_pin", "") or "")
-        self._privacy_mode_active = False  # NEVER remains active on app restart
-        self._failed_pin_attempts = 0
-        self._privacy_lockout_active = False
-        self._pending_pin_reset = bool(saved_settings.get("pending_pin_reset", False))
-        self._safe_mode_active = self._pending_pin_reset
-        self._privacy_idle_minutes = int(saved_settings.get("privacy_idle_minutes", 5))
         self._manga_mode = saved_settings.get("manga_mode", False)
         self._filename_style = saved_settings.get("filename_style", "post_title")
         self._filename_template = saved_settings.get("filename_template", "{title} - {orig_name}")
@@ -464,32 +442,9 @@ class AppBridge(QObject):
         self._embed_cookies_browser = str(saved_settings.get("embed_cookies_browser", "") or "")
         self._open_folder_on_complete = bool(saved_settings.get("open_folder_on_complete", False))
         self._play_completion_sound = bool(saved_settings.get("play_completion_sound", False))
-        self._generate_desktop_report = bool(saved_settings.get("generate_desktop_report", saved_settings.get("save_desktop_report", False)))
         self._post_download_action = "none" # Always default to 'none' (Do Nothing) on startup
         self._known_recognition_mode = str(saved_settings.get("known_recognition_mode", "hybrid"))
         self.known_manager.set_mode(self._known_recognition_mode)
-        self._ai_recognition_enabled = bool(saved_settings.get("ai_recognition_enabled", False))
-        self._ai_engine_mode = str(saved_settings.get("ai_engine_mode", "hybrid"))
-        self.model_manager = ModelManager()
-        self.known_manager.enable_ai(self._ai_recognition_enabled, model_manager=self.model_manager)
-        self.known_manager.set_ai_engine_mode(self._ai_engine_mode)
-
-        def _on_model_progress(data: dict):
-            key = data.get("model_key", "")
-            st = data.get("status", "")
-            pct = float(data.get("percent", 0.0))
-            spd = f"{data.get('speed_mbps', 0.0):.1f} MB/s" if st == "downloading" else ""
-            err = str(data.get("error", ""))
-            self.aiModelProgressChanged.emit(key, st, pct, spd, err)
-            if st in ("ready", "not_downloaded", "error"):
-                self.aiRecognitionEnabledChanged.emit()
-
-        self._ai_deep_reasoner_variant = str(saved_settings.get("ai_deep_reasoner_variant", "light"))
-        self.model_manager.register_callback("fast_semantic", _on_model_progress)
-        self.model_manager.register_callback("deep_reasoner_light", _on_model_progress)
-        self.model_manager.register_callback("deep_reasoner_heavy", _on_model_progress)
-        self.model_manager.register_callback("deep_reasoner", _on_model_progress)
-
         self._language = str(saved_settings.get("language", "auto"))
         self._console_width = int(saved_settings.get("console_width", 620))
         self._current_fps = 0
@@ -559,8 +514,6 @@ class AppBridge(QObject):
         self._vault_harvest_cancel = threading.Event()
 
         try:
-            from core.storage_pool_manager import storage_pool_manager
-            storage_pool_manager.set_primary_dir(self._download_dir)
             from core.task_scheduler import task_scheduler
             task_scheduler.on_trigger_watchlist_sync = self._run_scheduled_watchlist_sync
             task_scheduler.on_trigger_creator_sync = self._run_scheduled_creator_sync
@@ -596,7 +549,6 @@ class AppBridge(QObject):
         self.downloader.on_progress_update        = lambda info: _safe_emit(self._progressSignal, info)
         self.downloader.on_task_status_changed    = lambda task: _safe_emit(self._taskSignal, task)
         self.downloader.on_tasks_changed          = lambda tasks: _safe_emit(self._tasksSignal, tasks)
-        self.downloader.on_cleanup_wanted         = lambda: _safe_emit(self._callOnGui, self._cleanup_after_run)
         self.downloader.on_download_finished      = lambda ok, msg: _safe_emit(self._finishedSignal, ok, msg)
         self.downloader.on_concurrency_throttled  = lambda count: _safe_emit(self._throttledSignal, count)
         self.downloader.on_pause_changed          = lambda paused: _safe_emit(self._pauseSignal, paused)
@@ -730,12 +682,6 @@ class AppBridge(QObject):
             self._download_dir = val
             self.downloadDirChanged.emit()
             self._settings_save_timer.start()
-            try:
-                from core.storage_pool_manager import storage_pool_manager
-                storage_pool_manager.set_primary_dir(val)
-                self.storagePoolChanged.emit()
-            except Exception:
-                pass
 
     @Property(str, notify=filterCharactersChanged)
     def filterCharacters(self) -> str:
@@ -1576,8 +1522,6 @@ class AppBridge(QObject):
         if self._proxy_url != val:
             self._proxy_url = val
             self.api_client.set_proxy(val)
-            from services import update_service as us
-            us.apply_proxy(val)
             self.proxyUrlChanged.emit()
             self.saveSettings()
 
@@ -1912,26 +1856,6 @@ class AppBridge(QObject):
             self.playCompletionSoundChanged.emit()
             self.saveSettings()
 
-    @Property(bool, notify=generateDesktopReportChanged)
-    def generateDesktopReport(self) -> bool:
-        return self._generate_desktop_report
-
-    @generateDesktopReport.setter
-    def generateDesktopReport(self, val: bool):
-        if self._generate_desktop_report != val:
-            self._generate_desktop_report = val
-            self.generateDesktopReportChanged.emit()
-            self.saveDesktopReportChanged.emit()
-            self.saveSettings()
-
-    @Property(bool, notify=saveDesktopReportChanged)
-    def saveDesktopReport(self) -> bool:
-        return self._generate_desktop_report
-
-    @saveDesktopReport.setter
-    def saveDesktopReport(self, val: bool):
-        self.generateDesktopReport = val
-
     # ── Download Archive Database (gallery-dl style) ─────────────────────────
     @Property(bool, notify=enableDownloadArchiveChanged)
     def enableDownloadArchive(self) -> bool:
@@ -1952,134 +1876,6 @@ class AppBridge(QObject):
         return self.archive_manager.get_total_count()
 
     # ── Privacy Mode & Shield Protection ────────────────────────────────────
-    @Property(bool, notify=privacyModeActiveChanged)
-    def privacyModeActive(self) -> bool:
-        return self._privacy_mode_active
-
-    @privacyModeActive.setter
-    def privacyModeActive(self, val: bool):
-        val = bool(val)
-        if self._privacy_mode_active != val:
-            self._privacy_mode_active = val
-            self.privacyModeActiveChanged.emit()
-
-    @Property(bool, notify=privacyPinConfiguredChanged)
-    def privacyPinConfigured(self) -> bool:
-        return bool(self._privacy_pin)
-
-    @Property(int, notify=privacyFailedAttemptsChanged)
-    def privacyFailedAttempts(self) -> int:
-        return self._failed_pin_attempts
-
-    @Property(bool, notify=privacyLockoutActiveChanged)
-    def privacyLockoutActive(self) -> bool:
-        return self._privacy_lockout_active
-
-    @Property(bool, notify=safeModeActiveChanged)
-    def safeModeActive(self) -> bool:
-        return self._safe_mode_active
-
-    @Property(int, notify=privacyIdleMinutesChanged)
-    def privacyIdleMinutes(self) -> int:
-        return self._privacy_idle_minutes
-
-    @Slot(result=bool)
-    def togglePrivacyMode(self) -> bool:
-        if not self._privacy_mode_active:
-            self.privacyModeActive = True
-            return True
-        else:
-            if not self._privacy_pin:
-                self.privacyModeActive = False
-                return False
-            return True
-
-    @Slot(str, result=bool)
-    def unlockPrivacyMode(self, pin: str = "") -> bool:
-        if self._privacy_lockout_active:
-            return False
-        entered = str(pin or "").strip()
-        if not self._privacy_pin:
-            self._failed_pin_attempts = 0
-            self.privacyFailedAttemptsChanged.emit()
-            self.privacyModeActive = False
-            return True
-        if entered == self._privacy_pin:
-            self._failed_pin_attempts = 0
-            self.privacyFailedAttemptsChanged.emit()
-            self.privacyModeActive = False
-            return True
-        else:
-            self._failed_pin_attempts += 1
-            self.privacyFailedAttemptsChanged.emit()
-            if self._failed_pin_attempts >= 5:
-                self._privacy_lockout_active = True
-                self._pending_pin_reset = True
-                self.saveSettings()
-                self.privacyLockoutActiveChanged.emit()
-                logger.warning("Privacy PIN failed 5 times; session locked out until restart.", category="session")
-            return False
-
-    @Slot()
-    def requestPinReset(self):
-        """User clicked 'Forgot PIN' or requested reset from locked state."""
-        self._pending_pin_reset = True
-        self._privacy_lockout_active = True
-        self.saveSettings()
-        self.privacyLockoutActiveChanged.emit()
-        logger.info("Privacy PIN reset requested. Application locked until restart.", category="session")
-
-    @Slot(str)
-    def completePinReset(self, new_pin: str = ""):
-        """Called when user sets a new PIN (or clears it) in Safe Mode after restart."""
-        cleaned = str(new_pin or "").strip()
-        self._privacy_pin = cleaned
-        self._pending_pin_reset = False
-        self._safe_mode_active = False
-        self._failed_pin_attempts = 0
-        self._privacy_lockout_active = False
-        self.saveSettings()
-        self.privacyPinConfiguredChanged.emit()
-        self.privacyFailedAttemptsChanged.emit()
-        self.privacyLockoutActiveChanged.emit()
-        self.safeModeActiveChanged.emit()
-        self.privacyModeActive = False
-        logger.info(f"Safe Mode resolved. PIN set: {bool(cleaned)}. All tabs restored.", category="session")
-
-    @Slot(str)
-    def setPrivacyPin(self, new_pin: str):
-        cleaned = str(new_pin or "").strip()
-        self._privacy_pin = cleaned
-        self._failed_pin_attempts = 0
-        self._privacy_lockout_active = False
-        self._pending_pin_reset = False
-        self.saveSettings()
-        self.privacyPinConfiguredChanged.emit()
-        self.privacyFailedAttemptsChanged.emit()
-        self.privacyLockoutActiveChanged.emit()
-        logger.info("Privacy PIN updated successfully.", category="session")
-
-    @Slot()
-    def resetPrivacyPin(self):
-        self._privacy_pin = ""
-        self._failed_pin_attempts = 0
-        self._privacy_lockout_active = False
-        self._pending_pin_reset = False
-        self.saveSettings()
-        self.privacyPinConfiguredChanged.emit()
-        self.privacyFailedAttemptsChanged.emit()
-        self.privacyLockoutActiveChanged.emit()
-        self.privacyModeActive = False
-        logger.info("Privacy PIN removed.", category="session")
-
-    @Slot(int)
-    def setPrivacyIdleMinutes(self, minutes: int):
-        m = max(0, min(30, int(minutes)))
-        if self._privacy_idle_minutes != m:
-            self._privacy_idle_minutes = m
-            self.privacyIdleMinutesChanged.emit()
-            self.saveSettings()
-            logger.info(f"Privacy idle timeout set to {m} minutes.", category="session")
 
     @Slot(str, str, str, str, result="QVariantList")
     def getArchiveHierarchy(self, query: str = "", service: str = "all", fileType: str = "all", sortBy: str = "creator_az"):
@@ -2209,12 +2005,6 @@ class AppBridge(QObject):
             candidates = []
             if self._download_dir:
                 candidates.append(self._download_dir)
-            try:
-                from core.storage_pool_manager import storage_pool_manager
-                if storage_pool_manager.enabled and storage_pool_manager.overflow_dirs:
-                    candidates.extend(storage_pool_manager.overflow_dirs)
-            except Exception:
-                pass
             artist_dirs = []
             try:
                 # The creator's Watchlist folders are scanned as they are, whatever their name
@@ -2310,14 +2100,6 @@ class AppBridge(QObject):
         candidates = []
         if self._download_dir and os.path.isdir(self._download_dir):
             candidates.append(os.path.normpath(self._download_dir))
-        try:
-            from core.storage_pool_manager import storage_pool_manager
-            if storage_pool_manager.enabled and storage_pool_manager.overflow_dirs:
-                for d in storage_pool_manager.overflow_dirs:
-                    if d and os.path.isdir(d):
-                        candidates.append(os.path.normpath(d))
-        except Exception:
-            pass
         try:
             if self._watchlist_manager:
                 for item in self._watchlist_manager.get_all():
@@ -2482,141 +2264,6 @@ class AppBridge(QObject):
             self.known_manager.set_mode(val)
             self.knownRecognitionModeChanged.emit()
             self.saveSettings()
-
-    @Property(bool, notify=aiRecognitionEnabledChanged)
-    def aiRecognitionEnabled(self) -> bool:
-        return self._ai_recognition_enabled
-
-    @aiRecognitionEnabled.setter
-    def aiRecognitionEnabled(self, val: bool):
-        val = bool(val)
-        if self._ai_recognition_enabled != val:
-            self._ai_recognition_enabled = val
-            self.known_manager.enable_ai(val, model_manager=self.model_manager)
-            self.aiRecognitionEnabledChanged.emit()
-            self.saveSettings()
-
-    @Property(str, notify=aiEngineModeChanged)
-    def aiEngineMode(self) -> str:
-        return self._ai_engine_mode
-
-    @aiEngineMode.setter
-    def aiEngineMode(self, val: str):
-        allowed = {"semantic_only", "hybrid"}
-        if val in allowed and self._ai_engine_mode != val:
-            self._ai_engine_mode = val
-            self.known_manager.set_ai_engine_mode(val)
-            self.aiEngineModeChanged.emit()
-            self.saveSettings()
-
-    @Property(str, notify=aiHardwareInfoChanged)
-    def aiHardwareBadge(self) -> str:
-        info = HardwareDetector.cached_info()
-        if info is None:
-            # Detected in the background; the badge updates when it's known
-            HardwareDetector.probe_async(lambda: self.aiHardwareInfoChanged.emit())
-            return "Detecting hardware…"
-        return str(info.get("provider_name", "CPU Mode"))
-
-    @Property(bool, notify=aiRecognitionEnabledChanged)
-    def aiFastSemanticReady(self) -> bool:
-        return self.model_manager.is_model_ready("fast_semantic")
-
-    @Property(bool, notify=aiRecognitionEnabledChanged)
-    def aiDeepReasonerReady(self) -> bool:
-        from core.ai_reasoner import has_llama_cpp
-        if not has_llama_cpp():
-            return False
-        return (
-            self.model_manager.is_model_ready("deep_reasoner_heavy")
-            or self.model_manager.is_model_ready("deep_reasoner_light")
-            or self.model_manager.is_model_ready("deep_reasoner")
-        )
-
-    @Property(str, notify=aiRecognitionEnabledChanged)
-    def aiDeepReasonerVariant(self) -> str:
-        return self._ai_deep_reasoner_variant
-
-    @aiDeepReasonerVariant.setter
-    def aiDeepReasonerVariant(self, val: str):
-        allowed = {"light", "heavy"}
-        if val in allowed and self._ai_deep_reasoner_variant != val:
-            self._ai_deep_reasoner_variant = val
-            self.aiRecognitionEnabledChanged.emit()
-            self.saveSettings()
-
-    @Property(bool, notify=aiRecognitionEnabledChanged)
-    def aiDeepReasonerLightReady(self) -> bool:
-        return self.model_manager.is_model_ready("deep_reasoner_light")
-
-    @Property(bool, notify=aiRecognitionEnabledChanged)
-    def aiDeepReasonerHeavyReady(self) -> bool:
-        return self.model_manager.is_model_ready("deep_reasoner_heavy")
-
-
-    @Slot(str, result="QVariant")
-    def getAiModelStatus(self, model_key: str):
-        if HardwareDetector.cached_info() is None:
-            # Hardware is detected in the background; the AI section refreshes when it's known
-            HardwareDetector.probe_async(lambda: self.aiHardwareInfoChanged.emit())
-        return self.model_manager.get_status(model_key)
-
-    @Slot(str)
-    def startAiModelDownload(self, model_key: str):
-        self.model_manager.start_download(model_key)
-
-    @Slot(str)
-    def cancelAiModelDownload(self, model_key: str):
-        self.model_manager.cancel_download(model_key)
-
-    @Slot(str, result=bool)
-    def deleteAiModel(self, model_key: str) -> bool:
-        # A loaded model keeps its files open (Windows won't delete them), so unload it first
-        km = getattr(self, "known_manager", None)
-        for engine in (getattr(km, "semantic_matcher", None), getattr(km, "contextual_reasoner", None)):
-            if engine is not None and hasattr(engine, "unload"):
-                try:
-                    engine.unload()
-                except Exception:
-                    logger.exception("Couldn't unload an AI model before deleting it", category="ai")
-        res = self.model_manager.delete_model(model_key)
-        self.aiRecognitionEnabledChanged.emit()
-        return res
-
-    @Slot(str, result="QVariant")
-    def testAiRecognition(self, test_title: str):
-        """Runs test inference across Tier 0, Tier 1, and Tier 2 for interactive sandbox."""
-        clean_t = (test_title or "").strip()
-        if not clean_t:
-            return {"error": "Empty test title"}
-
-        # Tier 0 (Fast heuristic)
-        t0_res = self.known_manager._find_matching_hierarchy_fast(clean_t, [], [])
-        t0_str = f"{t0_res[1]} ({t0_res[0]})" if (t0_res and t0_res[1]) else (t0_res[0] if t0_res else "None")
-
-        # Tier 1 (Semantic matcher)
-        t1_str = "Not available (model not downloaded)"
-        if self.model_manager.is_model_ready("fast_semantic"):
-            if self.known_manager.semantic_matcher:
-                if self.known_manager.semantic_matcher._cached_vectors is None:
-                    self.known_manager.semantic_matcher.build_known_index(self.known_manager)
-                m = self.known_manager.semantic_matcher.find_match(clean_t, threshold=0.70)
-                if m:
-                    t1_str = f"{m[1]} ({m[0]}) [score={m[2]:.2f}]"
-                else:
-                    t1_str = "No match above threshold"
-
-        # Final resolved hierarchy using standard engine
-        final = self.known_manager.find_matching_hierarchy(clean_t)
-        final_str = f"{final[1]} ({final[0]})" if (final and final[1]) else (final[0] if final else "Uncategorized")
-
-        return {
-            "title": clean_t,
-            "tier0": t0_str,
-            "tier1": t1_str,
-            "final": final_str,
-            "hardware": (HardwareDetector.cached_info() or {}).get("provider_name", "Detecting hardware…")
-        }
 
     # Model Properties
 
@@ -2812,20 +2459,6 @@ class AppBridge(QObject):
         return self._vault_harvest_status
 
     # ── Storage Pool Properties ──────────────────────────────────────────────
-    @Property(bool, notify=storagePoolChanged)
-    def storagePoolEnabled(self) -> bool:
-        from core.storage_pool_manager import storage_pool_manager
-        return storage_pool_manager.enabled
-
-    @Property(float, notify=storagePoolChanged)
-    def storagePoolMarginGB(self) -> float:
-        from core.storage_pool_manager import storage_pool_manager
-        return storage_pool_manager.safety_margin_gb
-
-    @Property(str, notify=storagePoolChanged)
-    def storagePoolStatusJson(self) -> str:
-        from core.storage_pool_manager import storage_pool_manager
-        return json.dumps(storage_pool_manager.get_pool_status(), ensure_ascii=False)
 
     # ── Cookie Watchdog Properties ───────────────────────────────────────────
     @Property(str, notify=cookieWatchdogChanged)
@@ -5935,12 +5568,8 @@ class AppBridge(QObject):
                              else getattr(self, "_loaded_decompressor_settings", {})),
             "open_folder_on_complete": self._open_folder_on_complete,
             "play_completion_sound": self._play_completion_sound,
-            "generate_desktop_report": self._generate_desktop_report,
             "post_download_action": "none",
             "known_recognition_mode": self._known_recognition_mode,
-            "ai_recognition_enabled": self._ai_recognition_enabled,
-            "ai_engine_mode": self._ai_engine_mode,
-            "ai_deep_reasoner_variant": self._ai_deep_reasoner_variant,
             "language": self._language,
             "console_width": self._console_width,
             "tag_folder_mode": self._tag_folder_mode,
@@ -5971,9 +5600,6 @@ class AppBridge(QObject):
             "bandwidth_limit_enabled": self._bandwidth_limit_enabled,
             "bandwidth_limit_value": self._bandwidth_limit_value,
             "bandwidth_limit_unit": self._bandwidth_limit_unit,
-            "privacy_pin": self._privacy_pin,
-            "pending_pin_reset": self._pending_pin_reset,
-            "privacy_idle_minutes": self._privacy_idle_minutes
         }
         self.session_manager.save_settings(settings_dict, silent=True)
 
@@ -6060,14 +5686,6 @@ class AppBridge(QObject):
             if now - self._last_archive_emit_time >= 2.0:
                 self._last_archive_emit_time = now
                 self.archiveRecordCountChanged.emit()
-
-    def _cleanup_after_run(self):
-        """Memory cleanup after a download run, on the window thread (see MemoryCollector.collect)."""
-        try:
-            from core.memory_collector import MemoryCollector
-            MemoryCollector.instance().collect(reason="download finished")
-        except Exception:
-            pass
 
     TASK_UPDATES_PER_TURN = 300
 
@@ -6261,8 +5879,9 @@ class AppBridge(QObject):
 
                 unique_creators = sorted(list(set(t.creator_name for t in all_tasks if t.creator_name)))
                 try:
-                    from services import update_service as _us
-                    app_version = str(_us._read_version_file(_us.get_app_dir()).get("version") or "")
+                    from core.path_utils import get_base_dir
+                    with open(os.path.join(get_base_dir(), "version.json"), encoding="utf-8") as _vf:
+                        app_version = str(json.load(_vf).get("version") or "")
                 except Exception:
                     app_version = ""
 
@@ -6435,11 +6054,6 @@ class AppBridge(QObject):
     def _allowed_download_roots(self) -> List[str]:
         roots = [self._download_dir]
         try:
-            from core.storage_pool_manager import storage_pool_manager
-            roots.extend(storage_pool_manager.overflow_dirs or [])
-        except Exception:
-            pass
-        try:
             for e in list(self._watchlist_manager.entries):
                 roots.extend(d for d in [e.download_dir, *(e.download_dirs or [])] if d)
         except Exception:
@@ -6538,21 +6152,6 @@ class AppBridge(QObject):
         }
         label = _labels.get(action, action.capitalize())
         self._pending_post_action = action
-
-        # Generate comprehensive Desktop report before action executes (if enabled)
-        if self._generate_desktop_report:
-            try:
-                from services.report_generator import generate_completion_report
-                tasks = self._queue_model.getTasks() if self._queue_model else (self.downloader.tasks if self.downloader else [])
-                report_paths = generate_completion_report(
-                    tasks=tasks,
-                    action_name=label,
-                    elapsed_seconds=getattr(self.downloader, "_elapsed_seconds", 0.0) if self.downloader else 0.0
-                )
-                if report_paths.get("html"):
-                    logger.info(f"📊 Download completion report saved to Desktop: {report_paths['html']}", category="system")
-            except Exception as e:
-                logger.warning(f"Could not generate desktop report: {e}", category="system")
 
         logger.info(f"Post-download action '{label}' queued — showing 15s countdown modal.", category="system")
         # Emit to QML — the modal handles the countdown and calls confirmPostAction() or cancelPostAction()
@@ -6714,20 +6313,6 @@ class AppBridge(QObject):
             # 3. Post-download action (close app, shutdown, sleep, etc.)
             if self._post_download_action and self._post_download_action != "none":
                 self._execute_post_action()
-            elif self._generate_desktop_report:
-                try:
-                    from services.report_generator import generate_completion_report
-                    tasks = self._queue_model.getTasks() if self._queue_model else (self.downloader.tasks if self.downloader else [])
-                    report_paths = generate_completion_report(
-                        tasks=tasks,
-                        action_name="Completion",
-                        elapsed_seconds=getattr(self.downloader, "_elapsed_seconds", 0.0) if self.downloader else 0.0
-                    )
-                    if report_paths.get("html"):
-                        logger.info(f"📊 Download completion report saved to Desktop: {report_paths['html']}", category="system")
-                except Exception as e:
-                    logger.warning(f"Could not generate desktop report: {e}", category="system")
-
             # 4. Auto-add / update completed artist in watchlist. "Downloaded up to" only moves through
             # posts whose files all finished (completed or skipped by the filters).
             try:
@@ -7027,47 +6612,12 @@ class AppBridge(QObject):
            - Otherwise, construct the default path inside self._download_dir.
         """
         from core.filter_engine import FilterEngine
-        from core.storage_pool_manager import storage_pool_manager
 
         if getattr(entry, "custom_folder", False) and entry.download_dir:
             return entry.download_dir          # a folder the user chose, used as it is
 
         clean_c = FilterEngine.clean_filesystem_text(entry.creator_name or entry.user_id, max_len=80, fallback="creator")
         expected_folder = f"{clean_c} [{entry.service}]"
-
-        if storage_pool_manager.enabled and storage_pool_manager.overflow_dirs:
-            # Multi-drive overflow active: discover existing artist folders across drives
-            reg_paths = list(getattr(entry, "download_dirs", []) or [])
-            if entry.download_dir and entry.download_dir not in reg_paths:
-                reg_paths.insert(0, entry.download_dir)
-
-            existing_locs = storage_pool_manager.find_artist_locations(
-                creator_name=entry.creator_name or entry.user_id,
-                service=entry.service,
-                additional_paths=reg_paths
-            )
-            # Sync discovered back into entry.download_dirs
-            synced = False
-            for loc in existing_locs:
-                if loc not in entry.download_dirs:
-                    entry.download_dirs.append(loc)
-                    synced = True
-            if synced:
-                self._watchlist_manager.save(entry)
-
-            if existing_locs:
-                # Pick the existing artist location that sits on the disk with the MOST free space
-                best_loc, _ = storage_pool_manager.get_most_free_drive(existing_locs)
-                return best_loc
-            else:
-                # No artist folder exists yet -> pick among primary and all overflow roots by most free disk
-                roots = ([storage_pool_manager.primary_dir] if storage_pool_manager.primary_dir else [self._download_dir]) + list(storage_pool_manager.overflow_dirs)
-                best_root, _ = storage_pool_manager.get_most_free_drive(roots)
-                target = pick_creator_folder(best_root, clean_c, entry.service)
-                if target not in entry.download_dirs:
-                    entry.download_dirs.append(target)
-                    self._watchlist_manager.save(entry)
-                return target
 
         # Standard single-drive fallback
         target = (getattr(entry, "download_dir", "") or "").strip()
@@ -7612,11 +7162,9 @@ class AppBridge(QObject):
     def _folders_to_move(self, entry, new_dir: str) -> List[str]:
         """The artist's current folders whose files could follow them to new_dir: never the main
         download folder or a storage drive's root, nor a folder that contains new_dir or sits in it."""
-        from core.storage_pool_manager import storage_pool_manager
         key = lambda p: os.path.normcase(os.path.normpath(p))  # noqa: E731
         new_k = key(new_dir)
-        roots = {key(r) for r in [self._download_dir, storage_pool_manager.primary_dir,
-                                  *storage_pool_manager.overflow_dirs] if r}
+        roots = {key(r) for r in [self._download_dir] if r}
         out, seen = [], set()
         for d in [entry.download_dir, *(entry.download_dirs or [])]:
             if not d or not os.path.isdir(d):
@@ -7777,18 +7325,12 @@ class AppBridge(QObject):
             return []
 
         import shutil
-        from core.storage_pool_manager import storage_pool_manager
 
         registered = list(getattr(entry, "download_dirs", []) or [])
         if entry.download_dir and entry.download_dir not in registered:
             registered.insert(0, entry.download_dir)
 
-        # Discovered on-disk folders across primary & overflow drives
-        discovered = storage_pool_manager.find_artist_locations(
-            creator_name=entry.creator_name or entry.user_id,
-            service=entry.service,
-            additional_paths=registered
-        )
+        discovered = [p for p in registered if p and os.path.isdir(p)]
 
         updated = False
         for p in discovered:
@@ -8290,49 +7832,6 @@ class AppBridge(QObject):
         return count
 
     # ── Storage Pool Slots ───────────────────────────────────────────────────
-    @Slot(bool)
-    def setStoragePoolEnabled(self, enabled: bool):
-        from core.storage_pool_manager import storage_pool_manager
-        storage_pool_manager.set_enabled(enabled)
-        self.storagePoolChanged.emit()
-
-    @Slot(float)
-    def setStoragePoolMargin(self, marginGB: float):
-        from core.storage_pool_manager import storage_pool_manager
-        storage_pool_manager.set_safety_margin(marginGB)
-        self.storagePoolChanged.emit()
-
-    @Slot(str, result=bool)
-    def addStoragePoolDrive(self, path: str) -> bool:
-        from core.storage_pool_manager import storage_pool_manager
-        res = storage_pool_manager.add_overflow_dir(path)
-        if res:
-            self.storagePoolChanged.emit()
-        return res
-
-    @Slot(str, result=bool)
-    def removeStoragePoolDrive(self, path: str) -> bool:
-        from core.storage_pool_manager import storage_pool_manager
-        res = storage_pool_manager.remove_overflow_dir(path)
-        if res:
-            self.storagePoolChanged.emit()
-        return res
-
-    @Slot(result=str)
-    def selectStoragePoolDirectory(self) -> str:
-        folder = QFileDialog.getExistingDirectory(
-            None,
-            "Select Storage Overflow Directory",
-            ""
-        )
-        if folder:
-            self.addStoragePoolDrive(folder)
-            return folder
-        return ""
-
-    @Slot()
-    def refreshStoragePools(self):
-        self.storagePoolChanged.emit()
 
     # ── Cookie Importer Slots ────────────────────────────────────────────────
     @Slot(result=bool)
@@ -10255,23 +9754,6 @@ class AppBridge(QObject):
     @Slot(str, str, 'QVariantList', bool)
     def refreshPostMetadataAsync(self, request_id: str, folder_path: str, file_paths: list = None, save_to_documents: bool = False):
         self._run_async(request_id, self.refreshPostMetadata, folder_path, list(file_paths or []), save_to_documents)
-
-    @Slot(str, result='QVariantMap')
-    @Slot(str, bool, result='QVariantMap')
-    def fingerprintVideos(self, folder_path: str, recursive: bool = True) -> dict:
-        """
-        Scans a directory for existing video files, computes their SHA-256 hashes and media
-        signatures, and indexes them into Pawchive's ArchiveManager database to enable file
-        recognition and prevent duplicate downloads.
-        """
-        from core.video_fingerprinter import VideoFingerprinter
-        fingerprinter = VideoFingerprinter(archive_manager=self.archive_manager)
-        return fingerprinter.fingerprint_and_index(folder_path, recursive=recursive)
-
-    @Slot(str, str)
-    @Slot(str, str, bool)
-    def fingerprintVideosAsync(self, request_id: str, folder_path: str, recursive: bool = True):
-        self._run_async(request_id, self.fingerprintVideos, folder_path, recursive)
 
     @staticmethod
     def _flatten_log_path(folder_path: str) -> str:
