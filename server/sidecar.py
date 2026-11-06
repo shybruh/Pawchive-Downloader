@@ -416,6 +416,7 @@ def build_engine():
         "appBridge": app_bridge,
         "accounts": AccountsBridge(),
         "scheduler": SchedulerBridge(app_bridge),
+        "linkVault": app_bridge.link_vault,
         "galleryTools": tools,
         "galleryUpdates": GalleryUpdates(app_bridge, wl),
     }

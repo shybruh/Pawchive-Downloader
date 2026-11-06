@@ -263,6 +263,25 @@ def _process_mega_folder(folder_id: str, folder_key: str, session: requests.Sess
     return root_name, files_to_download
 
 
+def _unfinished(cancel_event, downloaded: int, expected: int) -> str:
+    """Why a download that stopped receiving data isn't complete ("" when it is). Stopping a
+    download closes its connection, so the read loop simply ends: without this check a half file
+    was renamed and reported as finished."""
+    if cancel_event is not None and cancel_event.is_set():
+        return "cancelled"
+    if expected and downloaded < expected:
+        return f"connection ended at {downloaded // 1048576} of {expected // 1048576} MB"
+    return ""
+
+
+def _remove_quietly(path: str) -> None:
+    try:
+        if os.path.exists(path):
+            os.remove(path)
+    except OSError:
+        pass
+
+
 def download_and_decrypt_mega_file(
     info: Dict[str, Any],
     download_dir: str,
@@ -284,12 +303,14 @@ def download_and_decrypt_mega_file(
         return False
 
     os.makedirs(download_dir, exist_ok=True)
+    if cancel_event is not None and cancel_event.is_set():
+        return False
 
     if os.path.exists(final_path) and os.path.getsize(final_path) == file_size and file_size > 0:
         log_func(f"   [Mega] ℹ️ File '{file_name}' already exists. Skipping.")
         if progress_callback:
             progress_callback(file_name, file_size, file_size, file_index, total_files)
-        return
+        return True
 
     key, iv, _ = _parse_mega_key(_urlb64_to_b64(info['file_key']))
     if iv is None:
@@ -322,32 +343,13 @@ def download_and_decrypt_mega_file(
             with open(tmp_path, mode) as f:
                 for chunk in r.iter_content(chunk_size=16384):
                     if cancel_event and cancel_event.is_set():
-                        log_func(f"   [Mega] Download cancelled for '{file_name}'.")
-                        if os.path.exists(tmp_path):
-                            try:
-                                os.remove(tmp_path)
-                            except OSError:
-                                pass
-                        return
-                    while pause_event and pause_event.is_set():
+                        break
+                    while pause_event and pause_event.is_set() and not (cancel_event and cancel_event.is_set()):
                         time.sleep(0.5)
-                        if cancel_event and cancel_event.is_set():
-                            if os.path.exists(tmp_path):
-                                try:
-                                    os.remove(tmp_path)
-                                except OSError:
-                                    pass
-                            return
-
+                    if cancel_event and cancel_event.is_set():
+                        break
                     if not bandwidth_limiter.wait_for(len(chunk), cancel_event, pause_event):
-                        log_func(f"   [Mega] Download cancelled for '{file_name}'.")
-                        if os.path.exists(tmp_path):
-                            try:
-                                os.remove(tmp_path)
-                            except OSError:
-                                pass
-                        return
-
+                        break
                     decrypted = cipher.decrypt(chunk)
                     f.write(decrypted)
                     downloaded += len(chunk)
@@ -361,6 +363,15 @@ def download_and_decrypt_mega_file(
             with _active_cloud_lock:
                 _active_cloud_resps.discard(r)
 
+    why = _unfinished(cancel_event, downloaded, file_size)
+    if why == "cancelled":
+        log_func(f"   [Mega] Download cancelled for '{file_name}'.")
+        _remove_quietly(tmp_path)
+        return False
+    if why:
+        # The ".part" file stays: the next try continues from where this one stopped
+        log_func(f"   [Mega] ❌ '{file_name}' didn't finish ({why}).")
+        return False
     if os.path.exists(tmp_path):
         if os.path.exists(final_path):
             os.remove(final_path)
@@ -368,6 +379,8 @@ def download_and_decrypt_mega_file(
         log_func(f"   [Mega] ✅ Completed: '{file_name}'")
         if progress_callback:
             progress_callback(file_name, file_size, file_size, file_index, total_files)
+        return True
+    return False
 
 
 def download_mega_link(
@@ -421,10 +434,11 @@ def download_mega_link(
 
         progress_lock = Lock()
         processed_count = 0
+        unfinished = 0
         total_files = len(files)
 
         def _mega_worker(file_data):
-            nonlocal processed_count
+            nonlocal processed_count, unfinished
             if cancel_event and cancel_event.is_set():
                 return
             try:
@@ -451,7 +465,7 @@ def download_mega_link(
                     log_func(f"   [Mega Worker] ⚠️ Skipping '{file_data['relative_path']}': unsafe folder name")
                     return
 
-                download_and_decrypt_mega_file(
+                if not download_and_decrypt_mega_file(
                     file_info,
                     save_dir,
                     log_func,
@@ -460,8 +474,12 @@ def download_mega_link(
                     pause_event,
                     file_index=processed_count + 1,
                     total_files=total_files
-                )
+                ):
+                    with progress_lock:
+                        unfinished += 1
             except Exception as e:
+                with progress_lock:
+                    unfinished += 1
                 if not (cancel_event and cancel_event.is_set()):
                     log_func(f"   [Mega Worker] ❌ Error on '{file_data['relative_path']}': {e}")
             finally:
@@ -479,6 +497,11 @@ def download_mega_link(
                     future.result()
                 except Exception:
                     pass
+        if cancel_event and cancel_event.is_set():
+            return False
+        if unfinished:
+            log_func(f"   [Mega] ❌ {unfinished} of {total_files} file(s) didn't finish.")
+            return False
         return True
 
     elif file_match:
@@ -511,7 +534,7 @@ def download_mega_link(
             'dl_url': dl_url,
             'file_key': file_key
         }
-        download_and_decrypt_mega_file(
+        return bool(download_and_decrypt_mega_file(
             file_info,
             target_folder,
             log_func,
@@ -520,8 +543,7 @@ def download_mega_link(
             pause_event,
             file_index=1,
             total_files=1
-        )
-        return True
+        ))
 
     log_func(f"⚠️ Unrecognized Mega URL format: {url}")
     return False
@@ -863,32 +885,13 @@ def download_dropbox_link(
                 with open(full_path, 'wb') as f:
                     for chunk in r.iter_content(chunk_size=16384):
                         if cancel_event and cancel_event.is_set():
-                            log_func("   [Dropbox] Download cancelled.")
-                            if os.path.exists(full_path):
-                                try:
-                                    os.remove(full_path)
-                                except OSError:
-                                    pass
-                            return False
-                        while pause_event and pause_event.is_set():
+                            break
+                        while pause_event and pause_event.is_set() and not (cancel_event and cancel_event.is_set()):
                             time.sleep(0.5)
-                            if cancel_event and cancel_event.is_set():
-                                if os.path.exists(full_path):
-                                    try:
-                                        os.remove(full_path)
-                                    except OSError:
-                                        pass
-                                return False
-
+                        if cancel_event and cancel_event.is_set():
+                            break
                         if not bandwidth_limiter.wait_for(len(chunk), cancel_event, pause_event):
-                            log_func("   [Dropbox] Download cancelled.")
-                            if os.path.exists(full_path):
-                                try:
-                                    os.remove(full_path)
-                                except OSError:
-                                    pass
-                            return False
-
+                            break
                         f.write(chunk)
                         downloaded += len(chunk)
                         if time.time() - last_log >= 1.0:
@@ -899,6 +902,11 @@ def download_dropbox_link(
                 with _active_cloud_lock:
                     _active_cloud_resps.discard(r)
 
+            why = _unfinished(cancel_event, downloaded, total_size)
+            if why:
+                _remove_quietly(full_path)
+                log_func("   [Dropbox] Download cancelled." if why == "cancelled" else f"   [Dropbox] ❌ '{filename}' didn't finish ({why}).")
+                return False
             log_func(f"   [Dropbox] ✅ Downloaded '{filename}'")
 
             if zipfile.is_zipfile(full_path):
@@ -1011,10 +1019,11 @@ def download_gofile_link(
 
         progress_lock = Lock()
         processed_count = 0
+        unfinished = 0
         total_files = len(files)
 
         def _gofile_worker(fobj):
-            nonlocal processed_count
+            nonlocal processed_count, unfinished
             if cancel_event and cancel_event.is_set():
                 return
 
@@ -1039,30 +1048,13 @@ def download_gofile_link(
                         with open(fpath, "wb") as f:
                             for chunk in r.iter_content(chunk_size=16384):
                                 if cancel_event and cancel_event.is_set():
-                                    if os.path.exists(fpath):
-                                        try:
-                                            os.remove(fpath)
-                                        except OSError:
-                                            pass
-                                    return
-                                while pause_event and pause_event.is_set():
+                                    break
+                                while pause_event and pause_event.is_set() and not (cancel_event and cancel_event.is_set()):
                                     time.sleep(0.5)
-                                    if cancel_event and cancel_event.is_set():
-                                        if os.path.exists(fpath):
-                                            try:
-                                                os.remove(fpath)
-                                            except OSError:
-                                                pass
-                                        return
-
+                                if cancel_event and cancel_event.is_set():
+                                    break
                                 if not bandwidth_limiter.wait_for(len(chunk), cancel_event, pause_event):
-                                    if os.path.exists(fpath):
-                                        try:
-                                            os.remove(fpath)
-                                        except OSError:
-                                            pass
-                                    return
-
+                                    break
                                 f.write(chunk)
                                 downloaded += len(chunk)
                                 if time.time() - last_t >= 1.0:
@@ -1073,6 +1065,14 @@ def download_gofile_link(
                         with _active_cloud_lock:
                             _active_cloud_resps.discard(r)
 
+                why = _unfinished(cancel_event, downloaded, fsize)
+                if why:
+                    _remove_quietly(fpath)
+                    with progress_lock:
+                        unfinished += 1
+                    if why != "cancelled":
+                        log_func(f"   [GoFile] ❌ '{fname}' didn't finish ({why}).")
+                    return
                 log_func(f"   [GoFile] ✅ Finished '{fname}'")
                 if progress_callback:
                     progress_callback(fname, fsize, fsize, processed_count + 1, total_files)
@@ -1100,6 +1100,11 @@ def download_gofile_link(
                     future.result()
                 except Exception:
                     pass
+        if cancel_event and cancel_event.is_set():
+            return False
+        if unfinished:
+            log_func(f"   [GoFile] ❌ {unfinished} of {total_files} file(s) didn't finish.")
+            return False
         return True
     except Exception as e:
         log_func(f"   [GoFile] ❌ GoFile error: {e}")

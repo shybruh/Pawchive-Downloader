@@ -2604,6 +2604,9 @@ class KemonoDownloader:
             ]
         else:
             self._run_tasks = [t for t in self.tasks if t.status == "pending"]
+        # Cloud links (MEGA, Drive…) in the queue are pages the cloud downloader handles, not files
+        from core.cloud_links import cloud_platform
+        self._run_tasks = [t for t in self._run_tasks if not cloud_platform(t.url)]
         self._already_there = Counter()          # files found downloaded already (counted in the log file)
         logger.debug("Download settings saved to the log file.", category="downloader",
                      details=self._describe_run(options, cookie_str, len(self._run_tasks)))

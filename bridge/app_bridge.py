@@ -9,6 +9,7 @@ import sys
 import shutil
 import time
 import subprocess
+import collections
 import threading
 import json
 import re
@@ -57,20 +58,20 @@ from core.filter_engine import FilterEngine, FilterOptions, FILTER_PROFILES, REM
 from core.file_order import normalize_file_order
 from core.api_client import KemonoApiClient
 from core.downloader import KemonoDownloader, DownloadTask, is_permanent_failure
+from core.cloud_links import cloud_platform, PLATFORM_NAMES
 from core.session_manager import SessionManager
 from core.known_manager import KnownManager
 from bridge.log_model import LogModel
 from bridge.queue_model import QueueModel
 from bridge.known_model import KnownModel
 from bridge.watchlist_model import WatchlistModel
-from bridge.archive_creators_model import ArchiveCreatorsModel, RecordListModel
+from bridge.archive_creators_model import ArchiveCreatorsModel
 from core import folder_naming
 from core.folder_naming import pick_creator_folder, is_creator_folder
 from bridge.decompressor_bridge import DecompressorBridge
 from core.bandwidth_limiter import bandwidth_limiter
 from core.watchlist_manager import WatchlistManager
 from services.batch_loader import BatchLoader
-from services.link_extractor import LinkExtractor
 from services.bunkr_client import fetch_bunkr_album
 from services.erome_client import fetch_erome_album
 from services.nhentai_client import fetch_nhentai_gallery
@@ -206,12 +207,6 @@ class AppBridge(QObject):
     watchlistFolderMoveProgress = Signal(str, str, int, int)   # (userId, service, files moved, files to move)
 
     # Link Vault signals
-    linkVaultChanged          = Signal()
-    linkVaultProbingStarted   = Signal()
-    linkVaultProbingFinished  = Signal()
-    vaultHarvestStarted       = Signal(str)             # (creatorName)
-    vaultHarvestProgress      = Signal(str, int, int)   # (statusMsg, currentPage, currentLinks)
-    vaultHarvestFinished      = Signal(bool, str, int, int)  # (success, creatorName, newLinks, totalPosts)
 
     # Telegram integration signals
     telegramAuthRequested     = Signal(bool)                 # (is_private)
@@ -429,7 +424,6 @@ class AppBridge(QObject):
         self._watchlist_manager.background_saves = True     # written off the window thread
         self._watchlist_model = WatchlistModel(self._watchlist_manager, self)
         self._archive_creators_model = ArchiveCreatorsModel(self)
-        self._vault_creators_model = RecordListModel(self, key_field="creator_key")
         # Watchlist downloads: new posts that needed no files (already saved or filtered out),
         # counted as done when the download finishes
         self._watchlist_pending_updates: Dict[Tuple[str, str], List[Tuple[str, str]]] = {}
@@ -473,11 +467,9 @@ class AppBridge(QObject):
         self._is_favorite_artists_loading = False
 
         # Link Vault state
-        self._vault_search = ""
-        self._vault_platform = "all"
-        self._vault_harvesting = False
-        self._vault_harvest_status = ""
-        self._vault_harvest_cancel = threading.Event()
+        # Saved cloud links per creator (exposed to the UI as "linkVault")
+        from bridge.link_vault_bridge import LinkVaultBridge
+        self.link_vault = LinkVaultBridge(self)
 
         try:
             from core.task_scheduler import task_scheduler
@@ -1741,9 +1733,27 @@ class AppBridge(QObject):
 
     # Model Properties
 
+    # The list models the UI reads as "appBridge.<name>" (child objects of the bridge)
     @Property(QObject, constant=True)
     def queueModel(self) -> QueueModel:
         return self._queue_model
+
+    @Property(QObject, constant=True)
+    def logModel(self) -> LogModel:
+        return self._log_model
+
+    @Property(QObject, constant=True)
+    def knownModel(self) -> KnownModel:
+        return self._known_model
+
+    @Property(QObject, constant=True)
+    def watchlistModel(self) -> WatchlistModel:
+        return self._watchlist_model
+
+    @Property(QObject, constant=True)
+    def archiveCreatorsModel(self) -> ArchiveCreatorsModel:
+        """The Archive tab's creators (filled by getArchiveDataAsync)."""
+        return self._archive_creators_model
 
     @Property(bool, notify=watchlistCheckOnStartupChanged)
     def watchlistCheckOnStartup(self) -> bool:
@@ -1789,68 +1799,6 @@ class AppBridge(QObject):
     @Property(bool, notify=isDownloadingChanged)
     def isCloudDownloading(self) -> bool:
         return self._is_cloud_downloading
-
-    # ── Link Vault Properties ────────────────────────────────────────────────
-    def _vault_tree(self) -> list:
-        """The Link Vault's tree for the current search / platform. Built once per vault change and
-        filter: it was rebuilt (the whole vault) on every read."""
-        from core.link_vault_manager import link_vault_manager
-        key = (getattr(link_vault_manager, "revision", 0), len(link_vault_manager.data.get("links", [])),
-               self._vault_search, self._vault_platform)
-        cached = self.__dict__.get("_vault_tree_cache")
-        if cached and cached[0] == key:
-            return cached[1]
-        tree = link_vault_manager.get_tree_model(self._vault_search, self._vault_platform)
-        self._vault_tree_cache = (key, tree)
-        return tree
-
-    @Property(str, notify=linkVaultChanged)
-    def linkVaultTreeJson(self) -> str:
-        return json.dumps(self._vault_tree(), ensure_ascii=False)
-
-    @Slot(str)
-    def linkVaultTreeJsonAsync(self, request_id: str):
-        """The Link Vault's creators, built in the background into linkVaultCreatorsModel (the view
-        shows them with applyPending()); asyncResultReady answers with their number. Sending the
-        whole tree as one JSON text to parse on the window thread froze big vaults."""
-        def _job():
-            try:
-                tree = self._vault_tree()
-            except Exception as e:
-                logger.error(f"Background task failed: {e}", category="system")
-                tree = []
-
-            def _deliver():
-                self._vault_creators_model.set_pending(tree)
-                self.asyncResultReady.emit(request_id, {"count": len(tree)})
-            try:
-                self._callOnGui.emit(_deliver)
-            except RuntimeError:
-                pass      # the app is closing
-        threading.Thread(target=_job, daemon=True, name=f"async:{request_id[:24]}").start()
-
-    @Property(int, notify=linkVaultChanged)
-    def linkVaultTotalLinks(self) -> int:
-        from core.link_vault_manager import link_vault_manager
-        return len(link_vault_manager.data.get("links", []))
-
-    @Property(int, notify=linkVaultChanged)
-    def linkVaultTotalCreators(self) -> int:
-        from core.link_vault_manager import link_vault_manager
-        return len(link_vault_manager.data.get("creators", {}))
-
-    @Property(bool, notify=linkVaultChanged)
-    def linkVaultProbingActive(self) -> bool:
-        from core.link_vault_manager import link_vault_manager
-        return link_vault_manager._probing_active
-
-    @Property(bool, notify=linkVaultChanged)
-    def linkVaultHarvestingActive(self) -> bool:
-        return self._vault_harvesting
-
-    @Property(str, notify=linkVaultChanged)
-    def linkVaultHarvestingStatus(self) -> str:
-        return self._vault_harvest_status
 
     @Slot(result="QVariantList")
     def getDownloadHistory(self):
@@ -3043,72 +2991,6 @@ class AppBridge(QObject):
             self.statusTextChanged.emit()
             logger.success(f"Added {len(tasks)} tasks from {len(filtered_posts)} selected posts to queue.", category="queue")
 
-    def _auto_harvest_posts_to_vault(self, posts: List[Dict[str, Any]], creator_name: str, domain: str, service: str, user_id: str):
-        """
-        Background worker to harvest cloud links, smart passwords, and post metadata
-        from posts into the permanent Link Vault during downloads or queue additions.
-        """
-        if not posts or not service or not user_id:
-            return
-
-        posts_copy = list(posts)
-
-        def _worker():
-            try:
-                from services.link_extractor import LinkExtractor
-                from core.link_vault_manager import link_vault_manager
-
-                harvested_posts = []
-                for p in posts_copy:
-                    rec = LinkExtractor.extract_post_vault_record(
-                        post=p,
-                        api_client=None,
-                        domain=domain,
-                        service=service,
-                        user_id=user_id
-                    )
-                    if rec and rec.get("links"):
-                        harvested_posts.append(rec)
-
-                if harvested_posts:
-                    new_links_count = link_vault_manager.add_harvested_data(
-                        creator_name=creator_name or user_id,
-                        service=service,
-                        user_id=user_id,
-                        harvested_posts=harvested_posts
-                    )
-                    if new_links_count > 0:
-                        logger.success(
-                            f"Link Vault: Auto-harvested and permanently saved {new_links_count} new link(s) for '{creator_name or user_id}'.",
-                            category="vault"
-                        )
-                        self.linkVaultChanged.emit()
-
-                    if self.archive_manager and self.archive_manager.is_enabled:
-                        archived_link_count = 0
-                        for hp in harvested_posts:
-                            p_id = str(hp.get("post_id") or "")
-                            p_title = str(hp.get("post_title") or "")
-                            for lk in hp.get("links", []):
-                                u = lk.get("url")
-                                if u:
-                                    if self.archive_manager.record_link(
-                                        service=service,
-                                        creator_id=user_id,
-                                        post_id=p_id,
-                                        url=u,
-                                        creator_name=creator_name or user_id,
-                                        post_title=p_title,
-                                        link_title=lk.get("title") or u
-                                    ):
-                                        archived_link_count += 1
-                        if archived_link_count > 0:
-                            self.archiveUpdated.emit()
-            except Exception as e:
-                logger.debug(f"Link Vault auto-harvest error: {e}", category="vault")
-
-        threading.Thread(target=_worker, daemon=True).start()
-
     def _async_fetch_and_start(self, parsed: URLParseResult, auto_start: bool):
         try:
             if self._refuse_if_disabled(getattr(parsed, "raw_url", "") or parsed.domain):
@@ -3382,7 +3264,7 @@ class AppBridge(QObject):
                 )
 
                 # Auto-harvest cloud storage links into permanent Link Vault
-                self._auto_harvest_posts_to_vault(
+                self.link_vault.auto_harvest_posts(
                     posts=posts,
                     creator_name=creator_name,
                     domain=parsed.domain,
@@ -3834,6 +3716,7 @@ class AppBridge(QObject):
         files. The retry itself starts back on the window thread."""
         if selected is not None and not selected:
             return
+        self._retry_cloud(selected, include_cancelled)     # cloud links (MEGA, Drive…) retry here
         if getattr(self, "_retry_preparing", False):
             return                            # a retry is already being prepared
         self._retry_preparing = True
@@ -4118,256 +4001,247 @@ class AppBridge(QObject):
         if save_path:
             self.session_manager.export_links_to_file(links, save_path)
 
+    # ── Cloud downloads (MEGA, Google Drive, Dropbox, GoFile) ───────────────
+    # Each link is a row in the queue like any file: its progress, finish, failure and retry show
+    # there. The file downloader skips these rows (core/cloud_links.py); they run here.
+
     @Slot("QVariantList", str)
     def startCloudDownloads(self, selected_links: list, dest_folder: str = ""):
-        """Downloads selected harvested cloud links (Mega, Drive, Dropbox, GoFile) with live progress telemetry."""
-        if self._is_cloud_downloading or self._is_downloading:
-            logger.warning("Download process is already running!", category="system")
-            return
-
+        """Queues cloud links (from the link vault or a "Links only" run) and downloads them."""
         if not selected_links:
             logger.warning("No links selected for cloud download.", category="downloader")
             return
-
-        base_dir = dest_folder.strip() or self._download_dir
+        base_dir = (dest_folder or "").strip() or self._download_dir
         os.makedirs(base_dir, exist_ok=True)
+        records = {r["url"]: r for r in getattr(self.downloader, "harvested_links_records", [])
+                   if isinstance(r, dict) and r.get("url")}
+        # Links saved in the link vault know their post and creator
+        try:
+            from core.link_vault_manager import link_vault_manager
+            vault = link_vault_manager.data
+            for lk in vault.get("links", []):
+                u = lk.get("url")
+                if u and u not in records:
+                    cr = vault.get("creators", {}).get(lk.get("creator_key", ""), {})
+                    records[u] = {"title": lk.get("post_title") or "", "creator": lk.get("creator_name") or cr.get("creator_name", ""),
+                                  "service": cr.get("service", ""), "post_id": lk.get("post_id") or "", "platform": lk.get("platform") or ""}
+        except Exception:
+            pass
+        queued = {t.url for t in self._queue_model.getTasks()
+                  if cloud_platform(t.url) and t.status in ("pending", "downloading")}
+        tasks = []
+        for item in selected_links:
+            url = (item.get("url", "") if isinstance(item, dict) else str(item)).strip()
+            if not url or url in queued:
+                continue
+            queued.add(url)
+            tasks.append(self._make_cloud_task(url, item if isinstance(item, dict) else {}, records.get(url, {}), base_dir))
+        if not tasks:
+            logger.info("Those links are already in the queue.", category="downloader")
+            return
+        self._handle_append_tasks(tasks)
+        self._run_cloud_tasks(tasks)
 
+    @staticmethod
+    def _make_cloud_task(url: str, item: dict, record: dict, base_dir: str) -> DownloadTask:
+        def pick(key, default=""):
+            return item.get(key) or record.get(key) or default
+        platform = cloud_platform(url) or str(pick("platform", "other"))
+        title = str(pick("title", "Cloud File"))
+        creator = str(pick("creator"))
+        service = str(pick("service"))
+        label = FilterEngine.clean_filesystem_text(f"{title} ({PLATFORM_NAMES.get(platform, platform)})", max_len=120, fallback="Cloud link")
+        task = DownloadTask(
+            url=url, target_path=os.path.join(base_dir, label), post_title=title,
+            creator_name=creator or "Cloud links", service=service or platform, post_id=str(pick("post_id")),
+            file_id=f"cloud:{url}", batch_id=f"cloud_{service}_{creator}".rstrip("_") if creator else "cloud_links")
+        task.cloud_item = {"title": title, "platform": platform, "creator": creator, "service": service,
+                           "tags": pick("tags", []), "post_id": str(pick("post_id")), "content": str(pick("content")),
+                           "base_dir": base_dir}
+        return task
+
+    def _cloud_target_dir(self, task: DownloadTask, filter_opts) -> Optional[str]:
+        """The folder a cloud link downloads into (creator / post / character folders, as for
+        files), or None when the filters skip its post."""
+        it = getattr(task, "cloud_item", None) or {}
+        url, base_dir = task.url, it.get("base_dir") or self._download_dir
+        title, creator, service = it.get("title", "Cloud File"), it.get("creator", ""), it.get("service", "")
+        tags, post_id, content = it.get("tags", []), it.get("post_id", ""), it.get("content", "")
+
+        if filter_opts.characters or (filter_opts.skip_words and filter_opts.skip_scope in ("posts", "both")):
+            keep, reason = FilterEngine.should_keep_post({"title": title, "tags": tags, "id": post_id, "content": content}, filter_opts)
+            if not keep:
+                logger.info(f"☁️ Skipping cloud link for '{title}': {reason}", category="filter")
+                return None
+
+        parts = [base_dir]
+        if self._separate_folders_by_known:
+            creator_prof = None
+            if getattr(self, "archive_manager", None) and self.archive_manager.is_enabled:
+                creator_prof = self.archive_manager.get_creator_character_profile(
+                    service=service, creator_id=creator, creator_name=creator, base_dirs=[base_dir])
+            match = self.known_manager.find_matching_hierarchy(
+                title, tags=tags, filenames=[os.path.basename(url.split("?")[0])], content=content, creator_profile=creator_prof)
+            if match:
+                franchise, char_name = match
+                if franchise and franchise.strip() and franchise not in ("Other", "General"):
+                    parts.append(FilterEngine.clean_filesystem_text(franchise, max_len=60, fallback="Franchise"))
+                if char_name and char_name.strip() and char_name.lower() != (franchise or "").lower():
+                    parts.append(FilterEngine.clean_filesystem_text(char_name, max_len=60, fallback="Character"))
+            else:
+                parts.append("Other")
+        creator_clean = FilterEngine.clean_filesystem_text(creator, max_len=80, fallback="") if creator else ""
+        if creator_clean:
+            parts.append(os.path.basename(pick_creator_folder(os.path.join(*parts), creator_clean, service)) if service else creator_clean)
+        if self._subfolder_per_post and title and title not in ("Cloud File", "Untitled"):
+            parts.append(FilterEngine.clean_filesystem_text(title, max_len=100, fallback="Untitled"))
+        target = os.path.join(*parts)
+        os.makedirs(target, exist_ok=True)
+        return target
+
+    def _run_cloud_tasks(self, tasks: List[DownloadTask]):
+        """Downloads queued cloud links a few at a time. Links queued while a run is going join it."""
+        waiting = self.__dict__.setdefault("_cloud_waiting", collections.deque())
+        waiting.extend(tasks)
+        if self._is_cloud_downloading:
+            return
         self._is_cloud_downloading = True
         self._is_downloading = True
         self.isDownloadingChanged.emit()
         self._cloud_cancel_event.clear()
         self._cloud_pause_event.clear()
 
-        def _worker():
-            total = len(selected_links)
-            concurrency = min(total, max(1, self._threads_count))
-            logger.info(f"☁️ Starting concurrent cloud downloads for {total} link(s) ({concurrency} parallel streams) to: {base_dir}", category="downloader")
-            self._status_text = f"Cloud Download: 0/{total} completed"
-            self.statusTextChanged.emit()
+        def _set(task, status, error=""):
+            task.status = status
+            task.error_msg = error
+            if status in ("completed", "skipped"):
+                task.progress_pct = 100
+            self._taskSignal.emit(task)
 
+        def _download(task) -> None:
+            if self._cloud_cancel_event.is_set():
+                _set(task, "cancelled")
+                return
             filter_opts = self._get_filter_options()
+            target_dir = self._cloud_target_dir(task, filter_opts)
+            if target_dir is None:
+                _set(task, "skipped", "Skipped by your filters")
+                return
+            platform = task.cloud_item.get("platform", "")
+            url = task.url
+            logger.info(f"☁️ [{platform.upper()}] Starting -> {target_dir}: {url}", category="downloader")
+            task.downloaded_bytes, task.file_size = 0, 0
+            _set(task, "downloading")
+            last = {"t": 0.0, "bytes": 0, "time": time.time()}
 
-            # Index harvested records by URL to recover any post metadata (tags, service, creator, title, post_id)
-            harvested_map = {}
-            for r in getattr(self.downloader, "harvested_links_records", []):
-                if isinstance(r, dict) and r.get("url"):
-                    harvested_map[r["url"]] = r
-
-            success_count = 0
-            start_time = time.time()
-            total_downloaded_bytes = 0
-            progress_lock = threading.Lock()
-            last_calc_time = time.time()
-            last_calc_bytes = 0
-            link_progress_map = {}
-
-            def _process_link(idx, item):
-                nonlocal success_count, total_downloaded_bytes, last_calc_time, last_calc_bytes
-                if self._cloud_cancel_event.is_set():
-                    return False
-
-                url = item.get("url", "") if isinstance(item, dict) else str(item)
-                record = harvested_map.get(url, {})
-                title = (item.get("title") if isinstance(item, dict) else None) or record.get("title") or "Cloud File"
-                platform = (item.get("platform") if isinstance(item, dict) else None) or record.get("platform") or "other"
-                creator = (item.get("creator") if isinstance(item, dict) else None) or record.get("creator") or ""
-                service = (item.get("service") if isinstance(item, dict) else None) or record.get("service") or ""
-                tags = (item.get("tags") if isinstance(item, dict) else None) or record.get("tags") or []
-                post_id = (item.get("post_id") if isinstance(item, dict) else None) or record.get("post_id") or ""
-                content = (item.get("content") if isinstance(item, dict) else None) or record.get("content") or ""
-
-                if "mega.nz" in url or "mega.co.nz" in url or "mega.io" in url:
-                    platform = "mega"
-                elif "drive.google.com" in url or "docs.google.com" in url or "drive.usercontent.google.com" in url:
-                    platform = "gdrive"
-                elif "dropbox.com" in url:
-                    platform = "dropbox"
-                elif "gofile.io" in url:
-                    platform = "gofile"
-
-                # Check post-level filters (character whitelist & skip words)
-                if filter_opts.characters or (filter_opts.skip_words and filter_opts.skip_scope in ("posts", "both")):
-                    fake_post = {"title": title, "tags": tags, "id": post_id, "content": content}
-                    keep_post, reason = FilterEngine.should_keep_post(fake_post, filter_opts)
-                    if not keep_post:
-                        logger.info(f"☁️ Skipping cloud link for '{title}': {reason}", category="filter")
-                        return True
-
-                # Determine target folder hierarchy
-                folder_parts = [base_dir]
-
-                # Franchise -> Character hierarchy if Character Sorting is enabled
-                if self._separate_folders_by_known:
-                    cloud_filenames = [os.path.basename(url.split("?")[0])] if url else []
-                    creator_prof = None
-                    if getattr(self, "archive_manager", None) and self.archive_manager.is_enabled:
-                        creator_prof = self.archive_manager.get_creator_character_profile(
-                            service=service,
-                            creator_id=creator,
-                            creator_name=creator,
-                            base_dirs=[base_dir]
-                        )
-                    matched_hierarchy = self.known_manager.find_matching_hierarchy(
-                        title, tags=tags, filenames=cloud_filenames, content=content, creator_profile=creator_prof
-                    )
-                    if matched_hierarchy:
-                        franchise, char_name = matched_hierarchy
-                        if franchise and franchise.strip() and franchise not in ("Other", "General"):
-                            clean_fr = FilterEngine.clean_filesystem_text(franchise, max_len=60, fallback="Franchise")
-                            folder_parts.append(clean_fr)
-                        if char_name and char_name.strip() and char_name.lower() != (franchise or "").lower():
-                            clean_ch = FilterEngine.clean_filesystem_text(char_name, max_len=60, fallback="Character")
-                            folder_parts.append(clean_ch)
-                    else:
-                        folder_parts.append("Other")
-
-                # Creator subfolder
-                creator_clean = FilterEngine.clean_filesystem_text(creator, max_len=80, fallback="") if creator else ""
-                if creator_clean:
-                    if service:
-                        folder_parts.append(os.path.basename(pick_creator_folder(os.path.join(*folder_parts), creator_clean, service)))
-                    else:
-                        folder_parts.append(creator_clean)
-
-                # Post subfolder
-                if self._subfolder_per_post and title and title not in ("Cloud File", "Untitled"):
-                    clean_title = FilterEngine.clean_filesystem_text(title, max_len=100, fallback="Untitled")
-                    folder_parts.append(clean_title)
-
-                target_dir = os.path.join(*folder_parts)
-                os.makedirs(target_dir, exist_ok=True)
-
-                logger.info(f"☁️ [{platform.upper()}] Starting ({idx}/{total}) -> {target_dir}: {url}", category="downloader")
-
-                def _prog(fname, dl, tot, file_idx=1, file_tot=1):
-                    nonlocal last_calc_time, last_calc_bytes
-                    with progress_lock:
-                        link_progress_map[idx] = {
-                            "fname": fname,
-                            "dl": dl,
-                            "tot": tot,
-                            "file_idx": file_idx,
-                            "file_tot": file_tot,
-                            "platform": platform
-                        }
-                        now = time.time()
-                        dt = now - last_calc_time
-                        current_total_dl = sum(p["dl"] for p in link_progress_map.values()) + total_downloaded_bytes
-
-                        speed_str = ""
-                        eta_str = "--"
-                        if dt >= 0.5:
-                            d_bytes = max(0, current_total_dl - last_calc_bytes)
-                            speed = d_bytes / dt if dt > 0 else 0
-                            last_calc_time = now
-                            last_calc_bytes = current_total_dl
-                            if speed > 1024 * 1024:
-                                speed_str = f"{speed / (1024 * 1024):.1f} MB/s"
-                            elif speed > 1024:
-                                speed_str = f"{speed / 1024:.0f} KB/s"
-                            else:
-                                speed_str = f"{speed:.0f} B/s"
-
-                        # Calculate aggregated progress across all links
-                        sum_fraction = 0.0
-                        for l_idx in range(1, total + 1):
-                            if l_idx in link_progress_map:
-                                p = link_progress_map[l_idx]
-                                f_tot = p["file_tot"]
-                                f_idx = p["file_idx"]
-                                f_dl = p["dl"]
-                                f_t = p["tot"]
-                                f_frac = (f_idx - 1 + (f_dl / f_t if f_t > 0 else 0)) / f_tot if f_tot > 0 else 0
-                                sum_fraction += f_frac
-                            elif l_idx < idx:
-                                sum_fraction += 1.0
-
-                        pct = int((sum_fraction / total) * 100) if total > 0 else 0
-                        elapsed_sec = int(now - start_time)
-                        elapsed_str = f"{elapsed_sec}s" if elapsed_sec < 60 else f"{elapsed_sec // 60}m {elapsed_sec % 60}s"
-                        saved_mb = current_total_dl / (1024 * 1024)
-                        saved_str = f"{saved_mb:.1f} MB" if saved_mb < 1024 else f"{saved_mb / 1024:.2f} GB"
-
-                        if total == 1:
-                            files_badge = f"{file_idx}/{file_tot}" if file_tot > 1 else "1/1"
-                        else:
-                            files_badge = f"{success_count}/{total} links"
-
-                        status_msg = f"[{platform.upper()}] {fname}"
-                        if tot > 0:
-                            status_msg += f" ({dl // 1024 // 1024}MB / {tot // 1024 // 1024}MB)"
-
+            def _prog(fname, dl, tot, file_idx=1, file_tot=1):
+                now = time.time()
+                task.target_path = os.path.join(target_dir, fname) if fname else task.target_path
+                task.downloaded_bytes, task.file_size = dl, tot
+                frac = ((file_idx - 1) + (dl / tot if tot else 0)) / file_tot if file_tot else 0
+                task.progress_pct = max(0, min(100, int(frac * 100)))
+                dt = now - last["time"]
+                if dt >= 0.5:
+                    bps = max(0, dl - last["bytes"]) / dt
+                    task.speed_bps = bps
+                    task.speed_str = f"{bps / 1048576:.1f} MB/s" if bps >= 1048576 else f"{bps / 1024:.0f} KB/s"
+                    last["bytes"], last["time"] = dl, now
+                if now - last["t"] >= 0.25:          # the queue only needs a few updates a second
+                    last["t"] = now
+                    self._taskSignal.emit(task)
+                    if not self.downloader.is_running:   # the footer shows cloud progress when nothing else runs
                         self._progressSignal.emit({
-                            "percent": max(0, min(100, pct)),
-                            "speed_str": speed_str or self._current_speed,
-                            "eta_str": eta_str,
-                            "saved_str": saved_str,
-                            "elapsed_str": elapsed_str,
-                            "files_count_text": files_badge,
-                            "status_text": status_msg
-                        })
+                            "percent": task.progress_pct, "speed_str": task.speed_str, "eta_str": "--",
+                            "files_count_text": f"{file_idx}/{file_tot}" if file_tot > 1 else "1/1",
+                            "status_text": f"[{PLATFORM_NAMES.get(platform, platform)}] {fname}"})
 
-                workers_per_link = max(1, min(self._threads_count, 8))
-                ok = False
+            def _cloud_log(msg):
+                text = str(msg)
+                if "❌" in text:
+                    logger.error(text, category="cloud", details=f"link: {url}")
+                elif "⚠" in text:
+                    logger.warning(text, category="cloud", details=f"link: {url}")
+                else:
+                    logger.info(text, category="cloud")
 
-                def _cloud_log(msg):
-                    # The cloud downloaders report everything through one callback; ❌ / ⚠ mark problems
-                    text = str(msg)
-                    if "❌" in text:
-                        logger.error(text, category="cloud", details=f"link: {url}")
-                    elif "⚠" in text:
-                        logger.warning(text, category="cloud", details=f"link: {url}")
-                    else:
-                        logger.info(text, category="cloud")
+            common = dict(log_func=_cloud_log, progress_callback=_prog, cancel_event=self._cloud_cancel_event,
+                          pause_event=self._cloud_pause_event, skip_words=filter_opts.skip_words, options=filter_opts)
+            workers = max(1, min(self._threads_count, 8))
+            ok = False
+            try:
+                if platform == "mega":
+                    ok = download_mega_link(url, target_dir, max_workers=workers, **common)
+                elif platform == "gdrive":
+                    ok = download_gdrive_link(url, target_dir, **common)
+                elif platform == "dropbox":
+                    ok = download_dropbox_link(url, target_dir, **common)
+                elif platform == "gofile":
+                    ok = download_gofile_link(url, target_dir, max_workers=workers, **common)
+                else:
+                    logger.warning(f"'{platform}' links can't be downloaded directly: {url}", category="downloader")
+            except Exception as ex:
+                logger.exception(f"Error downloading {url}: {ex}", category="cloud")
+            if ok:
+                _set(task, "completed")
+            elif self._cloud_cancel_event.is_set():
+                _set(task, "cancelled")
+            else:
+                logger.warning(f"☁️ [{platform.upper()}] didn't finish: {url}", category="cloud")
+                _set(task, "failed", "The download didn't finish (details in the Activity log)")
 
-                try:
-                    if platform == "mega":
-                        ok = download_mega_link(url, target_dir, log_func=_cloud_log, progress_callback=_prog, cancel_event=self._cloud_cancel_event, pause_event=self._cloud_pause_event, max_workers=workers_per_link, skip_words=filter_opts.skip_words, options=filter_opts)
-                    elif platform in ("gdrive", "google drive"):
-                        ok = download_gdrive_link(url, target_dir, log_func=_cloud_log, progress_callback=_prog, cancel_event=self._cloud_cancel_event, pause_event=self._cloud_pause_event, skip_words=filter_opts.skip_words, options=filter_opts)
-                    elif platform == "dropbox":
-                        ok = download_dropbox_link(url, target_dir, log_func=_cloud_log, progress_callback=_prog, cancel_event=self._cloud_cancel_event, pause_event=self._cloud_pause_event, skip_words=filter_opts.skip_words, options=filter_opts)
-                    elif platform == "gofile":
-                        ok = download_gofile_link(url, target_dir, log_func=_cloud_log, progress_callback=_prog, cancel_event=self._cloud_cancel_event, pause_event=self._cloud_pause_event, max_workers=workers_per_link, skip_words=filter_opts.skip_words, options=filter_opts)
-                    else:
-                        logger.warning(f"Platform '{platform}' cannot be directly auto-downloaded (URL: {url}).", category="downloader")
-                except Exception as ex:
-                    logger.exception(f"Error downloading {url}: {ex}", category="cloud")
-
-                if not ok and not self._cloud_cancel_event.is_set():
-                    logger.warning(f"☁️ [{platform.upper()}] ({idx}/{total}) didn't finish: {url}", category="cloud")
-
-                with progress_lock:
-                    if ok:
-                        success_count += 1
-                        if idx in link_progress_map:
-                            total_downloaded_bytes += link_progress_map[idx].get("tot", 0)
-
-                return ok
-
-            from concurrent.futures import ThreadPoolExecutor, as_completed
-            with ThreadPoolExecutor(max_workers=concurrency) as link_executor:
-                futures = [link_executor.submit(_process_link, idx, item) for idx, item in enumerate(selected_links, 1)]
-                for future in as_completed(futures):
-                    if self._cloud_cancel_event.is_set():
-                        for f in futures:
-                            f.cancel()
+        def _worker():
+            from concurrent.futures import ThreadPoolExecutor, wait, FIRST_COMPLETED
+            done = failed = 0
+            limit = max(1, min(self._threads_count, 4))
+            running = set()
+            with ThreadPoolExecutor(max_workers=limit) as pool:
+                while True:
+                    while waiting and len(running) < limit:
+                        task = waiting.popleft()
+                        if self._cloud_cancel_event.is_set():
+                            _set(task, "cancelled")
+                            continue
+                        running.add(pool.submit(_download, task))
+                    if not running:
                         break
-                    try:
-                        future.result()
-                    except Exception:
-                        pass
-
+                    finished, running = wait(running, timeout=0.5, return_when=FIRST_COMPLETED)
+                    for f in finished:
+                        try:
+                            f.result()
+                        except Exception:
+                            pass
+            for t in tasks:
+                done += t.status == "completed"
+                failed += t.status == "failed"
             self._is_cloud_downloading = False
-            self._is_downloading = False
-            self.isDownloadingChanged.emit()
-            self._overall_progress = 100 if success_count == total else int((success_count / total) * 100)
-            self.overallProgressChanged.emit()
-            self._status_text = f"Cloud Download completed: {success_count}/{total} succeeded."
-            self.statusTextChanged.emit()
-            logger.success(f"☁️ Cloud downloads finished: {success_count}/{total} succeeded.", category="downloader")
+            if not self.downloader.is_running:
+                self._is_downloading = False
+                self.isDownloadingChanged.emit()
+                self._status_text = "Cloud downloads finished."
+                self.statusTextChanged.emit()
+            logger.success(f"☁️ Cloud downloads finished ({failed} didn't finish).", category="downloader")
 
-        threading.Thread(target=_worker, daemon=True).start()
+        threading.Thread(target=_worker, daemon=True, name="CloudDownloads").start()
+
+    def _retry_cloud(self, keys: Optional[list] = None, include_cancelled: bool = True, batch_id: str = "") -> int:
+        """Retries failed cloud rows (keys: the Retry list's names; None: all of them). The file
+        downloader skips these rows, so they're restarted here."""
+        statuses = ("failed", "cancelled") if include_cancelled else ("failed",)
+        wanted = set(keys) if keys is not None else None
+        tasks = [t for t in self._queue_model.getTasks()
+                 if cloud_platform(t.url) and t.status in statuses
+                 and (wanted is None or KemonoDownloader.task_key(t) in wanted)
+                 and (not batch_id or t.batch_id == batch_id)]
+        for t in tasks:
+            if not getattr(t, "cloud_item", None):     # a row read back from a saved queue
+                t.cloud_item = {"title": t.post_title, "platform": cloud_platform(t.url), "creator": "", "service": "",
+                                "tags": [], "post_id": t.post_id, "content": "", "base_dir": self._download_dir}
+            t.status, t.error_msg, t.progress_pct = "pending", "", 0
+            self._taskSignal.emit(t)
+        if tasks:
+            logger.info(f"Retrying {len(tasks)} cloud link(s).", category="downloader")
+            self._run_cloud_tasks(tasks)
+        return len(tasks)
 
     @Slot()
     def cancelCloudDownloads(self):
@@ -4378,9 +4252,6 @@ class AppBridge(QObject):
             pass
         if self._is_cloud_downloading:
             self._cloud_cancel_event.set()
-            self._is_cloud_downloading = False
-            self._is_downloading = False
-            self.isDownloadingChanged.emit()
             logger.warning("Cloud downloads cancellation requested.", category="downloader")
 
 
@@ -4879,6 +4750,7 @@ class AppBridge(QObject):
 
     @Slot(str)
     def _handle_batch_retry(self, batch_id: str):
+        self._retry_cloud(batch_id=batch_id)
         if not self.downloader.tasks and self._queue_model.tasks:
             self.downloader.tasks = self._queue_model.getTasks()
         options = self._get_filter_options()
@@ -5874,7 +5746,7 @@ class AppBridge(QObject):
         )
 
         # Auto-harvest new posts' cloud links into permanent Link Vault
-        self._auto_harvest_posts_to_vault(
+        self.link_vault.auto_harvest_posts(
             posts=new_posts,
             creator_name=entry.creator_name,
             domain=entry.domain,
@@ -6465,246 +6337,6 @@ class AppBridge(QObject):
                 f"Watchlist check complete — {name!r} is up to date (no new posts).",
                 category="watchlist"
             )
-
-    # ── Link Vault Slots ─────────────────────────────────────────────────────
-    @Slot(str, str)
-    def refreshLinkVault(self, search: str = "", platform: str = ""):
-        self._vault_search = search
-        self._vault_platform = platform
-        self.linkVaultChanged.emit()
-
-    @Slot(str, result=bool)
-    def deleteVaultLink(self, linkId: str) -> bool:
-        from core.link_vault_manager import link_vault_manager
-        res = link_vault_manager.delete_link(linkId)
-        if res:
-            self.linkVaultChanged.emit()
-        return res
-
-    @Slot(str, 'QVariant', result=bool)
-    def updateVaultLinkPasswords(self, linkId: str, passwords) -> bool:
-        from core.link_vault_manager import link_vault_manager
-        pw_list = []
-        if isinstance(passwords, str):
-            pw_list = [p.strip() for p in passwords.split(",") if p.strip()]
-        elif isinstance(passwords, (list, tuple)):
-            pw_list = [str(p).strip() for p in passwords if str(p).strip()]
-        res = link_vault_manager.update_link_passwords(linkId, pw_list)
-        if res:
-            self.linkVaultChanged.emit()
-        return res
-
-    @Slot(str, result=bool)
-    def deleteVaultPost(self, postId: str) -> bool:
-        from core.link_vault_manager import link_vault_manager
-        res = link_vault_manager.delete_post(postId)
-        if res:
-            self.linkVaultChanged.emit()
-        return res
-
-    @Slot(str, result=bool)
-    def deleteVaultCreator(self, creatorKey: str) -> bool:
-        from core.link_vault_manager import link_vault_manager
-        res = link_vault_manager.delete_creator(creatorKey)
-        if res:
-            self.linkVaultChanged.emit()
-        return res
-
-    @Slot(result=int)
-    def cleanDeadVaultLinks(self) -> int:
-        from core.link_vault_manager import link_vault_manager
-        count = link_vault_manager.clean_dead_links()
-        self.linkVaultChanged.emit()
-        return count
-
-    @Slot(str, result=int)
-    @Slot(result=int)
-    def copyVaultLinks(self, creatorKey: str = "") -> int:
-        from core.link_vault_manager import link_vault_manager
-        urls = link_vault_manager.get_all_link_urls(creatorKey)
-        if urls:
-            self.copyToClipboard("\n".join(urls))
-        return len(urls)
-
-    @Slot(str, result=int)
-    def exportVaultToFolder(self, folderPath: str) -> int:
-        from core.link_vault_manager import link_vault_manager
-        clean_path = folderPath or ""
-        if clean_path.startswith("file:"):
-            clean_path = QUrl(clean_path).toLocalFile()
-        clean_path = os.path.normpath(clean_path)
-        return link_vault_manager.export_all_to_folder(clean_path)
-
-    @Slot()
-    def probeVaultHealth(self):
-        from core.link_vault_manager import link_vault_manager
-        self.linkVaultProbingStarted.emit()
-        def _on_done(done, total, url):
-            self.linkVaultChanged.emit()
-        def _on_complete():
-            self.linkVaultChanged.emit()
-            self.linkVaultProbingFinished.emit()
-        link_vault_manager.probe_all_links_async(
-            progress_callback=_on_done,
-            completion_callback=_on_complete
-        )
-
-    @Slot(str, bool, int, int)
-    def harvestArtistToVault(self, url: str, probeHealth: bool = True, pageStart: int = 1, pageEnd: int = 999999):
-        clean_url = (url or "").strip()
-        if not clean_url:
-            self.vaultHarvestFinished.emit(False, "", 0, 0)
-            return
-        if self._vault_harvesting:
-            logger.warning("Artist harvesting to Link Vault is already running.", category="vault")
-            return
-
-        def _worker():
-            self._vault_harvesting = True
-            self._vault_harvest_cancel.clear()
-            self._vault_harvest_status = "Connecting..."
-            self.linkVaultChanged.emit()
-
-            try:
-                parsed = KemonoURLParser.parse(clean_url)
-                if not parsed.is_valid:
-                    logger.error(f"Link Vault Harvest: Invalid artist URL '{clean_url}'", category="vault")
-                    self.vaultHarvestFinished.emit(False, "Invalid URL", 0, 0)
-                    return
-                if self._refuse_if_disabled(clean_url):
-                    self.vaultHarvestFinished.emit(False, "Site turned off", 0, 0)
-                    return
-
-                # Fetch artist profile
-                profile = self.api_client.fetch_creator_profile(parsed)
-                creator_name = clean_text(profile.get("name", parsed.user_id) or parsed.user_id)
-                creator_key = f"{parsed.service}:{parsed.user_id}".lower()
-
-                self._vault_harvest_status = f"Scanning posts for {creator_name}..."
-                self.linkVaultChanged.emit()
-                self.vaultHarvestStarted.emit(creator_name)
-
-                # Fetch all posts in range
-                if parsed.is_single_post:
-                    single = self.api_client.fetch_single_post(parsed)
-                    posts = [single] if single else []
-                else:
-                    if parsed.is_dms:
-                        posts = self.api_client.fetch_user_dms(
-                            parsed=parsed,
-                            page_start=pageStart,
-                            page_end=pageEnd,
-                            cancel_event=self._vault_harvest_cancel
-                        )
-                    else:
-                        posts = self.api_client.fetch_user_posts(
-                            parsed=parsed,
-                            page_start=pageStart,
-                            page_end=pageEnd,
-                            cancel_event=self._vault_harvest_cancel
-                        )
-
-                if self._vault_harvest_cancel.is_set():
-                    logger.warning(f"Link Vault Harvest: Cancelled during post fetch for {creator_name}.", category="vault")
-                    self.vaultHarvestFinished.emit(False, creator_name, 0, len(posts))
-                    return
-
-                if not posts:
-                    logger.info(f"Link Vault Harvest: No posts found for {creator_name}.", category="vault")
-                    self.vaultHarvestFinished.emit(True, creator_name, 0, 0)
-                    return
-
-                # Process posts into vault records
-                harvested_posts = []
-                total_links_found = 0
-                for idx, p in enumerate(posts):
-                    if self._vault_harvest_cancel.is_set():
-                        break
-
-                    rec = LinkExtractor.extract_post_vault_record(
-                        post=p,
-                        api_client=self.api_client,
-                        domain=parsed.domain,
-                        service=parsed.service,
-                        user_id=parsed.user_id
-                    )
-                    if rec and rec.get("links"):
-                        harvested_posts.append(rec)
-                        total_links_found += len(rec["links"])
-
-                    if (idx + 1) % 10 == 0 or idx == len(posts) - 1:
-                        status_msg = f"Processed {idx + 1}/{len(posts)} posts ({total_links_found} links found)"
-                        self._vault_harvest_status = status_msg
-                        self.linkVaultChanged.emit()
-                        self.vaultHarvestProgress.emit(status_msg, idx + 1, total_links_found)
-
-                if self._vault_harvest_cancel.is_set():
-                    logger.warning(f"Link Vault Harvest: Cancelled during link extraction for {creator_name}.", category="vault")
-                    self.vaultHarvestFinished.emit(False, creator_name, 0, len(posts))
-                    return
-
-                # Store harvested posts into Link Vault
-                from core.link_vault_manager import link_vault_manager
-                new_links_count = link_vault_manager.add_harvested_data(
-                    creator_name=creator_name,
-                    service=parsed.service,
-                    user_id=parsed.user_id,
-                    harvested_posts=harvested_posts
-                )
-                self.linkVaultChanged.emit()
-
-                # Optionally probe links health
-                if probeHealth and new_links_count > 0 and not self._vault_harvest_cancel.is_set():
-                    self._vault_harvest_status = f"Probing links for {creator_name}..."
-                    self.linkVaultChanged.emit()
-                    self.linkVaultProbingStarted.emit()
-                    def _on_probe_progress(done, tot, u):
-                        self.linkVaultChanged.emit()
-                    def _on_probe_complete():
-                        self.linkVaultChanged.emit()
-                        self.linkVaultProbingFinished.emit()
-                    link_vault_manager.probe_all_links_async(
-                        progress_callback=_on_probe_progress,
-                        cancel_event=self._vault_harvest_cancel,
-                        creator_key=creator_key,
-                        completion_callback=_on_probe_complete
-                    )
-
-                logger.success(
-                    f"Link Vault: Finished harvesting {creator_name} ({new_links_count} new links saved from {len(posts)} posts).",
-                    category="vault"
-                )
-                self.vaultHarvestFinished.emit(True, creator_name, new_links_count, len(posts))
-
-            except Exception as e:
-                logger.error(f"Link Vault Harvest failed: {e}", category="vault")
-                self.vaultHarvestFinished.emit(False, str(e), 0, 0)
-            finally:
-                self._vault_harvesting = False
-                self._vault_harvest_status = ""
-                self.linkVaultChanged.emit()
-
-        t = threading.Thread(target=_worker, daemon=True, name="VaultArtistHarvester")
-        t.start()
-
-    @Slot()
-    def cancelVaultHarvest(self):
-        self._vault_harvest_cancel.set()
-        self._vault_harvesting = False
-        self._vault_harvest_status = "Cancelled"
-        self.linkVaultChanged.emit()
-
-    @Slot(result=int)
-    def copyPasswordsToDecompressor(self) -> int:
-        from core.link_vault_manager import link_vault_manager
-        pws = link_vault_manager.get_all_passwords()
-        count = len(pws)
-        if hasattr(self, "_decompressor_bridge") and self._decompressor_bridge:
-            for pw in pws:
-                if pw and hasattr(self._decompressor_bridge, "addPassword"):
-                    self._decompressor_bridge.addPassword(pw)
-        logger.success(f"Copied {count} password(s) from Link Vault to Bulk Decompressor.", category="vault")
-        return count
 
     # ── Scheduled runs (the scheduler screen is bridge/scheduler_bridge.py) ─────
     @Slot()

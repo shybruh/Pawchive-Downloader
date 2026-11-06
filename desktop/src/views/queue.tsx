@@ -182,8 +182,8 @@ function GroupList({ onOpen }: { onOpen: (batchId: string) => void }) {
         {rows.map((g) => {
           const p = pct(g.totalProgress);
           const active = g.downloadingFiles > 0;
-          const status = g.isPaused ? "paused" : active ? "downloading" : g.failedFiles > 0 && g.completedFiles + g.skippedFiles + g.failedFiles >= g.totalFiles
-            ? (g.completedFiles > 0 ? "partial" : "failed") : g.completedFiles + g.skippedFiles >= g.totalFiles ? "completed" : "pending";
+          // The engine works out the post's status (cancelled and skipped posts included)
+          const status = g.status || (g.isPaused ? "paused" : active ? "downloading" : "pending");
           return (
             <div key={g.batchId} className="group flex items-center gap-4 border-b px-4 py-3 last:border-b-0 hover:bg-accent/30">
               <button className="min-w-0 flex-1 text-left" onClick={() => onOpen(g.batchId)}>

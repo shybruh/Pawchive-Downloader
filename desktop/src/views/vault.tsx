@@ -30,17 +30,17 @@ function HealthDot({ health }: { health: VaultLink["health"] }) {
 }
 
 export function VaultView() {
-  const totalLinks = useProp<number>("appBridge", "linkVaultTotalLinks", 0);
-  const totalCreators = useProp<number>("appBridge", "linkVaultTotalCreators", 0);
-  const probing = useProp<boolean>("appBridge", "linkVaultProbingActive", false);
-  const harvesting = useProp<boolean>("appBridge", "linkVaultHarvestingActive", false);
-  const harvestStatus = useProp<string>("appBridge", "linkVaultHarvestingStatus", "");
+  const totalLinks = useProp<number>("linkVault", "totalLinks", 0);
+  const totalCreators = useProp<number>("linkVault", "totalCreators", 0);
+  const probing = useProp<boolean>("linkVault", "probingActive", false);
+  const harvesting = useProp<boolean>("linkVault", "harvestingActive", false);
+  const harvestStatus = useProp<string>("linkVault", "harvestingStatus", "");
   const [search, setSearch] = useState("");
   const [platform, setPlatform] = useState("all");
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<string>("");
   const [collectOpen, setCollectOpen] = useState(false);
-  const { rows, refresh } = useModel<{ creator: VaultCreator }>("appBridge.linkVaultCreatorsModel", { throttleMs: 100 });
+  const { rows, refresh } = useModel<{ creator: VaultCreator }>("linkVault.creatorsModel", { throttleMs: 100 });
   const creators = useMemo(() => rows.map((r) => r.creator).filter(Boolean), [rows]);
   const platforms = useRef(new Set<string>());
 
@@ -49,21 +49,21 @@ export function VaultView() {
     let cancelled = false;
     const t = setTimeout(async () => {
       setLoading(true);
-      await call("appBridge", "refreshLinkVault", search, platform === "all" ? "" : platform);
-      await callAsync("appBridge", "linkVaultTreeJsonAsync");
+      await call("linkVault", "refresh", search, platform === "all" ? "" : platform);
+      await callAsync("linkVault", "treeAsync");
       if (cancelled) return;
-      await call("appBridge.linkVaultCreatorsModel", "applyPending");
+      await call("linkVault.creatorsModel", "applyPending");
       await refresh();
       setLoading(false);
     }, 250);
     return () => { cancelled = true; clearTimeout(t); };
   }, [search, platform, totalLinks, totalCreators, probing, refresh]);
 
-  useSignal("appBridge", "vaultHarvestFinished", (ok: boolean, name: string, newLinks: number) => {
+  useSignal("linkVault", "harvestFinished", (ok: boolean, name: string, newLinks: number) => {
     if (ok) toast.success(`Collected ${newLinks} new link${newLinks === 1 ? "" : "s"}${name ? ` from ${name}` : ""}`);
     else toast.error("Link collection stopped");
   });
-  useSignal("appBridge", "linkVaultProbingFinished", () => toast.success("Link check finished"));
+  useSignal("linkVault", "probingFinished", () => toast.success("Link check finished"));
 
   for (const c of creators) for (const p of c.posts ?? []) for (const l of p.links ?? []) platforms.current.add((l.platform || "other").toLowerCase());
   const current = creators.find((c) => c.creator_key === selected) ?? creators[0];
@@ -72,25 +72,25 @@ export function VaultView() {
     <>
       <PageHeader title="Link vault" description={`${totalLinks} links from ${totalCreators} creators`}
         actions={<>
-          <Button variant="outline" size="sm" disabled={probing || !totalLinks} onClick={() => call("appBridge", "probeVaultHealth")}>
+          <Button variant="outline" size="sm" disabled={probing || !totalLinks} onClick={() => call("linkVault", "probeHealth")}>
             {probing ? <Loader2Icon className="animate-spin" /> : <ShieldCheckIcon />}{probing ? "Checking…" : "Check links"}
           </Button>
           <Button size="sm" disabled={harvesting} onClick={() => setCollectOpen(true)}><PickaxeIcon />Collect links</Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild><Button variant="ghost" size="icon-sm"><EllipsisIcon /></Button></DropdownMenuTrigger>
             <DropdownMenuContent className="w-60">
-              <DropdownMenuItem disabled={!totalLinks} onSelect={async () => { const n = await call<number>("appBridge", "copyVaultLinks", ""); toast.success(`Copied ${n} links`); }}>
+              <DropdownMenuItem disabled={!totalLinks} onSelect={async () => { const n = await call<number>("linkVault", "copyLinks", ""); toast.success(`Copied ${n} links`); }}>
                 <ClipboardCopyIcon />Copy every link
               </DropdownMenuItem>
               <DropdownMenuItem disabled={!totalLinks} onSelect={async () => {
                 const dir = await pickFolder("Export the vault to…"); if (!dir) return;
-                const n = await call<number>("appBridge", "exportVaultToFolder", dir); toast.success(`Exported ${n} links`);
+                const n = await call<number>("linkVault", "exportToFolder", dir); toast.success(`Exported ${n} links`);
               }}><FolderOutputIcon />Export to a folder…</DropdownMenuItem>
-              <DropdownMenuItem onSelect={async () => { const n = await call<number>("appBridge", "copyPasswordsToDecompressor"); toast.success(`${n} passwords sent to the Decompressor`); }}>
+              <DropdownMenuItem onSelect={async () => { const n = await call<number>("linkVault", "copyPasswordsToDecompressor"); toast.success(`${n} passwords sent to the Decompressor`); }}>
                 <FileArchiveIcon />Send passwords to Decompressor
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem variant="destructive" onSelect={async () => { const n = await call<number>("appBridge", "cleanDeadVaultLinks"); toast.success(`Removed ${n} dead links`); }}>
+              <DropdownMenuItem variant="destructive" onSelect={async () => { const n = await call<number>("linkVault", "cleanDeadLinks"); toast.success(`Removed ${n} dead links`); }}>
                 <TrashIcon />Remove dead links
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -107,7 +107,7 @@ export function VaultView() {
 
       {harvesting && (
         <Alert className="mx-6 mt-4" tone="info" icon={Loader2Icon} busy
-          action={<Button size="xs" variant="outline" onClick={() => call("appBridge", "cancelVaultHarvest")}><XIcon />Stop</Button>}>
+          action={<Button size="xs" variant="outline" onClick={() => call("linkVault", "cancelHarvest")}><XIcon />Stop</Button>}>
           <span className="block truncate">{harvestStatus || "Collecting links…"}</span>
         </Alert>
       )}
@@ -150,13 +150,13 @@ function CreatorDetail({ creator }: { creator: VaultCreator }) {
           <div className="truncate font-medium">{creator.creator_name}</div>
           <div className="text-xs text-muted-foreground">{creator.link_count} links in {creator.post_count} posts</div>
         </div>
-        <Button variant="outline" size="sm" onClick={async () => { const n = await call<number>("appBridge", "copyVaultLinks", creator.creator_key); toast.success(`Copied ${n} links`); }}>
+        <Button variant="outline" size="sm" onClick={async () => { const n = await call<number>("linkVault", "copyLinks", creator.creator_key); toast.success(`Copied ${n} links`); }}>
           <CopyIcon />Copy links
         </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild><Button variant="ghost" size="icon-sm"><EllipsisIcon /></Button></DropdownMenuTrigger>
           <DropdownMenuContent>
-            <DropdownMenuItem variant="destructive" onSelect={() => call("appBridge", "deleteVaultCreator", creator.creator_key)}><TrashIcon />Remove creator</DropdownMenuItem>
+            <DropdownMenuItem variant="destructive" onSelect={() => call("linkVault", "deleteCreator", creator.creator_key)}><TrashIcon />Remove creator</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -174,7 +174,7 @@ function CreatorDetail({ creator }: { creator: VaultCreator }) {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild><Button variant="ghost" size="icon-xs"><EllipsisIcon /></Button></DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem variant="destructive" onSelect={() => call("appBridge", "deleteVaultPost", p.post_id)}><TrashIcon />Remove post</DropdownMenuItem>
+                  <DropdownMenuItem variant="destructive" onSelect={() => call("linkVault", "deletePost", p.post_id)}><TrashIcon />Remove post</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -205,7 +205,7 @@ function CreatorDetail({ creator }: { creator: VaultCreator }) {
                         <DropdownMenuItem onSelect={() => { call("appBridge", "startCloudDownloads", [l.url], ""); toast.success("Download started"); }}><DownloadIcon />Download</DropdownMenuItem>
                         <DropdownMenuItem onSelect={() => setEditing(l)}><PencilIcon />Edit passwords</DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem variant="destructive" onSelect={() => call("appBridge", "deleteVaultLink", l.id)}><TrashIcon />Remove link</DropdownMenuItem>
+                        <DropdownMenuItem variant="destructive" onSelect={() => call("linkVault", "deleteLink", l.id)}><TrashIcon />Remove link</DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
@@ -231,7 +231,7 @@ function PasswordsDialog({ link, onClose }: { link: VaultLink | null; onClose: (
           <Button variant="outline" onClick={onClose}>Cancel</Button>
           <Button onClick={async () => {
             if (!link) return;
-            await call("appBridge", "updateVaultLinkPasswords", link.id, text.split("\n").map((s) => s.trim()).filter(Boolean));
+            await call("linkVault", "updateLinkPasswords", link.id, text.split("\n").map((s) => s.trim()).filter(Boolean));
             toast.success("Passwords saved");
             onClose();
           }}>Save</Button>
@@ -271,7 +271,7 @@ function CollectDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (o
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
           <Button disabled={!url.trim() || blocked} onClick={() => {
-            call("appBridge", "harvestArtistToVault", url.trim(), probe, from, to ? Number(to) : 999999);
+            call("linkVault", "harvestCreator", url.trim(), probe, from, to ? Number(to) : 999999);
             onOpenChange(false);
           }}><PickaxeIcon />Collect</Button>
         </DialogFooter>

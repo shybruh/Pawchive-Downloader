@@ -68,7 +68,7 @@ directly as Tauri commands.
 
 ## 4. Still to fix regardless of the port
 
-- `bridge/app_bridge.py` is still one large object (~7,500 lines). It's being split by feature:
+- `bridge/app_bridge.py` is still one large object (~7,100 lines). It's being split by feature:
   each feature moves into its own engine object with its own name in `server/sidecar.py`, and the
   UI talks to that object directly. Each object is one unit to port to Rust.
 
@@ -76,8 +76,8 @@ directly as Tauri commands.
   |---|---|---|
   | `accounts` (`bridge/accounts_bridge.py`) | site sign-in, cookies, session test | done |
   | `scheduler` (`bridge/scheduler_bridge.py`) | scheduler settings and the schedule list (running a schedule stays with downloads) | done |
-  | `linkVault` | collected cloud links, cloud downloads | next |
-  | `favorites` | account favorites browse / download | |
+  | `linkVault` (`bridge/link_vault_bridge.py`) | saved cloud links: collect, check, edit, export (downloading them stays with downloads) | done |
+  | `favorites` | account favorites browse / download | next |
   | `watchlist` | watchlist slots and the background check | |
   | `postSelection` | "Select posts…" fetch and the picker's results | |
   | `downloads` | start / stop / pause, queue import and export, run results | |
