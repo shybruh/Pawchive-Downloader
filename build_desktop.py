@@ -67,6 +67,10 @@ def main():
     shutil.copy2(os.path.join(TAURI, "target", "release", "pawchive.exe"), os.path.join(portable, f"{product}.exe"))
     shutil.copytree(ENGINE_OUT, os.path.join(portable, "engine"))
     shutil.copy2(os.path.join(ROOT, "LICENSE"), os.path.join(portable, "LICENSE.txt"))
+    # Keeps settings and data next to the app instead of the user's AppData folder
+    with open(os.path.join(portable, "portable"), "w", encoding="utf-8") as f:
+        f.write("Settings, data and logs are kept in this folder. Delete this file to use AppData instead.
+")
     base = os.path.join(DIST, f"{product.replace(' ', '-')}-{version}-portable")
     shutil.make_archive(base, "zip", DIST, product)
 

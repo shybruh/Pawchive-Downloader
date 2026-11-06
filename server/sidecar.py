@@ -398,19 +398,12 @@ class Hub(QObject):
 # ── Engine start-up (mirrors main.py, minus the QML window) ────────────────────────────────────
 
 def build_engine():
-    from core.path_utils import get_base_dir
     from bridge.app_bridge import AppBridge
-    from bridge.translation_manager import TranslationManager
     from bridge.gallery_tools_bridge import GalleryToolsBridge
     from bridge.gallery_updates import GalleryUpdates
 
-    base_dir = get_base_dir()
     app_bridge = AppBridge()
     app_bridge.archive_manager.start_maintenance()
-
-    lang = TranslationManager(locales_dir=os.path.join(base_dir, "locales"))
-    lang.setLanguage(app_bridge.language)
-    app_bridge.languageChanged.connect(lambda: lang.setLanguage(app_bridge.language))
 
     wl = getattr(app_bridge, "_watchlist_manager", None)
     tools = GalleryToolsBridge(app_bridge, wl)
@@ -421,7 +414,6 @@ def build_engine():
         "appBridge": app_bridge,
         "galleryTools": tools,
         "galleryUpdates": GalleryUpdates(app_bridge, wl),
-        "Lang": lang,
     }
     return app_bridge, objects
 

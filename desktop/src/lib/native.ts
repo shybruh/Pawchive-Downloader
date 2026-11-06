@@ -1,3 +1,5 @@
+import { invoke } from "@tauri-apps/api/core";
+import { listen, type UnlistenFn } from "@tauri-apps/api/event";
 import { open, save } from "@tauri-apps/plugin-dialog";
 import { openUrl } from "@tauri-apps/plugin-opener";
 import { readText, writeText } from "@tauri-apps/plugin-clipboard-manager";
@@ -52,3 +54,26 @@ export const clipboard = {
     }
   },
 };
+
+export type SiteLoginResult = { site: string; cookie: string; names: string[] };
+
+/**
+ * Opens a site's login page in a window of the app and resolves with that window's cookies once
+ * it closes (browsers lock their own cookies, so importing from them rarely works).
+ */
+export async function siteLogin(url: string): Promise<SiteLoginResult> {
+  if (!inTauri()) throw new Error("Signing in here needs the desktop app");
+  let stop: UnlistenFn | undefined;
+  const done = new Promise<SiteLoginResult>((resolve) => {
+    listen<SiteLoginResult>("site-login-finished", (e) => resolve(e.payload)).then((u) => (stop = u));
+  });
+  try {
+    await invoke("site_login_open", { url });
+    return await done;
+  } finally {
+    stop?.();
+  }
+}
+
+export const siteLoginDone = () => invoke("site_login_done").catch(() => {});
+export const siteLoginCancel = () => invoke("site_login_cancel").catch(() => {});

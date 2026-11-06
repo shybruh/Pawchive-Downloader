@@ -115,6 +115,8 @@ jobs:
           Copy-Item desktop/src-tauri/target/release/pawchive.exe "$dir/Pawchive Downloader.exe"
           Copy-Item dist/pawchive-engine "$dir/engine" -Recurse
           Copy-Item LICENSE "$dir/LICENSE.txt"
+          # Keeps settings and data next to the app instead of the user's AppData folder
+          Set-Content "$dir/portable" "Settings, data and logs are kept in this folder. Delete this file to use AppData instead."
           $zip = "Pawchive-Downloader-$env:APP_VERSION-portable.zip"
           Compress-Archive -Path "portable/Pawchive Downloader" -DestinationPath $zip
           gh release upload "${{ github.ref_name }}" $zip --clobber

@@ -30,7 +30,7 @@ if __name__ == "__main__" or "core" not in sys.modules:
 
 from core.logger import logger
 from core.filter_engine import FilterEngine, FilterOptions, MediaTypes, fit_path_for_windows
-from core.providers import cookie_for_url, is_disabled, disabled_message, provider_for_host, KEMONO, COOMER, PAWCHIVE
+from core.providers import cookie_for_url, is_disabled, disabled_message, provider_for_host, PAWCHIVE
 from core.atomic_io import replace_file, atomic_write_text
 from core.file_order import order_files
 from core.path_utils import post_id_tag, post_info_name
@@ -41,7 +41,6 @@ from core.bandwidth_limiter import bandwidth_limiter
 from core.video_probe import VideoProbe
 
 # Services hosted on Coomer rather than Kemono (used to pick the right mirror for Pawchive files)
-COOMER_SERVICES = {"onlyfans", "fansly", "candfans"}
 
 
 # Sites that embed Vimeo players: domain-locked embeds only play for the creator's own site
@@ -119,7 +118,7 @@ def is_preview_url(url: str) -> bool:
     u_low = url.lower()
     if "/thumbnail/" in u_low:
         return True
-    if any(host in u_low for host in ("img.pawchive.pw", "img.kemono.cr", "img.coomer.st", "img.cum.st")):
+    if any(host in u_low for host in ("img.pawchive.pw", "img.cum.st")):
         return True
     return False
 
@@ -183,7 +182,7 @@ def needs_full_size_upgrade(existing_size: int, server_size: int, target_path: s
 PART_SUFFIX = ".part"
 
 _CONTACT_HEADERS = {
-    "X-Contact": "https://github.com/whyamihere773/Pawchive-Downloader",
+    "X-Contact": "https://github.com/shybruh/Pawchive-Downloader",
     "X-Client-Notice": (
         "Pawchive Downloader user here! Love your site. If my client is ever causing server strain, "
         "please open an issue on GitHub instead of a hard ban and I'll fix my request pacing immediately."
@@ -194,9 +193,9 @@ _HASH_PATH_RE = re.compile(r"/[0-9a-f]{2}/[0-9a-f]{2}/([0-9a-f]{64})\.[^/?#]+(?:
 
 
 def content_hash_from_url(url: str) -> str:
-    """Kemono, Pawchive and Coomer store files as /ab/cd/<sha256>.<ext>: the name is the SHA-256 of the
+    """Pawchive stores files as /ab/cd/<sha256>.<ext>: the name is the SHA-256 of the
     file's content, which gives a free check that a download arrived complete and undamaged."""
-    if not url or is_preview_url(url) or provider_for_host(url) not in (KEMONO, COOMER, PAWCHIVE):
+    if not url or is_preview_url(url) or provider_for_host(url) != PAWCHIVE:
         return ""
     m = _HASH_PATH_RE.search(url.split("://", 1)[-1])
     return m.group(1).lower() if m else ""
@@ -759,8 +758,6 @@ class KemonoDownloader:
                             vname = variants[0].get("name")
                 return f"https://cdn.cum.st/media/{p}/{vname}"
             return f"https://cum.st/data{clean_rel}"
-        elif "coomer" in (domain or ""):
-            return f"https://c1.coomer.st/data{clean_rel}" if not is_disabled("coomer.st") else f"https://cum.st/data{clean_rel}"
         else:
             return f"https://file.pawchive.pw/data{clean_rel}"
 
@@ -840,7 +837,7 @@ class KemonoDownloader:
         session_headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
             "Referer": f"https://{eff_domain}/",
-            "X-Contact": "https://github.com/whyamihere773/Pawchive-Downloader",
+            "X-Contact": "https://github.com/shybruh/Pawchive-Downloader",
             "X-Client-Notice": (
                 "Pawchive Downloader user here! Love your site. If my client is ever causing server strain, "
                 "please open an issue on GitHub instead of a hard ban and I'll fix my request pacing immediately."
@@ -912,7 +909,7 @@ class KemonoDownloader:
         headers = {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36",
             "Referer": "https://pawchive.pw/",
-            "X-Contact": "https://github.com/whyamihere773/Pawchive-Downloader",
+            "X-Contact": "https://github.com/shybruh/Pawchive-Downloader",
         }
         try:
             r = requests.get(page_url, headers=headers, timeout=15)
@@ -1665,10 +1662,8 @@ class KemonoDownloader:
                         effective_domain = "cum.st"
                     elif "pawchive" in orig_host:
                         effective_domain = "pawchive.pw"
-                    elif "coomer" in orig_host:
-                        effective_domain = "coomer.st"
-                    elif "kemono" in orig_host:
-                        effective_domain = "kemono.cr"
+                if "cum.st" not in (effective_domain or ""):
+                    effective_domain = "pawchive.pw"      # the only other archive site
 
                 is_preview_only = (
                     bool(fobj.get("preview_only")) and
@@ -1692,14 +1687,7 @@ class KemonoDownloader:
                 if is_preview_only or options.download_thumbnails_only:
                     # When download_thumbnails_only is enabled or an attachment is flagged preview_only,
                     # strictly query thumbnail CDN servers — never pull the heavy full-sized original file.
-                    if "pawchive" in effective_domain:
-                        thumb_host = "img.pawchive.pw"
-                    elif "cum.st" in effective_domain:
-                        thumb_host = "img.cum.st"
-                    elif "coomer" in effective_domain:
-                        thumb_host = "img.cum.st" if is_disabled("coomer.st") else "img.coomer.st"
-                    else:
-                        thumb_host = "img.pawchive.pw" if is_disabled("kemono.cr") else "img.kemono.cr"
+                    thumb_host = "img.cum.st" if "cum.st" in effective_domain else "img.pawchive.pw"
                     candidate_urls.append(f"https://{thumb_host}/thumbnail/data{clean_rel}")
 
                     # If this is a video file, the thumbnail is served as an image, so adjust filename extension
@@ -1717,8 +1705,6 @@ class KemonoDownloader:
                             original_url and (
                                 "/thumbnail/" in original_url or
                                 "img.pawchive" in original_url or
-                                "img.kemono" in original_url or
-                                "img.coomer" in original_url or
                                 "img.cum.st" in original_url
                             )
                         )
@@ -1742,18 +1728,10 @@ class KemonoDownloader:
                             candidate_urls.append(f"https://cum.st/data{clean_rel}")
                             candidate_urls.append(f"https://img.cum.st/data{clean_rel}")
                             fallback_thumb_url = f"https://img.cum.st/thumbnail/data{clean_rel}"
-                        elif "pawchive" in effective_domain:
-                            # Pawchive first; then Kemono / Coomer, which hold the same files (same hash
-                            # paths). Posts Pawchive imported from Kemono but hasn't copied yet
-                            # (origin "kemono" / preview_state "pending") only exist there, so they go first.
+                        else:
                             full_url = f"https://file.pawchive.pw/data{clean_rel}?f={_fq(sanitized_name)}"
-                            mirror_host = "coomer.st" if service.lower() in COOMER_SERVICES else "kemono.cr"
-                            mirror_url = f"https://{mirror_host}/data{clean_rel}?f={_fq(sanitized_name)}"
-                            not_copied_yet = str(post.get("origin", "")).lower() in ("kemono", "coomer") or str(post.get("preview_state", "")).lower() == "pending"
-                            order = [mirror_url, full_url] if not_copied_yet else [full_url, mirror_url]
-                            for u in order:
-                                if u not in candidate_urls and not is_disabled(u):
-                                    candidate_urls.append(u)
+                            if full_url not in candidate_urls:
+                                candidate_urls.append(full_url)
                             node_num = fobj.get("node") if isinstance(fobj, dict) else None
                             if not node_num and isinstance(post, dict):
                                 node_num = post.get("node")
@@ -1762,26 +1740,6 @@ class KemonoDownloader:
                                 if node_url not in candidate_urls:
                                     candidate_urls.append(node_url)
                             fallback_thumb_url = f"https://img.pawchive.pw/thumbnail/data{clean_rel}"
-                        elif "coomer" in effective_domain:
-                            # coomer.st/data/… redirects to the file server that holds the file.
-                            # While Coomer is switched off, cum.st's file server is tried instead.
-                            coomer_hosts = ["coomer.st", "n1.coomer.st", "n2.coomer.st", "n3.coomer.st", "n4.coomer.st"]
-                            if is_disabled("coomer.st"):
-                                coomer_hosts = ["cum.st"]
-                            for host in coomer_hosts:
-                                u = f"https://{host}/data{clean_rel}?f={_fq(sanitized_name)}"
-                                if u not in candidate_urls:
-                                    candidate_urls.append(u)
-                            fallback_thumb_url = f"https://{'img.cum.st' if is_disabled('coomer.st') else 'img.coomer.st'}/thumbnail/data{clean_rel}"
-                        else:  # kemono / default — kemono.cr/data/… redirects to the right file server
-                            for host in ["kemono.cr", "n1.kemono.cr", "n2.kemono.cr", "n3.kemono.cr", "n4.kemono.cr"]:
-                                u = f"https://{host}/data{clean_rel}?f={_fq(sanitized_name)}"
-                                if u not in candidate_urls:
-                                    candidate_urls.append(u)
-                            paw_u = f"https://file.pawchive.pw/data{clean_rel}?f={_fq(sanitized_name)}"
-                            if paw_u not in candidate_urls:
-                                candidate_urls.append(paw_u)
-                            fallback_thumb_url = f"https://{'img.pawchive.pw' if is_disabled('kemono.cr') else 'img.kemono.cr'}/thumbnail/data{clean_rel}"
 
                         # Only append thumbnail fallback if enabled in options
                         allow_thumb_fallback = getattr(options, "fallback_to_thumbnails", False)
@@ -1791,7 +1749,7 @@ class KemonoDownloader:
                             if is_thumbnail_url and original_url and original_url not in candidate_urls:
                                 candidate_urls.append(f"{original_url}?f={_fq(sanitized_name)}")
 
-                # Switched-off sites (Kemono / Coomer) are never contacted
+                # Kemono / Coomer are never contacted
                 candidate_urls = [u for u in candidate_urls if not is_disabled(u)]
                 file_url = candidate_urls[0] if candidate_urls else f"https://file.pawchive.pw/data{clean_rel}?f={_fq(sanitized_name)}"
                 target_dest_dir = _get_dest_folder(sanitized_name)
@@ -3507,12 +3465,8 @@ class KemonoDownloader:
                         req_headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
                         req_headers["Referer"] = "https://nhentai.net/"
                         req_headers["Accept"] = "*/*"
-                    elif "coomer" in u_low:
-                        req_headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-                        req_headers["Referer"] = "https://coomer.st/"
-                        req_headers["Accept"] = "*/*"
                     elif "pawchive" in u_low:
-                        req_headers["User-Agent"] = "PawchiveDownloader/1.3.5 (https://github.com/whyamihere773/Pawchive-Downloader)"
+                        req_headers["User-Agent"] = "PawchiveDownloader/1.3.5 (https://github.com/shybruh/Pawchive-Downloader)"
                         req_headers["Referer"] = "https://pawchive.pw/"
                         req_headers["Accept"] = "*/*"
                     elif "cum.st" in u_low:
@@ -3521,7 +3475,6 @@ class KemonoDownloader:
                         req_headers["Accept"] = "*/*"
                     else:
                         req_headers["User-Agent"] = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
-                        req_headers["Referer"] = "https://kemono.cr/"
                         req_headers["Accept"] = "*/*"
 
                     # The login cookie only goes to the archive site it belongs to
@@ -3598,10 +3551,10 @@ class KemonoDownloader:
                             try:
                                 if "pawchive" in attempt_url.lower():
                                     clean_headers = {
-                                        "User-Agent": "PawchiveDownloader/1.3.5 (https://github.com/whyamihere773/Pawchive-Downloader)",
+                                        "User-Agent": "PawchiveDownloader/1.3.5 (https://github.com/shybruh/Pawchive-Downloader)",
                                         "Referer": "https://pawchive.pw/",
                                         "Accept": "*/*",
-                                        "X-Contact": "https://github.com/whyamihere773/Pawchive-Downloader",
+                                        "X-Contact": "https://github.com/shybruh/Pawchive-Downloader",
                                     }
                                 else:
                                     clean_headers = {

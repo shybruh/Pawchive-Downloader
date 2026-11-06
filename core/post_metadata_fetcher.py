@@ -228,21 +228,6 @@ class PostMetadataFetcher:
             except Exception as e:
                 logger.debug(f"fetch_single_post failed on {self.default_domain}: {e}")
 
-            # 2. Fallback to kemono.cr / coomer.st if pawchive returned None
-            if not post_obj:
-                fallback_domain = "kemono.cr" if service != "onlyfans" and service != "fansly" else "coomer.st"
-                parsed_fb = URLParseResult(
-                    raw_url=f"https://{fallback_domain}/{service}/user/{creator_id}/post/{post_id}",
-                    domain=fallback_domain,
-                    service=service,
-                    user_id=creator_id,
-                    post_id=post_id,
-                    is_valid=True
-                )
-                try:
-                    post_obj = self.api_client.fetch_single_post(parsed_fb)
-                except Exception as e:
-                    logger.debug(f"fetch_single_post fallback failed: {e}")
 
             if not post_obj:
                 results["errors"].append(f"Post {post_id} not found on server")

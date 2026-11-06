@@ -1,9 +1,9 @@
 import { useEffect, useState, type ReactNode } from "react";
 import {
   CircleCheckIcon, CookieIcon, DownloadCloudIcon, ExternalLinkIcon, FolderOpenIcon, GaugeIcon, KeyRoundIcon,
-  InfoIcon, Loader2Icon, LogOutIcon, PaletteIcon, RefreshCwIcon, ShieldIcon, TypeIcon, UserRoundIcon,
+  InfoIcon, Loader2Icon, LogInIcon, LogOutIcon, PaletteIcon, RefreshCwIcon, ShieldIcon, TypeIcon, UserRoundIcon,
 } from "lucide-react";
-import { openExternal } from "@/lib/native";
+import { inTauri, openExternal, siteLogin, siteLoginCancel, siteLoginDone } from "@/lib/native";
 import { openTelegramSignIn } from "@/components/telegram";
 import { useNav } from "@/lib/nav";
 import { checkForUpdate, installUpdate, useUpdater } from "@/lib/updater";
@@ -218,9 +218,17 @@ function AccountsSection() {
   );
 }
 
+// Login pages that open in the app's sign-in window
+const LOGIN_PAGES: Record<string, string> = {
+  pawchive: "https://pawchive.pw/account/login",
+  cumst: "https://cum.st/auth/signin",
+};
+
 function ProviderCard({ p }: { p: Provider }) {
   const [value, setValue] = useState("");
   const [busy, setBusy] = useState(false);
+  const [importing, setImporting] = useState(false);
+  const [signingIn, setSigningIn] = useState(false);
   const [user, setUser] = useState("");
   const [pass, setPass] = useState("");
   const [loggingIn, setLoggingIn] = useState(false);
@@ -230,6 +238,27 @@ function ProviderCard({ p }: { p: Provider }) {
     setBusy(false);
     if (ok) toast.success(msg || `${p.name} session is valid`); else toast.error(msg || `${p.name} session didn't work`);
   });
+  useSignal("appBridge", "providerImportFinished", (id: string, ok: boolean, msg: string) => {
+    if (id !== p.id) return;
+    setImporting(false);
+    if (ok) { toast.success(msg || "Imported"); setBusy(true); call("appBridge", "validateProviderSession", p.id); }
+    else toast.error("Couldn't import from your browser", { description: msg, duration: 10000 });
+  });
+  const signInInApp = async () => {
+    setSigningIn(true);
+    try {
+      const r = await siteLogin(LOGIN_PAGES[p.id]);
+      // Closing the window without signing in leaves no session cookie: keep what was saved
+      if (!r.names.some((n) => /session/i.test(n))) { toast.message("Not signed in", { description: "The window closed before a sign-in finished." }); return; }
+      await call("appBridge", "saveProviderCredential", p.id, r.cookie);
+      setBusy(true);
+      call("appBridge", "validateProviderSession", p.id);
+    } catch (e) {
+      toast.error("Couldn't open the sign-in window", { description: String(e) });
+    } finally {
+      setSigningIn(false);
+    }
+  };
   useSignal("appBridge", "providerLoginFinished", (id: string, ok: boolean, msg: string) => {
     if (id !== p.id) return;
     setLoggingIn(false);
@@ -267,8 +296,19 @@ function ProviderCard({ p }: { p: Provider }) {
             }}><KeyRoundIcon />Save</Button>
           </div>
           <div className="flex flex-wrap gap-2">
+            {LOGIN_PAGES[p.id] && inTauri() && (signingIn ? (
+              <>
+                <Button size="sm" onClick={() => siteLoginDone()}><CircleCheckIcon />I've signed in</Button>
+                <Button variant="ghost" size="sm" onClick={() => { siteLoginCancel(); setSigningIn(false); }}>Cancel</Button>
+              </>
+            ) : (
+              <Button variant={connected ? "outline" : "default"} size="sm" onClick={signInInApp}><LogInIcon />{connected ? "Sign in again" : "Sign in on the site"}</Button>
+            ))}
             {p.supports_browser_import && (
-              <Button variant="outline" size="sm" onClick={() => call("appBridge", "importBrowserCookiesToProvider", p.id, "")}><CookieIcon />Import from browser</Button>
+              <Button variant="outline" size="sm" disabled={importing} onClick={() => { setImporting(true); call("appBridge", "importBrowserCookiesToProvider", p.id, ""); }}
+                title="Firefox works best; Chrome, Edge and Brave lock their cookies to themselves">
+                {importing ? <Loader2Icon className="animate-spin" /> : <CookieIcon />}Import from browser
+              </Button>
             )}
             {connected && (
               <>
@@ -306,10 +346,6 @@ function TelegramAccount() {
 
 function AppearanceSection() {
   const [dark, setDark] = useState(() => document.documentElement.classList.contains("dark"));
-  const langs = useProp<Json[]>("Lang", "availableLanguages", []);
-  const [language, setLanguage] = useSetting<string>("appBridge", "language", "auto");
-  const options = [{ value: "auto", label: "System default" }, ...langs.map((l) =>
-    typeof l === "string" ? { value: l, label: l } : { value: String(l.code ?? l.id ?? l.value), label: String(l.name ?? l.label ?? l.code) })];
   return (
     <Group title="Appearance">
       <Field label="Dark mode">
@@ -319,13 +355,9 @@ function AppearanceSection() {
           try { localStorage.setItem("theme", v ? "dark" : "light"); } catch { /* storage off */ }
         }} />
       </Field>
-      <Field label="Language" hint="Applies to the engine's messages; the new interface is English for now.">
-        <Select value={language} onValueChange={setLanguage} options={options} className="w-56" />
-      </Field>
     </Group>
   );
 }
-type Json = any; // eslint-disable-line @typescript-eslint/no-explicit-any
 
 function UpdatesSection() {
   const u = useUpdater();

@@ -32,6 +32,10 @@ marks, AI tagging, storage breakdown.
 | Video fingerprinting, media compression | `video_fingerprinter`, `media_compressor`, the Decompressor's "compress after extracting" |
 | Python workarounds | `memory_collector`, `hang_detector` |
 | The Qt / QML interface | `qml/`, `main.py`, `updater.py`, the old build script and PyInstaller specs |
+| Translations | `locales/` (15 languages + tutorials), `translation_manager`, the Language setting; the interface is English-only |
+| Kemono / Coomer fallbacks | mirror and file-server fallbacks, metadata fallbacks, a `Referer: kemono.cr` header sent to every other host |
+| Qt Quick / QML in the engine | the thumbnail code no longer uses QML image providers; the packaged engine leaves out Qt Quick, QML, PDF, OpenGL and other unused Qt modules (486 MB → 124 MB) |
+| Upstream repo files | `SECURITY.md`, `.github/FUNDING.yml` |
 
 Kept on purpose: `ffmpeg_manager` (the video-length filter needs ffprobe), `franchise_resolver`
 (plain keyword matching from Known.txt), keyword tagging in the gallery tools.
@@ -65,8 +69,8 @@ directly as Tauri commands.
 ## 4. Still to fix regardless of the port
 
 - `bridge/app_bridge.py` is still one ~10,000-line object; split it by feature when porting.
-- Requests send `X-Contact` headers pointing at the original project's GitHub
-  (`core/downloader.py`, `_CONTACT_HEADERS`).
-- Settings, data and logs live next to the engine executable; an installed app should keep them in
-  the user's app-data folder.
-- Kemono / Coomer code paths are switched off but still present; delete them in the Rust version.
+- Browser cookie import only works with Firefox: Chrome, Edge and Brave encrypt cookies with
+  app-bound keys. Signing in inside the app (`src-tauri/src/site_login.rs`) is the main way to log in.
+- Kemono / Coomer names remain only where they're harmless: link recognition (so their links are
+  refused with a clear message), the "kemono" credential slot that stores the general cookie, and
+  internal class names. Drop them in the Rust version.

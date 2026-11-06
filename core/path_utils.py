@@ -38,48 +38,74 @@ def _is_dir_writable(path: str) -> bool:
         return False
 
 
-_rescued_from_internal = False
+APP_FOLDER_NAME = "Pawchive Downloader"
+_migrated = False
 
 
-def _rescue_from_internal() -> None:
-    """Packaged Windows builds keep config/, data/ and dependencies/ next to the .exe. The first 1.2.2
-    build used the ones inside "_internal" instead, so it didn't see the user's settings, watchlist
-    and logins. Anything it saved there is copied next to the .exe, only where no file of that name
-    exists yet (the user's real files always win)."""
-    global _rescued_from_internal
-    if _rescued_from_internal or sys.platform != "win32" or not getattr(sys, "frozen", False):
-        return
-    _rescued_from_internal = True
+def _copy_missing(src_root: str, dst_root: str) -> None:
+    """Copies every file of src_root into dst_root that dst_root doesn't have yet (the files
+    already there always win). An SQLite database's side files (-wal / -shm / -journal) are only
+    copied together with their database: next to a different database they would be read as part
+    of it and damage it."""
     import shutil
-    internal, root = get_base_dir(), get_app_root()
-    if os.path.normcase(os.path.abspath(internal)) == os.path.normcase(os.path.abspath(root)):
+    if not os.path.isdir(src_root):
         return
-    for sub in ("config", "data", "dependencies"):
-        src_root = os.path.join(internal, sub)
-        if not os.path.isdir(src_root):
-            continue
-        for dirpath, _dirs, files in os.walk(src_root):
-            dst_dir = os.path.normpath(os.path.join(root, sub, os.path.relpath(dirpath, src_root)))
-            for name in files:
-                # SQLite's side files belong to the database next to them: one copied next to a
-                # different database (the user's own) would be read as part of it and damage it
-                if name.lower().endswith(("-wal", "-shm", "-journal")):
-                    continue
-                dst = os.path.join(dst_dir, name)
-                if os.path.exists(dst):
-                    continue
-                try:
-                    os.makedirs(dst_dir, exist_ok=True)
-                    shutil.copy2(os.path.join(dirpath, name), dst)
-                except OSError:
-                    pass
+    for dirpath, _dirs, files in os.walk(src_root):
+        dst_dir = os.path.normpath(os.path.join(dst_root, os.path.relpath(dirpath, src_root)))
+        copied = set()
+        side = ("-wal", "-shm", "-journal")
+        for name in sorted(files, key=lambda n: n.lower().endswith(side)):
+            low = name.lower()
+            if low.endswith(side) and low.rsplit("-", 1)[0] not in copied:
+                continue
+            dst = os.path.join(dst_dir, name)
+            if os.path.exists(dst):
+                continue
+            try:
+                os.makedirs(dst_dir, exist_ok=True)
+                shutil.copy2(os.path.join(dirpath, name), dst)
+                copied.add(low)
+            except OSError:
+                pass
+
+
+def _is_portable() -> bool:
+    """A packaged build keeps everything next to itself when a file named "portable" sits next to
+    the app or the engine (the portable zip ships one)."""
+    root = get_app_root()
+    return any(os.path.exists(os.path.join(d, "portable")) for d in (root, os.path.dirname(root)))
+
+
+def get_user_root() -> str:
+    """The folder that holds settings, data, logs and downloaded helper programs.
+
+    Running from source (or a portable build) that's the app folder. An installed Windows build
+    uses "%APPDATA%/Pawchive Downloader", so settings survive updates and the install folder can stay
+    read-only; on first use it takes over what older builds kept next to the engine (and inside
+    its "_internal" folder)."""
+    global _migrated
+    if sys.platform != "win32" or not getattr(sys, "frozen", False) or _is_portable():
+        return get_app_root()
+    base = os.environ.get("APPDATA") or os.path.join(os.path.expanduser("~"), "AppData", "Roaming")
+    root = os.path.join(base, APP_FOLDER_NAME)
+    if not _migrated:
+        _migrated = True
+        os.makedirs(root, exist_ok=True)
+        # Older builds: next to the engine, and the first 1.2.2 build used the ones in "_internal".
+        # "dependencies" also seeds the bundled 7-Zip and yt-dlp into a folder yt-dlp can update.
+        for old in (get_app_root(), get_base_dir()):
+            if os.path.normcase(os.path.abspath(old)) == os.path.normcase(os.path.abspath(root)):
+                continue
+            for sub in ("config", "data", "dependencies"):
+                _copy_missing(os.path.join(old, sub), os.path.join(root, sub))
+    return root
 
 
 def get_config_dir(custom_dir: Optional[str] = None) -> str:
     """
     Resolve the configuration directory:
     - If custom_dir is provided, use it.
-    - On Windows: portable `config` next to the .exe (or main.py when running from source).
+    - On Windows: `config` in the user root (see get_user_root).
     - On Linux/macOS:
       - If running from source and `<base_dir>/config` is writable, use it.
       - Otherwise, use `$XDG_CONFIG_HOME/pawchive` (defaults to `~/.config/pawchive`).
@@ -95,8 +121,7 @@ def get_config_dir(custom_dir: Optional[str] = None) -> str:
         return env_dir
 
     if sys.platform == "win32":
-        _rescue_from_internal()
-        local_cfg = os.path.join(get_app_root(), "config")
+        local_cfg = os.path.join(get_user_root(), "config")
         os.makedirs(local_cfg, exist_ok=True)
         return local_cfg
 
@@ -138,7 +163,7 @@ def migrate_legacy_files(new_dir: str, legacy_dir: str, names) -> None:
 def get_data_dir() -> str:
     """
     Resolve data/state directory:
-    - On Windows: the folder of the .exe (or main.py when running from source).
+    - On Windows: the user root (see get_user_root).
     - On Linux/macOS: `$XDG_DATA_HOME/pawchive` (defaults to `~/.local/share/pawchive`),
       or `<base_dir>` if running from source and writable.
     """
@@ -148,8 +173,7 @@ def get_data_dir() -> str:
         return env_dir
 
     if sys.platform == "win32":
-        _rescue_from_internal()
-        return get_app_root()
+        return get_user_root()
 
     base_dir = get_base_dir()
 
@@ -172,16 +196,16 @@ def get_app_root() -> str:
 def get_logs_dir() -> str:
     """Resolve directory where log files should be written.
 
-    Always `logs/` next to the app (the .exe, the Linux binary or main.py). Only when that folder
-    can't be written (a system-wide or read-only install) do logs go to the user's folder instead.
+    `logs/` in the user root on Windows, next to the app elsewhere. Only when that folder can't be
+    written (a system-wide or read-only install) do logs go to the user's folder instead.
     """
-    local_logs = os.path.join(get_app_root(), "logs")
+    local_logs = os.path.join(get_user_root() if sys.platform == "win32" else get_app_root(), "logs")
     if _is_dir_writable(local_logs):
         return local_logs
 
     if sys.platform == "win32":
         base = os.environ.get("LOCALAPPDATA") or os.path.expanduser("~")
-        logs_dir = os.path.join(base, "Pawchive Downloader", "logs")
+        logs_dir = os.path.join(base, APP_FOLDER_NAME, "logs")
     else:
         xdg_state = os.environ.get("XDG_STATE_HOME")
         if xdg_state:
@@ -195,6 +219,8 @@ def get_logs_dir() -> str:
 def get_legacy_logs_dirs() -> list:
     """Folders older versions wrote logs to (their files are moved into the new layout)."""
     dirs = [os.path.join(get_base_dir(), "logs")]          # Windows builds: _internal/logs
+    if sys.platform == "win32" and getattr(sys, "frozen", False):
+        dirs.append(os.path.join(get_app_root(), "logs"))  # builds that kept logs next to the engine
     if sys.platform != "win32" and getattr(sys, "frozen", False):   # Linux builds used the user's folder
         xdg_state = os.environ.get("XDG_STATE_HOME")
         if xdg_state:
@@ -207,8 +233,7 @@ def get_legacy_logs_dirs() -> list:
 def get_dependencies_dir() -> str:
     """Resolve directory where helper binaries (yt-dlp, 7za) reside or should be downloaded."""
     if sys.platform == "win32":
-        _rescue_from_internal()
-        local_deps = os.path.join(get_app_root(), "dependencies")
+        local_deps = os.path.join(get_user_root(), "dependencies")
         os.makedirs(local_deps, exist_ok=True)
         return local_deps
 

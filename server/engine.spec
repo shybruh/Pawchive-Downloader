@@ -12,7 +12,6 @@ project_root = os.path.abspath(os.path.join(SPECPATH, ".."))
 
 datas = [
     (os.path.join(project_root, "assets"), "assets"),
-    (os.path.join(project_root, "locales"), "locales"),
     (os.path.join(project_root, "config", "settings.example.json"), "config"),
 ]
 
@@ -25,8 +24,7 @@ for name in ["7za.exe", "7z.exe", "7z.dll", "yt-dlp.exe"]:
         binaries.append((p, "dependencies"))
 
 hidden_imports = [
-    "PySide6.QtCore", "PySide6.QtGui", "PySide6.QtWidgets", "PySide6.QtQml", "PySide6.QtQuick",
-    "PySide6.QtNetwork", "PySide6.QtWebSockets", "PySide6.QtSvg",
+    "PySide6.QtCore", "PySide6.QtGui", "PySide6.QtWidgets", "PySide6.QtNetwork", "PySide6.QtWebSockets",
     "Crypto", "Crypto.Cipher", "Crypto.Cipher.AES", "Crypto.Util", "Crypto.Util.Padding",
     "Crypto.Util.strxor", "Crypto.Random",
     "gdown", "requests", "urllib3", "brotli", "bs4", "psutil", "mutagen", "telethon", "qrcode",
@@ -45,13 +43,32 @@ a = Analysis(
     binaries=binaries,
     datas=datas,
     hiddenimports=hidden_imports,
-    excludes=["tkinter", "matplotlib", "scipy", "pandas", "unittest", "pytest", "IPython", "notebook",
-              "PySide6.QtWebEngineCore", "PySide6.QtWebEngineWidgets", "PySide6.Qt3DCore", "PySide6.QtCharts",
-              "PySide6.QtDataVisualization", "PySide6.QtPdf", "PySide6.QtDesigner"],
+    # The engine only uses QtCore, QtGui, QtWidgets, QtNetwork and QtWebSockets; everything else in
+    # PySide6 (Quick / QML, multimedia, web engine, 3D…) is left out, which is most of its size
+    excludes=["tkinter", "matplotlib", "scipy", "pandas", "unittest", "pytest", "IPython", "notebook", "numpy"] + [
+        f"PySide6.{m}" for m in (
+            "QtQml", "QtQuick", "QtQuickControls2", "QtQuickWidgets", "QtQuick3D", "QtQuickTest", "QtMultimedia",
+            "QtMultimediaWidgets", "QtSpatialAudio", "QtWebEngineCore", "QtWebEngineWidgets", "QtWebEngineQuick",
+            "QtWebChannel", "QtWebView", "Qt3DCore", "Qt3DRender", "Qt3DInput", "Qt3DLogic", "Qt3DAnimation",
+            "Qt3DExtras", "QtCharts", "QtGraphs", "QtDataVisualization", "QtPdf", "QtPdfWidgets", "QtDesigner",
+            "QtHelp", "QtUiTools", "QtSql", "QtTest", "QtOpenGL", "QtOpenGLWidgets", "QtSvg", "QtSvgWidgets",
+            "QtPrintSupport", "QtVirtualKeyboard", "QtShaderTools", "QtLocation", "QtPositioning", "QtSensors",
+            "QtBluetooth", "QtNfc", "QtSerialPort", "QtSerialBus", "QtRemoteObjects", "QtScxml",
+            "QtStateMachine", "QtTextToSpeech", "QtHttpServer", "QtConcurrent", "QtXml", "QtDBus",
+            "QtAxContainer", "QtCanvasPainter",
+        )
+    ],
     noarchive=False,
 )
 # Never ship AI model files
 a.datas = [d for d in a.datas if not (os.sep + "models" + os.sep in d[0] or d[0].lower().endswith((".onnx", ".gguf")))]
+
+# Qt plugins drag in libraries a windowless engine never loads (Quick / QML through the virtual
+# keyboard, PDF through its image plugin, software OpenGL); drop them
+_DROP = ("qt6qml", "qt6quick", "qt6pdf", "qt6virtualkeyboard", "opengl32sw", "qvirtualkeyboard", "qpdf",
+         "qt6opengl", "qt6svg", "qsvg")
+a.binaries = [b for b in a.binaries if not any(k in os.path.basename(b[0]).lower() for k in _DROP)]
+a.datas = [d for d in a.datas if "PySide6" not in d[0].replace("\\", "/").split("/")[0] or "translations" not in d[0]]
 
 pyz = PYZ(a.pure)
 exe = EXE(

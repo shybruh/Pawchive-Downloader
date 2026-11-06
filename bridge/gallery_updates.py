@@ -29,7 +29,7 @@ _POST_ID_PREFIX = re.compile(r"^(\d{5,})_")
 _CREATOR_URL = re.compile(r"https?://([^/\s]+)/([^/\s]+)/user/([^/?#\s]+)")
 _POST_ID_LINE = re.compile(r"^\s*post id\s*:\s*(\S+)", re.IGNORECASE)
 _SERVICE_TAG = re.compile(r"\[([A-Za-z0-9_-]{2,20})\]\s*$")
-_COOMER_SERVICES = {"onlyfans", "fansly", "candfans"}
+_CUMST_SERVICES = {"onlyfans", "fansly", "candfans"}
 _MAX_WALK_FILES = 300_000
 
 
@@ -250,7 +250,7 @@ class GalleryUpdates(QObject):
                     ).fetchone()
                 if row:
                     service, creator_id, creator_name = row[0], row[1], row[2] or ""
-                    domain = "coomer.st" if (service or "").lower() in _COOMER_SERVICES else "kemono.cr"
+                    domain = "cum.st" if (service or "").lower() in _CUMST_SERVICES else "pawchive.pw"
                     return self._from_url(f"https://{domain}/{service}/user/{creator_id}", folder, "archive", creator_name)
             except Exception as e:
                 logger.debug(f"Archive lookup for {folder} failed: {e}", category="gallery")
@@ -306,7 +306,7 @@ class GalleryUpdates(QObject):
         """The user pasted a creator link for this folder: check it and remember it."""
         info = self._from_url(url, folder, "remembered", artist_dir=os.path.normpath(folder))
         if not info:
-            return {"found": False, "error": "That doesn't look like a creator link (for example https://kemono.cr/patreon/user/12345)."}
+            return {"found": False, "error": "That doesn't look like a creator link (for example https://pawchive.pw/patreon/user/12345)."}
         self._links[os.path.normpath(folder)] = info["url"]
         self._save_links()
         return info

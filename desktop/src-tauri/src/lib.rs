@@ -5,6 +5,7 @@
 
 mod engine;
 mod proc_group;
+mod site_login;
 
 use engine::{Engine, EngineInfo};
 use std::sync::Arc;
@@ -50,9 +51,17 @@ pub fn run() {
             let engine = Arc::new(Engine::new(log_dir));
             engine.start()?;
             app.manage(engine);
+            app.manage(site_login::LoginSite::default());
             Ok(())
         })
-        .invoke_handler(tauri::generate_handler![engine_info, engine_restart, engine_shutdown])
+        .invoke_handler(tauri::generate_handler![
+            engine_info,
+            engine_restart,
+            engine_shutdown,
+            site_login::site_login_open,
+            site_login::site_login_done,
+            site_login::site_login_cancel
+        ])
         .build(tauri::generate_context!())
         .expect("error while building the Pawchive shell");
 

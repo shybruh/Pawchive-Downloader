@@ -192,7 +192,6 @@ class AppBridge(QObject):
     consoleWidthChanged = Signal()
     postDownloadActionChanged = Signal()
     knownRecognitionModeChanged = Signal()
-    languageChanged = Signal()
     postActionCountdownStarted = Signal(str)  # carries human label e.g. "Shutdown"
     exportCompleted = Signal(str, bool)       # (filePath, wasDownloading)
     importCompleted = Signal(int, int)        # (taskCount, creatorCount)
@@ -253,6 +252,7 @@ class AppBridge(QObject):
     # Cookie Watchdog signals
     cookieWatchdogChanged     = Signal()
     cookieImportCompleted     = Signal(bool, str)
+    providerImportFinished    = Signal(str, bool, str)   # provider id, ok, message
 
     # Provider & Credential Vault signals
     providersChanged          = Signal()
@@ -445,7 +445,6 @@ class AppBridge(QObject):
         self._post_download_action = "none" # Always default to 'none' (Do Nothing) on startup
         self._known_recognition_mode = str(saved_settings.get("known_recognition_mode", "hybrid"))
         self.known_manager.set_mode(self._known_recognition_mode)
-        self._language = str(saved_settings.get("language", "auto"))
         self._console_width = int(saved_settings.get("console_width", 620))
         self._current_fps = 0
         self._screen_hz = 60
@@ -1739,17 +1738,6 @@ class AppBridge(QObject):
     @Property(str, notify=creatorNameChanged)
     def creatorName(self) -> str:
         return self._creator_name
-
-    @Property(str, notify=languageChanged)
-    def language(self) -> str:
-        return self._language
-
-    @language.setter
-    def language(self, val: str):
-        if self._language != val:
-            self._language = val
-            self.languageChanged.emit()
-            self.saveSettings()
 
     @Property(float, notify=downloadDelayChanged)
     def downloadDelay(self) -> float:
@@ -3491,10 +3479,9 @@ class AppBridge(QObject):
             try:
                 from core.auth_manager import auth_manager
                 from core.providers import is_disabled
-                # The first site with a login that isn't switched off (Kemono / Coomer are off for now)
+                # The first site you're signed in to
                 domain, prov_id = "pawchive.pw", "pawchive"
-                for _dom, _prov in (("kemono.cr", "kemono"), ("coomer.st", "coomer"),
-                                    ("pawchive.pw", "pawchive"), ("cum.st", "cumst")):
+                for _dom, _prov in (("pawchive.pw", "pawchive"), ("cum.st", "cumst")):
                     if not is_disabled(_prov) and auth_manager.is_logged_in(_prov):
                         domain, prov_id = _dom, _prov
                         break
@@ -5570,7 +5557,6 @@ class AppBridge(QObject):
             "play_completion_sound": self._play_completion_sound,
             "post_download_action": "none",
             "known_recognition_mode": self._known_recognition_mode,
-            "language": self._language,
             "console_width": self._console_width,
             "tag_folder_mode": self._tag_folder_mode,
             "skip_post_covers": self._skip_post_covers,
@@ -6366,7 +6352,7 @@ class AppBridge(QObject):
                                 is_external = getattr(t0, "is_ytdlp", False) or getattr(t0, "is_telegram", False) or t_svc.lower() in ("bunkr", "coomer_bunkr", "kemono_bunkr", "external")
                                 if t_uid and t_svc and not is_external:
                                     t_name = getattr(t0, "creator_name", "").strip() or t_uid
-                                    t_domain = getattr(t0, "domain", "") or ("coomer.st" if t_svc.lower() in ("onlyfans", "fansly", "candfans") else "pawchive.pw")
+                                    t_domain = getattr(t0, "domain", "") or ("cum.st" if t_svc.lower() in ("onlyfans", "fansly", "candfans") else "pawchive.pw")
                                     t_url = getattr(t0, "artist_url", "") or f"https://{t_domain}/{t_svc}/user/{t_uid}"
                                     t_dir = self.extract_artist_folder_from_path(
                                         t0.target_path,
@@ -7898,15 +7884,21 @@ class AppBridge(QObject):
 
         threading.Thread(target=_val_worker, daemon=True, name=f"ValWorker_{providerId}").start()
 
-    @Slot(str, result=bool)
-    @Slot(str, str, result=bool)
-    def importBrowserCookiesToProvider(self, providerId: str, browserId: str = "") -> bool:
-        from services.cookie_importer import browser_cookie_importer
-        from core.auth_manager import auth_manager
-        try:
-            res = browser_cookie_importer.import_auto_detect(preferred_browser=browserId or None)
-            c_str = res.get("cookie_string", "")
-            if c_str:
+    @Slot(str)
+    @Slot(str, str)
+    def importBrowserCookiesToProvider(self, providerId: str, browserId: str = ""):
+        """Reads the provider's sign-in from an installed browser (in the background); the result
+        arrives as providerImportFinished."""
+        def _worker():
+            from services.cookie_importer import browser_cookie_importer
+            from core.auth_manager import auth_manager, SUPPORTED_PROVIDERS
+            meta = SUPPORTED_PROVIDERS.get(providerId, {})
+            domains = [d for d in dict.fromkeys([meta.get("domain", "")] + list(meta.get("mirror_domains", []))) if d] or None
+            try:
+                res = browser_cookie_importer.import_auto_detect(preferred_browser=browserId or None, domains=domains)
+                c_str = res.get("cookie_string", "")
+                if not c_str:
+                    raise RuntimeError("No sign-in found in your browsers.")
                 auth_manager.set_credential(providerId, {"cookie": c_str})
                 if providerId == "kemono":
                     self.cookieString = c_str
@@ -7914,11 +7906,13 @@ class AppBridge(QObject):
                 self.providersChanged.emit()
                 self.cookieWatchdogChanged.emit()
                 self.cookieImportCompleted.emit(True, res.get("browser_name", "Browser"))
-                return True
-        except Exception as e:
-            logger.error(f"Browser cookie import to {providerId} failed: {e}", category="cookie")
-            self.cookieImportCompleted.emit(False, str(e))
-        return False
+                self.providerImportFinished.emit(providerId, True, f"Imported from {res.get('browser_name', 'your browser')}")
+            except Exception as e:
+                logger.error(f"Browser cookie import to {providerId} failed: {e}", category="cookie")
+                self.cookieImportCompleted.emit(False, str(e))
+                self.providerImportFinished.emit(providerId, False, str(e))
+
+        threading.Thread(target=_worker, daemon=True, name=f"CookieImport_{providerId}").start()
 
     @Slot(str, str, str)
     def loginProviderWithCredentials(self, providerId: str, username: str, password: str):

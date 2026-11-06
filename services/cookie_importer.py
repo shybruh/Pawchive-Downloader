@@ -191,7 +191,7 @@ class BrowserCookieImporter:
                 return val if cls._is_valid_cookie_value(val) else ""
             except Exception:
                 if prefix == b"v20":
-                    raise RuntimeError("App-Bound Encryption (v20) detected. Google Chrome 127+ restricts external cookie decryption. Please use Mozilla Firefox or Edge.")
+                    raise RuntimeError("App-bound encryption: this browser locks its cookies to itself, so they can't be read. Use Sign in instead, or Firefox.")
                 return ""
         else:
             # Legacy DPAPI directly on value
@@ -203,30 +203,49 @@ class BrowserCookieImporter:
                 return ""
 
     @classmethod
-    def import_from_chromium(cls, user_data_path: str) -> Dict[str, Any]:
+    def import_from_chromium(cls, user_data_path: str, domains: Optional[List[str]] = None) -> Dict[str, Any]:
         """
-        Extracts session and target cookies from a Chromium-based browser profile.
-        Safely copies DB to tempdir to prevent locking conflicts with running browsers.
+        Extracts session cookies from a Chromium-based browser (all of its profiles).
+        Copies each database to a temp folder first so a running browser's lock isn't touched.
         """
-        cookies_db_path = None
-        # Check standard paths: Default/Network/Cookies or Network/Cookies
-        for sub in [
-            os.path.join("Default", "Network", "Cookies"),
-            os.path.join("Network", "Cookies"),
-            os.path.join("Default", "Cookies"),
-            "Cookies"
-        ]:
-            cand = os.path.join(user_data_path, sub)
-            if os.path.exists(cand):
-                cookies_db_path = cand
-                break
-
-        if not cookies_db_path:
+        dbs = cls._chromium_cookie_dbs(user_data_path)
+        if not dbs:
             raise FileNotFoundError(f"Cookies database not found in {user_data_path}")
-
         master_key = cls._get_chromium_master_key(user_data_path)
+        errors = []
+        for db in dbs:
+            try:
+                res = cls._read_chromium_db(db, master_key, domains)
+            except Exception as e:
+                errors.append(e)
+                continue
+            if res["count"]:
+                return res
+        if errors:
+            raise errors[0]
+        return {"cookie_string": "", "cookies": {}, "count": 0, "expiry": cls.calculate_expiration_info("", None)}
 
-        # Safely copy DB to temporary directory
+    @staticmethod
+    def _chromium_cookie_dbs(user_data_path: str) -> List[str]:
+        """Cookie databases of every profile ("Default", "Profile 1"...), most recently used first."""
+        found = []
+        roots = [user_data_path]
+        try:
+            roots += [os.path.join(user_data_path, d) for d in os.listdir(user_data_path)
+                      if d == "Default" or d.startswith("Profile ")]
+        except OSError:
+            pass
+        for root in roots:
+            for sub in (os.path.join("Network", "Cookies"), "Cookies"):
+                cand = os.path.join(root, sub)
+                if os.path.isfile(cand):
+                    found.append(cand)
+                    break
+        found.sort(key=lambda p: os.path.getmtime(p) if os.path.exists(p) else 0, reverse=True)
+        return found
+
+    @classmethod
+    def _read_chromium_db(cls, cookies_db_path: str, master_key: bytes, domains: Optional[List[str]]) -> Dict[str, Any]:
         temp_dir = tempfile.mkdtemp(prefix="paw_cookie_")
         temp_db = os.path.join(temp_dir, "Cookies.sqlite")
         try:
@@ -245,9 +264,10 @@ class BrowserCookieImporter:
             cursor = conn.cursor()
 
             # Query target cookies
-            domain_clauses = " OR ".join(["host_key LIKE ?" for _ in cls.TARGET_DOMAINS])
+            targets = domains or cls.TARGET_DOMAINS
+            domain_clauses = " OR ".join(["host_key LIKE ?" for _ in targets])
             query = f"SELECT host_key, name, encrypted_value, expires_utc FROM cookies WHERE {domain_clauses}"
-            params = [f"%{d}%" for d in cls.TARGET_DOMAINS]
+            params = [f"%{d}" if domains else f"%{d}%" for d in targets]
 
             cursor.execute(query, params)
             rows = cursor.fetchall()
@@ -306,7 +326,7 @@ class BrowserCookieImporter:
         return result
 
     @classmethod
-    def import_from_firefox(cls, profiles_dir: str) -> Dict[str, Any]:
+    def import_from_firefox(cls, profiles_dir: str, domains: Optional[List[str]] = None) -> Dict[str, Any]:
         """
         Extracts cookies from Mozilla Firefox profiles.
         Scans all profile directories sorted by most recently modified first.
@@ -353,9 +373,10 @@ class BrowserCookieImporter:
                 conn = sqlite3.connect(temp_db)
                 cursor = conn.cursor()
 
-                domain_clauses = " OR ".join(["host LIKE ?" for _ in cls.TARGET_DOMAINS])
+                targets = domains or cls.TARGET_DOMAINS
+                domain_clauses = " OR ".join(["host LIKE ?" for _ in targets])
                 query = f"SELECT host, name, value, expiry FROM moz_cookies WHERE {domain_clauses}"
-                params = [f"%{d}%" for d in cls.TARGET_DOMAINS]
+                params = [f"%{d}" if domains else f"%{d}%" for d in targets]
 
                 cursor.execute(query, params)
                 rows = cursor.fetchall()
@@ -388,7 +409,7 @@ class BrowserCookieImporter:
         }
 
     @classmethod
-    def import_auto_detect(cls, preferred_browser: Optional[str] = None) -> Dict[str, Any]:
+    def import_auto_detect(cls, preferred_browser: Optional[str] = None, domains: Optional[List[str]] = None) -> Dict[str, Any]:
         """
         Auto-detects installed browser and extracts credentials.
         If preferred_browser is specified, targets that specific browser.
@@ -410,9 +431,9 @@ class BrowserCookieImporter:
 
             try:
                 if bid == "firefox":
-                    res = cls.import_from_firefox(path)
+                    res = cls.import_from_firefox(path, domains)
                 else:
-                    res = cls.import_from_chromium(path)
+                    res = cls.import_from_chromium(path, domains)
             except Exception as e:
                 err_msg = str(e)
                 if "used by another process" in err_msg or "locked" in err_msg.lower():
@@ -420,7 +441,7 @@ class BrowserCookieImporter:
                 raise RuntimeError(f"Could not import cookies from {b_name}: {e}")
 
             if not res.get("cookie_string") or res.get("count", 0) == 0:
-                raise RuntimeError(f"No active Kemono/Coomer/Patreon session cookies found in {b_name}. Please make sure you are logged in on {b_name}.")
+                raise RuntimeError(f"No sign-in found in {b_name}. Make sure you're signed in to the site there.")
 
             res["browser_name"] = b_name
             res["browser_id"] = bid
@@ -447,9 +468,9 @@ class BrowserCookieImporter:
             path = b["path"]
             try:
                 if bid == "firefox":
-                    res = cls.import_from_firefox(path)
+                    res = cls.import_from_firefox(path, domains)
                 else:
-                    res = cls.import_from_chromium(path)
+                    res = cls.import_from_chromium(path, domains)
 
                 if res.get("cookie_string") and res.get("count", 0) > 0:
                     res["browser_name"] = b["name"]
@@ -460,18 +481,20 @@ class BrowserCookieImporter:
                     )
                     return res
                 else:
-                    diagnostic_notes.append(f"{b['name']}: No active cookies")
+                    diagnostic_notes.append(f"{b['name']}: not signed in")
             except Exception as e:
                 err_str = str(e)
                 if "used by another process" in err_str or "locked" in err_str.lower():
-                    diagnostic_notes.append(f"{b['name']}: Browser running (locked)")
+                    diagnostic_notes.append(f"{b['name']}: open, close it first")
                 elif "App-Bound" in err_str or "v20" in err_str or "MAC check" in err_str:
-                    diagnostic_notes.append(f"{b['name']}: Protected by App-Bound encryption")
+                    diagnostic_notes.append(f"{b['name']}: cookies locked to the browser")
+                elif isinstance(e, FileNotFoundError):
+                    continue                        # installed but never used
                 else:
                     diagnostic_notes.append(f"{b['name']}: {e}")
 
         summary = "; ".join(diagnostic_notes)
-        raise RuntimeError(f"Could not auto-detect cookies ({summary}). Please select Mozilla Firefox from the dropdown or paste your session cookie manually.")
+        raise RuntimeError(f"No sign-in could be read from your browsers ({summary or 'none found'}). Use Sign in instead, or paste the session cookie.")
 
     @classmethod
     def calculate_expiration_info(cls, cookie_string: str, timestamp_expiry: Optional[float] = None) -> Dict[str, Any]:

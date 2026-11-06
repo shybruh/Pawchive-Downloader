@@ -46,7 +46,7 @@ except ImportError:
         _ACCEPT_ENCODING = "gzip, deflate"
 
 # Services that live on Coomer / cum.st rather than Kemono / Pawchive
-_COOMER_FAMILY_SERVICES = {"onlyfans", "fansly", "candfans"}
+_CUMST_SERVICES = {"onlyfans", "fansly", "candfans"}
 
 
 def _retry_after_seconds(value, default: float = 5.0, cap: float = 120.0) -> float:
@@ -172,7 +172,7 @@ class KemonoApiClient:
             "Accept-Language": "en-US,en;q=0.9",
             "Accept-Encoding": _ACCEPT_ENCODING,
             "Connection": "keep-alive",
-            "X-Contact": "https://github.com/whyamihere773/Pawchive-Downloader",
+            "X-Contact": "https://github.com/shybruh/Pawchive-Downloader",
             "X-Client-Notice": (
                 "Pawchive Downloader user here! Love your site. If my client is ever causing server strain, "
                 "please open an issue on GitHub instead of a hard ban and I'll fix my request pacing immediately."
@@ -461,9 +461,8 @@ class KemonoApiClient:
         logger.info(f"Fetching creator profile: {parsed.service}/{parsed.user_id}", category="api")
         uid_str = str(parsed.user_id).strip()
 
-        # Phase 1: Try dedicated JSON profile endpoints on the link's site + the mirror that carries
-        # the same creators (Pawchive/Kemono, or cum.st/Coomer). Switched-off sites are skipped.
-        family = ("coomer.st", "cum.st") if str(parsed.service).lower() in _COOMER_FAMILY_SERVICES else ("pawchive.pw", "kemono.cr")
+        # Phase 1: Try dedicated JSON profile endpoints on the link's site (cum.st or Pawchive)
+        family = ("cum.st",) if str(parsed.service).lower() in _CUMST_SERVICES else ("pawchive.pw",)
         profile_domains = [d for d in [parsed.domain, *family] if d and not is_disabled(d)]
         profile_domains = list(dict.fromkeys(profile_domains))
 
@@ -1386,7 +1385,7 @@ class KemonoApiClient:
 
     def fetch_user_favorites(
         self,
-        domain: str = "kemono.cr",
+        domain: str = "pawchive.pw",
         fav_type: str = "post",
         page_start: int = 1,
         page_end: int = 999999,

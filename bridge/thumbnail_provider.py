@@ -17,8 +17,6 @@ import urllib.parse
 
 from PySide6.QtCore import QSize, QStandardPaths, Qt
 from PySide6.QtGui import QColor, QImage, QImageReader, QPainter
-from PySide6.QtQml import QQmlImageProviderBase
-from PySide6.QtQuick import QQuickImageProvider
 
 from core.logger import logger
 
@@ -232,34 +230,6 @@ def decode_full_image(path: str) -> QImage:
     return img
 
 
-class FullImageProvider(QQuickImageProvider):
-    """Serves image://full/<url-encoded path> for the image viewer (decoded off the UI thread)."""
-
-    def __init__(self):
-        super().__init__(
-            QQmlImageProviderBase.ImageType.Image,
-            QQmlImageProviderBase.Flag.ForceAsynchronousImageLoading,
-        )
-
-    def requestImage(self, image_id: str, size: QSize, requested_size: QSize) -> QImage:
-        path = urllib.parse.unquote(image_id.split("?", 1)[0])
-        key = _media_key("full", path) if os.path.isfile(path) else None
-        img = media_cache.get(key) if key else None
-        if img is None:
-            img = decode_full_image(path) if key else QImage()
-            if key and not img.isNull():
-                media_cache.put(key, img, img.sizeInBytes())
-        if img.isNull():
-            # 1x1 transparent: the viewer shows "can't display" instead of a console error
-            img = QImage(1, 1, QImage.Format.Format_ARGB32)
-            img.fill(0)
-        elif requested_size.isValid() and requested_size.width() > 0 and requested_size.height() > 0:
-            img = img.scaled(requested_size, Qt.AspectRatioMode.KeepAspectRatio, Qt.TransformationMode.SmoothTransformation)
-        size.setWidth(img.width())
-        size.setHeight(img.height())
-        return img
-
-
 # ── Animated images Qt can't play itself (APNG, animated AVIF, mis-named GIFs…) ───
 # Frames are decoded once with Pillow, scaled to fit a memory budget, and kept for the
 # last few animations so the viewer / hover preview can step through them smoothly.
@@ -312,32 +282,6 @@ def animation_frame(path: str, index: int) -> QImage:
     return a["frames"][index % len(a["frames"])]
 
 
-class FrameProvider(QQuickImageProvider):
-    """image://frame/<url-encoded path>?frame=N, one decoded frame of a prepared animation.
-    Synchronous on purpose: frames are already in memory, so swapping them never flickers."""
-
-    def __init__(self):
-        super().__init__(QQmlImageProviderBase.ImageType.Image)
-
-    def requestImage(self, image_id: str, size: QSize, requested_size: QSize) -> QImage:
-        path_part, _, query = image_id.partition("?")
-        path = urllib.parse.unquote(path_part)
-        index = 0
-        for kv in query.split("&"):
-            if kv.startswith("frame="):
-                try:
-                    index = int(kv[6:])
-                except ValueError:
-                    pass
-        img = animation_frame(path, index)
-        if img.isNull():
-            img = QImage(1, 1, QImage.Format.Format_ARGB32)
-            img.fill(0)
-        size.setWidth(img.width())
-        size.setHeight(img.height())
-        return img
-
-
 def _cache_dir() -> str:
     base = QStandardPaths.writableLocation(QStandardPaths.StandardLocation.CacheLocation)
     if not base:
@@ -347,12 +291,10 @@ def _cache_dir() -> str:
     return path
 
 
-class ThumbnailProvider(QQuickImageProvider):
+class ThumbnailProvider:
+    """Thumbnails for the media server (server/media.py), cached on disk. Thread-safe."""
+
     def __init__(self):
-        super().__init__(
-            QQmlImageProviderBase.ImageType.Image,
-            QQmlImageProviderBase.Flag.ForceAsynchronousImageLoading,
-        )
         self._cache_dir = _cache_dir()
         self._prune_started = False
         self._prune_lock = threading.Lock()
