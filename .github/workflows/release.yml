@@ -45,8 +45,10 @@ jobs:
         run: |
           New-Item -ItemType Directory -Force dependencies | Out-Null
           Invoke-WebRequest https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe -OutFile dependencies/yt-dlp.exe
-          Invoke-WebRequest https://www.7-zip.org/a/7z2409-extra.7z -OutFile 7z-extra.7z
-          7z e 7z-extra.7z x64/7za.exe x64/7za.dll x64/7zxa.dll -odependencies -y | Out-Null
+          # 7-Zip is preinstalled on GitHub's Windows runners; ship that copy (7z.exe + 7z.dll)
+          $sevenZip = @("C:\Program Files\7-Zip", "C:\Program Files (x86)\7-Zip") | Where-Object { Test-Path "$_\7z.exe" } | Select-Object -First 1
+          if (-not $sevenZip) { throw "7-Zip isn't installed on this runner" }
+          Copy-Item "$sevenZip\7z.exe", "$sevenZip\7z.dll" dependencies/
           Get-ChildItem dependencies
 
       - name: Build engine
