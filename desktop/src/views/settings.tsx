@@ -199,8 +199,8 @@ type Provider = {
 };
 
 function AccountsSection() {
-  const { data, reload } = useQuery<Provider[]>("appBridge", "getProvidersList");
-  useSignal("appBridge", "providersChanged", () => reload());
+  const { data, reload } = useQuery<Provider[]>("accounts", "getProvidersList");
+  useSignal("accounts", "providersChanged", () => reload());
   const providers = data ?? [];
   return (
     <>
@@ -229,15 +229,15 @@ function ProviderCard({ p }: { p: Provider }) {
   const [pass, setPass] = useState("");
   const [loggingIn, setLoggingIn] = useState(false);
   const connected = !!(p.is_logged_in ?? p.logged_in) || /^connected/i.test(p.status_text || "");
-  useSignal("appBridge", "providerValidationFinished", (id: string, ok: boolean, msg: string) => {
+  useSignal("accounts", "providerValidationFinished", (id: string, ok: boolean, msg: string) => {
     if (id !== p.id) return;
     setBusy(false);
     if (ok) toast.success(msg || `${p.name} session is valid`); else toast.error(msg || `${p.name} session didn't work`);
   });
-  useSignal("appBridge", "providerImportFinished", (id: string, ok: boolean, msg: string) => {
+  useSignal("accounts", "providerImportFinished", (id: string, ok: boolean, msg: string) => {
     if (id !== p.id) return;
     setImporting(false);
-    if (ok) { toast.success(msg || "Imported"); setBusy(true); call("appBridge", "validateProviderSession", p.id); }
+    if (ok) { toast.success(msg || "Imported"); setBusy(true); call("accounts", "validateProviderSession", p.id); }
     else toast.error("Couldn't import from your browser", { description: msg, duration: 10000 });
   });
   const signInInApp = async () => {
@@ -246,16 +246,16 @@ function ProviderCard({ p }: { p: Provider }) {
       const r = await siteLogin(LOGIN_PAGES[p.id]);
       // Closing the window without signing in leaves no session cookie: keep what was saved
       if (!r.names.some((n) => /session/i.test(n))) { toast.message("Not signed in", { description: "The window closed before a sign-in finished." }); return; }
-      await call("appBridge", "saveProviderCredential", p.id, r.cookie);
+      await call("accounts", "saveProviderCredential", p.id, r.cookie);
       setBusy(true);
-      call("appBridge", "validateProviderSession", p.id);
+      call("accounts", "validateProviderSession", p.id);
     } catch (e) {
       toast.error("Couldn't open the sign-in window", { description: String(e) });
     } finally {
       setSigningIn(false);
     }
   };
-  useSignal("appBridge", "providerLoginFinished", (id: string, ok: boolean, msg: string) => {
+  useSignal("accounts", "providerLoginFinished", (id: string, ok: boolean, msg: string) => {
     if (id !== p.id) return;
     setLoggingIn(false);
     if (ok) { setPass(""); toast.success(msg || `Signed in to ${p.name}`); } else toast.error(msg || "Sign-in failed");
@@ -276,7 +276,7 @@ function ProviderCard({ p }: { p: Provider }) {
               e.preventDefault();
               if (!user.trim() || !pass) return;
               setLoggingIn(true);
-              call("appBridge", "loginProviderWithCredentials", p.id, user.trim(), pass);
+              call("accounts", "loginProviderWithCredentials", p.id, user.trim(), pass);
             }}>
               <Input placeholder="Username or email" autoComplete="username" value={user} onChange={(e) => setUser(e.target.value)} />
               <Input type="password" placeholder="Password" autoComplete="current-password" value={pass} onChange={(e) => setPass(e.target.value)} />
@@ -288,7 +288,7 @@ function ProviderCard({ p }: { p: Provider }) {
             <Input type="password" placeholder={connected ? (p.masked_value || "Saved — paste to replace") : p.auth_type === "token" ? "Paste your access token" : p.auth_type === "api_key" ? "Paste your API key" : "Paste a session cookie"}
               value={value} onChange={(e) => setValue(e.target.value)} className="font-mono text-[13px]" />
             <Button disabled={!value.trim()} onClick={async () => {
-              await call("appBridge", "saveProviderCredential", p.id, value.trim()); setValue(""); toast.success(`${p.name} saved`);
+              await call("accounts", "saveProviderCredential", p.id, value.trim()); setValue(""); toast.success(`${p.name} saved`);
             }}><KeyRoundIcon />Save</Button>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -301,17 +301,17 @@ function ProviderCard({ p }: { p: Provider }) {
               <Button variant={connected ? "outline" : "default"} size="sm" onClick={signInInApp}><LogInIcon />{connected ? "Sign in again" : "Sign in on the site"}</Button>
             ))}
             {p.supports_browser_import && (
-              <Button variant="outline" size="sm" disabled={importing} onClick={() => { setImporting(true); call("appBridge", "importBrowserCookiesToProvider", p.id, ""); }}
+              <Button variant="outline" size="sm" disabled={importing} onClick={() => { setImporting(true); call("accounts", "importBrowserCookiesToProvider", p.id, ""); }}
                 title="Firefox works best; Chrome, Edge and Brave lock their cookies to themselves">
                 {importing ? <Loader2Icon className="animate-spin" /> : <CookieIcon />}Import from browser
               </Button>
             )}
             {connected && (
               <>
-                <Button variant="outline" size="sm" disabled={busy} onClick={() => { setBusy(true); call("appBridge", "validateProviderSession", p.id); }}>
+                <Button variant="outline" size="sm" disabled={busy} onClick={() => { setBusy(true); call("accounts", "validateProviderSession", p.id); }}>
                   {busy ? <Loader2Icon className="animate-spin" /> : <RefreshCwIcon />}Test
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => call("appBridge", "clearProviderCredential", p.id)}><LogOutIcon />Disconnect</Button>
+                <Button variant="ghost" size="sm" onClick={() => call("accounts", "clearProviderCredential", p.id)}><LogOutIcon />Disconnect</Button>
               </>
             )}
           </div>

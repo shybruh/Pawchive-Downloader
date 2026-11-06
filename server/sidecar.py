@@ -399,6 +399,8 @@ class Hub(QObject):
 
 def build_engine():
     from bridge.app_bridge import AppBridge
+    from bridge.accounts_bridge import AccountsBridge
+    from bridge.scheduler_bridge import SchedulerBridge
     from bridge.gallery_tools_bridge import GalleryToolsBridge
     from bridge.gallery_updates import GalleryUpdates
 
@@ -412,6 +414,8 @@ def build_engine():
         "decompressorBridge": app_bridge.decompressorBridge,
         "telegramBridge": app_bridge.telegramBridge,
         "appBridge": app_bridge,
+        "accounts": AccountsBridge(),
+        "scheduler": SchedulerBridge(app_bridge),
         "galleryTools": tools,
         "galleryUpdates": GalleryUpdates(app_bridge, wl),
     }
@@ -431,6 +435,8 @@ def main():
     app.setQuitOnLastWindowClosed(False)
 
     from core.logger import logger
+    # Write this run's log file (logs/v<version>/<date_time>.log); crash logs and "Open logs" use it
+    logger.start_session()
     app_bridge, objects = build_engine()
 
     registry = Registry()

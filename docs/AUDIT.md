@@ -68,7 +68,24 @@ directly as Tauri commands.
 
 ## 4. Still to fix regardless of the port
 
-- `bridge/app_bridge.py` is still one ~10,000-line object; split it by feature when porting.
+- `bridge/app_bridge.py` is still one large object (~7,500 lines). It's being split by feature:
+  each feature moves into its own engine object with its own name in `server/sidecar.py`, and the
+  UI talks to that object directly. Each object is one unit to port to Rust.
+
+  | Object | Covers | Status |
+  |---|---|---|
+  | `accounts` (`bridge/accounts_bridge.py`) | site sign-in, cookies, session test | done |
+  | `scheduler` (`bridge/scheduler_bridge.py`) | scheduler settings and the schedule list (running a schedule stays with downloads) | done |
+  | `linkVault` | collected cloud links, cloud downloads | next |
+  | `favorites` | account favorites browse / download | |
+  | `watchlist` | watchlist slots and the background check | |
+  | `postSelection` | "Select posts…" fetch and the picker's results | |
+  | `downloads` | start / stop / pause, queue import and export, run results | |
+  | `settings` | the option properties (what remains in `appBridge`) | last |
+
+  The bridge members nothing used (~2,300 lines: Qt-interface leftovers, and engine features the
+  new UI never exposed such as batch rename, auto-sort, broken-file scan and the video-length
+  filter) were deleted first.
 - Browser cookie import only works with Firefox: Chrome, Edge and Brave encrypt cookies with
   app-bound keys. Signing in inside the app (`src-tauri/src/site_login.rs`) is the main way to log in.
 - Kemono / Coomer names remain only where they're harmless: link recognition (so their links are

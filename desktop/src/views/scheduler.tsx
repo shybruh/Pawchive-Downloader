@@ -28,23 +28,23 @@ function relative(iso: string | null): string {
 }
 
 function useSchedulerSettings() {
-  const enabled = useProp<boolean>("appBridge", "schedulerEnabled", false);
-  const lock = useProp<boolean>("appBridge", "schedulerLockThreadsDelay", false);
-  const nightOwl = useProp<boolean>("appBridge", "schedulerNightOwlEnabled", false);
-  const start = useProp<string>("appBridge", "schedulerNightOwlStart", "01:00");
-  const end = useProp<string>("appBridge", "schedulerNightOwlEnd", "07:00");
-  const preventSleep = useProp<boolean>("appBridge", "schedulerPreventSleep", false);
-  const sweep = useProp<boolean>("appBridge", "schedulerSweepRetry", false);
+  const enabled = useProp<boolean>("scheduler", "enabled", false);
+  const lock = useProp<boolean>("scheduler", "lockThreadsDelay", false);
+  const nightOwl = useProp<boolean>("scheduler", "nightOwlEnabled", false);
+  const start = useProp<string>("scheduler", "nightOwlStart", "01:00");
+  const end = useProp<string>("scheduler", "nightOwlEnd", "07:00");
+  const preventSleep = useProp<boolean>("scheduler", "preventSleep", false);
+  const sweep = useProp<boolean>("scheduler", "sweepRetry", false);
   const s = { enabled, lock, nightOwl, start, end, preventSleep, sweep };
   const save = (patch: Partial<typeof s>) => {
     const n = { ...s, ...patch };
-    call("appBridge", "setSchedulerSettings", n.enabled, n.lock, n.nightOwl, n.start, n.end, n.preventSleep, n.sweep);
+    call("scheduler", "setSettings", n.enabled, n.lock, n.nightOwl, n.start, n.end, n.preventSleep, n.sweep);
   };
   return [s, save] as const;
 }
 
 export function SchedulerView() {
-  const json = useProp<string>("appBridge", "schedulerSchedulesJson", "[]");
+  const json = useProp<string>("scheduler", "schedulesJson", "[]");
   const schedules = useMemo<Schedule[]>(() => { try { return JSON.parse(json || "[]"); } catch { return []; } }, [json]);
   const [settings, save] = useSchedulerSettings();
   const [editing, setEditing] = useState<Schedule | "new" | null>(null);
@@ -120,7 +120,7 @@ function ScheduleRow({ s, onEdit }: { s: Schedule; onEdit: () => void }) {
         <span className="text-muted-foreground">Next run</span>
         <span className="tabular-nums">{s.enabled ? relative(s.next_run) : "Off"}</span>
       </div>
-      <Switch checked={s.enabled} onCheckedChange={(v) => call("appBridge", "toggleSchedulerTask", s.id, v)} />
+      <Switch checked={s.enabled} onCheckedChange={(v) => call("scheduler", "toggleTask", s.id, v)} />
       <DropdownMenu>
         <DropdownMenuTrigger asChild><Button variant="ghost" size="icon-sm"><EllipsisIcon /></Button></DropdownMenuTrigger>
         <DropdownMenuContent>
@@ -129,7 +129,7 @@ function ScheduleRow({ s, onEdit }: { s: Schedule; onEdit: () => void }) {
             <DropdownMenuItem onSelect={() => { call("appBridge", "checkWatchlist", false); toast.success("Checking the watchlist"); }}><PlayIcon />Run now</DropdownMenuItem>
           )}
           <DropdownMenuSeparator />
-          <DropdownMenuItem variant="destructive" onSelect={() => call("appBridge", "deleteSchedulerTask", s.id)}><TrashIcon />Delete</DropdownMenuItem>
+          <DropdownMenuItem variant="destructive" onSelect={() => call("scheduler", "deleteTask", s.id)}><TrashIcon />Delete</DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
@@ -158,8 +158,8 @@ function ScheduleForm({ initial, onClose }: { initial: Schedule | null; onClose:
 
   const submit = async () => {
     const n = name.trim() || (target === "watchlist" ? "Watchlist check" : "Creator download");
-    if (initial) await call("appBridge", "updateSchedulerTask", initial.id, n, target, url.trim(), trigger, Math.max(1, hours), time);
-    else await call("appBridge", "addSchedulerTask", n, target, url.trim(), trigger, Math.max(1, hours), time);
+    if (initial) await call("scheduler", "updateTask", initial.id, n, target, url.trim(), trigger, Math.max(1, hours), time);
+    else await call("scheduler", "addTask", n, target, url.trim(), trigger, Math.max(1, hours), time);
     toast.success(initial ? "Schedule updated" : "Schedule created");
     onClose();
   };
