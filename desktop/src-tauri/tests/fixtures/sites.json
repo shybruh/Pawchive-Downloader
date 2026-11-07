@@ -1,0 +1,740 @@
+[
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": ""
+  },
+  "result": ""
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "  plain  "
+  },
+  "result": "plain"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "a\tb\r\nc   d"
+  },
+  "result": "a b c d"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "Tom &amp; Jerry &lt;3 &#39;x&#39; &quot;q&quot;"
+  },
+  "result": "Tom & Jerry <3 'x' \"q\""
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "&nbsp;spaced&nbsp;"
+  },
+  "result": "spaced"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "cafÃ©"
+  },
+  "result": "café"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "itâs"
+  },
+  "result": "itâs"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "itâ€™s"
+  },
+  "result": "it’s"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "ðŸ± cat"
+  },
+  "result": "ðŸ± cat"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "Ã alone"
+  },
+  "result": "Ã alone"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "zero​width‏"
+  },
+  "result": "zerowidth"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "soft­hyphen"
+  },
+  "result": "softhyphen"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "bom﻿here"
+  },
+  "result": "bomhere"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "ï»¿start"
+  },
+  "result": "start"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "replace�char"
+  },
+  "result": "replacechar"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "emoji 🐈 stays"
+  },
+  "result": "emoji 🐈 stays"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "日本語のテキスト"
+  },
+  "result": "日本語のテキスト"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "line sep"
+  },
+  "result": "linesep"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "word⁠joiner"
+  },
+  "result": "wordjoiner"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "&amp;amp;"
+  },
+  "result": "&amp;"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "Ã©Ã©"
+  },
+  "result": "éé"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "mixed cafÃ© and ☃"
+  },
+  "result": "mixed cafÃ© and ☃"
+ },
+ {
+  "fn": "clean_text",
+  "args": {
+   "text": "ð only"
+  },
+  "result": "ð only"
+ },
+ {
+  "fn": "normalize_cookie",
+  "args": {
+   "v": ""
+  },
+  "result": ""
+ },
+ {
+  "fn": "normalize_cookie",
+  "args": {
+   "v": "   "
+  },
+  "result": ""
+ },
+ {
+  "fn": "normalize_cookie",
+  "args": {
+   "v": "abc"
+  },
+  "result": "session=abc"
+ },
+ {
+  "fn": "normalize_cookie",
+  "args": {
+   "v": "session=abc"
+  },
+  "result": "session=abc"
+ },
+ {
+  "fn": "normalize_cookie",
+  "args": {
+   "v": "eyJhbGciOi.x.y"
+  },
+  "result": "session=eyJhbGciOi.x.y"
+ },
+ {
+  "fn": "normalize_cookie",
+  "args": {
+   "v": "eyJ.session=1"
+  },
+  "result": "eyJ.session=1"
+ },
+ {
+  "fn": "normalize_cookie",
+  "args": {
+   "v": "a=b; c=d"
+  },
+  "result": "a=b; c=d"
+ },
+ {
+  "fn": "normalize_cookie",
+  "args": {
+   "v": "  token  "
+  },
+  "result": "session=token"
+ },
+ {
+  "fn": "normalize_cookie",
+  "args": {
+   "v": "x=1"
+  },
+  "result": "x=1"
+ },
+ {
+  "fn": "creator_name_from_html",
+  "args": {
+   "html": "<span itemprop=\"name\">Teshii</span>",
+   "uid": "1"
+  },
+  "result": "Teshii"
+ },
+ {
+  "fn": "creator_name_from_html",
+  "args": {
+   "html": "<span itemprop='name'> Silly &amp; Teshii </span>",
+   "uid": "1"
+  },
+  "result": "Silly & Teshii"
+ },
+ {
+  "fn": "creator_name_from_html",
+  "args": {
+   "html": "<span itemprop=\"name\">152819670</span><title>Posts of Real Name from Patreon</title>",
+   "uid": "152819670"
+  },
+  "result": "Real Name"
+ },
+ {
+  "fn": "creator_name_from_html",
+  "args": {
+   "html": "<div class=\"x user-header__name y\">Header Name</div>",
+   "uid": "1"
+  },
+  "result": "Header Name"
+ },
+ {
+  "fn": "creator_name_from_html",
+  "args": {
+   "html": "<title>  Posts of Someone from Patreon | Pawchive</title>",
+   "uid": "1"
+  },
+  "result": "Someone"
+ },
+ {
+  "fn": "creator_name_from_html",
+  "args": {
+   "html": "<title>Someone's posts</title>",
+   "uid": "1"
+  },
+  "result": "Someone"
+ },
+ {
+  "fn": "creator_name_from_html",
+  "args": {
+   "html": "<meta property=\"og:title\" content=\"OG Name\">",
+   "uid": "1"
+  },
+  "result": "OG Name"
+ },
+ {
+  "fn": "creator_name_from_html",
+  "args": {
+   "html": "<meta property=\"og:title\" content=\"Posts of nobody\">",
+   "uid": "1"
+  },
+  "result": null
+ },
+ {
+  "fn": "creator_name_from_html",
+  "args": {
+   "html": "<meta property=\"og:title\" content=\"1\">",
+   "uid": "1"
+  },
+  "result": null
+ },
+ {
+  "fn": "creator_name_from_html",
+  "args": {
+   "html": "<html><body>nothing</body></html>",
+   "uid": "1"
+  },
+  "result": null
+ },
+ {
+  "fn": "creator_name_from_html",
+  "args": {
+   "html": "",
+   "uid": "1"
+  },
+  "result": null
+ },
+ {
+  "fn": "creator_name_from_html",
+  "args": {
+   "html": "<SPAN ITEMPROP=\"name\">Upper</SPAN>",
+   "uid": "1"
+  },
+  "result": "Upper"
+ },
+ {
+  "fn": "creator_name_from_html",
+  "args": {
+   "html": "<span itemprop=\"name\">\n  Multi\n  Line\n</span>",
+   "uid": "1"
+  },
+  "result": null
+ },
+ {
+  "fn": "temporary_links_from_html",
+  "args": {
+   "html": "<a href=\"https://t1.pawchive.pw/f/abc/My%20Video.mp4?e=123&amp;s=x\">dl</a><video src=\"https://t1.pawchive.pw/f/def/clip.mov?e=9\"></video><a href='https://t1.pawchive.pw/f/abc/My%20Video.mp4?e=999'>dup</a>"
+  },
+  "result": [
+   [
+    "My Video.mp4",
+    "https://t1.pawchive.pw/f/abc/My%20Video.mp4?e=123&s=x"
+   ],
+   [
+    "clip.mov",
+    "https://t1.pawchive.pw/f/def/clip.mov?e=9"
+   ]
+  ]
+ },
+ {
+  "fn": "temporary_links_from_html",
+  "args": {
+   "html": "<a href=\"https://example.com/f/x.mp4\">no</a>"
+  },
+  "result": []
+ },
+ {
+  "fn": "temporary_links_from_html",
+  "args": {
+   "html": "<img src=\"https://t1.pawchive.pw/f/zz/%E6%97%A5%E6%9C%AC.png\">"
+  },
+  "result": [
+   [
+    "日本.png",
+    "https://t1.pawchive.pw/f/zz/%E6%97%A5%E6%9C%AC.png"
+   ]
+  ]
+ },
+ {
+  "fn": "temporary_links_from_html",
+  "args": {
+   "html": ""
+  },
+  "result": []
+ },
+ {
+  "fn": "temporary_link_expired",
+  "args": {
+   "f": {
+    "path": "https://t1.pawchive.pw/f/a/x.mp4?e=1794011718"
+   }
+  },
+  "result": true
+ },
+ {
+  "fn": "temporary_link_expired",
+  "args": {
+   "f": {
+    "path": "https://t1.pawchive.pw/f/a/x.mp4?e=1951695318"
+   }
+  },
+  "result": false
+ },
+ {
+  "fn": "temporary_link_expired",
+  "args": {
+   "f": {
+    "temp_url": "https://t1.pawchive.pw/f/a/x.mp4?e=1794011718",
+    "path": "/data/x.mp4"
+   }
+  },
+  "result": true
+ },
+ {
+  "fn": "temporary_link_expired",
+  "args": {
+   "f": {
+    "temp_url": "https://t1.pawchive.pw/f/a/x.mp4?e=1951695318"
+   }
+  },
+  "result": false
+ },
+ {
+  "fn": "temporary_link_expired",
+  "args": {
+   "f": {
+    "temp_expires": "2001-01-01T00:00:00Z"
+   }
+  },
+  "result": true
+ },
+ {
+  "fn": "temporary_link_expired",
+  "args": {
+   "f": {
+    "temp_expires": "2099-01-01T00:00:00+00:00"
+   }
+  },
+  "result": false
+ },
+ {
+  "fn": "temporary_link_expired",
+  "args": {
+   "f": {
+    "temp_expires": "garbage"
+   }
+  },
+  "result": false
+ },
+ {
+  "fn": "temporary_link_expired",
+  "args": {
+   "f": {
+    "path": "/data/plain.mp4"
+   }
+  },
+  "result": false
+ },
+ {
+  "fn": "temporary_link_expired",
+  "args": {
+   "f": {}
+  },
+  "result": false
+ },
+ {
+  "fn": "parse_cumst_bookmarks",
+  "args": {
+   "data": {
+    "nodes": [
+     {},
+     {},
+     {
+      "data": [
+       {
+        "creators": 1,
+        "total": 2
+       },
+       [
+        3,
+        8
+       ],
+       42,
+       {
+        "id": 4,
+        "service": 5,
+        "name": 6,
+        "postCount": 7
+       },
+       "123",
+       "OnlyFans",
+       "Some Creator",
+       77,
+       {
+        "id": "456",
+        "service": "fansly",
+        "displayName": "Display"
+       }
+      ]
+     }
+    ]
+   },
+   "kind": "artist"
+  },
+  "result": [
+   [
+    {
+     "id": "123",
+     "service": "onlyfans",
+     "name": "Some Creator",
+     "avatar": "https://img.cum.st/creator/onlyfans/123/avatar.webp",
+     "domain": "cum.st",
+     "postCount": 77,
+     "imageCount": 0,
+     "videoCount": 0
+    },
+    {
+     "id": "456",
+     "service": "fansly",
+     "name": "Display",
+     "avatar": "https://img.cum.st/creator/fansly/456/avatar.webp",
+     "domain": "cum.st",
+     "postCount": 0,
+     "imageCount": 0,
+     "videoCount": 0
+    }
+   ],
+   42
+  ]
+ },
+ {
+  "fn": "parse_cumst_bookmarks",
+  "args": {
+   "data": {
+    "nodes": [
+     {},
+     {},
+     {
+      "data": [
+       {
+        "items": 1,
+        "total": 9
+       },
+       [
+        2,
+        6
+       ],
+       {
+        "id": 3,
+        "creatorId": 4,
+        "service": 5,
+        "extra": 3
+       },
+       "p1",
+       "c1",
+       "Fansly",
+       {
+        "id": "p2",
+        "user": "u2",
+        "service": "onlyfans",
+        "title": "Hello"
+       }
+      ]
+     }
+    ]
+   },
+   "kind": "post"
+  },
+  "result": [
+   [
+    {
+     "id": "p1",
+     "user": "c1",
+     "service": "fansly",
+     "title": "Post p1",
+     "domain": "cum.st",
+     "creatorId": "c1",
+     "extra": "p1"
+    },
+    {
+     "id": "p2",
+     "user": "u2",
+     "service": "onlyfans",
+     "title": "Hello",
+     "domain": "cum.st"
+    }
+   ],
+   9
+  ]
+ },
+ {
+  "fn": "parse_cumst_bookmarks",
+  "args": {
+   "data": {
+    "nodes": [
+     {},
+     {}
+    ]
+   },
+   "kind": "post"
+  },
+  "result": [
+   [],
+   null
+  ]
+ },
+ {
+  "fn": "parse_cumst_bookmarks",
+  "args": {
+   "data": [
+    {
+     "id": 1
+    }
+   ],
+   "kind": "artist"
+  },
+  "result": [
+   [
+    {
+     "id": 1
+    }
+   ],
+   null
+  ]
+ },
+ {
+  "fn": "parse_cumst_bookmarks",
+  "args": {
+   "data": {
+    "nodes": [
+     {},
+     {},
+     {
+      "data": []
+     }
+    ]
+   },
+   "kind": "artist"
+  },
+  "result": [
+   [],
+   null
+  ]
+ },
+ {
+  "fn": "retry_after",
+  "args": {
+   "v": "5"
+  },
+  "result": 5.0
+ },
+ {
+  "fn": "retry_after",
+  "args": {
+   "v": "0"
+  },
+  "result": 0.0
+ },
+ {
+  "fn": "retry_after",
+  "args": {
+   "v": "500"
+  },
+  "result": 120.0
+ },
+ {
+  "fn": "retry_after",
+  "args": {
+   "v": "-3"
+  },
+  "result": 0.0
+ },
+ {
+  "fn": "retry_after",
+  "args": {
+   "v": "abc"
+  },
+  "result": 7.0
+ },
+ {
+  "fn": "retry_after",
+  "args": {
+   "v": null
+  },
+  "result": 7.0
+ },
+ {
+  "fn": "retry_after",
+  "args": {
+   "v": "Wed, 21 Oct 2015 07:28:00 GMT"
+  },
+  "result": 0.0
+ },
+ {
+  "fn": "pawchive_dms_page",
+  "args": {
+   "html": "<html><body>\n    <a href=\"/patreon/user/152819670/dms?o=50\">next</a>\n    <article class=\"dm-card\" id=\"dm123\"><div class=\"dm-card__content\"><p>Hello there</p><p>second</p></div>\n      <div class=\"dm-card__added\">Added: 2024-03-05 10:00</div>\n      <img src=\"/data/aa/pic.jpg\"><img src=\"https://x/logo.png\"><a href=\"//cdn.pawchive.pw/data/bb/file.zip?f=1\">zip</a></article>\n    <article class=\"dm-card\"><div class=\"dm-card__content\">   </div>\n      <img src=\"relative/img.png\"></article>\n    </body></html>",
+   "service": "patreon",
+   "user": "152819670"
+  },
+  "result": [
+   {
+    "id": "dm123",
+    "user": "152819670",
+    "service": "patreon",
+    "domain": "pawchive.pw",
+    "is_dm": true,
+    "title": "Hello there",
+    "captionText": "Hello there\nsecond",
+    "content": "<p>Hello there</p><p>second</p>",
+    "published": "2024-03-05",
+    "attachments": [
+     {
+      "name": "pic.jpg",
+      "path": "/data/aa/pic.jpg",
+      "originalFilename": "pic.jpg"
+     },
+     {
+      "name": "file.zip",
+      "path": "https://cdn.pawchive.pw/data/bb/file.zip?f=1",
+      "originalFilename": "file.zip"
+     }
+    ]
+   },
+   {
+    "id": "dm_cc3e19b67fb0f07f",
+    "user": "152819670",
+    "service": "patreon",
+    "domain": "pawchive.pw",
+    "is_dm": true,
+    "title": "Direct Message",
+    "captionText": "",
+    "content": "",
+    "published": "",
+    "attachments": [
+     {
+      "name": "img.png",
+      "path": "/relative/img.png",
+      "originalFilename": "img.png"
+     }
+    ]
+   }
+  ]
+ },
+ {
+  "fn": "pawchive_dms_page",
+  "args": {
+   "html": "<html><body><p>No DMs</p></body></html>",
+   "service": "patreon",
+   "user": "152819670"
+  },
+  "result": []
+ }
+]

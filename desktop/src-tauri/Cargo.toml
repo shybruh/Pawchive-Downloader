@@ -45,6 +45,8 @@ unicode-general-category = "1"
 md-5 = "0.10"
 html-escape = "0.2"
 chrono = "0.4"
+scraper = "0.24"
+urlencoding = "2"
 
 
 [target.'cfg(windows)'.dependencies]

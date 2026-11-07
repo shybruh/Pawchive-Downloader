@@ -7,6 +7,7 @@
 pub mod filters;
 pub mod links;
 pub mod naming;
+pub mod sites;
 mod py;
 
 #[cfg(test)]
