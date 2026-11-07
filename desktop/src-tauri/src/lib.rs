@@ -3,6 +3,7 @@
 //! Starts the Python engine (`server/sidecar.py`) as a background process, hands its WebSocket
 //! port and secret token to the React UI, and stops the engine when the app exits.
 
+mod downloader;
 mod engine;
 mod accounts;
 mod host;

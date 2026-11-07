@@ -39,6 +39,7 @@ base64 = "0.22"
 sha2 = "0.10"
 reqwest = { version = "0.13", features = ["blocking", "form", "json"] }
 crc32fast = "1"
+regex = "1"
 
 
 [target.'cfg(windows)'.dependencies]

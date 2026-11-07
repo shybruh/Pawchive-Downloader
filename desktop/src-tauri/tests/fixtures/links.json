@@ -1,0 +1,1748 @@
+[
+ {
+  "input": "",
+  "result": {
+   "domain": "",
+   "service": "",
+   "user_id": "",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": false,
+   "raw_url": "",
+   "error_msg": "URL cannot be empty.",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "   ",
+  "result": {
+   "domain": "",
+   "service": "",
+   "user_id": "",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": false,
+   "raw_url": "https://",
+   "error_msg": "Not a supported link (Pawchive, cum.st, Telegram, Bunkr, Erome, nHentai, GoFile, MEGA, Google Drive or Dropbox).",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "not a link",
+  "result": {
+   "domain": "",
+   "service": "",
+   "user_id": "",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": false,
+   "raw_url": "https://not a link",
+   "error_msg": "Not a supported link (Pawchive, cum.st, Telegram, Bunkr, Erome, nHentai, GoFile, MEGA, Google Drive or Dropbox).",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://",
+  "result": {
+   "domain": "",
+   "service": "",
+   "user_id": "",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": false,
+   "raw_url": "https://",
+   "error_msg": "Not a supported link (Pawchive, cum.st, Telegram, Bunkr, Erome, nHentai, GoFile, MEGA, Google Drive or Dropbox).",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://example.com",
+  "result": {
+   "domain": "",
+   "service": "",
+   "user_id": "",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": false,
+   "raw_url": "https://example.com",
+   "error_msg": "Not a supported link (Pawchive, cum.st, Telegram, Bunkr, Erome, nHentai, GoFile, MEGA, Google Drive or Dropbox).",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://example.com/patreon/user/1",
+  "result": {
+   "domain": "",
+   "service": "",
+   "user_id": "",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": false,
+   "raw_url": "https://example.com/patreon/user/1",
+   "error_msg": "Not a supported link (Pawchive, cum.st, Telegram, Bunkr, Erome, nHentai, GoFile, MEGA, Google Drive or Dropbox).",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/patreon/user/152819670",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "152819670",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/patreon/user/152819670",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/patreon/user/152819670/",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "152819670",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/patreon/user/152819670/",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/patreon/user/152819670/post/174018597",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "152819670",
+   "post_id": "174018597",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/patreon/user/152819670/post/174018597",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/patreon/user/152819670/post/174018597/",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "152819670",
+   "post_id": "174018597",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/patreon/user/152819670/post/174018597/",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/patreon/user/152819670/post/174018597?foo=bar#x",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "152819670",
+   "post_id": "174018597",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/patreon/user/152819670/post/174018597?foo=bar#x",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/patreon/user/152819670/posts",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "152819670",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/patreon/user/152819670/posts",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/patreon/user/152819670/dms",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "152819670",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": true,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/patreon/user/152819670/dms",
+   "error_msg": "",
+   "extra_data": {
+    "is_dms": true
+   }
+  }
+ },
+ {
+  "input": "https://pawchive.pw/patreon/user/152819670/dm",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "152819670",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": true,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/patreon/user/152819670/dm",
+   "error_msg": "",
+   "extra_data": {
+    "is_dms": true
+   }
+  }
+ },
+ {
+  "input": "https://pawchive.pw/patreon/user/152819670?tab=dms",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "152819670",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": true,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/patreon/user/152819670?tab=dms",
+   "error_msg": "",
+   "extra_data": {
+    "is_dms": true
+   }
+  }
+ },
+ {
+  "input": "https://pawchive.pw/patreon/user/152819670?o=50&tab=dm",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "152819670",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": true,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/patreon/user/152819670?o=50&tab=dm",
+   "error_msg": "",
+   "extra_data": {
+    "is_dms": true
+   }
+  }
+ },
+ {
+  "input": "https://pawchive.pw/patreon/user/152819670?tab=dmsx",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "152819670",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/patreon/user/152819670?tab=dmsx",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/Patreon/User/ABC",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "ABC",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/Patreon/User/ABC",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://www.pawchive.pw/fanbox/user/3316400",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "fanbox",
+   "user_id": "3316400",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://www.pawchive.pw/fanbox/user/3316400",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "http://pawchive.pw/fantia/user/12345/post/999",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "fantia",
+   "user_id": "12345",
+   "post_id": "999",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "http://pawchive.pw/fantia/user/12345/post/999",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "pawchive.pw/patreon/user/1",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "1",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/patreon/user/1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "PAWCHIVE.PW/PATREON/USER/1/POST/2",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "1",
+   "post_id": "2",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://PAWCHIVE.PW/PATREON/USER/1/POST/2",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "  https://pawchive.pw/patreon/user/1  ",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "1",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/patreon/user/1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://img.pawchive.pw/patreon/user/1",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "1",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://img.pawchive.pw/patreon/user/1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/creators/patreon/152819670",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "152819670",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/creators/patreon/152819670",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/artists/fanbox/42/post/7",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "fanbox",
+   "user_id": "42",
+   "post_id": "7",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/artists/fanbox/42/post/7",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/posts/patreon/152819670/174018597",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "152819670",
+   "post_id": "174018597",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/posts/patreon/152819670/174018597",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/discord/server/123",
+  "result": {
+   "domain": "",
+   "service": "",
+   "user_id": "",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": false,
+   "raw_url": "https://pawchive.pw/discord/server/123",
+   "error_msg": "Not a supported link (Pawchive, cum.st, Telegram, Bunkr, Erome, nHentai, GoFile, MEGA, Google Drive or Dropbox).",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://cum.st/onlyfans/user/belledelphine",
+  "result": {
+   "domain": "cum.st",
+   "service": "onlyfans",
+   "user_id": "belledelphine",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://cum.st/onlyfans/user/belledelphine",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://cum.st/onlyfans/user/belledelphine/post/123456",
+  "result": {
+   "domain": "cum.st",
+   "service": "onlyfans",
+   "user_id": "belledelphine",
+   "post_id": "123456",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://cum.st/onlyfans/user/belledelphine/post/123456",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://cum.st/fansly/user/9988/dms",
+  "result": {
+   "domain": "cum.st",
+   "service": "fansly",
+   "user_id": "9988",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": true,
+   "is_valid": true,
+   "raw_url": "https://cum.st/fansly/user/9988/dms",
+   "error_msg": "",
+   "extra_data": {
+    "is_dms": true
+   }
+  }
+ },
+ {
+  "input": "https://www.cum.st/candfans/user/x?tab=dms",
+  "result": {
+   "domain": "cum.st",
+   "service": "candfans",
+   "user_id": "x",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": true,
+   "is_valid": true,
+   "raw_url": "https://www.cum.st/candfans/user/x?tab=dms",
+   "error_msg": "",
+   "extra_data": {
+    "is_dms": true
+   }
+  }
+ },
+ {
+  "input": "https://kemono.cr/patreon/user/1",
+  "result": {
+   "domain": "kemono.cr",
+   "service": "patreon",
+   "user_id": "1",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://kemono.cr/patreon/user/1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://kemono.su/patreon/user/1/post/2",
+  "result": {
+   "domain": "kemono.su",
+   "service": "patreon",
+   "user_id": "1",
+   "post_id": "2",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://kemono.su/patreon/user/1/post/2",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://coomer.st/onlyfans/user/abc",
+  "result": {
+   "domain": "coomer.st",
+   "service": "onlyfans",
+   "user_id": "abc",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://coomer.st/onlyfans/user/abc",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://coomer.su/onlyfans/user/abc/post/9",
+  "result": {
+   "domain": "coomer.su",
+   "service": "onlyfans",
+   "user_id": "abc",
+   "post_id": "9",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://coomer.su/onlyfans/user/abc/post/9",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://example.org/patreon/user/1/post/2",
+  "result": {
+   "domain": "",
+   "service": "",
+   "user_id": "",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": false,
+   "raw_url": "https://example.org/patreon/user/1/post/2",
+   "error_msg": "Not a supported link (Pawchive, cum.st, Telegram, Bunkr, Erome, nHentai, GoFile, MEGA, Google Drive or Dropbox).",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw.evil.com/patreon/user/1",
+  "result": {
+   "domain": "",
+   "service": "",
+   "user_id": "",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": false,
+   "raw_url": "https://pawchive.pw.evil.com/patreon/user/1",
+   "error_msg": "Not a supported link (Pawchive, cum.st, Telegram, Bunkr, Erome, nHentai, GoFile, MEGA, Google Drive or Dropbox).",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://t.me/c/1234567890/45",
+  "result": {
+   "domain": "t.me",
+   "service": "telegram",
+   "user_id": "1234567890",
+   "post_id": "45",
+   "provider": "telegram",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://t.me/c/1234567890/45",
+   "error_msg": "",
+   "extra_data": {
+    "is_private": true,
+    "type": "private_post",
+    "channel_id": "1234567890",
+    "message_id": 45
+   }
+  }
+ },
+ {
+  "input": "https://telegram.me/c/1/2",
+  "result": {
+   "domain": "t.me",
+   "service": "telegram",
+   "user_id": "1",
+   "post_id": "2",
+   "provider": "telegram",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://telegram.me/c/1/2",
+   "error_msg": "",
+   "extra_data": {
+    "is_private": true,
+    "type": "private_post",
+    "channel_id": "1",
+    "message_id": 2
+   }
+  }
+ },
+ {
+  "input": "https://t.me/+AbCdEf_123",
+  "result": {
+   "domain": "t.me",
+   "service": "telegram",
+   "user_id": "AbCdEf_123",
+   "post_id": null,
+   "provider": "telegram",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://t.me/+AbCdEf_123",
+   "error_msg": "",
+   "extra_data": {
+    "is_private": true,
+    "type": "invite",
+    "invite_hash": "AbCdEf_123"
+   }
+  }
+ },
+ {
+  "input": "https://t.me/joinchat/XyZ-9",
+  "result": {
+   "domain": "t.me",
+   "service": "telegram",
+   "user_id": "XyZ-9",
+   "post_id": null,
+   "provider": "telegram",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://t.me/joinchat/XyZ-9",
+   "error_msg": "",
+   "extra_data": {
+    "is_private": true,
+    "type": "invite",
+    "invite_hash": "XyZ-9"
+   }
+  }
+ },
+ {
+  "input": "https://t.me/somechannel/123",
+  "result": {
+   "domain": "t.me",
+   "service": "telegram",
+   "user_id": "somechannel",
+   "post_id": "123",
+   "provider": "telegram",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://t.me/somechannel/123",
+   "error_msg": "",
+   "extra_data": {
+    "is_private": false,
+    "type": "public_post",
+    "channel_name": "somechannel",
+    "message_id": 123
+   }
+  }
+ },
+ {
+  "input": "https://t.me/s/somechannel/123",
+  "result": {
+   "domain": "t.me",
+   "service": "telegram",
+   "user_id": "somechannel",
+   "post_id": "123",
+   "provider": "telegram",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://t.me/s/somechannel/123",
+   "error_msg": "",
+   "extra_data": {
+    "is_private": false,
+    "type": "public_post",
+    "channel_name": "somechannel",
+    "message_id": 123
+   }
+  }
+ },
+ {
+  "input": "https://t.me/somechannel",
+  "result": {
+   "domain": "t.me",
+   "service": "telegram",
+   "user_id": "somechannel",
+   "post_id": null,
+   "provider": "telegram",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://t.me/somechannel",
+   "error_msg": "",
+   "extra_data": {
+    "is_private": false,
+    "type": "channel",
+    "channel_name": "somechannel"
+   }
+  }
+ },
+ {
+  "input": "https://t.me/somechannel/",
+  "result": {
+   "domain": "t.me",
+   "service": "telegram",
+   "user_id": "somechannel",
+   "post_id": null,
+   "provider": "telegram",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://t.me/somechannel/",
+   "error_msg": "",
+   "extra_data": {
+    "is_private": false,
+    "type": "channel",
+    "channel_name": "somechannel"
+   }
+  }
+ },
+ {
+  "input": "https://t.me/abc",
+  "result": {
+   "domain": "",
+   "service": "",
+   "user_id": "",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": false,
+   "raw_url": "https://t.me/abc",
+   "error_msg": "Not a supported link (Pawchive, cum.st, Telegram, Bunkr, Erome, nHentai, GoFile, MEGA, Google Drive or Dropbox).",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://t.me/s/channel_name",
+  "result": {
+   "domain": "t.me",
+   "service": "telegram",
+   "user_id": "channel_name",
+   "post_id": null,
+   "provider": "telegram",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://t.me/s/channel_name",
+   "error_msg": "",
+   "extra_data": {
+    "is_private": false,
+    "type": "channel",
+    "channel_name": "channel_name"
+   }
+  }
+ },
+ {
+  "input": "https://www.t.me/chan_nel/7",
+  "result": {
+   "domain": "t.me",
+   "service": "telegram",
+   "user_id": "chan_nel",
+   "post_id": "7",
+   "provider": "telegram",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://www.t.me/chan_nel/7",
+   "error_msg": "",
+   "extra_data": {
+    "is_private": false,
+    "type": "public_post",
+    "channel_name": "chan_nel",
+    "message_id": 7
+   }
+  }
+ },
+ {
+  "input": "t.me/channelname",
+  "result": {
+   "domain": "t.me",
+   "service": "telegram",
+   "user_id": "channelname",
+   "post_id": null,
+   "provider": "telegram",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://t.me/channelname",
+   "error_msg": "",
+   "extra_data": {
+    "is_private": false,
+    "type": "channel",
+    "channel_name": "channelname"
+   }
+  }
+ },
+ {
+  "input": "https://t.me/channelname?single",
+  "result": {
+   "domain": "",
+   "service": "",
+   "user_id": "",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": false,
+   "raw_url": "https://t.me/channelname?single",
+   "error_msg": "Not a supported link (Pawchive, cum.st, Telegram, Bunkr, Erome, nHentai, GoFile, MEGA, Google Drive or Dropbox).",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://t.me/channelname/123?comment=4",
+  "result": {
+   "domain": "t.me",
+   "service": "telegram",
+   "user_id": "channelname",
+   "post_id": "123",
+   "provider": "telegram",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://t.me/channelname/123?comment=4",
+   "error_msg": "",
+   "extra_data": {
+    "is_private": false,
+    "type": "public_post",
+    "channel_name": "channelname",
+    "message_id": 123
+   }
+  }
+ },
+ {
+  "input": "https://bunkr.si/a/AbCd1234",
+  "result": {
+   "domain": "bunkr.si",
+   "service": "bunkr",
+   "user_id": "bunkr_user",
+   "post_id": "AbCd1234",
+   "provider": "bunkr",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://bunkr.si/a/AbCd1234",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://bunkr.cr/v/xyz_9",
+  "result": {
+   "domain": "bunkr.cr",
+   "service": "bunkr",
+   "user_id": "bunkr_user",
+   "post_id": "xyz_9",
+   "provider": "bunkr",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://bunkr.cr/v/xyz_9",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://bunkrr.ru/d/file-1",
+  "result": {
+   "domain": "bunkrr.ru",
+   "service": "bunkr",
+   "user_id": "bunkr_user",
+   "post_id": "file-1",
+   "provider": "bunkr",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://bunkrr.ru/d/file-1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://cdn9.bunkr.ru/f/Q",
+  "result": {
+   "domain": "cdn9.bunkr.ru",
+   "service": "bunkr",
+   "user_id": "bunkr_user",
+   "post_id": "Q",
+   "provider": "bunkr",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://cdn9.bunkr.ru/f/Q",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://bunk.la/i/img",
+  "result": {
+   "domain": "bunk.la",
+   "service": "bunkr",
+   "user_id": "bunkr_user",
+   "post_id": "img",
+   "provider": "bunkr",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://bunk.la/i/img",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://bunkr.black/file/abc",
+  "result": {
+   "domain": "bunkr.black",
+   "service": "bunkr",
+   "user_id": "bunkr_user",
+   "post_id": "abc",
+   "provider": "bunkr",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://bunkr.black/file/abc",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://bunkr.si/x/nope",
+  "result": {
+   "domain": "",
+   "service": "",
+   "user_id": "",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": false,
+   "raw_url": "https://bunkr.si/x/nope",
+   "error_msg": "Not a supported link (Pawchive, cum.st, Telegram, Bunkr, Erome, nHentai, GoFile, MEGA, Google Drive or Dropbox).",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://balbums.st/a/album1",
+  "result": {
+   "domain": "balbums.st",
+   "service": "bunkr",
+   "user_id": "bunkr_user",
+   "post_id": "album1",
+   "provider": "bunkr",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://balbums.st/a/album1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://balbums.st/",
+  "result": {
+   "domain": "balbums.st",
+   "service": "bunkr",
+   "user_id": "bunkr_user",
+   "post_id": "album",
+   "provider": "bunkr",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://balbums.st/",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://www.balbums.st/a/q-1",
+  "result": {
+   "domain": "balbums.st",
+   "service": "bunkr",
+   "user_id": "bunkr_user",
+   "post_id": "q-1",
+   "provider": "bunkr",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://www.balbums.st/a/q-1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://c.cdn.cr/storage/media/abcdef.mp4",
+  "result": {
+   "domain": "c.cdn.cr",
+   "service": "bunkr",
+   "user_id": "bunkr_user",
+   "post_id": "abcdef.mp4",
+   "provider": "bunkr",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://c.cdn.cr/storage/media/abcdef.mp4",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://x.scdn.st/storage/media/file123",
+  "result": {
+   "domain": "x.scdn.st",
+   "service": "bunkr",
+   "user_id": "bunkr_user",
+   "post_id": "file123",
+   "provider": "bunkr",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://x.scdn.st/storage/media/file123",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://scdn.st/storage/media/a.jpg",
+  "result": {
+   "domain": "scdn.st",
+   "service": "bunkr",
+   "user_id": "bunkr_user",
+   "post_id": "a.jpg",
+   "provider": "bunkr",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://scdn.st/storage/media/a.jpg",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://www.erome.com/a/AbC123",
+  "result": {
+   "domain": "erome.com",
+   "service": "erome",
+   "user_id": "erome_user",
+   "post_id": "AbC123",
+   "provider": "erome",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://www.erome.com/a/AbC123",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://erome.com/a/x",
+  "result": {
+   "domain": "erome.com",
+   "service": "erome",
+   "user_id": "erome_user",
+   "post_id": "x",
+   "provider": "erome",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://erome.com/a/x",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://erome.com/user",
+  "result": {
+   "domain": "",
+   "service": "",
+   "user_id": "",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": false,
+   "raw_url": "https://erome.com/user",
+   "error_msg": "Not a supported link (Pawchive, cum.st, Telegram, Bunkr, Erome, nHentai, GoFile, MEGA, Google Drive or Dropbox).",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://nhentai.net/g/123456/",
+  "result": {
+   "domain": "nhentai.net",
+   "service": "nhentai",
+   "user_id": "123456",
+   "post_id": "123456",
+   "provider": "nhentai",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://nhentai.net/g/123456/",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://www.nhentai.net/g/1",
+  "result": {
+   "domain": "nhentai.net",
+   "service": "nhentai",
+   "user_id": "1",
+   "post_id": "1",
+   "provider": "nhentai",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://www.nhentai.net/g/1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://nhentai.net/tag/x",
+  "result": {
+   "domain": "",
+   "service": "",
+   "user_id": "",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": false,
+   "raw_url": "https://nhentai.net/tag/x",
+   "error_msg": "Not a supported link (Pawchive, cum.st, Telegram, Bunkr, Erome, nHentai, GoFile, MEGA, Google Drive or Dropbox).",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://saint2.su/embed/abc",
+  "result": {
+   "domain": "",
+   "service": "",
+   "user_id": "",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": false,
+   "raw_url": "https://saint2.su/embed/abc",
+   "error_msg": "Not a supported link (Pawchive, cum.st, Telegram, Bunkr, Erome, nHentai, GoFile, MEGA, Google Drive or Dropbox).",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://www.patreon.com/posts/some-title-123456789",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "",
+   "post_id": "123456789",
+   "provider": "native",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://www.patreon.com/posts/some-title-123456789",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://patreon.com/posts/987",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "",
+   "post_id": "987",
+   "provider": "native",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://patreon.com/posts/987",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://patreon.com/user?u=1",
+  "result": {
+   "domain": "",
+   "service": "",
+   "user_id": "",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": false,
+   "raw_url": "https://patreon.com/user?u=1",
+   "error_msg": "Not a supported link (Pawchive, cum.st, Telegram, Bunkr, Erome, nHentai, GoFile, MEGA, Google Drive or Dropbox).",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://www.fanbox.cc/@creator/posts/123",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "fanbox",
+   "user_id": "creator",
+   "post_id": "123",
+   "provider": "native",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://www.fanbox.cc/@creator/posts/123",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://creator.fanbox.cc/posts/456",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "fanbox",
+   "user_id": "creator",
+   "post_id": "456",
+   "provider": "native",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://creator.fanbox.cc/posts/456",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://fantia.jp/posts/789",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "fantia",
+   "user_id": "",
+   "post_id": "789",
+   "provider": "native",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://fantia.jp/posts/789",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://boosty.to/someone/posts/abc-123",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "boosty",
+   "user_id": "someone",
+   "post_id": "abc-123",
+   "provider": "native",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://boosty.to/someone/posts/abc-123",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://subscribestar.adult/posts/42",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "subscribestar",
+   "user_id": "",
+   "post_id": "42",
+   "provider": "native",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://subscribestar.adult/posts/42",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://www.subscribestar.com/posts/43",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "subscribestar",
+   "user_id": "",
+   "post_id": "43",
+   "provider": "native",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://www.subscribestar.com/posts/43",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://www.dlsite.com/maniax/work/=/product_id/RJ123456.html",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "dlsite",
+   "user_id": "",
+   "post_id": "RJ123456",
+   "provider": "native",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://www.dlsite.com/maniax/work/=/product_id/RJ123456.html",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://gofile.io/d/hf2SP4",
+  "result": {
+   "domain": "",
+   "service": "",
+   "user_id": "",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": false,
+   "raw_url": "https://gofile.io/d/hf2SP4",
+   "error_msg": "Not a supported link (Pawchive, cum.st, Telegram, Bunkr, Erome, nHentai, GoFile, MEGA, Google Drive or Dropbox).",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://mega.nz/file/abc#key",
+  "result": {
+   "domain": "",
+   "service": "",
+   "user_id": "",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": false,
+   "raw_url": "https://mega.nz/file/abc#key",
+   "error_msg": "Not a supported link (Pawchive, cum.st, Telegram, Bunkr, Erome, nHentai, GoFile, MEGA, Google Drive or Dropbox).",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://drive.google.com/file/d/x/view",
+  "result": {
+   "domain": "",
+   "service": "",
+   "user_id": "",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": false,
+   "raw_url": "https://drive.google.com/file/d/x/view",
+   "error_msg": "Not a supported link (Pawchive, cum.st, Telegram, Bunkr, Erome, nHentai, GoFile, MEGA, Google Drive or Dropbox).",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/patreon/user/u1",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "patreon",
+   "user_id": "u1",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/patreon/user/u1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://cum.st/patreon/user/u1/post/p1",
+  "result": {
+   "domain": "cum.st",
+   "service": "patreon",
+   "user_id": "u1",
+   "post_id": "p1",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://cum.st/patreon/user/u1/post/p1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/fanbox/user/u1",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "fanbox",
+   "user_id": "u1",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/fanbox/user/u1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://cum.st/fanbox/user/u1/post/p1",
+  "result": {
+   "domain": "cum.st",
+   "service": "fanbox",
+   "user_id": "u1",
+   "post_id": "p1",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://cum.st/fanbox/user/u1/post/p1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/fantia/user/u1",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "fantia",
+   "user_id": "u1",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/fantia/user/u1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://cum.st/fantia/user/u1/post/p1",
+  "result": {
+   "domain": "cum.st",
+   "service": "fantia",
+   "user_id": "u1",
+   "post_id": "p1",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://cum.st/fantia/user/u1/post/p1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/onlyfans/user/u1",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "onlyfans",
+   "user_id": "u1",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/onlyfans/user/u1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://cum.st/onlyfans/user/u1/post/p1",
+  "result": {
+   "domain": "cum.st",
+   "service": "onlyfans",
+   "user_id": "u1",
+   "post_id": "p1",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://cum.st/onlyfans/user/u1/post/p1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/fansly/user/u1",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "fansly",
+   "user_id": "u1",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/fansly/user/u1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://cum.st/fansly/user/u1/post/p1",
+  "result": {
+   "domain": "cum.st",
+   "service": "fansly",
+   "user_id": "u1",
+   "post_id": "p1",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://cum.st/fansly/user/u1/post/p1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/subscribestar/user/u1",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "subscribestar",
+   "user_id": "u1",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/subscribestar/user/u1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://cum.st/subscribestar/user/u1/post/p1",
+  "result": {
+   "domain": "cum.st",
+   "service": "subscribestar",
+   "user_id": "u1",
+   "post_id": "p1",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://cum.st/subscribestar/user/u1/post/p1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/boosty/user/u1",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "boosty",
+   "user_id": "u1",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/boosty/user/u1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://cum.st/boosty/user/u1/post/p1",
+  "result": {
+   "domain": "cum.st",
+   "service": "boosty",
+   "user_id": "u1",
+   "post_id": "p1",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://cum.st/boosty/user/u1/post/p1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/gumroad/user/u1",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "gumroad",
+   "user_id": "u1",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/gumroad/user/u1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://cum.st/gumroad/user/u1/post/p1",
+  "result": {
+   "domain": "cum.st",
+   "service": "gumroad",
+   "user_id": "u1",
+   "post_id": "p1",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://cum.st/gumroad/user/u1/post/p1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/candfans/user/u1",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "candfans",
+   "user_id": "u1",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/candfans/user/u1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://cum.st/candfans/user/u1/post/p1",
+  "result": {
+   "domain": "cum.st",
+   "service": "candfans",
+   "user_id": "u1",
+   "post_id": "p1",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://cum.st/candfans/user/u1/post/p1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://pawchive.pw/discord/user/u1",
+  "result": {
+   "domain": "pawchive.pw",
+   "service": "discord",
+   "user_id": "u1",
+   "post_id": null,
+   "provider": "archive",
+   "is_single_post": false,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://pawchive.pw/discord/user/u1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ },
+ {
+  "input": "https://cum.st/discord/user/u1/post/p1",
+  "result": {
+   "domain": "cum.st",
+   "service": "discord",
+   "user_id": "u1",
+   "post_id": "p1",
+   "provider": "archive",
+   "is_single_post": true,
+   "is_dms": false,
+   "is_valid": true,
+   "raw_url": "https://cum.st/discord/user/u1/post/p1",
+   "error_msg": "",
+   "extra_data": {}
+  }
+ }
+]
