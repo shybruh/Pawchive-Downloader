@@ -11,6 +11,11 @@
 //!   `{"op": "state", "key", "status", "error_msg", "retry_count"}`  a file's status changed there
 //!   `{"op": "batch", "batch", "paused": true}`
 //!   `{"t": "reply", "id", "value"}`  the answer to a question below
+//!   `{"op": "call", "id", "fn", "args"}`  work done here for the app, answered with
+//!   `{"t": "result", "id", "value"}` (or `"error"`): fn "plan" builds the download tasks of
+//!   scanned posts (args: posts, options, request); fn "site" is the archive sites' client
+//!   (post lists, DMs, single posts, profiles, tags, favorites, creator lists), cancelled with
+//!   `{"op": "cancel_call", "id"}`
 //!
 //! To the app:
 //!   `{"t": "task", "key", ...state}`  a file changed (status, progress, where it's saved)
@@ -18,11 +23,16 @@
 //!   `{"t": "log", "level", "message"}`, `{"t": "checkpoint"}`, `{"t": "discard_recovery"}`
 //!   `{"t": "record_file", "key", "size", "path"}`
 //!   `{"t": "ask", "id", "fn", "args"}` for what the app still knows or does: is_archived, cookie,
-//!   refresh_link, special (yt-dlp / Telegram files), post_process, limit
+//!   refresh_link, special (yt-dlp / Telegram files), post_process, limit; while planning also
+//!   known, creator_profile, archived, video_duration, plan_cancelled
+//!   `{"t": "note", "fn", "args"}`  the same without an answer: record_link, archive_password,
+//!   add_passwords, log
 
 use super::fetch::{Cell, Ctl, Hooks, State};
 use super::filters::Options;
-use super::plan::Task;
+use super::plan::{self, Lookups, Task};
+use super::links::ParsedLink;
+use super::sites::SiteClient;
 use super::queue::{Queue, QueueHooks};
 use serde_json::{json, Value};
 use std::collections::HashMap;
@@ -72,6 +82,11 @@ impl Link {
         let answer = rx.recv().unwrap_or(Value::Null);
         self.asks.lock().unwrap().remove(&id);
         answer
+    }
+
+    /// Tells the app something that needs no answer
+    fn note(&self, f: &str, args: Value) {
+        self.send(json!({"t": "note", "fn": f, "args": args}));
     }
 
     fn reply(&self, id: u64, value: Value) {
@@ -169,6 +184,168 @@ impl QueueHooks for Remote {
     fn log(&self, level: &str, message: &str) {
         self.0.send(json!({"t": "log", "level": level, "message": message}));
     }
+}
+
+/// What the planner looks up in the app while it plans one call's posts
+struct PlanCtx {
+    link: Arc<Link>,
+    id: u64,
+    archive: bool,
+    sites: SiteClient,
+}
+
+impl Lookups for PlanCtx {
+    fn known_hierarchy(&self, title: &str, tags: Option<&Value>, filenames: &[String], content: Option<&Value>, profile: Option<&Value>) -> Option<(String, String)> {
+        let a = self.link.ask("known", json!([title, tags, filenames, content, profile]));
+        let a = a.as_array()?;
+        let s = |i: usize| a.get(i).and_then(Value::as_str).unwrap_or("").to_string();
+        Some((s(0), s(1)))
+    }
+    fn creator_profile(&self, service: &str, creator: &str, base_dirs: &[String]) -> Option<Value> {
+        // (a reference to the app's own copy: it is only handed back to "known")
+        Some(self.link.ask("creator_profile", json!([service, creator, base_dirs]))).filter(|v| !v.is_null())
+    }
+    fn archive_enabled(&self) -> bool {
+        self.archive
+    }
+    fn is_archived(&self, service: &str, post_id: &str, file_id: &str, sha256: &str) -> bool {
+        self.link.ask("archived", json!([service, post_id, file_id, sha256])).as_bool().unwrap_or(false)
+    }
+    fn record_link(&self, service: &str, creator_id: &str, post_id: &str, url: &str, creator_name: &str, post_title: &str, link_title: &str) {
+        self.link.note("record_link", json!([service, creator_id, post_id, url, creator_name, post_title, link_title]));
+    }
+    fn video_duration(&self, url: &str) -> Option<f64> {
+        self.link.ask("video_duration", json!([url])).as_f64()
+    }
+    fn resolve_temporary_links(&self, post: &mut Value, domain: &str) {
+        self.sites.resolve_temporary_links(post, domain);
+    }
+    fn record_archive_password(&self, archive_path: &str, password: &str) {
+        self.link.note("archive_password", json!([archive_path, password]));
+    }
+    fn add_passwords(&self, passwords: &[String]) {
+        self.link.note("add_passwords", json!([passwords]));
+    }
+    fn cancelled(&self) -> bool {
+        self.link.ask("plan_cancelled", json!([self.id])).as_bool().unwrap_or(true)
+    }
+    fn log(&self, level: &str, message: &str, to_file: bool) {
+        self.link.note("log", json!([level, message, to_file]));
+    }
+}
+
+fn plan_call(id: u64, args: &Value) -> Result<Value, String> {
+    let posts = args["posts"].as_array().ok_or("no posts")?;
+    let o = Options::from_dict(&args["options"]);
+    let r = &args["request"];
+    let s = |k: &str| r.get(k).and_then(Value::as_str).unwrap_or("");
+    let opt = |k: &str| r.get(k).and_then(Value::as_str).filter(|v| !v.is_empty());
+    let req = plan::Request {
+        creator_name: s("creator_name"),
+        service: s("service"),
+        domain: s("domain"),
+        base_dir: s("base_dir"),
+        batch_id: opt("batch_id"),
+        artist_dir: opt("artist_dir"),
+        user_id: s("user_id"),
+        include_service: r.get("include_service").and_then(Value::as_bool).unwrap_or(true),
+    };
+    let l = link().clone();
+    let cookies = l.clone();
+    let mut sites = SiteClient::new(
+        args.get("cookie").and_then(Value::as_str).unwrap_or(""),
+        Box::new(move |site: &str| cookies.ask("account_cookie", json!([site])).as_str().unwrap_or("").to_string()),
+    );
+    let lg = l.clone();
+    sites.set_log(Box::new(move |level: &str, msg: &str| lg.note("log", json!([level, msg, true, "api"]))));
+    let ctx = PlanCtx { link: l, id, archive: args["archive"].as_bool().unwrap_or(false), sites };
+    let p = plan::build(posts, &o, &req, &ctx);
+    Ok(json!({
+        "tasks": p.tasks,
+        "pending_post_infos": p.pending_post_infos,
+        "write_now": p.write_now,
+        "harvested_links": p.harvested_links,
+        "harvested_records": p.harvested_records,
+        "not_queued": p.not_queued,
+        "renamed": p.renamed,
+        "unmatched_known": p.unmatched_known,
+        "cancelled": p.cancelled,
+    }))
+}
+
+/// Cancel flags of the calls running now ({"op": "cancel_call", "id"} sets one)
+fn call_flags() -> &'static Mutex<HashMap<u64, Arc<AtomicBool>>> {
+    static F: OnceLock<Mutex<HashMap<u64, Arc<AtomicBool>>>> = OnceLock::new();
+    F.get_or_init(Default::default)
+}
+
+fn parsed_link(v: &Value) -> ParsedLink {
+    let s = |k: &str| v.get(k).and_then(Value::as_str).unwrap_or("").to_string();
+    let b = |k: &str| v.get(k).and_then(Value::as_bool).unwrap_or(false);
+    ParsedLink {
+        domain: s("domain"),
+        service: s("service"),
+        user_id: s("user_id"),
+        post_id: v.get("post_id").and_then(Value::as_str).filter(|p| !p.is_empty()).map(str::to_string),
+        provider: s("provider"),
+        is_single_post: b("is_single_post"),
+        is_dms: b("is_dms"),
+        is_valid: v.get("is_valid").and_then(Value::as_bool).unwrap_or(true),
+        raw_url: s("raw_url"),
+        error_msg: s("error_msg"),
+        extra_data: v.get("extra_data").and_then(Value::as_object).cloned().unwrap_or_default(),
+    }
+}
+
+/// The archive sites' client, for the app's scans: args {"fn", "cookie", "user_agent", "proxy", ...}.
+/// Log lines and progress ({"t": "note", "fn": "progress", "args": [id, page, count, total]})
+/// come back while it runs.
+fn site_call(id: u64, a: &Value) -> Result<Value, String> {
+    let l = link().clone();
+    let s = |k: &str| a.get(k).and_then(Value::as_str).unwrap_or("").to_string();
+    let n = |k: &str, d: usize| a.get(k).and_then(Value::as_u64).map(|x| x as usize).unwrap_or(d);
+    let cookies = l.clone();
+    let mut c = SiteClient::with_proxy(
+        &s("cookie"),
+        Box::new(move |site: &str| cookies.ask("account_cookie", json!([site])).as_str().unwrap_or("").to_string()),
+        &s("proxy"),
+    );
+    if !s("user_agent").trim().is_empty() {
+        c.user_agent = s("user_agent").trim().to_string();
+    }
+    let lg = l.clone();
+    c.set_log(Box::new(move |level: &str, msg: &str| lg.note("log", json!([level, msg, true, "api"]))));
+    let cancel = call_flags().lock().unwrap().entry(id).or_default().clone();
+    let progress = |page: usize, count: usize, total: Option<u64>| l.note("progress", json!([id, page, count, total]));
+    let p = parsed_link(&a["link"]);
+    let out = match s("fn").as_str() {
+        "posts" => {
+            let posts = c.user_posts(&p, n("page_start", 1), n("page_end", 999_999), n("page_size", 50), &progress, &cancel, &s("date_after"), &s("date_before"));
+            json!({"posts": posts, "failed": c.last_fetch_failed.get()})
+        }
+        "dms" => json!(c.user_dms(&p, n("page_start", 1), n("page_end", 999_999), n("page_size", 50), &progress, &cancel)),
+        "single_post" => json!(c.single_post(&p)),
+        "comments" => json!(c.post_comments(&s("domain"), &s("service"), &s("user_id"), &s("post_id"))),
+        "profile" => c.creator_profile(&p),
+        "creator_name" => json!(c.creator_name(&p)),
+        "tags" => json!(c.creator_tags(&p)),
+        "favorites" => json!(c.favorites(&s("domain"), &s("fav_type"), n("page_start", 1), n("page_end", 999_999), n("page_size", 50), &progress, &cancel)),
+        "listing_cost" => json!(c.creator_listing_cost(&s("domain"))),
+        "creator_updates" => {
+            let max_age = a.get("max_age").and_then(Value::as_f64).unwrap_or(600.0);
+            match c.creator_updates(&s("domain"), max_age, &cancel) {
+                Some(m) => json!(m.into_iter().map(|((svc, uid), t)| json!([svc, uid, t])).collect::<Vec<_>>()),
+                None => Value::Null,
+            }
+        }
+        "resolve_links" => {
+            let mut post = a["post"].clone();
+            let k = c.resolve_temporary_links(&mut post, &s("domain"));
+            json!({"post": post, "resolved": k})
+        }
+        other => return Err(format!("unknown site call {other}")),
+    };
+    Ok(out)
 }
 
 fn link() -> &'static Arc<Link> {
@@ -280,6 +457,24 @@ fn handle(msg: &Value) {
         "workers" => q.set_max_workers(msg["n"].as_u64().unwrap_or(1) as usize),
         "state" => q.set_state(&s("key"), &s("status"), msg.get("error_msg").and_then(Value::as_str), msg.get("retry_count").and_then(Value::as_u64).map(|n| n as u32)),
         "batch" => q.set_batch_paused(&s("batch"), msg["paused"].as_bool().unwrap_or(false)),
+        "cancel_call" => {
+            let id = msg["id"].as_u64().unwrap_or(0);
+            call_flags().lock().unwrap().entry(id).or_default().store(true, Ordering::Relaxed);
+        }
+        "call" => {
+            let id = msg["id"].as_u64().unwrap_or(0);
+            let args = &msg["args"];
+            let out = match s("fn").as_str() {
+                "plan" => plan_call(id, args),
+                "site" => site_call(id, args),
+                other => Err(format!("unknown call {other}")),
+            };
+            call_flags().lock().unwrap().remove(&id);
+            link().send(match out {
+                Ok(v) => json!({"t": "result", "id": id, "value": v}),
+                Err(e) => json!({"t": "result", "id": id, "error": e}),
+            });
+        }
         _ => {}
     }
 }

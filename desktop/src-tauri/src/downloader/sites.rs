@@ -133,6 +133,42 @@ fn has_class_matching(e: &ElementRef, pattern: &Regex) -> bool {
 /// Picks the account cookie saved for a site ("pawchive" / "cumst"), "" when there's none
 pub type AccountCookies = Box<dyn Fn(&str) -> String + Send + Sync>;
 
+/// Where the client's log lines go: (level, message) with level debug / info / warning / error / success
+pub type LogSink = Box<dyn Fn(&str, &str) + Send + Sync>;
+
+type Listings = std::sync::Mutex<HashMap<String, (f64, HashMap<(String, String), f64>)>>;
+
+/// The whole-site creator lists, kept a few minutes for every client
+fn listing_cache() -> &'static Listings {
+    static C: OnceLock<Listings> = OnceLock::new();
+    C.get_or_init(Default::default)
+}
+
+fn listing_sizes() -> &'static std::sync::Mutex<HashMap<String, usize>> {
+    static S: OnceLock<std::sync::Mutex<HashMap<String, usize>>> = OnceLock::new();
+    S.get_or_init(|| std::sync::Mutex::new(HashMap::from([("cum.st".to_string(), 51000)])))
+}
+
+/// HTTP clients (with and without the proxy) shared by every SiteClient, so connections are reused
+fn shared_clients(proxy: &str) -> (Client, Client) {
+    static POOL: OnceLock<std::sync::Mutex<HashMap<String, (Client, Client)>>> = OnceLock::new();
+    let mut pool = POOL.get_or_init(Default::default).lock().unwrap();
+    pool.entry(proxy.to_string())
+        .or_insert_with(|| {
+            let build = || {
+                let mut b = Client::builder().connect_timeout(Duration::from_secs(20)).pool_max_idle_per_host(4);
+                if !proxy.is_empty() {
+                    if let Ok(p) = reqwest::Proxy::all(proxy) {
+                        b = b.proxy(p);
+                    }
+                }
+                b.build().expect("HTTP client")
+            };
+            (build(), build())
+        })
+        .clone()
+}
+
 pub struct SiteClient {
     client: Client,
     quick: Client,
@@ -141,8 +177,28 @@ pub struct SiteClient {
     account_cookies: AccountCookies,
     /// The last post list stopped early because of an error (not at its end)
     pub last_fetch_failed: std::cell::Cell<bool>,
-    listing_cache: std::sync::Mutex<HashMap<String, (f64, HashMap<(String, String), f64>)>>,
-    listing_sizes: std::sync::Mutex<HashMap<String, usize>>,
+    log: LogSink,
+}
+
+/// Python's HTTP_STATUS_HINTS
+fn status_hint(status: u16) -> &'static str {
+    match status {
+        400 => "Bad Request — malformed URL or invalid query parameters",
+        401 => "Unauthorized — session expired or invalid cookie",
+        403 => "Forbidden — content locked (Cloudflare block might help to use cookies)",
+        404 => "Not Found — creator or post does not exist on this server",
+        408 => "Request Timeout — server closed idle connection",
+        410 => "Gone — resource was permanently removed",
+        416 => "Range Not Satisfiable — byte range exceeds file size (already complete)",
+        429 => "Rate Limited — too many requests (429 backoff active)",
+        451 => "Unavailable For Legal Reasons — DMCA or regional restriction",
+        500 => "Internal Server Error — server-side crash or backend issue",
+        502 => "Bad Gateway — upstream server temporarily unreachable",
+        503 => "Service Unavailable — server overloaded or undergoing maintenance",
+        504 => "Gateway Timeout — upstream proxy timed out",
+        520 => "Web Server Returned Unknown Error (Cloudflare 520)",
+        _ => "",
+    }
 }
 
 pub struct Answer {
@@ -159,23 +215,29 @@ impl Answer {
 
 impl SiteClient {
     pub fn new(general_cookie: &str, account_cookies: AccountCookies) -> Self {
-        let build = || {
-            Client::builder()
-                .connect_timeout(Duration::from_secs(20))
-                .pool_max_idle_per_host(4)
-                .build()
-                .expect("HTTP client")
-        };
+        Self::with_proxy(general_cookie, account_cookies, "")
+    }
+
+    /// A client whose requests go through `proxy` ("" for none)
+    pub fn with_proxy(general_cookie: &str, account_cookies: AccountCookies, proxy: &str) -> Self {
+        let (client, quick) = shared_clients(proxy.trim());
         Self {
-            client: build(),
-            quick: build(),
+            client,
+            quick,
             general_cookie: general_cookie.trim().to_string(),
             user_agent: DEFAULT_USER_AGENT.into(),
             account_cookies,
             last_fetch_failed: std::cell::Cell::new(false),
-            listing_cache: Default::default(),
-            listing_sizes: std::sync::Mutex::new(HashMap::from([("cum.st".to_string(), 51000)])),
+            log: Box::new(|_, _| {}),
         }
+    }
+
+    pub fn set_log(&mut self, log: LogSink) {
+        self.log = log;
+    }
+
+    fn say(&self, level: &str, message: &str) {
+        (self.log)(level, message);
     }
 
     /// The login cookie that may go to `url`: only to the archive site it belongs to
@@ -217,16 +279,46 @@ impl SiteClient {
             if !cookie.is_empty() {
                 req = req.header("Cookie", cookie);
             }
+            let t0 = std::time::Instant::now();
             match req.send() {
                 Ok(resp) => {
                     let status = resp.status().as_u16();
                     if !quick && attempt + 1 < tries && matches!(status, 429 | 500 | 502 | 503 | 504) {
                         continue;
                     }
-                    return Some(read(resp));
+                    let a = read(resp);
+                    let ms = t0.elapsed().as_secs_f64() * 1000.0;
+                    match status {
+                        200 | 206 => {
+                            // (the size the server announced, as the Python client showed it)
+                            let len = a.headers.get("content-length").and_then(|v| v.to_str().ok()).and_then(|v| v.parse::<u64>().ok()).unwrap_or(0);
+                            let kind: String = a.headers.get("content-type").and_then(|v| v.to_str().ok()).unwrap_or("?").chars().take(40).collect();
+                            self.say("debug", &format!("HTTP {status}  {ms:6.0}ms  {:>5}KB  {kind}  ← {url}", len / 1024))
+                        }
+                        416 => self.say("debug", &format!("HTTP 416 (Already complete)  ← {url}")),
+                        403 => self.say("warning", &format!("HTTP 403 Forbidden — {}. Add a session cookie in Settings.", status_hint(403))),
+                        429 => {
+                            let ra = a.headers.get("Retry-After").and_then(|v| v.to_str().ok()).unwrap_or("?").to_string();
+                            self.say("warning", &format!("HTTP 429 Rate-limited (Retry-After: {ra}s) — backing off…"))
+                        }
+                        _ => {
+                            let hint = status_hint(status);
+                            self.say("warning", &format!("HTTP {status}  {ms:6.0}ms  {}  ← {url}", if hint.is_empty() { "Unexpected status" } else { hint }))
+                        }
+                    }
+                    return Some(a);
                 }
                 Err(_) if !quick && attempt + 1 < tries => continue,
-                Err(_) => return None,
+                Err(e) => {
+                    if e.is_timeout() {
+                        self.say("error", &format!("Request timed out after {:.0}ms — {url}", t0.elapsed().as_secs_f64() * 1000.0));
+                    } else if e.is_connect() {
+                        self.say("error", &format!("Connection failed (server unreachable?): {e}"));
+                    } else {
+                        self.say("error", &format!("Unexpected HTTP error: {e}"));
+                    }
+                    return None;
+                }
             }
         }
         None
@@ -268,6 +360,7 @@ impl SiteClient {
 
     /// The creator's profile: the profile API, else their page's HTML, else a post's author name
     pub fn creator_profile(&self, p: &ParsedLink) -> Value {
+        self.say("info", &format!("Fetching creator profile: {}/{}", p.service, p.user_id));
         let uid = p.user_id.trim().to_string();
         let family = if CUMST_SERVICES.contains(&p.service.to_lowercase().as_str()) { "cum.st" } else { "pawchive.pw" };
         let mut domains: Vec<String> = Vec::new();
@@ -283,6 +376,7 @@ impl SiteClient {
                     let raw = ["displayName", "name", "username"].iter().find_map(|k| data.get(*k).filter(|v| super::filters::truthy(v)).cloned());
                     let name = raw.map(|v| clean_text(v.as_str().unwrap_or(&v.to_string()))).unwrap_or_default();
                     if !name.is_empty() && name != uid {
+                        self.say("success", &format!("Creator: {}  service={}  id={}", py_repr(&name), p.service, p.user_id));
                         data.insert("name".into(), json!(name));
                         return Value::Object(data);
                     }
@@ -293,6 +387,7 @@ impl SiteClient {
             let url = format!("https://{d}/{}/user/{}", p.service, p.user_id);
             if let Some(a) = self.get(&url, 10, true).filter(|a| a.status == 200) {
                 if let Some(name) = Self::creator_name_from_html(&a.body, &uid) {
+                    self.say("success", &format!("Creator: {} (from HTML page {d})  service={}  id={}", py_repr(&name), p.service, p.user_id));
                     return json!({"id": p.user_id, "name": name, "service": p.service});
                 }
             }
@@ -309,11 +404,13 @@ impl SiteClient {
                     let raw = ["username", "name"].iter().find_map(|k| first.get(*k).filter(|v| super::filters::truthy(v)).cloned());
                     let name = raw.map(|v| clean_text(v.as_str().unwrap_or(&v.to_string()))).unwrap_or_default();
                     if !name.is_empty() && name != uid {
+                        self.say("success", &format!("Creator: {} (from post metadata)  service={}", py_repr(&name), p.service));
                         return json!({"id": p.user_id, "name": name, "service": p.service});
                     }
                 }
             }
         }
+        self.say("warning", &format!("Could not retrieve profile for {}; using ID as name.", p.user_id));
         json!({"id": p.user_id, "name": p.user_id, "service": p.service})
     }
 
@@ -412,13 +509,18 @@ impl SiteClient {
         let text = |k: &str| obj.get(k).map(|v| v.as_str().map(str::to_string).unwrap_or_else(|| v.to_string())).filter(|s| !s.is_empty() && s != "null");
         let (Some(pid), Some(svc), Some(user)) = (text("id"), text("service"), text("user")) else { return resolved };
         let d = if domain.contains("pawchive") { domain } else { "pawchive.pw" };
-        let Some(page) = self.get(&format!("https://{d}/{svc}/user/{user}/post/{pid}"), 20, false).filter(|a| a.status == 200 && !a.body.is_empty()) else {
+        let page_url = format!("https://{d}/{svc}/user/{user}/post/{pid}");
+        self.say("debug", &format!("Fetching post HTML to resolve {deferred} temporary file(s): {page_url}"));
+        let Some(page) = self.get(&page_url, 20, false).filter(|a| a.status == 200 && !a.body.is_empty()) else {
+            self.say("warning", &format!("Could not fetch HTML for post {pid} to resolve temporary files"));
             return resolved;
         };
         let links = Self::temporary_links_from_html(&page.body);
         if links.is_empty() {
+            self.say("info", &format!("Post {pid} has {deferred} deferred attachment(s), but temporary links are expired or unavailable"));
             return resolved;
         }
+        let before = resolved;
         let find = |name: &str| {
             links.iter().find(|(n, _)| n == name).or_else(|| links.iter().find(|(n, _)| n.to_lowercase() == name.to_lowercase())).map(|(_, u)| u.clone())
         };
@@ -447,6 +549,9 @@ impl SiteClient {
                 }
             }
         }
+        if resolved > before {
+            self.say("info", &format!("✨ Resolved {}/{deferred} temporary oversized file(s) from t1.pawchive.pw for post {pid}", resolved - before));
+        }
         resolved
     }
 
@@ -454,6 +559,7 @@ impl SiteClient {
     pub fn single_post(&self, p: &ParsedLink) -> Option<Value> {
         let post_id = p.post_id.as_deref().filter(|s| !s.is_empty())?;
         let kind = if p.raw_url.to_lowercase().contains("/dm/") { "dm" } else { "post" };
+        self.say("info", &format!("Fetching single {kind}: {post_id}"));
         let a = self.get(&format!("https://{}/api/v1/{}/user/{}/{kind}/{post_id}", p.domain, p.service, p.user_id), 15, false)?;
         if a.status != 200 {
             return None;
@@ -507,8 +613,12 @@ impl SiteClient {
         let (mut page, mut offset) = (page_start, (page_start.max(1) - 1) * page_size);
         let (mut errors, mut rate_limited, mut largest, mut pages) = (0, 0u32, 0usize, 0usize);
         let mut total: Option<u64> = None;
+        let mut cancelled = false;
+        self.say("info", &format!("Post enumeration started — {}/{}  pages {page_start}–{page_end}  (page size: {page_size})", p.service, p.user_id));
         while page <= page_end {
             if cancel.load(Ordering::Relaxed) {
+                self.say("warning", "Post enumeration cancelled by user.");
+                cancelled = true;
                 break;
             }
             let url = if p.domain == "cum.st" {
@@ -521,11 +631,15 @@ impl SiteClient {
             }
             let resp = self.get(&url, 25, false);
             if cancel.load(Ordering::Relaxed) {
+                self.say("warning", "Post enumeration cancelled by user.");
+                cancelled = true;
                 break;
             }
             let Some(resp) = resp else {
                 errors += 1;
+                self.say("warning", &format!("Page {page} request failed ({errors}/3 consecutive errors)"));
                 if errors >= 3 {
+                    self.say("error", "Stopping enumeration after 3 consecutive failures.");
                     self.last_fetch_failed.set(true);
                     break;
                 }
@@ -536,27 +650,37 @@ impl SiteClient {
             if resp.status == 429 {
                 rate_limited += 1;
                 if rate_limited > 6 {
+                    self.say("error", &format!("Page {page}: still rate limited after 6 waits; stopping here."));
                     self.last_fetch_failed.set(true);
                     break;
                 }
                 let wait = retry_after(resp.headers.get("Retry-After").and_then(|v| v.to_str().ok()), 5.0 * rate_limited as f64);
+                self.say("warning", &format!("Page {page}: Rate limited (429). Pausing {wait:.0}s before retry..."));
                 sleep_cancellable(wait, Some(cancel));
                 continue;
             }
             rate_limited = 0;
             if resp.status == 403 {
                 self.last_fetch_failed.set(true);
+                self.say("error", "403 Forbidden — posts are paywalled or cookie is missing/expired. Add your session cookie in Settings → Network.");
                 break;
             }
             if resp.status != 200 {
-                if !(matches!(resp.status, 400 | 404) && pages > 0) {
+                if matches!(resp.status, 400 | 404) && pages > 0 {
+                    self.say("info", &format!("Page {page}: no more posts (HTTP {}).", resp.status));
+                } else {
                     self.last_fetch_failed.set(true);
+                    self.say("warning", &format!("Page {page}: unexpected HTTP {}, stopping.", resp.status));
                 }
                 break;
             }
-            let Some(data) = resp.json() else {
-                self.last_fetch_failed.set(true);
-                break;
+            let data = match serde_json::from_str::<Value>(&resp.body) {
+                Ok(d) => d,
+                Err(e) => {
+                    self.last_fetch_failed.set(true);
+                    self.say("error", &format!("Page {page}: JSON parse error — {e}"));
+                    break;
+                }
             };
             let posts = match &data {
                 Value::Object(o) => o
@@ -570,10 +694,12 @@ impl SiteClient {
                 _ => Vec::new(),
             };
             if posts.is_empty() {
+                self.say("info", &format!("Page {page} returned 0 posts — enumeration complete at offset {offset}."));
                 break;
             }
             let batch = posts.len();
             pages += 1;
+            self.say("info", &format!("Page {page:3}  offset {offset:5}  +{batch} posts  (running total: {})", all.len() + batch));
             if let Some(Value::Object(o)) = Some(&data) {
                 match o.get("total") {
                     Some(Value::Number(n)) if n.as_u64().is_some_and(|t| t > 0) => total = n.as_u64(),
@@ -586,6 +712,7 @@ impl SiteClient {
             progress(page, all.len(), total);
             largest = largest.max(batch);
             if batch < largest {
+                self.say("info", &format!("Partial page ({batch}<{largest}) — reached last page."));
                 break;
             }
             if !date_after.is_empty() {
@@ -594,12 +721,19 @@ impl SiteClient {
                     std::mem::swap(&mut a, &mut b);
                 }
                 if !a.is_empty() && !oldest.is_empty() && oldest < a {
+                    self.say("info", &format!("Date early-stop: oldest post on page {page} ({oldest}) is before date range start ({a}) — no need to scan further."));
                     break;
                 }
             }
             offset += batch;
             page += 1;
             std::thread::sleep(Duration::from_secs_f64(if p.domain.to_lowercase().contains("pawchive") { uniform(0.35, 0.55) } else { 0.15 }));
+        }
+        let word = if pages == 1 { "page" } else { "pages" };
+        if cancelled {
+            self.say("info", &format!("Enumeration stopped: {} posts collected from {pages} {word} before cancelling.", all.len()));
+        } else {
+            self.say("success", &format!("Enumeration done: {} posts collected across {pages} {word}.", all.len()));
         }
         all
     }
@@ -610,8 +744,11 @@ impl SiteClient {
         let domain = p.domain.to_lowercase();
         let is_cumst = domain.contains("cum.st");
         if !is_cumst && !domain.contains("pawchive") {
+            self.say("info", &format!("Direct messages (DMs) are not supported on {}.", p.domain));
             return Vec::new();
         }
+        self.say("info", &format!("DM enumeration started — {}/{} on {}", p.service, p.user_id, p.domain));
+        let (mut cancelled, mut pages) = (false, 0usize);
         let mut all: Vec<Value> = Vec::new();
         let mut seen: HashSet<String> = HashSet::new();
         let (mut page, mut offset) = (page_start, (page_start.max(1) - 1) * page_size);
@@ -619,6 +756,8 @@ impl SiteClient {
         let mut total: Option<u64> = None;
         while page <= page_end {
             if cancel.load(Ordering::Relaxed) {
+                self.say("warning", "DM enumeration cancelled by user.");
+                cancelled = true;
                 break;
             }
             let url = if is_cumst {
@@ -631,11 +770,15 @@ impl SiteClient {
             }
             let resp = self.get(&url, 25, false);
             if cancel.load(Ordering::Relaxed) {
+                self.say("warning", "DM enumeration cancelled by user.");
+                cancelled = true;
                 break;
             }
             let Some(resp) = resp else {
                 errors += 1;
+                self.say("warning", &format!("DM Page {page} request failed ({errors}/3 consecutive errors)"));
                 if errors >= 3 {
+                    self.say("error", "Stopping DM enumeration after 3 consecutive failures.");
                     break;
                 }
                 std::thread::sleep(Duration::from_secs(2));
@@ -645,18 +788,31 @@ impl SiteClient {
             if resp.status == 429 {
                 rate_limited += 1;
                 if rate_limited > 6 {
+                    self.say("error", &format!("DM Page {page}: rate limited after 6 waits; stopping."));
                     break;
                 }
                 let wait = retry_after(resp.headers.get("Retry-After").and_then(|v| v.to_str().ok()), 5.0 * rate_limited as f64);
+                self.say("warning", &format!("DM Page {page}: Rate limited (429). Pausing {wait:.0}s..."));
                 sleep_cancellable(wait, Some(cancel));
                 continue;
             }
             rate_limited = 0;
+            if matches!(resp.status, 400 | 404) {
+                self.say("info", &format!("DM Page {page}: no more DMs (HTTP {}).", resp.status));
+                break;
+            }
             if resp.status != 200 {
+                self.say("warning", &format!("DM Page {page}: unexpected HTTP {}, stopping.", resp.status));
                 break;
             }
             let (page_dms, has_next) = if is_cumst {
-                let Some(data) = resp.json() else { break };
+                let data = match serde_json::from_str::<Value>(&resp.body) {
+                    Ok(d) => d,
+                    Err(e) => {
+                        self.say("error", &format!("DM Page {page}: JSON parse error — {e}"));
+                        break;
+                    }
+                };
                 if let Some(t) = data.get("total") {
                     let s = t.as_str().map(str::to_string).unwrap_or_else(|| t.to_string());
                     if !s.is_empty() && s.chars().all(|c| c.is_ascii_digit()) {
@@ -673,6 +829,7 @@ impl SiteClient {
                 pawchive_dms_page(&resp.body, p, offset)
             };
             if page_dms.is_empty() {
+                self.say("info", &format!("DM Page {page} returned 0 DMs — enumeration complete at offset {offset}."));
                 break;
             }
             let fresh: Vec<Value> = page_dms
@@ -684,20 +841,35 @@ impl SiteClient {
                 .cloned()
                 .collect();
             if fresh.is_empty() {
+                self.say("info", &format!("DM Page {page}: no new DMs found (all {} cards were already seen) — pagination complete.", page_dms.len()));
                 break;
             }
             let batch = fresh.len();
             all.extend(fresh);
+            pages += 1;
+            self.say("info", &format!("DM Page {page:3}  offset {offset:5}  +{batch} DMs  (running total: {})", all.len()));
             progress(page, all.len(), total);
-            if total.is_some_and(|t| t > 0 && all.len() as u64 >= t) {
+            if let Some(t) = total.filter(|t| *t > 0 && all.len() as u64 >= *t) {
+                self.say("info", &format!("Reached known total of {t} DMs."));
                 break;
             }
-            if !is_cumst && (!has_next || batch < 50) {
+            if !is_cumst && !has_next {
+                self.say("info", &format!("Last Pawchive DMs page reached ({batch} cards, no subsequent pagination links)."));
+                break;
+            }
+            if !is_cumst && batch < 50 {
+                self.say("info", &format!("Last Pawchive DMs page reached ({batch} cards)."));
                 break;
             }
             offset += page_dms.len();
             page += 1;
             std::thread::sleep(Duration::from_secs_f64(if domain.contains("pawchive") { uniform(0.35, 0.55) } else { 0.15 }));
+        }
+        let word = if pages == 1 { "page" } else { "pages" };
+        if cancelled {
+            self.say("info", &format!("DM enumeration stopped: {} DMs collected from {pages} {word} before cancelling.", all.len()));
+        } else {
+            self.say("success", &format!("DM enumeration done: {} DMs collected across {pages} {word}.", all.len()));
         }
         all
     }
@@ -708,7 +880,12 @@ impl SiteClient {
         if !domain.contains("pawchive") && !domain.contains("cum.st") {
             return Vec::new();
         }
-        let Some(a) = self.get(&format!("https://{}/api/v1/{}/user/{}/tags", p.domain, p.service, p.user_id), 10, false).filter(|a| a.status == 200) else {
+        let url = format!("https://{}/api/v1/{}/user/{}/tags", p.domain, p.service, p.user_id);
+        self.say("info", &format!("Fetching creator tags: {url}"));
+        let a = self.get(&url, 10, false);
+        let got = a.as_ref().map(|a| a.status.to_string()).unwrap_or_else(|| "no response".into());
+        let Some(a) = a.filter(|a| a.status == 200) else {
+            self.say("warning", &format!("Failed to fetch tags for {} ({}): HTTP {got}", p.user_id, p.service));
             return Vec::new();
         };
         let Some(data) = a.json() else { return Vec::new() };
@@ -730,18 +907,24 @@ impl SiteClient {
         }
         // Python's sort is stable, as is this one
         tags.sort_by(|a, b| b.1.cmp(&a.1));
+        self.say("info", &format!("Fetched {} tag(s) for {} [{}]", tags.len(), p.user_id, p.service));
         tags.into_iter().map(|t| t.0).collect()
     }
 
     /// The signed-in account's favorite posts or creators ("post" / "artist")
-    pub fn favorites(&self, domain: &str, fav_type: &str, page_start: usize, page_end: usize, page_size: usize, cancel: &AtomicBool) -> Vec<Value> {
+    #[allow(clippy::too_many_arguments)]
+    pub fn favorites(
+        &self, domain: &str, fav_type: &str, page_start: usize, page_end: usize, page_size: usize, progress: &dyn Fn(usize, usize, Option<u64>), cancel: &AtomicBool,
+    ) -> Vec<Value> {
         let low = domain.to_lowercase();
         let (is_pawchive, is_cumst) = (low.contains("pawchive"), low.contains("cum.st") || low.contains("cumst"));
         let mut all: Vec<Value> = Vec::new();
         let mut seen: HashSet<String> = HashSet::new();
         let (mut page, mut offset, mut errors, mut largest) = (page_start, (page_start.max(1) - 1) * page_size, 0, 0usize);
+        self.say("info", &format!("Favorites enumeration started — domain={domain} type={fav_type} pages {page_start}–{page_end}"));
         while page <= page_end {
             if cancel.load(Ordering::Relaxed) {
+                self.say("warning", "Favorites enumeration cancelled by user.");
                 break;
             }
             let url = if is_cumst {
@@ -751,16 +934,30 @@ impl SiteClient {
             } else {
                 format!("https://{domain}/api/v1/favorites?type={fav_type}&o={offset}")
             };
-            let Some(resp) = self.get(&url, 25, false) else {
+            progress(page, all.len(), None);
+            let resp = self.get(&url, 25, false);
+            if cancel.load(Ordering::Relaxed) {
+                break;
+            }
+            let Some(resp) = resp else {
                 errors += 1;
                 if errors >= 3 {
+                    self.say("error", "Stopping favorites enumeration after 3 consecutive failures.");
                     break;
                 }
                 std::thread::sleep(Duration::from_secs(2));
                 continue;
             };
             errors = 0;
+            if matches!(resp.status, 401 | 403) {
+                self.say("error", &format!(
+                    "HTTP {} Unauthorized when fetching favorites from {domain}. Please log in or add your session cookie in Settings → Accounts & Logins.",
+                    resp.status
+                ));
+                break;
+            }
             if resp.status != 200 {
+                self.say("warning", &format!("Favorites returned HTTP {}, stopping.", resp.status));
                 break;
             }
             let mut cumst_total = None;
@@ -782,6 +979,7 @@ impl SiteClient {
                 }
             };
             if items.is_empty() {
+                self.say("info", &format!("Page {page}: 0 favorites returned — enumeration complete."));
                 break;
             }
             let key = |it: &Value| {
@@ -790,21 +988,27 @@ impl SiteClient {
             };
             let fresh: Vec<Value> = items.iter().filter(|it| seen.insert(key(it))).cloned().collect();
             if fresh.is_empty() {
+                self.say("info", &format!("Page {page}: nothing new — reached end of favorites."));
                 break;
             }
             let batch = items.len();
+            let new = fresh.len();
             all.extend(fresh);
-            if is_cumst && cumst_total.is_some_and(|t| all.len() as i64 >= t) {
+            self.say("info", &format!("Page {page:3}  offset {offset:5}  +{new} favorite {fav_type}(s) (total: {})", all.len()));
+            if let Some(t) = cumst_total.filter(|t| is_cumst && all.len() as i64 >= *t) {
+                self.say("info", &format!("Page {page}: reached cum.st total ({}/{t}) — enumeration complete.", all.len()));
                 break;
             }
             largest = largest.max(batch);
             if batch < largest {
+                self.say("info", &format!("Partial page ({batch}<{largest}) — reached end of favorites."));
                 break;
             }
             offset += batch;
             page += 1;
             std::thread::sleep(Duration::from_millis(200));
         }
+        self.say("success", &format!("Favorites enumeration done: {} {fav_type}(s) collected.", all.len()));
         all
     }
 
@@ -844,7 +1048,7 @@ impl SiteClient {
     pub fn creator_listing_cost(&self, domain: &str) -> usize {
         match domain.to_lowercase().as_str() {
             "pawchive.pw" => 1,
-            "cum.st" => self.listing_sizes.lock().unwrap().get("cum.st").copied().unwrap_or(51000) / 45 + 1,
+            "cum.st" => listing_sizes().lock().unwrap().get("cum.st").copied().unwrap_or(51000) / 45 + 1,
             _ => 0,
         }
     }
@@ -855,7 +1059,7 @@ impl SiteClient {
         if !["pawchive.pw", "cum.st"].contains(&domain.as_str()) {
             return None;
         }
-        if let Some((t, m)) = self.listing_cache.lock().unwrap().get(&domain) {
+        if let Some((t, m)) = listing_cache().lock().unwrap().get(&domain) {
             if now() - t < max_age {
                 return Some(m.clone());
             }
@@ -876,7 +1080,7 @@ impl SiteClient {
             }
             m
         };
-        self.listing_cache.lock().unwrap().insert(domain, (now(), updates.clone()));
+        listing_cache().lock().unwrap().insert(domain, (now(), updates.clone()));
         Some(updates)
     }
 
@@ -899,7 +1103,7 @@ impl SiteClient {
             let data = a.json()?;
             if let Some(t) = data.get("total").and_then(Value::as_u64) {
                 total = Some(t as usize);
-                self.listing_sizes.lock().unwrap().insert("cum.st".into(), t as usize);
+                listing_sizes().lock().unwrap().insert("cum.st".into(), t as usize);
             }
             let creators = match &data {
                 Value::Object(o) => o.get("creators").and_then(Value::as_array).cloned().unwrap_or_default(),
@@ -933,6 +1137,28 @@ impl SiteClient {
         }
         (!updates.is_empty()).then_some(updates)
     }
+}
+
+/// Python's repr() of a string
+pub fn py_repr(s: &str) -> String {
+    let q = if s.contains('\'') && !s.contains('"') { '"' } else { '\'' };
+    let mut out = String::from(q);
+    for c in s.chars() {
+        match c {
+            '\\' => out.push_str("\\\\"),
+            '\n' => out.push_str("\\n"),
+            '\r' => out.push_str("\\r"),
+            '\t' => out.push_str("\\t"),
+            c if c == q => {
+                out.push('\\');
+                out.push(c);
+            }
+            c if (c as u32) < 0x20 || c as u32 == 0x7f => out.push_str(&format!("\\x{:02x}", c as u32)),
+            c => out.push(c),
+        }
+    }
+    out.push(q);
+    out
 }
 
 fn read(resp: Response) -> Answer {

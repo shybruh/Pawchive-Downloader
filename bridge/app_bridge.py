@@ -281,7 +281,9 @@ class AppBridge(QObject):
             max_workers=4,
             archive_manager=self.archive_manager
         )
-        self.api_client = ApiClient()
+        # ...and so do the site requests of scans (services/rust_sites.py)
+        from services import rust_sites
+        self.api_client = rust_sites.RustApiClient() if rust_sites.available() else ApiClient()
 
         # Models
         self._log_model = LogModel(self)

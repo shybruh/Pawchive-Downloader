@@ -58,6 +58,8 @@ pub trait Lookups {
     fn cancelled(&self) -> bool {
         false
     }
+    /// A line for the log panel (to_file: also in the log file)
+    fn log(&self, _level: &str, _message: &str, _to_file: bool) {}
 }
 
 pub struct NoLookups;
@@ -960,9 +962,11 @@ pub fn build(posts: &[Value], o: &Options, r: &Request, ctx: &dyn Lookups) -> Pl
             let expected_sha = first_text(fobj, &["sha256", "hash"]);
             let server_size = file_bytes.unwrap_or(0);
             let on_disk = || disk.iter().find_map(|c| nonempty_file(c).map(|s| (c.clone(), s)));
+            let shown = basename(&target_path).to_string();
             if ctx.archive_enabled() && ctx.is_archived(service, &post_id, &file_id, &expected_sha) {
                 let upgrade = on_disk().is_some_and(|(p, s)| needs_full_size_upgrade(s, server_size, &target_path, o, &p));
                 if !upgrade {
+                    ctx.log("info", &format!("📦 Skipping archived file: '{shown}' (present in download archive)"), false);
                     bump(&mut plan.not_queued, "in the download archive");
                     continue;
                 }
@@ -970,9 +974,11 @@ pub fn build(posts: &[Value], o: &Options, r: &Request, ctx: &dyn Lookups) -> Pl
             if !o.flag("keep_duplicates") {
                 if let Some((p, s)) = on_disk() {
                     if !needs_full_size_upgrade(s, server_size, &target_path, o, &p) {
+                        ctx.log("info", &format!("⏳ Skipping existing file: '{shown}' (already present on disk)"), false);
                         bump(&mut plan.not_queued, "already on disk");
                         continue;
                     }
+                    ctx.log("info", &format!("🔄 Re-downloading '{shown}' ({}) to upgrade to full resolution", f::format_size_str(s)), true);
                 }
             }
 
@@ -1021,6 +1027,7 @@ pub fn build(posts: &[Value], o: &Options, r: &Request, ctx: &dyn Lookups) -> Pl
                 let e_path = n::fit_path_for_windows(&join(&[&dest_folder(&e_name), &e_name]), n::WINDOWS_MAX_PATH);
                 let e_id = format!("embed_{post_id}_{i}");
                 if ctx.archive_enabled() && ctx.is_archived(service, &post_id, &e_id, "") {
+                    ctx.log("info", &format!("📦 Skipping archived embedded media: '{e_name}' (present in download archive)"), false);
                     bump(&mut plan.not_queued, "in the download archive");
                     continue;
                 }

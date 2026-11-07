@@ -14,6 +14,9 @@ in Rust. This module keeps the two in step over a local socket:
 Rust asks back for what still lives here: the download archive, login cookies, refreshed
 Pawchive links, embedded videos (yt-dlp) and Telegram files, and post-processing.
 
+Planning (which files of the scanned posts to download, and where) runs in Rust too: the planner
+asks here for the Known list, the download archive and video lengths.
+
 Without the desktop shell (no PAWCHIVE_QUEUE_URL), the Python loop runs as before.
 """
 
@@ -36,6 +39,10 @@ _applying = threading.local()          # set while a change from Rust is applied
 _keys = itertools.count(1)
 # Rust's log lines for controls this side logs itself
 _ALREADY_LOGGED = {"Download paused.", "Download resumed.", "Download cancellation requested."}
+# The planner's questions, and the questions answered on the reading thread (they wait on nothing
+# else from Rust, and planning a big creator asks thousands of them)
+_PLAN_ASKS = {"known", "creator_profile", "archived", "plan_cancelled", "video_duration"}
+_QUICK_ASKS = {"known", "creator_profile", "archived", "plan_cancelled", "is_archived", "cookie", "limit"}
 
 
 def available() -> bool:
@@ -50,14 +57,29 @@ def _key(t) -> str:
     return k
 
 
-class _Link:
-    """The socket to the Rust queue: one JSON object per line, both ways."""
+_LEVELS = ("debug", "info", "warning", "error", "success")
 
-    def __init__(self, on_message):
-        self._on_message = on_message
+
+def _log(level: str, message: str, to_file: bool = True, category: str = "downloader") -> None:
+    if level in ("debug", "info") and not to_file:      # (only these two can stay out of the log file)
+        getattr(logger, level)(message, category=category, to_file=False)
+    else:
+        getattr(logger, level if level in _LEVELS else "info")(message, category=category)
+
+
+class _Link:
+    """The socket to the Rust engine: one JSON object per line, both ways. One for the whole app
+    (the engine takes one connection): the download queue, the planner and the site client share it."""
+
+    def __init__(self, on_message=None):
+        self._on_message = on_message or (lambda msg: None)
         self._sock: Optional[socket.socket] = None
         self._lock = threading.Lock()
         self._connect_lock = threading.Lock()
+        self._calls: Dict[int, list] = {}
+        self._progress: Dict[int, Any] = {}
+        self._call_ids = itertools.count(1)
+        self._unreachable_said = False
 
     @property
     def up(self) -> bool:
@@ -74,8 +96,12 @@ class _Link:
                 s.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
                 s.sendall((json.dumps({"token": _TOKEN}) + "\n").encode())
             except OSError as e:
-                logger.warning(f"The download engine couldn't be reached ({e}); downloading the old way.", category="downloader")
+                if not self._unreachable_said:      # (said once: every scan and download tries again)
+                    self._unreachable_said = True
+                    logger.warning(f"The download engine couldn't be reached ({e}); using the built-in one.",
+                                   category="downloader")
                 return False
+            self._unreachable_said = False
             self._sock = s
             threading.Thread(target=self._read, args=(s,), name="rust-queue-read", daemon=True).start()
             return True
@@ -93,9 +119,83 @@ class _Link:
             self._close(s)
             return False
 
+    def new_call_id(self) -> int:
+        return next(self._call_ids)
+
+    def call(self, fn: str, args: Dict[str, Any], cid: Optional[int] = None, progress=None, cancelled=None):
+        """Runs fn in Rust and waits for its answer: (True, value), or (False, why).
+        progress(page, count, total) gets the call's progress notes; when cancelled() turns true,
+        Rust is told to stop (the call still returns what was collected)."""
+        cid = cid or self.new_call_id()
+        slot = [threading.Event(), (False, "the download engine stopped")]
+        self._calls[cid] = slot
+        if progress:
+            self._progress[cid] = progress
+        told = False
+        try:
+            if not self.send({"op": "call", "id": cid, "fn": fn, "args": args}):
+                return False, "the download engine couldn't be reached"
+            while not slot[0].wait(0.1 if cancelled else 0.5):
+                if self._sock is None:
+                    break
+                if cancelled and not told and cancelled():
+                    told = True
+                    self.send({"op": "cancel_call", "id": cid})
+            return slot[1]
+        finally:
+            self._calls.pop(cid, None)
+            self._progress.pop(cid, None)
+
+    def _handled_here(self, msg: Dict[str, Any]) -> bool:
+        """Messages for any call: results, progress, log lines, account cookies."""
+        t = msg.get("t")
+        if t == "result":
+            self._result(msg)
+            return True
+        if t == "note":
+            fn, args = msg.get("fn"), msg.get("args") or []
+            if fn == "log":            # [level, message, to_file, category] (the planner's: no category)
+                level, message, to_file, category = (list(args) + [None] * 4)[:4]
+                _log(str(level), str(message), to_file is not False, category or "file")
+                return True
+            if fn == "progress":
+                cb = self._progress.get(args[0]) if args else None
+                if cb:
+                    page, count, total = (list(args[1:]) + [None, None, None])[:3]
+                    try:
+                        if total is None:
+                            cb(page, count)
+                        else:
+                            try:
+                                cb(page, count, total)
+                            except TypeError:
+                                cb(page, count)
+                    except Exception as e:
+                        logger.debug(f"Progress callback failed: {e}", category="api")
+                return True
+        if t == "ask" and msg.get("fn") == "account_cookie":
+            value = ""
+            try:
+                from core.auth_manager import auth_manager
+                from core.providers import normalize_cookie
+                value = normalize_cookie(auth_manager.get_credential((msg.get("args") or [""])[0], "cookie") or "")
+            except Exception:
+                pass
+            self.send({"t": "reply", "id": msg.get("id"), "value": value})
+            return True
+        return False
+
+    def _result(self, msg: Dict[str, Any]) -> None:
+        slot = self._calls.get(msg.get("id"))
+        if slot is not None:
+            slot[1] = (False, str(msg["error"])) if "error" in msg else (True, msg.get("value"))
+            slot[0].set()
+
     def _close(self, s):
         if self._sock is s:
             self._sock = None
+            for slot in list(self._calls.values()):
+                slot[0].set()
         try:
             s.close()
         except OSError:
@@ -110,7 +210,8 @@ class _Link:
                 except ValueError:
                     continue
                 try:
-                    self._on_message(msg)
+                    if not self._handled_here(msg):
+                        self._on_message(msg)
                 except Exception as e:
                     logger.debug(f"Download engine message failed: {e}", category="downloader")
         except OSError:
@@ -122,18 +223,35 @@ class _Link:
             pass
 
 
+_shared: Optional[_Link] = None
+_shared_lock = threading.Lock()
+
+
+def shared_link() -> _Link:
+    global _shared
+    with _shared_lock:
+        if _shared is None:
+            _shared = _Link()
+        return _shared
+
+
 class RustDownloader(FileDownloader):
     def __init__(self, *args, **kwargs):
         self._link = None
         self._mw = 4
         super().__init__(*args, **kwargs)
-        self._link = _Link(self._on_message)
+        self._link = shared_link()
+        self._link._on_message = self._on_message
         self._by_key: Dict[str, Any] = {}
         self._finished = threading.Event()
         self._result = (False, "")
         self._dirty: Dict[str, Any] = {}
         self._dirty_lock = threading.Lock()
         self._dirty_wake = threading.Event()
+        self._clean_cookie = ""
+        self._plans: Dict[int, Any] = {}           # call id → "was this plan cancelled?"
+        self._profiles: Dict[int, Any] = {}        # creator profiles lent to the planner by reference
+        self._profile_ids = itertools.count(1)
         dl.status_listener = self._status_changed
         threading.Thread(target=self._flush_loop, name="rust-queue-flush", daemon=True).start()
 
@@ -205,6 +323,152 @@ class RustDownloader(FileDownloader):
             for k, t in dirty.items():
                 self._link.send({"op": "state", "key": k, "status": t.status, "error_msg": t.error_msg or "",
                                  "retry_count": int(getattr(t, "retry_count", 0) or 0)})
+
+    # ── Planning: the download tasks of scanned posts ───────────────────────────
+
+    def build_tasks_from_posts(self, posts, creator_name, service, domain, base_dir, options,
+                               batch_id=None, artist_dir=None, user_id=""):
+        def the_old_way():
+            return super(RustDownloader, self).build_tasks_from_posts(
+                posts, creator_name, service, domain, base_dir, options,
+                batch_id=batch_id, artist_dir=artist_dir, user_id=user_id)
+
+        if os.environ.get("PAWCHIVE_PYTHON_PLANNER", "") == "1" or not self._link.connect():
+            return the_old_way()
+        from collections import Counter
+        from core import folder_naming
+        from core.downloader import DownloadTask, MediaTypes
+
+        self._unmatched_known_count = 0
+        self.last_build_cancelled = False
+        session = self._session_id          # (only a cancel issued during this build counts)
+        if options.manga_mode:
+            logger.info("Manga Mode active: Sorting posts chronologically (oldest first)...", category="downloader")
+        elif options.tag_folder_mode:
+            logger.info("Tag Folder Mode active: Sorting posts by primary tag and chronological index...", category="downloader")
+        try:
+            new_chars = self.known_manager.find_candidates_in_posts(posts)
+        except Exception:
+            new_chars = []
+        if new_chars:
+            logger.debug(
+                f"Spotted {len(new_chars)} possible character name(s) in post titles (not added to Known list): "
+                f"{', '.join(new_chars[:6])}{'...' if len(new_chars) > 6 else ''}",
+                category="known")
+        logger.info(f"Structuring download plan for {len(posts)} posts...", category="downloader")
+
+        cid = self._link.new_call_id()
+        self._plans[cid] = lambda: self._cancel_event.is_set() and self._session_id != session
+        try:
+            ok, plan = self._link.call("plan", {
+                "posts": posts,
+                "options": options.to_dict(),
+                "archive": bool(self.archive_manager and self.archive_manager.is_enabled),
+                "request": {"creator_name": creator_name or "", "service": service or "", "domain": domain or "",
+                            "base_dir": base_dir or "", "batch_id": batch_id or "", "artist_dir": artist_dir or "",
+                            "user_id": str(user_id or ""), "include_service": bool(folder_naming.include_service)},
+            }, cid)
+        finally:
+            self._plans.pop(cid, None)
+        if not ok:
+            logger.warning(f"The download engine couldn't plan these posts ({plan}); planning them the old way.",
+                           category="downloader")
+            return the_old_way()
+        if plan.get("cancelled"):
+            self.last_build_cancelled = True
+            logger.info("Task structuring cancelled by user.", category="downloader")
+            return []
+        self._unmatched_known_count = int(plan.get("unmatched_known") or 0)
+
+        tasks = []
+        for d in plan.get("tasks") or []:
+            t = DownloadTask(
+                url=d["url"], target_path=d["target_path"], post_title=d["post_title"],
+                creator_name=d["creator_name"], service=d["service"], post_id=d["post_id"], file_id=d["file_id"],
+                file_size=int(d.get("file_size") or 0), expected_sha256=d.get("expected_sha256") or "",
+                is_ytdlp=bool(d.get("is_ytdlp")), batch_id=d.get("batch_id") or None,
+                post_url=d.get("post_url") or "", post_date=d.get("post_date") or "", user_id=d.get("user_id") or "")
+            t.options = options
+            t.fallback_urls = list(d.get("fallback_urls") or [])
+            t.post_info_path = d.get("post_info_path") or ""
+            tasks.append(t)
+
+        # Post texts: text-only posts are saved now; the others once their first file is downloaded
+        for path, pid, text in plan.get("pending_post_infos") or []:
+            self._post_info_pending[(path, pid)] = text
+        for path, pid, text in plan.get("write_now") or []:
+            dl._write_post_info(path, text, pid)
+
+        if options.file_type == MediaTypes.LINKS:
+            self.harvested_links = {k: list(v) for k, v in (plan.get("harvested_links") or {}).items() if v}
+            self.harvested_links_records = list(plan.get("harvested_records") or [])
+            total = sum(len(v) for v in self.harvested_links.values())
+            if total:
+                logger.success(
+                    f"🔗 Links scan complete: {total} unique external link(s) found across "
+                    f"{len(self.harvested_links)} platform(s). Click 'Download Links' or 'Export Links'.",
+                    category="downloader")
+            else:
+                logger.warning("Links scan complete: No external cloud links were found in any posts.",
+                               category="downloader")
+        else:
+            self.harvested_links = {}
+            self.harvested_links_records = []
+
+        not_queued, renamed = Counter(plan.get("not_queued") or {}), Counter(plan.get("renamed") or {})
+        notes = [f"Not queued: {dl._counts(not_queued)}." if not_queued else "",
+                 f"Renamed to keep files apart: {dl._counts(renamed)}." if renamed else ""]
+        logger.success(" ".join([f"Prepared {len(tasks)} file download tasks."] + [n for n in notes if n]),
+                       category="downloader")
+        return tasks
+
+    def _plan_answer(self, fn: str, args: List[Any]) -> Any:
+        if fn == "plan_cancelled":
+            check = self._plans.get(args[0])
+            return bool(check()) if check else False
+        if fn == "known":
+            title, tags, filenames, content, profile = (list(args) + [None] * 5)[:5]
+            if isinstance(profile, dict) and "ref" in profile:
+                profile = self._profiles.get(profile["ref"])
+            hit = self.known_manager.find_matching_hierarchy(
+                title, tags=tags, filenames=filenames, content=content, creator_profile=profile)
+            return [hit[0] or "", hit[1] or ""] if hit else None
+        if fn == "creator_profile":
+            service, creator, dirs = args
+            prof = self.archive_manager.get_creator_character_profile(
+                service=service, creator_id=creator, creator_name=creator, base_dirs=list(dirs))
+            if not prof:
+                return None
+            n = next(self._profile_ids)
+            if len(self._profiles) > 64:
+                self._profiles.clear()
+            self._profiles[n] = prof
+            return {"ref": n}
+        if fn == "archived":
+            service, post_id, file_id, sha = args
+            return bool(self.archive_manager and self.archive_manager.is_archived(
+                service=service, post_id=post_id, file_id=file_id, file_hash=sha))
+        if fn == "video_duration":
+            from core.video_probe import VideoProbe
+            return VideoProbe.get_video_duration(args[0], getattr(self, "session", None))
+        return None
+
+    def _note(self, fn: str, args: List[Any]) -> None:
+        try:
+            if fn == "record_link":
+                if self.archive_manager and self.archive_manager.is_enabled:
+                    service, creator_id, post_id, url, creator_name, post_title, link_title = args
+                    self.archive_manager.record_link(
+                        service=service, creator_id=creator_id, post_id=post_id, url=url,
+                        creator_name=creator_name, post_title=post_title, link_title=link_title)
+            elif fn in ("archive_password", "add_passwords"):
+                from core.archive_password_manager import archive_password_manager
+                if fn == "archive_password":
+                    archive_password_manager.record_archive_password(args[0], args[1])
+                else:
+                    archive_password_manager.add_passwords(list(args[0]))
+        except Exception as e:
+            logger.debug(f"Download engine note {fn} failed: {e}", category="downloader")
 
     # ── The run ────────────────────────────────────────────────────────────────
 
@@ -306,7 +570,12 @@ class RustDownloader(FileDownloader):
                     file_hash=task.expected_sha256, filename=task.filename, creator_name=task.creator_name,
                     post_title=task.post_title, file_size=int(msg.get("size") or 0), file_path=msg.get("path") or task.target_path)
         elif t == "ask":
-            threading.Thread(target=self._answer, args=(msg,), daemon=True).start()
+            if msg.get("fn") in _QUICK_ASKS:
+                self._answer(msg)
+            else:
+                threading.Thread(target=self._answer, args=(msg,), daemon=True).start()
+        elif t == "note":
+            self._note(msg.get("fn"), msg.get("args") or [])
         elif t == "gone":
             self._finished.set()
 
@@ -352,7 +621,9 @@ class RustDownloader(FileDownloader):
         value: Any = None
         try:
             task = self._by_key.get(args[0]) if args and fn in ("is_archived", "refresh_link", "special", "post_process") else None
-            if fn == "cookie":
+            if fn in _PLAN_ASKS:
+                value = self._plan_answer(fn, args)
+            elif fn == "cookie":
                 from core.providers import cookie_for_url
                 value = cookie_for_url(args[0], self._clean_cookie) or ""
             elif fn == "limit":
