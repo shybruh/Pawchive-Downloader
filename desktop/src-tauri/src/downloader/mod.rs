@@ -4,4 +4,10 @@
 
 #![allow(dead_code)] // used once the Rust downloader takes over from the Python one
 
+pub mod filters;
 pub mod links;
+pub mod naming;
+mod py;
+
+#[cfg(test)]
+mod golden;
