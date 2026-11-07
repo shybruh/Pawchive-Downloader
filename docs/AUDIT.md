@@ -97,7 +97,7 @@ Each step is checked against the running app before its Python code is deleted. 
   | `linkVault` (`bridge/link_vault_bridge.py`) | saved cloud links: collect, check, edit, export (downloading them stays with downloads) | done |
   | Gallery file explorer (in `appBridge`) | folder listing and sizes, breadcrumbs, drives, move, rename, duplicates, path safety, open / reveal | in Rust (`src-tauri/src/bridge/gallery.rs`, answered by the host for `appBridge`); Recycle Bin delete and the bookmarks still in Python |
   | `favorites` | account favorites browse / download | next |
-  | `watchlist` | watchlist slots and the background check | |
+  | `watchlist` | watchlist slots and the background check | the check for new posts runs in Rust (`src-tauri/src/watchlist/`, through the Rust site client); the store and slots are still Python. Favorites wait for it: they are watchlist entries |
   | `postSelection` | "Select posts…" fetch and the picker's results | |
   | `downloads` | start / stop / pause, queue import and export, run results | |
   | `settings` | the option properties (what remains in `appBridge`) | last |

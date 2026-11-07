@@ -258,7 +258,7 @@ fn plan_call(id: u64, args: &Value) -> Result<Value, String> {
         Box::new(move |site: &str| cookies.ask("account_cookie", json!([site])).as_str().unwrap_or("").to_string()),
     );
     let lg = l.clone();
-    sites.set_log(Box::new(move |level: &str, msg: &str| lg.note("log", json!([level, msg, true, "api"]))));
+    sites.set_log(Box::new(move |level: &str, category: &str, msg: &str| lg.note("log", json!([level, msg, true, category]))));
     let ctx = PlanCtx { link: l, id, archive: args["archive"].as_bool().unwrap_or(false), sites };
     let p = plan::build(posts, &o, &req, &ctx);
     Ok(json!({
@@ -315,7 +315,7 @@ fn site_call(id: u64, a: &Value) -> Result<Value, String> {
         c.user_agent = s("user_agent").trim().to_string();
     }
     let lg = l.clone();
-    c.set_log(Box::new(move |level: &str, msg: &str| lg.note("log", json!([level, msg, true, "api"]))));
+    c.set_log(Box::new(move |level: &str, category: &str, msg: &str| lg.note("log", json!([level, msg, true, category]))));
     let cancel = call_flags().lock().unwrap().entry(id).or_default().clone();
     let progress = |page: usize, count: usize, total: Option<u64>| l.note("progress", json!([id, page, count, total]));
     let p = parsed_link(&a["link"]);
@@ -338,6 +338,25 @@ fn site_call(id: u64, a: &Value) -> Result<Value, String> {
                 Some(m) => json!(m.into_iter().map(|((svc, uid), t)| json!([svc, uid, t])).collect::<Vec<_>>()),
                 None => Value::Null,
             }
+        }
+        "posts_since" => {
+            // The watchlist's check for new posts (src/watchlist/): one page at a time
+            let entry = crate::watchlist::Entry::from_value(&a["entry"]);
+            let mut fetch = |page: usize| {
+                let posts = c.user_posts(&p, page, page, 50, &|_, _, _| {}, &cancel, "", "");
+                (posts, c.last_fetch_failed.get())
+            };
+            let wl = l.clone();
+            let r = crate::watchlist::posts_since(
+                &entry,
+                &mut fetch,
+                n("page_start", 1),
+                n("page_end", 999_999),
+                a["raise_on_error"].as_bool().unwrap_or(false),
+                &|| cancel.load(std::sync::atomic::Ordering::Relaxed),
+                &move |level: &str, msg: &str| wl.note("log", json!([level, msg, true, "watchlist"])),
+            );
+            json!({"posts": r.posts, "failed_page": r.failed_page})
         }
         "resolve_links" => {
             let mut post = a["post"].clone();

@@ -1098,6 +1098,14 @@ class WatchlistManager:
             except Exception:
                 pass
 
+        # The desktop shell's engine does the check (services/rust_sites.py, src-tauri/src/watchlist/)
+        in_rust = getattr(api_client, "watch_posts_since", None)
+        found = in_rust(parsed, entry, page_start, page_end, raise_on_error, cancel_event) if in_rust else None
+        if found is not None:
+            entry.cached_new_posts = found
+            entry.new_post_count = len(found)
+            return found
+
         new_posts: List[Dict[str, Any]] = []
         if page_start < 1:
             page_start = 1
@@ -1217,10 +1225,17 @@ class WatchlistManager:
             current_page += 1
 
         # Sort oldest first for ordered downloading
-        new_posts.sort(key=lambda p: (
-            p.get("published") or p.get("added") or "0",
-            str(p.get("id", "0"))
-        ))
+        # (a date given as a timestamp sorts as its local date and time: comparing it with the text
+        # dates of the other posts stopped the check with an error)
+        def _sort_date(p):
+            v = p.get("published") or p.get("added") or "0"
+            if isinstance(v, (int, float)) and not isinstance(v, bool):
+                try:
+                    return datetime.datetime.fromtimestamp(v).strftime("%Y-%m-%dT%H:%M:%S")
+                except (OverflowError, OSError, ValueError):
+                    return "0"
+            return str(v)
+        new_posts.sort(key=lambda p: (_sort_date(p), str(p.get("id", "0"))))
 
         # Filter out ignored posts and update cached_new_posts
         ignored_set = set(str(pid) for pid in getattr(entry, "ignored_post_ids", []))

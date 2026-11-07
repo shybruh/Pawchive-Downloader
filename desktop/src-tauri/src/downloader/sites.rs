@@ -133,8 +133,9 @@ fn has_class_matching(e: &ElementRef, pattern: &Regex) -> bool {
 /// Picks the account cookie saved for a site ("pawchive" / "cumst"), "" when there's none
 pub type AccountCookies = Box<dyn Fn(&str) -> String + Send + Sync>;
 
-/// Where the client's log lines go: (level, message) with level debug / info / warning / error / success
-pub type LogSink = Box<dyn Fn(&str, &str) + Send + Sync>;
+/// Where the client's log lines go: (level, category, message); level debug / info / warning /
+/// error / success, category "api" or "http" (one line per request), as the Python client's
+pub type LogSink = Box<dyn Fn(&str, &str, &str) + Send + Sync>;
 
 type Listings = std::sync::Mutex<HashMap<String, (f64, HashMap<(String, String), f64>)>>;
 
@@ -228,7 +229,7 @@ impl SiteClient {
             user_agent: DEFAULT_USER_AGENT.into(),
             account_cookies,
             last_fetch_failed: std::cell::Cell::new(false),
-            log: Box::new(|_, _| {}),
+            log: Box::new(|_, _, _| {}),
         }
     }
 
@@ -237,7 +238,12 @@ impl SiteClient {
     }
 
     fn say(&self, level: &str, message: &str) {
-        (self.log)(level, message);
+        (self.log)(level, "api", message);
+    }
+
+    /// A line about one request
+    fn say_http(&self, level: &str, message: &str) {
+        (self.log)(level, "http", message);
     }
 
     /// The login cookie that may go to `url`: only to the archive site it belongs to
@@ -293,17 +299,17 @@ impl SiteClient {
                             // (the size the server announced, as the Python client showed it)
                             let len = a.headers.get("content-length").and_then(|v| v.to_str().ok()).and_then(|v| v.parse::<u64>().ok()).unwrap_or(0);
                             let kind: String = a.headers.get("content-type").and_then(|v| v.to_str().ok()).unwrap_or("?").chars().take(40).collect();
-                            self.say("debug", &format!("HTTP {status}  {ms:6.0}ms  {:>5}KB  {kind}  ← {url}", len / 1024))
+                            self.say_http("debug", &format!("HTTP {status}  {ms:6.0}ms  {:>5}KB  {kind}  ← {url}", len / 1024))
                         }
-                        416 => self.say("debug", &format!("HTTP 416 (Already complete)  ← {url}")),
-                        403 => self.say("warning", &format!("HTTP 403 Forbidden — {}. Add a session cookie in Settings.", status_hint(403))),
+                        416 => self.say_http("debug", &format!("HTTP 416 (Already complete)  ← {url}")),
+                        403 => self.say_http("warning", &format!("HTTP 403 Forbidden — {}. Add a session cookie in Settings.", status_hint(403))),
                         429 => {
                             let ra = a.headers.get("Retry-After").and_then(|v| v.to_str().ok()).unwrap_or("?").to_string();
-                            self.say("warning", &format!("HTTP 429 Rate-limited (Retry-After: {ra}s) — backing off…"))
+                            self.say_http("warning", &format!("HTTP 429 Rate-limited (Retry-After: {ra}s) — backing off…"))
                         }
                         _ => {
                             let hint = status_hint(status);
-                            self.say("warning", &format!("HTTP {status}  {ms:6.0}ms  {}  ← {url}", if hint.is_empty() { "Unexpected status" } else { hint }))
+                            self.say_http("warning", &format!("HTTP {status}  {ms:6.0}ms  {}  ← {url}", if hint.is_empty() { "Unexpected status" } else { hint }))
                         }
                     }
                     return Some(a);
@@ -311,11 +317,11 @@ impl SiteClient {
                 Err(_) if !quick && attempt + 1 < tries => continue,
                 Err(e) => {
                     if e.is_timeout() {
-                        self.say("error", &format!("Request timed out after {:.0}ms — {url}", t0.elapsed().as_secs_f64() * 1000.0));
+                        self.say_http("error", &format!("Request timed out after {:.0}ms — {url}", t0.elapsed().as_secs_f64() * 1000.0));
                     } else if e.is_connect() {
-                        self.say("error", &format!("Connection failed (server unreachable?): {e}"));
+                        self.say_http("error", &format!("Connection failed (server unreachable?): {e}"));
                     } else {
-                        self.say("error", &format!("Unexpected HTTP error: {e}"));
+                        self.say_http("error", &format!("Unexpected HTTP error: {e}"));
                     }
                     return None;
                 }

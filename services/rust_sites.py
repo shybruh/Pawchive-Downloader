@@ -82,6 +82,23 @@ class RustApiClient(ApiClient):
             return None
         return {(svc, uid): t for svc, uid, t in v}
 
+    # ── The watchlist's check for new posts ─────────────────────────────────
+
+    def watch_posts_since(self, parsed, entry, page_start: int = 1, page_end: int = 999999,
+                          raise_on_error: bool = False, cancel_event=None):
+        """WatchlistManager.get_posts_since's page loop, run in Rust (src-tauri/src/watchlist/): the new
+        posts, oldest first, ignored ones left out. None when Rust can't answer (then Python checks)."""
+        fields = {k: getattr(entry, k, None) for k in ("creator_name", "last_post_date", "last_post_id")}
+        fields["cutoff_day_ids"] = [str(i) for i in (getattr(entry, "cutoff_day_ids", None) or [])]
+        fields["ignored_post_ids"] = [str(i) for i in (getattr(entry, "ignored_post_ids", None) or [])]
+        v = self._site("posts_since", cancelled=self._stop(cancel_event), link=_parsed(parsed), entry=fields,
+                       page_start=int(page_start), page_end=int(page_end), raise_on_error=bool(raise_on_error))
+        if v is _FAILED:
+            return None
+        if v.get("failed_page"):
+            raise RuntimeError(f"page {v['failed_page']} of the post list couldn't be fetched")
+        return list(v.get("posts") or [])
+
     # ── Posts ────────────────────────────────────────────────────────────────
 
     def resolve_pawchive_deferred_attachments(self, post: Dict[str, Any], domain: str = "pawchive.pw") -> int:

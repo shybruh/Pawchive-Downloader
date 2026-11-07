@@ -8,6 +8,7 @@ mod engine;
 mod accounts;
 mod host;
 mod bridge;
+mod watchlist;
 mod media;
 mod transfer;
 mod proc_group;
