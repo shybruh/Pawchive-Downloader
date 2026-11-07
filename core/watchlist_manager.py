@@ -15,7 +15,7 @@ from dataclasses import dataclass, field, asdict
 from typing import List, Optional, Dict, Any
 
 from core.logger import logger
-from core.watchlist_store import WatchlistStore
+from core.watchlist_store import WatchlistStore, open_store
 
 
 @dataclass
@@ -248,7 +248,7 @@ class WatchlistManager:
         # that changed). Older versions' watchlist.json is imported once and kept as .migrated.
         self.watchlist_file = os.path.join(config_dir, "watchlist.json")
         self.db_file = os.path.join(config_dir, "watchlist.db")
-        self.store = WatchlistStore(self.db_file)
+        self.store = open_store(self.db_file)
         self._index_stale = True
         self._entries: _TrackedList = _TrackedList((), self._list_changed)
         # Checks run in background threads while the window edits entries

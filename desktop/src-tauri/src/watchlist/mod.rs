@@ -1,6 +1,9 @@
 //! The watchlist, being ported from core/watchlist_manager.py. First part: the check for a
 //! creator's new posts (WatchlistManager.get_posts_since), checked against the Python version by
-//! tools/golden_watchlist.py. The watchlist's store and its entries are still kept by Python.
+//! tools/golden_watchlist.py. Second part: the watchlist's database (store.rs). The entries
+//! themselves are still kept, and changed, by Python.
+
+pub mod store;
 
 use chrono::TimeZone;
 use serde_json::Value;

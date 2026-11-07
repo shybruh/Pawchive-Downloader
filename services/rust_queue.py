@@ -133,6 +133,9 @@ class _Link:
         """Runs fn in Rust and waits for its answer: (True, value), or (False, why).
         progress(page, count, total) gets the call's progress notes; when cancelled() turns true,
         Rust is told to stop (the call still returns what was collected)."""
+        if threading.current_thread().name == "rust-queue-read":
+            # (the answer would come in on this very thread: waiting here would never end)
+            return False, "the download engine couldn't be reached from its reading thread"
         cid = cid or self.new_call_id()
         slot = [threading.Event(), (False, "the download engine stopped")]
         self._calls[cid] = slot

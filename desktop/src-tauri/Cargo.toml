@@ -26,14 +26,14 @@ tauri-plugin-updater = "2"
 tauri-plugin-process = "2"
 getrandom = "0.3"
 serde = { version = "1", features = ["derive"] }
-serde_json = "1"
+serde_json = { version = "1", features = ["preserve_order", "float_roundtrip"] }
 tokio-tungstenite = "0.26"
 futures-util = "0.3"
 tokio = { version = "1", features = ["net", "sync", "macros", "rt"] }
 tiny_http = "0.12"
 sha1 = "0.10"
 image = { version = "0.25", default-features = false, features = ["jpeg", "png", "gif", "webp", "bmp", "tiff", "ico"] }
-rusqlite = { version = "0.37", features = ["bundled"] }
+rusqlite = { version = "0.37", features = ["bundled", "backup"] }
 aes-gcm = "0.10"
 base64 = "0.22"
 sha2 = "0.10"

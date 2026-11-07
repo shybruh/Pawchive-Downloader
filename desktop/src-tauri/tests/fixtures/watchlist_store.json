@@ -1,0 +1,1195 @@
+[
+ {
+  "op": "has_rows",
+  "args": {},
+  "result": false,
+  "tables": {}
+ },
+ {
+  "op": "write",
+  "args": {
+   "rows": [
+    [
+     1,
+     0,
+     {
+      "url": "https://pawchive.pw/patreon/user/1",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "1",
+      "creator_name": "Alice",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2026-11-01T10:00:00",
+      "auto_check": true,
+      "download_dir": "D:\\Art\\Alice",
+      "download_dirs": [
+       "D:\\Art\\Alice"
+      ],
+      "ignored_post_ids": [],
+      "cutoff_day_ids": [],
+      "is_favorite": false
+     },
+     {
+      "file_type": "all",
+      "subfolder_per_post": true,
+      "skip_words": "wip, sketch",
+      "max_size": 0
+     },
+     []
+    ],
+    [
+     2,
+     1,
+     {
+      "url": "https://pawchive.pw/patreon/user/2",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "2",
+      "creator_name": "Bob",
+      "last_post_id": "99",
+      "last_post_date": "2026-10-01",
+      "added_at": "2026-11-01T10:00:00",
+      "auto_check": true,
+      "download_dir": "D:\\Art\\Bob",
+      "download_dirs": [
+       "D:\\Art\\Bob"
+      ],
+      "ignored_post_ids": [],
+      "cutoff_day_ids": [
+       "99"
+      ],
+      "is_favorite": false
+     },
+     {
+      "file_type": "all",
+      "subfolder_per_post": true,
+      "skip_words": "wip, sketch",
+      "max_size": 0
+     },
+     [
+      {
+       "id": "101",
+       "title": "Ünïcödé ✨ post",
+       "published": "2026-11-02T08:00:00",
+       "attachments": [
+        {
+         "name": "a.png",
+         "path": "/ab/cd/abcd.png"
+        }
+       ]
+      },
+      {
+       "id": "102",
+       "title": "Second \"quoted\" \\ back",
+       "added": "2026-11-03"
+      }
+     ]
+    ],
+    [
+     3,
+     2,
+     {
+      "url": "https://pawchive.pw/patreon/user/3",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "3",
+      "creator_name": "Cara",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2026-11-01T10:00:00",
+      "auto_check": true,
+      "download_dir": "D:\\Art\\Cara",
+      "download_dirs": [
+       "D:\\Art\\Cara"
+      ],
+      "ignored_post_ids": [],
+      "cutoff_day_ids": [],
+      "is_favorite": true,
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": true
+     },
+     {},
+     []
+    ]
+   ],
+   "deleted": [],
+   "replace_all": false
+  },
+  "result": 3,
+  "tables": {
+   "creators": [
+    [
+     1,
+     0,
+     "patreon",
+     "1",
+     "Alice",
+     "{\"url\":\"https://pawchive.pw/patreon/user/1\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"1\",\"creator_name\":\"Alice\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Alice\",\"download_dirs\":[\"D:\\\\Art\\\\Alice\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     null
+    ],
+    [
+     2,
+     1,
+     "patreon",
+     "2",
+     "Bob",
+     "{\"url\":\"https://pawchive.pw/patreon/user/2\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"2\",\"creator_name\":\"Bob\",\"last_post_id\":\"99\",\"last_post_date\":\"2026-10-01\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Bob\",\"download_dirs\":[\"D:\\\\Art\\\\Bob\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[\"99\"],\"is_favorite\":false}",
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     "[{\"id\":\"101\",\"title\":\"Ünïcödé ✨ post\",\"published\":\"2026-11-02T08:00:00\",\"attachments\":[{\"name\":\"a.png\",\"path\":\"/ab/cd/abcd.png\"}]},{\"id\":\"102\",\"title\":\"Second \\\"quoted\\\" \\\\ back\",\"added\":\"2026-11-03\"}]"
+    ],
+    [
+     3,
+     2,
+     "patreon",
+     "3",
+     "Cara",
+     "{\"url\":\"https://pawchive.pw/patreon/user/3\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"3\",\"creator_name\":\"Cara\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Cara\",\"download_dirs\":[\"D:\\\\Art\\\\Cara\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":true,\"last_checked_at\":1794082361.9700677,\"custom_folder\":true}",
+     null,
+     null
+    ]
+   ],
+   "options": [
+    [
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     "{\"file_type\":\"all\",\"subfolder_per_post\":true,\"skip_words\":\"wip, sketch\",\"max_size\":0}"
+    ]
+   ],
+   "meta": []
+  }
+ },
+ {
+  "op": "has_rows",
+  "args": {},
+  "result": true,
+  "tables": {
+   "creators": [
+    [
+     1,
+     0,
+     "patreon",
+     "1",
+     "Alice",
+     "{\"url\":\"https://pawchive.pw/patreon/user/1\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"1\",\"creator_name\":\"Alice\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Alice\",\"download_dirs\":[\"D:\\\\Art\\\\Alice\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     null
+    ],
+    [
+     2,
+     1,
+     "patreon",
+     "2",
+     "Bob",
+     "{\"url\":\"https://pawchive.pw/patreon/user/2\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"2\",\"creator_name\":\"Bob\",\"last_post_id\":\"99\",\"last_post_date\":\"2026-10-01\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Bob\",\"download_dirs\":[\"D:\\\\Art\\\\Bob\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[\"99\"],\"is_favorite\":false}",
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     "[{\"id\":\"101\",\"title\":\"Ünïcödé ✨ post\",\"published\":\"2026-11-02T08:00:00\",\"attachments\":[{\"name\":\"a.png\",\"path\":\"/ab/cd/abcd.png\"}]},{\"id\":\"102\",\"title\":\"Second \\\"quoted\\\" \\\\ back\",\"added\":\"2026-11-03\"}]"
+    ],
+    [
+     3,
+     2,
+     "patreon",
+     "3",
+     "Cara",
+     "{\"url\":\"https://pawchive.pw/patreon/user/3\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"3\",\"creator_name\":\"Cara\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Cara\",\"download_dirs\":[\"D:\\\\Art\\\\Cara\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":true,\"last_checked_at\":1794082361.9700677,\"custom_folder\":true}",
+     null,
+     null
+    ]
+   ],
+   "options": [
+    [
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     "{\"file_type\":\"all\",\"subfolder_per_post\":true,\"skip_words\":\"wip, sketch\",\"max_size\":0}"
+    ]
+   ],
+   "meta": []
+  }
+ },
+ {
+  "op": "load",
+  "args": {},
+  "result": [
+   [
+    1,
+    0,
+    {
+     "url": "https://pawchive.pw/patreon/user/1",
+     "service": "patreon",
+     "domain": "pawchive.pw",
+     "user_id": "1",
+     "creator_name": "Alice",
+     "last_post_id": "",
+     "last_post_date": "",
+     "added_at": "2026-11-01T10:00:00",
+     "auto_check": true,
+     "download_dir": "D:\\Art\\Alice",
+     "download_dirs": [
+      "D:\\Art\\Alice"
+     ],
+     "ignored_post_ids": [],
+     "cutoff_day_ids": [],
+     "is_favorite": false,
+     "options": {
+      "file_type": "all",
+      "subfolder_per_post": true,
+      "skip_words": "wip, sketch",
+      "max_size": 0
+     }
+    },
+    []
+   ],
+   [
+    2,
+    1,
+    {
+     "url": "https://pawchive.pw/patreon/user/2",
+     "service": "patreon",
+     "domain": "pawchive.pw",
+     "user_id": "2",
+     "creator_name": "Bob",
+     "last_post_id": "99",
+     "last_post_date": "2026-10-01",
+     "added_at": "2026-11-01T10:00:00",
+     "auto_check": true,
+     "download_dir": "D:\\Art\\Bob",
+     "download_dirs": [
+      "D:\\Art\\Bob"
+     ],
+     "ignored_post_ids": [],
+     "cutoff_day_ids": [
+      "99"
+     ],
+     "is_favorite": false,
+     "options": {
+      "file_type": "all",
+      "subfolder_per_post": true,
+      "skip_words": "wip, sketch",
+      "max_size": 0
+     }
+    },
+    [
+     {
+      "id": "101",
+      "title": "Ünïcödé ✨ post",
+      "published": "2026-11-02T08:00:00",
+      "attachments": [
+       {
+        "name": "a.png",
+        "path": "/ab/cd/abcd.png"
+       }
+      ]
+     },
+     {
+      "id": "102",
+      "title": "Second \"quoted\" \\ back",
+      "added": "2026-11-03"
+     }
+    ]
+   ],
+   [
+    3,
+    2,
+    {
+     "url": "https://pawchive.pw/patreon/user/3",
+     "service": "patreon",
+     "domain": "pawchive.pw",
+     "user_id": "3",
+     "creator_name": "Cara",
+     "last_post_id": "",
+     "last_post_date": "",
+     "added_at": "2026-11-01T10:00:00",
+     "auto_check": true,
+     "download_dir": "D:\\Art\\Cara",
+     "download_dirs": [
+      "D:\\Art\\Cara"
+     ],
+     "ignored_post_ids": [],
+     "cutoff_day_ids": [],
+     "is_favorite": true,
+     "last_checked_at": 1794082361.9700677,
+     "custom_folder": true,
+     "options": {}
+    },
+    []
+   ]
+  ],
+  "tables": {
+   "creators": [
+    [
+     1,
+     0,
+     "patreon",
+     "1",
+     "Alice",
+     "{\"url\":\"https://pawchive.pw/patreon/user/1\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"1\",\"creator_name\":\"Alice\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Alice\",\"download_dirs\":[\"D:\\\\Art\\\\Alice\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     null
+    ],
+    [
+     2,
+     1,
+     "patreon",
+     "2",
+     "Bob",
+     "{\"url\":\"https://pawchive.pw/patreon/user/2\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"2\",\"creator_name\":\"Bob\",\"last_post_id\":\"99\",\"last_post_date\":\"2026-10-01\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Bob\",\"download_dirs\":[\"D:\\\\Art\\\\Bob\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[\"99\"],\"is_favorite\":false}",
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     "[{\"id\":\"101\",\"title\":\"Ünïcödé ✨ post\",\"published\":\"2026-11-02T08:00:00\",\"attachments\":[{\"name\":\"a.png\",\"path\":\"/ab/cd/abcd.png\"}]},{\"id\":\"102\",\"title\":\"Second \\\"quoted\\\" \\\\ back\",\"added\":\"2026-11-03\"}]"
+    ],
+    [
+     3,
+     2,
+     "patreon",
+     "3",
+     "Cara",
+     "{\"url\":\"https://pawchive.pw/patreon/user/3\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"3\",\"creator_name\":\"Cara\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Cara\",\"download_dirs\":[\"D:\\\\Art\\\\Cara\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":true,\"last_checked_at\":1794082361.9700677,\"custom_folder\":true}",
+     null,
+     null
+    ]
+   ],
+   "options": [
+    [
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     "{\"file_type\":\"all\",\"subfolder_per_post\":true,\"skip_words\":\"wip, sketch\",\"max_size\":0}"
+    ]
+   ],
+   "meta": []
+  }
+ },
+ {
+  "op": "write",
+  "args": {
+   "rows": [
+    [
+     2,
+     1,
+     {
+      "url": "https://pawchive.pw/patreon/user/2",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "2",
+      "creator_name": "Bob",
+      "last_post_id": "102",
+      "last_post_date": "2026-11-03",
+      "added_at": "2026-11-01T10:00:00",
+      "auto_check": true,
+      "download_dir": "D:\\Art\\Bob",
+      "download_dirs": [
+       "D:\\Art\\Bob"
+      ],
+      "ignored_post_ids": [],
+      "cutoff_day_ids": [],
+      "is_favorite": false
+     },
+     {
+      "file_type": "images",
+      "date_after": "2024-01-01",
+      "ratio": 1.5
+     },
+     []
+    ],
+    [
+     4,
+     3,
+     {
+      "url": "https://pawchive.pw/patreon/user/4",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "4",
+      "creator_name": "Đặng 日本",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2026-11-01T10:00:00",
+      "auto_check": true,
+      "download_dir": "D:\\Art\\Đặng 日本",
+      "download_dirs": [
+       "D:\\Art\\Đặng 日本"
+      ],
+      "ignored_post_ids": [],
+      "cutoff_day_ids": [],
+      "is_favorite": false
+     },
+     {
+      "file_type": "images",
+      "date_after": "2024-01-01",
+      "ratio": 1.5
+     },
+     [
+      {
+       "id": "101",
+       "title": "Ünïcödé ✨ post",
+       "published": "2026-11-02T08:00:00",
+       "attachments": [
+        {
+         "name": "a.png",
+         "path": "/ab/cd/abcd.png"
+        }
+       ]
+      }
+     ]
+    ]
+   ],
+   "deleted": [
+    1
+   ],
+   "replace_all": false
+  },
+  "result": 3,
+  "tables": {
+   "creators": [
+    [
+     2,
+     1,
+     "patreon",
+     "2",
+     "Bob",
+     "{\"url\":\"https://pawchive.pw/patreon/user/2\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"2\",\"creator_name\":\"Bob\",\"last_post_id\":\"102\",\"last_post_date\":\"2026-11-03\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Bob\",\"download_dirs\":[\"D:\\\\Art\\\\Bob\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     null
+    ],
+    [
+     3,
+     2,
+     "patreon",
+     "3",
+     "Cara",
+     "{\"url\":\"https://pawchive.pw/patreon/user/3\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"3\",\"creator_name\":\"Cara\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Cara\",\"download_dirs\":[\"D:\\\\Art\\\\Cara\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":true,\"last_checked_at\":1794082361.9700677,\"custom_folder\":true}",
+     null,
+     null
+    ],
+    [
+     4,
+     3,
+     "fanbox",
+     "4",
+     "Đặng 日本",
+     "{\"url\":\"https://pawchive.pw/patreon/user/4\",\"service\":\"fanbox\",\"domain\":\"pawchive.pw\",\"user_id\":\"4\",\"creator_name\":\"Đặng 日本\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Đặng 日本\",\"download_dirs\":[\"D:\\\\Art\\\\Đặng 日本\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     "[{\"id\":\"101\",\"title\":\"Ünïcödé ✨ post\",\"published\":\"2026-11-02T08:00:00\",\"attachments\":[{\"name\":\"a.png\",\"path\":\"/ab/cd/abcd.png\"}]}]"
+    ]
+   ],
+   "options": [
+    [
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     "{\"file_type\":\"all\",\"subfolder_per_post\":true,\"skip_words\":\"wip, sketch\",\"max_size\":0}"
+    ],
+    [
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     "{\"file_type\":\"images\",\"date_after\":\"2024-01-01\",\"ratio\":1.5}"
+    ]
+   ],
+   "meta": []
+  }
+ },
+ {
+  "op": "load",
+  "args": {},
+  "result": [
+   [
+    2,
+    1,
+    {
+     "url": "https://pawchive.pw/patreon/user/2",
+     "service": "patreon",
+     "domain": "pawchive.pw",
+     "user_id": "2",
+     "creator_name": "Bob",
+     "last_post_id": "102",
+     "last_post_date": "2026-11-03",
+     "added_at": "2026-11-01T10:00:00",
+     "auto_check": true,
+     "download_dir": "D:\\Art\\Bob",
+     "download_dirs": [
+      "D:\\Art\\Bob"
+     ],
+     "ignored_post_ids": [],
+     "cutoff_day_ids": [],
+     "is_favorite": false,
+     "options": {
+      "file_type": "images",
+      "date_after": "2024-01-01",
+      "ratio": 1.5
+     }
+    },
+    []
+   ],
+   [
+    3,
+    2,
+    {
+     "url": "https://pawchive.pw/patreon/user/3",
+     "service": "patreon",
+     "domain": "pawchive.pw",
+     "user_id": "3",
+     "creator_name": "Cara",
+     "last_post_id": "",
+     "last_post_date": "",
+     "added_at": "2026-11-01T10:00:00",
+     "auto_check": true,
+     "download_dir": "D:\\Art\\Cara",
+     "download_dirs": [
+      "D:\\Art\\Cara"
+     ],
+     "ignored_post_ids": [],
+     "cutoff_day_ids": [],
+     "is_favorite": true,
+     "last_checked_at": 1794082361.9700677,
+     "custom_folder": true,
+     "options": {}
+    },
+    []
+   ],
+   [
+    4,
+    3,
+    {
+     "url": "https://pawchive.pw/patreon/user/4",
+     "service": "fanbox",
+     "domain": "pawchive.pw",
+     "user_id": "4",
+     "creator_name": "Đặng 日本",
+     "last_post_id": "",
+     "last_post_date": "",
+     "added_at": "2026-11-01T10:00:00",
+     "auto_check": true,
+     "download_dir": "D:\\Art\\Đặng 日本",
+     "download_dirs": [
+      "D:\\Art\\Đặng 日本"
+     ],
+     "ignored_post_ids": [],
+     "cutoff_day_ids": [],
+     "is_favorite": false,
+     "options": {
+      "file_type": "images",
+      "date_after": "2024-01-01",
+      "ratio": 1.5
+     }
+    },
+    [
+     {
+      "id": "101",
+      "title": "Ünïcödé ✨ post",
+      "published": "2026-11-02T08:00:00",
+      "attachments": [
+       {
+        "name": "a.png",
+        "path": "/ab/cd/abcd.png"
+       }
+      ]
+     }
+    ]
+   ]
+  ],
+  "tables": {
+   "creators": [
+    [
+     2,
+     1,
+     "patreon",
+     "2",
+     "Bob",
+     "{\"url\":\"https://pawchive.pw/patreon/user/2\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"2\",\"creator_name\":\"Bob\",\"last_post_id\":\"102\",\"last_post_date\":\"2026-11-03\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Bob\",\"download_dirs\":[\"D:\\\\Art\\\\Bob\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     null
+    ],
+    [
+     3,
+     2,
+     "patreon",
+     "3",
+     "Cara",
+     "{\"url\":\"https://pawchive.pw/patreon/user/3\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"3\",\"creator_name\":\"Cara\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Cara\",\"download_dirs\":[\"D:\\\\Art\\\\Cara\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":true,\"last_checked_at\":1794082361.9700677,\"custom_folder\":true}",
+     null,
+     null
+    ],
+    [
+     4,
+     3,
+     "fanbox",
+     "4",
+     "Đặng 日本",
+     "{\"url\":\"https://pawchive.pw/patreon/user/4\",\"service\":\"fanbox\",\"domain\":\"pawchive.pw\",\"user_id\":\"4\",\"creator_name\":\"Đặng 日本\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Đặng 日本\",\"download_dirs\":[\"D:\\\\Art\\\\Đặng 日本\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     "[{\"id\":\"101\",\"title\":\"Ünïcödé ✨ post\",\"published\":\"2026-11-02T08:00:00\",\"attachments\":[{\"name\":\"a.png\",\"path\":\"/ab/cd/abcd.png\"}]}]"
+    ]
+   ],
+   "options": [
+    [
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     "{\"file_type\":\"all\",\"subfolder_per_post\":true,\"skip_words\":\"wip, sketch\",\"max_size\":0}"
+    ],
+    [
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     "{\"file_type\":\"images\",\"date_after\":\"2024-01-01\",\"ratio\":1.5}"
+    ]
+   ],
+   "meta": []
+  }
+ },
+ {
+  "op": "set_meta",
+  "args": {
+   "key": "version",
+   "value": "1"
+  },
+  "result": null,
+  "tables": {
+   "creators": [
+    [
+     2,
+     1,
+     "patreon",
+     "2",
+     "Bob",
+     "{\"url\":\"https://pawchive.pw/patreon/user/2\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"2\",\"creator_name\":\"Bob\",\"last_post_id\":\"102\",\"last_post_date\":\"2026-11-03\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Bob\",\"download_dirs\":[\"D:\\\\Art\\\\Bob\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     null
+    ],
+    [
+     3,
+     2,
+     "patreon",
+     "3",
+     "Cara",
+     "{\"url\":\"https://pawchive.pw/patreon/user/3\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"3\",\"creator_name\":\"Cara\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Cara\",\"download_dirs\":[\"D:\\\\Art\\\\Cara\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":true,\"last_checked_at\":1794082361.9700677,\"custom_folder\":true}",
+     null,
+     null
+    ],
+    [
+     4,
+     3,
+     "fanbox",
+     "4",
+     "Đặng 日本",
+     "{\"url\":\"https://pawchive.pw/patreon/user/4\",\"service\":\"fanbox\",\"domain\":\"pawchive.pw\",\"user_id\":\"4\",\"creator_name\":\"Đặng 日本\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Đặng 日本\",\"download_dirs\":[\"D:\\\\Art\\\\Đặng 日本\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     "[{\"id\":\"101\",\"title\":\"Ünïcödé ✨ post\",\"published\":\"2026-11-02T08:00:00\",\"attachments\":[{\"name\":\"a.png\",\"path\":\"/ab/cd/abcd.png\"}]}]"
+    ]
+   ],
+   "options": [
+    [
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     "{\"file_type\":\"all\",\"subfolder_per_post\":true,\"skip_words\":\"wip, sketch\",\"max_size\":0}"
+    ],
+    [
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     "{\"file_type\":\"images\",\"date_after\":\"2024-01-01\",\"ratio\":1.5}"
+    ]
+   ],
+   "meta": [
+    [
+     "version",
+     "1"
+    ]
+   ]
+  }
+ },
+ {
+  "op": "get_meta",
+  "args": {
+   "key": "version",
+   "default": ""
+  },
+  "result": "1",
+  "tables": {
+   "creators": [
+    [
+     2,
+     1,
+     "patreon",
+     "2",
+     "Bob",
+     "{\"url\":\"https://pawchive.pw/patreon/user/2\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"2\",\"creator_name\":\"Bob\",\"last_post_id\":\"102\",\"last_post_date\":\"2026-11-03\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Bob\",\"download_dirs\":[\"D:\\\\Art\\\\Bob\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     null
+    ],
+    [
+     3,
+     2,
+     "patreon",
+     "3",
+     "Cara",
+     "{\"url\":\"https://pawchive.pw/patreon/user/3\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"3\",\"creator_name\":\"Cara\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Cara\",\"download_dirs\":[\"D:\\\\Art\\\\Cara\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":true,\"last_checked_at\":1794082361.9700677,\"custom_folder\":true}",
+     null,
+     null
+    ],
+    [
+     4,
+     3,
+     "fanbox",
+     "4",
+     "Đặng 日本",
+     "{\"url\":\"https://pawchive.pw/patreon/user/4\",\"service\":\"fanbox\",\"domain\":\"pawchive.pw\",\"user_id\":\"4\",\"creator_name\":\"Đặng 日本\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Đặng 日本\",\"download_dirs\":[\"D:\\\\Art\\\\Đặng 日本\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     "[{\"id\":\"101\",\"title\":\"Ünïcödé ✨ post\",\"published\":\"2026-11-02T08:00:00\",\"attachments\":[{\"name\":\"a.png\",\"path\":\"/ab/cd/abcd.png\"}]}]"
+    ]
+   ],
+   "options": [
+    [
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     "{\"file_type\":\"all\",\"subfolder_per_post\":true,\"skip_words\":\"wip, sketch\",\"max_size\":0}"
+    ],
+    [
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     "{\"file_type\":\"images\",\"date_after\":\"2024-01-01\",\"ratio\":1.5}"
+    ]
+   ],
+   "meta": [
+    [
+     "version",
+     "1"
+    ]
+   ]
+  }
+ },
+ {
+  "op": "get_meta",
+  "args": {
+   "key": "missing",
+   "default": "fallback"
+  },
+  "result": "fallback",
+  "tables": {
+   "creators": [
+    [
+     2,
+     1,
+     "patreon",
+     "2",
+     "Bob",
+     "{\"url\":\"https://pawchive.pw/patreon/user/2\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"2\",\"creator_name\":\"Bob\",\"last_post_id\":\"102\",\"last_post_date\":\"2026-11-03\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Bob\",\"download_dirs\":[\"D:\\\\Art\\\\Bob\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     null
+    ],
+    [
+     3,
+     2,
+     "patreon",
+     "3",
+     "Cara",
+     "{\"url\":\"https://pawchive.pw/patreon/user/3\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"3\",\"creator_name\":\"Cara\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Cara\",\"download_dirs\":[\"D:\\\\Art\\\\Cara\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":true,\"last_checked_at\":1794082361.9700677,\"custom_folder\":true}",
+     null,
+     null
+    ],
+    [
+     4,
+     3,
+     "fanbox",
+     "4",
+     "Đặng 日本",
+     "{\"url\":\"https://pawchive.pw/patreon/user/4\",\"service\":\"fanbox\",\"domain\":\"pawchive.pw\",\"user_id\":\"4\",\"creator_name\":\"Đặng 日本\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Đặng 日本\",\"download_dirs\":[\"D:\\\\Art\\\\Đặng 日本\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     "[{\"id\":\"101\",\"title\":\"Ünïcödé ✨ post\",\"published\":\"2026-11-02T08:00:00\",\"attachments\":[{\"name\":\"a.png\",\"path\":\"/ab/cd/abcd.png\"}]}]"
+    ]
+   ],
+   "options": [
+    [
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     "{\"file_type\":\"all\",\"subfolder_per_post\":true,\"skip_words\":\"wip, sketch\",\"max_size\":0}"
+    ],
+    [
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     "{\"file_type\":\"images\",\"date_after\":\"2024-01-01\",\"ratio\":1.5}"
+    ]
+   ],
+   "meta": [
+    [
+     "version",
+     "1"
+    ]
+   ]
+  }
+ },
+ {
+  "op": "drop_unused_options",
+  "args": {},
+  "result": null,
+  "tables": {
+   "creators": [
+    [
+     2,
+     1,
+     "patreon",
+     "2",
+     "Bob",
+     "{\"url\":\"https://pawchive.pw/patreon/user/2\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"2\",\"creator_name\":\"Bob\",\"last_post_id\":\"102\",\"last_post_date\":\"2026-11-03\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Bob\",\"download_dirs\":[\"D:\\\\Art\\\\Bob\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     null
+    ],
+    [
+     3,
+     2,
+     "patreon",
+     "3",
+     "Cara",
+     "{\"url\":\"https://pawchive.pw/patreon/user/3\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"3\",\"creator_name\":\"Cara\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Cara\",\"download_dirs\":[\"D:\\\\Art\\\\Cara\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":true,\"last_checked_at\":1794082361.9700677,\"custom_folder\":true}",
+     null,
+     null
+    ],
+    [
+     4,
+     3,
+     "fanbox",
+     "4",
+     "Đặng 日本",
+     "{\"url\":\"https://pawchive.pw/patreon/user/4\",\"service\":\"fanbox\",\"domain\":\"pawchive.pw\",\"user_id\":\"4\",\"creator_name\":\"Đặng 日本\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Đặng 日本\",\"download_dirs\":[\"D:\\\\Art\\\\Đặng 日本\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     "[{\"id\":\"101\",\"title\":\"Ünïcödé ✨ post\",\"published\":\"2026-11-02T08:00:00\",\"attachments\":[{\"name\":\"a.png\",\"path\":\"/ab/cd/abcd.png\"}]}]"
+    ]
+   ],
+   "options": [
+    [
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     "{\"file_type\":\"images\",\"date_after\":\"2024-01-01\",\"ratio\":1.5}"
+    ]
+   ],
+   "meta": [
+    [
+     "version",
+     "1"
+    ]
+   ]
+  }
+ },
+ {
+  "op": "write",
+  "args": {
+   "rows": [
+    [
+     7,
+     0,
+     {
+      "url": "https://pawchive.pw/patreon/user/7",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "7",
+      "creator_name": "Zed",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2026-11-01T10:00:00",
+      "auto_check": true,
+      "download_dir": "D:\\Art\\Zed",
+      "download_dirs": [
+       "D:\\Art\\Zed"
+      ],
+      "ignored_post_ids": [],
+      "cutoff_day_ids": [],
+      "is_favorite": false
+     },
+     {
+      "file_type": "all",
+      "subfolder_per_post": true,
+      "skip_words": "wip, sketch",
+      "max_size": 0
+     },
+     []
+    ],
+    [
+     8,
+     1,
+     {
+      "url": "https://pawchive.pw/patreon/user/8",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "8",
+      "creator_name": "Yan",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2026-11-01T10:00:00",
+      "auto_check": true,
+      "download_dir": "D:\\Art\\Yan",
+      "download_dirs": [
+       "D:\\Art\\Yan"
+      ],
+      "ignored_post_ids": [],
+      "cutoff_day_ids": [],
+      "is_favorite": false
+     },
+     {},
+     []
+    ]
+   ],
+   "deleted": [],
+   "replace_all": true
+  },
+  "result": 2,
+  "tables": {
+   "creators": [
+    [
+     7,
+     0,
+     "patreon",
+     "7",
+     "Zed",
+     "{\"url\":\"https://pawchive.pw/patreon/user/7\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"7\",\"creator_name\":\"Zed\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Zed\",\"download_dirs\":[\"D:\\\\Art\\\\Zed\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     null
+    ],
+    [
+     8,
+     1,
+     "patreon",
+     "8",
+     "Yan",
+     "{\"url\":\"https://pawchive.pw/patreon/user/8\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"8\",\"creator_name\":\"Yan\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Yan\",\"download_dirs\":[\"D:\\\\Art\\\\Yan\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     null,
+     null
+    ]
+   ],
+   "options": [
+    [
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     "{\"file_type\":\"all\",\"subfolder_per_post\":true,\"skip_words\":\"wip, sketch\",\"max_size\":0}"
+    ],
+    [
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     "{\"file_type\":\"images\",\"date_after\":\"2024-01-01\",\"ratio\":1.5}"
+    ]
+   ],
+   "meta": [
+    [
+     "version",
+     "1"
+    ]
+   ]
+  }
+ },
+ {
+  "op": "load",
+  "args": {},
+  "result": [
+   [
+    7,
+    0,
+    {
+     "url": "https://pawchive.pw/patreon/user/7",
+     "service": "patreon",
+     "domain": "pawchive.pw",
+     "user_id": "7",
+     "creator_name": "Zed",
+     "last_post_id": "",
+     "last_post_date": "",
+     "added_at": "2026-11-01T10:00:00",
+     "auto_check": true,
+     "download_dir": "D:\\Art\\Zed",
+     "download_dirs": [
+      "D:\\Art\\Zed"
+     ],
+     "ignored_post_ids": [],
+     "cutoff_day_ids": [],
+     "is_favorite": false,
+     "options": {
+      "file_type": "all",
+      "subfolder_per_post": true,
+      "skip_words": "wip, sketch",
+      "max_size": 0
+     }
+    },
+    []
+   ],
+   [
+    8,
+    1,
+    {
+     "url": "https://pawchive.pw/patreon/user/8",
+     "service": "patreon",
+     "domain": "pawchive.pw",
+     "user_id": "8",
+     "creator_name": "Yan",
+     "last_post_id": "",
+     "last_post_date": "",
+     "added_at": "2026-11-01T10:00:00",
+     "auto_check": true,
+     "download_dir": "D:\\Art\\Yan",
+     "download_dirs": [
+      "D:\\Art\\Yan"
+     ],
+     "ignored_post_ids": [],
+     "cutoff_day_ids": [],
+     "is_favorite": false,
+     "options": {}
+    },
+    []
+   ]
+  ],
+  "tables": {
+   "creators": [
+    [
+     7,
+     0,
+     "patreon",
+     "7",
+     "Zed",
+     "{\"url\":\"https://pawchive.pw/patreon/user/7\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"7\",\"creator_name\":\"Zed\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Zed\",\"download_dirs\":[\"D:\\\\Art\\\\Zed\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     null
+    ],
+    [
+     8,
+     1,
+     "patreon",
+     "8",
+     "Yan",
+     "{\"url\":\"https://pawchive.pw/patreon/user/8\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"8\",\"creator_name\":\"Yan\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Yan\",\"download_dirs\":[\"D:\\\\Art\\\\Yan\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     null,
+     null
+    ]
+   ],
+   "options": [
+    [
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     "{\"file_type\":\"all\",\"subfolder_per_post\":true,\"skip_words\":\"wip, sketch\",\"max_size\":0}"
+    ],
+    [
+     "e7036b3c000e2ae1176d2064f87c1986ec263ab8",
+     "{\"file_type\":\"images\",\"date_after\":\"2024-01-01\",\"ratio\":1.5}"
+    ]
+   ],
+   "meta": [
+    [
+     "version",
+     "1"
+    ]
+   ]
+  }
+ },
+ {
+  "op": "drop_unused_options",
+  "args": {},
+  "result": null,
+  "tables": {
+   "creators": [
+    [
+     7,
+     0,
+     "patreon",
+     "7",
+     "Zed",
+     "{\"url\":\"https://pawchive.pw/patreon/user/7\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"7\",\"creator_name\":\"Zed\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Zed\",\"download_dirs\":[\"D:\\\\Art\\\\Zed\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     null
+    ],
+    [
+     8,
+     1,
+     "patreon",
+     "8",
+     "Yan",
+     "{\"url\":\"https://pawchive.pw/patreon/user/8\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"8\",\"creator_name\":\"Yan\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Yan\",\"download_dirs\":[\"D:\\\\Art\\\\Yan\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     null,
+     null
+    ]
+   ],
+   "options": [
+    [
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     "{\"file_type\":\"all\",\"subfolder_per_post\":true,\"skip_words\":\"wip, sketch\",\"max_size\":0}"
+    ]
+   ],
+   "meta": [
+    [
+     "version",
+     "1"
+    ]
+   ]
+  }
+ },
+ {
+  "op": "write",
+  "args": {
+   "rows": [],
+   "deleted": [
+    8,
+    99
+   ],
+   "replace_all": false
+  },
+  "result": 2,
+  "tables": {
+   "creators": [
+    [
+     7,
+     0,
+     "patreon",
+     "7",
+     "Zed",
+     "{\"url\":\"https://pawchive.pw/patreon/user/7\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"7\",\"creator_name\":\"Zed\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Zed\",\"download_dirs\":[\"D:\\\\Art\\\\Zed\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     null
+    ]
+   ],
+   "options": [
+    [
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     "{\"file_type\":\"all\",\"subfolder_per_post\":true,\"skip_words\":\"wip, sketch\",\"max_size\":0}"
+    ]
+   ],
+   "meta": [
+    [
+     "version",
+     "1"
+    ]
+   ]
+  }
+ },
+ {
+  "op": "load",
+  "args": {},
+  "result": [
+   [
+    7,
+    0,
+    {
+     "url": "https://pawchive.pw/patreon/user/7",
+     "service": "patreon",
+     "domain": "pawchive.pw",
+     "user_id": "7",
+     "creator_name": "Zed",
+     "last_post_id": "",
+     "last_post_date": "",
+     "added_at": "2026-11-01T10:00:00",
+     "auto_check": true,
+     "download_dir": "D:\\Art\\Zed",
+     "download_dirs": [
+      "D:\\Art\\Zed"
+     ],
+     "ignored_post_ids": [],
+     "cutoff_day_ids": [],
+     "is_favorite": false,
+     "options": {
+      "file_type": "all",
+      "subfolder_per_post": true,
+      "skip_words": "wip, sketch",
+      "max_size": 0
+     }
+    },
+    []
+   ]
+  ],
+  "tables": {
+   "creators": [
+    [
+     7,
+     0,
+     "patreon",
+     "7",
+     "Zed",
+     "{\"url\":\"https://pawchive.pw/patreon/user/7\",\"service\":\"patreon\",\"domain\":\"pawchive.pw\",\"user_id\":\"7\",\"creator_name\":\"Zed\",\"last_post_id\":\"\",\"last_post_date\":\"\",\"added_at\":\"2026-11-01T10:00:00\",\"auto_check\":true,\"download_dir\":\"D:\\\\Art\\\\Zed\",\"download_dirs\":[\"D:\\\\Art\\\\Zed\"],\"ignored_post_ids\":[],\"cutoff_day_ids\":[],\"is_favorite\":false}",
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     null
+    ]
+   ],
+   "options": [
+    [
+     "a7b1a69a3205d109d0bf0cf10c7b5e9466f9db1a",
+     "{\"file_type\":\"all\",\"subfolder_per_post\":true,\"skip_words\":\"wip, sketch\",\"max_size\":0}"
+    ]
+   ],
+   "meta": [
+    [
+     "version",
+     "1"
+    ]
+   ]
+  }
+ }
+]

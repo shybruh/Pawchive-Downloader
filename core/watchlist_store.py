@@ -27,6 +27,18 @@ def options_id(options_json: str) -> str:
     return hashlib.sha1(options_json.encode("utf-8")).hexdigest()
 
 
+def open_store(path: str) -> "WatchlistStore":
+    """The app's store: the desktop shell's Rust one when it's there (services/rust_watchlist_store.py)."""
+    try:
+        from services import rust_queue
+        if rust_queue.available():
+            from services.rust_watchlist_store import RustWatchlistStore
+            return RustWatchlistStore(path)
+    except ImportError:
+        pass
+    return WatchlistStore(path)
+
+
 class WatchlistStore:
     def __init__(self, path: str):
         self.path = path

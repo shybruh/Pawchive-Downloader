@@ -517,6 +517,7 @@ fn handle(msg: &Value) {
             let out = match s("fn").as_str() {
                 "plan" => plan_call(id, args),
                 "site" => site_call(id, args),
+                "watchlist_store" => crate::watchlist::store::call(args),
                 other => Err(format!("unknown call {other}")),
             };
             call_flags().lock().unwrap().remove(&id);
