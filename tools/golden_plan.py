@@ -40,7 +40,7 @@ class Known:
     def find_candidates_in_posts(self, posts):
         return []
 
-    def find_matching_hierarchy(self, title, tags=None, filenames=None, content=None, creator_profile=None):
+    def find_matching_hierarchy(self, title, tags=None, filenames=None, content=None):
         low = (title or "").lower()
         for k, v in KNOWN.items():
             if k in low:
@@ -52,9 +52,6 @@ class Archive:
     def __init__(self, archived):
         self.archived = set(archived)
         self.is_enabled = bool(archived)
-
-    def get_creator_character_profile(self, **kw):
-        return None
 
     def is_archived(self, service, post_id, file_id, file_hash=""):
         return file_id in self.archived

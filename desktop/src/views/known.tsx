@@ -1,13 +1,12 @@
 import { useState } from "react";
 import { FileTextIcon, PlusIcon, TagsIcon, XIcon } from "lucide-react";
 import { call, useModel, useSetting } from "@/lib/engine";
-import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Empty, Input, Select, Switch } from "@/components/ui";
+import { Button, Card, CardContent, CardDescription, CardHeader, CardTitle, Empty, Input, Switch } from "@/components/ui";
 import { PageBody, PageHeader } from "@/components/page";
 
 export function KnownView() {
   const { rows } = useModel<{ name: string; display: string }>("appBridge.knownModel");
   const [name, setName] = useState("");
-  const [mode, setMode] = useSetting<string>("appBridge", "knownRecognitionMode", "hybrid");
   const [separate, setSeparate] = useSetting<boolean>("appBridge", "separateFoldersByKnown", false);
 
   const add = () => { const n = name.trim(); if (n) { call("appBridge", "addKnownCharacter", n); setName(""); } };
@@ -19,15 +18,10 @@ export function KnownView() {
       <PageBody className="flex flex-col gap-5">
         <Card>
           <CardHeader>
-            <CardTitle>Recognition</CardTitle>
-            <CardDescription>How downloads are matched against this list.</CardDescription>
+            <CardTitle>Sorting</CardTitle>
+            <CardDescription>Downloads that match this list can go in folders named after their series and character.</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-wrap items-center gap-6">
-            <Select value={mode} onValueChange={setMode} options={[
-              { value: "hybrid", label: "Hybrid (list + learning)" },
-              { value: "database_only", label: "This list only" },
-              { value: "learning_only", label: "Learning only" },
-            ]} />
             <label className="flex items-center gap-2 text-sm">
               <Switch checked={!!separate} onCheckedChange={setSeparate} />
               Put matches in their own folders

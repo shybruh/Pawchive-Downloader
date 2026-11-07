@@ -26,7 +26,7 @@
 //!   `{"t": "record_file", "key", "size", "path"}`
 //!   `{"t": "ask", "id", "fn", "args"}` for what the app still knows or does: is_archived, cookie,
 //!   refresh_link, special (yt-dlp / Telegram files), post_process, limit; while planning also
-//!   known, creator_profile, archived, plan_cancelled
+//!   known, archived, plan_cancelled
 //!   `{"t": "note", "fn", "args"}`  the same without an answer: record_link, archive_password,
 //!   add_passwords, log
 
@@ -239,15 +239,11 @@ struct PlanCtx {
 }
 
 impl Lookups for PlanCtx {
-    fn known_hierarchy(&self, title: &str, tags: Option<&Value>, filenames: &[String], content: Option<&Value>, profile: Option<&Value>) -> Option<(String, String)> {
-        let a = self.link.ask("known", json!([title, tags, filenames, content, profile]));
+    fn known_hierarchy(&self, title: &str, tags: Option<&Value>, filenames: &[String], content: Option<&Value>) -> Option<(String, String)> {
+        let a = self.link.ask("known", json!([title, tags, filenames, content]));
         let a = a.as_array()?;
         let s = |i: usize| a.get(i).and_then(Value::as_str).unwrap_or("").to_string();
         Some((s(0), s(1)))
-    }
-    fn creator_profile(&self, service: &str, creator: &str, base_dirs: &[String]) -> Option<Value> {
-        // (a reference to the app's own copy: it is only handed back to "known")
-        Some(self.link.ask("creator_profile", json!([service, creator, base_dirs]))).filter(|v| !v.is_null())
     }
     fn archive_enabled(&self) -> bool {
         self.archive

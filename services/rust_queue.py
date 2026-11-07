@@ -41,8 +41,8 @@ _keys = itertools.count(1)
 _ALREADY_LOGGED = {"Download paused.", "Download resumed.", "Download cancellation requested."}
 # The planner's questions, and the questions answered on the reading thread (they wait on nothing
 # else from Rust, and planning a big creator asks thousands of them)
-_PLAN_ASKS = {"known", "creator_profile", "archived", "plan_cancelled"}
-_QUICK_ASKS = {"known", "creator_profile", "archived", "plan_cancelled", "is_archived", "cookie", "limit"}
+_PLAN_ASKS = {"known", "archived", "plan_cancelled"}
+_QUICK_ASKS = {"known", "archived", "plan_cancelled", "is_archived", "cookie", "limit"}
 
 
 def available() -> bool:
@@ -270,8 +270,6 @@ class RustDownloader(FileDownloader):
         self._dirty_wake = threading.Event()
         self._clean_cookie = ""
         self._plans: Dict[int, Any] = {}           # call id → "was this plan cancelled?"
-        self._profiles: Dict[int, Any] = {}        # creator profiles lent to the planner by reference
-        self._profile_ids = itertools.count(1)
         dl.status_listener = self._status_changed
         threading.Thread(target=self._flush_loop, name="rust-queue-flush", daemon=True).start()
 
@@ -444,23 +442,9 @@ class RustDownloader(FileDownloader):
             check = self._plans.get(args[0])
             return bool(check()) if check else False
         if fn == "known":
-            title, tags, filenames, content, profile = (list(args) + [None] * 5)[:5]
-            if isinstance(profile, dict) and "ref" in profile:
-                profile = self._profiles.get(profile["ref"])
-            hit = self.known_manager.find_matching_hierarchy(
-                title, tags=tags, filenames=filenames, content=content, creator_profile=profile)
+            title, tags, filenames, content = (list(args) + [None] * 4)[:4]
+            hit = self.known_manager.find_matching_hierarchy(title, tags=tags, filenames=filenames, content=content)
             return [hit[0] or "", hit[1] or ""] if hit else None
-        if fn == "creator_profile":
-            service, creator, dirs = args
-            prof = self.archive_manager.get_creator_character_profile(
-                service=service, creator_id=creator, creator_name=creator, base_dirs=list(dirs))
-            if not prof:
-                return None
-            n = next(self._profile_ids)
-            if len(self._profiles) > 64:
-                self._profiles.clear()
-            self._profiles[n] = prof
-            return {"ref": n}
         if fn == "archived":
             service, post_id, file_id, sha = args
             return bool(self.archive_manager and self.archive_manager.is_archived(

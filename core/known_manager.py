@@ -8,7 +8,6 @@ import os
 import threading
 import re
 import json
-import pickle
 from typing import List, Optional, Set, Dict, Any, Callable, Tuple
 from core.logger import logger
 from core.atomic_io import atomic_write_text
@@ -203,21 +202,12 @@ class KnownManager:
             from core.path_utils import get_config_dir
             self.file_path = os.path.join(get_config_dir(), "Known.txt")
 
-        # Recognition mode: "hybrid", "database_only", "learning_only"
-        self.mode: str = "hybrid"
-
         self.entries: List[str] = []
         self.entry_franchise_map: Dict[str, str] = {}
         self.franchise_sections: Dict[str, List[str]] = {}
         self.standalone_entries: List[str] = []
 
-        # Master comprehensive database (Danbooru Cat 3 & 4 game & anime characters)
-        self.master_characters: Dict[str, Dict[str, str]] = {}
-        self.master_franchises: List[str] = []
-        self._master_char_map: Dict[Tuple[str, ...], Tuple[str, str]] = {}
-        self._master_franchise_map: Dict[Tuple[str, ...], str] = {}
-
-        # Automated Franchise & Series Resolver (Seed Catalog, Local Cache, Fuzzy, AniList Auto-discovery)
+        # Franchise & series names (seed catalog, fuzzy typo healing)
         self.franchise_resolver = FranchiseResolver()
 
         # Custom Known.txt fast lookup indexes
@@ -234,119 +224,9 @@ class KnownManager:
         # In-memory query cache for instant hits
         self._lru_cache: Dict[Tuple[str, Tuple[str, ...], Tuple[str, ...], str, str], Optional[Tuple[str, str]]] = {}
 
-        # AI-assisted recognition subsystem (Tier 1 Embeddings & Tier 2 Reasoner)
-        self.model_manager: Optional[Any] = None
-        self.semantic_matcher: Optional[Any] = None
-        self.contextual_reasoner: Optional[Any] = None
-        self._ai_enabled: bool = False
-        self._ai_engine_mode: str = "hybrid"
-
-        self._load_master_db()
-
         self.on_entries_changed: Optional[Callable[[], None]] = None
         self._lock = threading.RLock()
         self.load()
-
-    def enable_ai(self, enabled: bool = True, model_manager: Optional[Any] = None) -> None:
-        """AI-assisted recognition was removed; matching uses Known.txt and the character database."""
-        self._ai_enabled = False
-
-    def set_ai_engine_mode(self, mode: str) -> None:
-        """Sets the AI engine mode ('semantic_only' or 'hybrid')."""
-        if mode in ("semantic_only", "hybrid"):
-            self._ai_engine_mode = mode
-            self._lru_cache.clear()
-
-
-    def _load_master_db(self):
-        """Loads the pre-compiled master game and anime characters database using fast binary caching."""
-        if getattr(sys, 'frozen', False):
-            base_dir = os.path.dirname(sys.executable)
-        else:
-            base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-        master_path = os.path.join(base_dir, "data", "master_characters.json")
-        bin_path = os.path.join(base_dir, "data", "master_characters.bin")
-
-        # 1. Fast binary load if cache is fresh and valid
-        if os.path.exists(bin_path) and os.path.exists(master_path):
-            if os.path.getmtime(bin_path) >= os.path.getmtime(master_path):
-                try:
-                    with open(bin_path, "rb") as f:
-                        cached_data = pickle.load(f)
-                        if cached_data.get("version") == 2:
-                            self.master_characters = cached_data["characters"]
-                            self.master_franchises = cached_data["franchises"]
-                            self._master_char_map = cached_data["char_map"]
-                            self._master_franchise_map = cached_data["franchise_map"]
-                            logger.info(
-                                f"Loaded Master Database (fast binary cache): {len(self.master_characters)} characters across {len(self.master_franchises)} franchises.",
-                                category="known"
-                            )
-                            return
-                except Exception as e:
-                    logger.debug(f"Could not load master_characters.bin: {e}, falling back to json")
-
-        # 2. Parse JSON and build compiled token indexes
-        if os.path.exists(master_path):
-            try:
-                with open(master_path, "r", encoding="utf-8") as f:
-                    data = json.load(f)
-                    chars = data.get("characters", {})
-                    raw_franchises = data.get("franchises", [])
-                    
-                    self.master_characters = {k: v for k, v in chars.items() if not _is_invalid_franchise(k)}
-                    self.master_franchises = [f for f in raw_franchises if not _is_invalid_franchise(f)]
-
-                    self._master_char_map = {}
-                    for k, info in self.master_characters.items():
-                        c_name = info.get("name", k.strip())
-                        fr = info.get("franchise", "General")
-                        if _is_invalid_franchise(fr):
-                            fr = "General"
-                        toks = tuple(self._tokenize(k))
-                        if toks:
-                            if len(toks) == 1 and toks[0] in _STOP_CHAR_WORDS:
-                                continue
-                            if toks not in self._master_char_map or (self._master_char_map[toks][0] in ("General", "Other") and fr not in ("General", "Other")):
-                                self._master_char_map[toks] = (fr, c_name)
-                            if len(toks) == 2:
-                                rev_toks = (toks[1], toks[0])
-                                if rev_toks not in self._master_char_map:
-                                    self._master_char_map[rev_toks] = (fr, c_name)
-
-                    self._master_franchise_map = {}
-                    for f in self.master_franchises:
-                        f_toks = tuple(self._tokenize(f))
-                        if f_toks:
-                            self._master_franchise_map[f_toks] = f
-
-                # Write pre-compiled binary cache (version 2)
-                try:
-                    with open(bin_path, "wb") as bf:
-                        pickle.dump({
-                            "version": 2,
-                            "characters": self.master_characters,
-                            "franchises": self.master_franchises,
-                            "char_map": self._master_char_map,
-                            "franchise_map": self._master_franchise_map
-                        }, bf, protocol=pickle.HIGHEST_PROTOCOL)
-                except Exception as ex:
-                    logger.debug(f"Could not write master_characters.bin: {ex}")
-
-                logger.info(
-                    f"Loaded Master Characters Database: {len(self.master_characters)} characters across {len(self.master_franchises)} franchises.",
-                    category="known"
-                )
-            except Exception as e:
-                logger.warning(f"Could not load master_characters.json: {e}", category="known")
-
-    def set_mode(self, mode: str):
-        allowed = {"hybrid", "database_only", "learning_only"}
-        if mode in allowed:
-            self.mode = mode
-            self._lru_cache.clear()
-            logger.info(f"Known character recognition mode set to: '{mode}'", category="known")
 
     def load(self, log: bool = True):
         # Everything is built aside and swapped in at the end: a download being planned at the same
@@ -422,7 +302,7 @@ Katarin
                         for al in parts[1:]:
                             if al not in franchise_aliases[current_franchise]:
                                 franchise_aliases[current_franchise].append(al)
-                            self.franchise_resolver.register_alias(al, current_franchise, persist=False)
+                            self.franchise_resolver.register_alias(al, current_franchise)
                         continue
 
                     if cleaned not in seen_entries:
@@ -900,100 +780,6 @@ Katarin
                 return i
         return None
 
-    def _match_entries_pool(self, pool_entries: List[str], hay_tokens: List[str], tag_keys: Set[str], is_custom_pool: bool = False) -> Optional[str]:
-        """Internal token-sequence matcher across a list of entries."""
-        indexed: List[Tuple[str, Tuple[str, ...]]] = []
-        first_token_map: Dict[str, List[str]] = {}
-        last_token_map: Dict[str, List[str]] = {}
-        single_names: List[str] = []
-
-        for entry in pool_entries:
-            canonical = self._canonical_entry(entry)
-            if not canonical:
-                continue
-            for alias in self._entry_aliases(entry):
-                ntoks = tuple(self._tokenize(alias))
-                if not ntoks:
-                    continue
-                # In master DB, reject single-word names that are generic dictionary words
-                if not is_custom_pool and len(ntoks) == 1:
-                    tok0 = ntoks[0]
-                    if len(tok0) < 4 or tok0 in _NOISE_TAGS or tok0 in GENERIC_TITLE_WORDS:
-                        continue
-                indexed.append((canonical, ntoks))
-                if len(ntoks) == 1:
-                    single_names.append(canonical)
-                else:
-                    first, last = ntoks[0], ntoks[-1]
-                    if len(first) >= 4 and first not in _NOISE_TAGS and first not in GENERIC_TITLE_WORDS:
-                        first_token_map.setdefault(first, [])
-                        if canonical not in first_token_map[first]:
-                            first_token_map[first].append(canonical)
-                    if (
-                        last != first
-                        and len(last) >= 4
-                        and last not in _NOISE_TAGS
-                        and last not in GENERIC_TITLE_WORDS
-                    ):
-                        last_token_map.setdefault(last, [])
-                        if canonical not in last_token_map[last]:
-                            last_token_map[last].append(canonical)
-
-        def consider(name: str, score: int, pos: int):
-            nonlocal best_name, best_score, best_pos
-            if score > best_score or (score == best_score and pos < best_pos):
-                best_name = name
-                best_score = score
-                best_pos = pos
-
-        best_name: Optional[str] = None
-        best_score = -1
-        best_pos = 10**9
-
-        def _is_filler(tok: str) -> bool:
-            return (
-                tok in _NOISE_TAGS
-                or tok in GENERIC_TITLE_WORDS
-                or tok.isdigit()
-                or bool(_ONLY_JUNK.match(tok))
-            )
-
-        for canonical, ntoks in indexed:
-            pos = self._find_token_sequence(hay_tokens, ntoks)
-            if pos is None:
-                continue
-            if any(_is_filler(t) for t in ntoks):
-                continue
-            tag_bonus = 1000 if " ".join(ntoks) in tag_keys else 0
-            consider(canonical, tag_bonus + len(ntoks) * 100 + sum(len(t) for t in ntoks), pos)
-
-        # Short / first-name forms (only for user custom Known.txt entries): "Miao story" → "Miao Ying", "kat video" → "Katarin"
-        if is_custom_pool:
-            for pos, tok in enumerate(hay_tokens):
-                rest = hay_tokens[pos + 1:]
-                rest_ok = not rest or all(_is_filler(t) for t in rest)
-                for cmap, bonus in ((first_token_map, 45), (last_token_map, 40)):
-                    hits = cmap.get(tok) or []
-                    if not hits:
-                        continue
-                    if len(hits) == 1:
-                        pick = hits[0]
-                    else:
-                        pick = max(hits, key=lambda n: (len(self._tokenize(n)), len(n)))
-                    extra = 80 if rest and rest_ok and best_name and self._tokenize(best_name) == [tok] else 0
-                    consider(pick, bonus + extra + len(tok), pos)
-
-                if 3 <= len(tok) <= 5:
-                    prefix_hits = [
-                        n for n in single_names
-                        if n.lower().startswith(tok) and len(n) >= 6
-                    ]
-                    uniq = list(dict.fromkeys(prefix_hits))
-                    if len(uniq) == 1:
-                        consider(uniq[0], 30 + len(tok), pos)
-
-        return best_name
-
     @classmethod
     def _split_camel_case(cls, s: str) -> str:
         s = re.sub(r'([a-z0-9])([A-Z])', r'\1 \2', s)
@@ -1131,7 +917,7 @@ Katarin
         return None
 
     def get_franchise_for_character(self, char_name: str) -> Optional[str]:
-        """Returns known franchise for character by inverting custom and master database mappings."""
+        """The franchise a character is listed under in Known.txt."""
         if not char_name or len(char_name) < 2:
             return None
         c_low = char_name.strip().lower()
@@ -1147,24 +933,9 @@ Katarin
             if not _is_invalid_franchise(fr):
                 return fr
 
-        # 2. Master DB exact mapping
-        toks = tuple(self._tokenize(char_name))
-        if hasattr(self, "_master_char_map") and toks in self._master_char_map:
-            fr, _ = self._master_char_map[toks]
-            if not _is_invalid_franchise(fr):
-                return fr
-
-        # 3. Two-word reverse tokens (Western <-> Eastern order)
-        if len(toks) == 2:
-            rev_toks = (toks[1], toks[0])
-            if hasattr(self, "_master_char_map") and rev_toks in self._master_char_map:
-                fr, _ = self._master_char_map[rev_toks]
-                if not _is_invalid_franchise(fr):
-                    return fr
-
         return None
 
-    def _resolve_franchise_text(self, text: str, allow_online: bool = False) -> Optional[str]:
+    def _resolve_franchise_text(self, text: str) -> Optional[str]:
         if not text:
             return None
         cleaned = text.strip("【】[]() _|-").strip()
@@ -1176,23 +947,11 @@ Katarin
         if hasattr(self, "_custom_franchise_map") and toks in self._custom_franchise_map:
             return self._custom_franchise_map[toks]
 
-        # 2. Automated FranchiseResolver (Seed catalog, Local cache, Substring, Fuzzy matching)
+        # 2. FranchiseResolver (seed catalog, substring, fuzzy matching)
         if hasattr(self, "franchise_resolver") and self.franchise_resolver:
-            resolved = self.franchise_resolver.resolve(cleaned, allow_online=allow_online)
+            resolved = self.franchise_resolver.resolve(cleaned)
             if resolved:
                 return resolved
-
-        # 3. Master database franchise map
-        if hasattr(self, "_master_franchise_map") and toks in self._master_franchise_map:
-            if len(toks) == 1:
-                tok0 = toks[0]
-                if (tok0 in getattr(self, "_custom_words", set()) 
-                    or toks in getattr(self, "_custom_exact_map", {})
-                    or (hasattr(self, "_master_char_map") and toks in self._master_char_map)):
-                    return None
-            f = self._master_franchise_map[toks]
-            if not _is_invalid_franchise(f):
-                return f
 
         return None
 
@@ -1238,11 +997,6 @@ Katarin
                         a_toks = set(self._tokenize(alias))
                         if a_toks and (toks.issubset(a_toks) or a_toks.issubset(toks)):
                             return canon
-            c_toks = tuple(self._tokenize(ch))
-            if hasattr(self, "_master_char_map") and c_toks in self._master_char_map:
-                m_fr, m_char = self._master_char_map[c_toks]
-                if m_fr.lower() == fr.lower() or m_fr in ("General", "Other"):
-                    return m_char
             return ch
 
         # If exactly 1 meaningful segment remains (e.g. "Classroom of the Elite _ NSFW" -> ["Classroom of the Elite"])
@@ -1272,9 +1026,9 @@ Katarin
             if hasattr(self, "_custom_franchise_map") and fr_toks in self._custom_franchise_map:
                 resolved_fr = self._custom_franchise_map[fr_toks]
                 fr_score = 10000
-            # 1B. Automated FranchiseResolver (Seed catalog + persistent cache + fuzzy typo healing)
+            # 1B. FranchiseResolver (seed catalog + fuzzy typo healing)
             elif hasattr(self, "franchise_resolver") and self.franchise_resolver:
-                res = self.franchise_resolver.resolve(cand_fr_clean, allow_online=False)
+                res = self.franchise_resolver.resolve(cand_fr_clean)
                 if res:
                     c_norm = self.franchise_resolver._normalize(res)
                     matched_custom_sec = None
@@ -1285,22 +1039,6 @@ Katarin
                     resolved_fr = matched_custom_sec or res
                     fr_score = 8000 if matched_custom_sec else 5000
 
-            # 1C. Master database franchise map
-            if not resolved_fr and hasattr(self, "_master_franchise_map") and fr_toks in self._master_franchise_map:
-                f = self._master_franchise_map[fr_toks]
-                if not _is_invalid_franchise(f):
-                    if len(fr_toks) >= 2:
-                        resolved_fr = f
-                        fr_score = 2000
-                    else:
-                        is_known_char = (
-                            cand_fr_clean.lower() in self.entry_franchise_map
-                            or fr_toks[0] in getattr(self, "_custom_words", set())
-                            or (hasattr(self, "_master_char_map") and fr_toks in self._master_char_map)
-                        )
-                        if not is_known_char:
-                            resolved_fr = f
-                            fr_score = 300
 
             if not resolved_fr:
                 inverted_fr = self.get_franchise_for_character(cand_fr_clean)
@@ -1328,13 +1066,7 @@ Katarin
                         ch_score += 20000
                         break
 
-            if hasattr(self, "_master_char_map") and ch_toks in self._master_char_map:
-                m_fr, m_char = self._master_char_map[ch_toks]
-                if m_fr.lower() == resolved_fr.lower():
-                    ch_score += 15000
-                else:
-                    ch_score += 1000
-            elif clean_ch.lower() in self.entry_franchise_map:
+            if clean_ch.lower() in self.entry_franchise_map:
                 ch_score += 2000
 
             if len(ch_toks) >= 2:
@@ -1383,33 +1115,25 @@ Katarin
         title: str,
         tags: Optional[Any] = None,
         filenames: Optional[List[str]] = None,
-        content: Optional[str] = None,
-        creator_profile: Optional[Dict[str, Any]] = None
+        content: Optional[str] = None
     ) -> Optional[Tuple[str, str]]:
         """
-        Picks the (Franchise, Character) hierarchical pair for a post.
+        Picks the (Franchise, Character) hierarchical pair for a post from Known.txt.
         Returns Tuple of (franchise_name, character_name), or None if uncataloged.
         Uses Tags, Title N-Grams, Filenames (with CamelCase de-munging), Post Content,
-        optional AI Semantic Matching (Tier 1), Creator Archive Reasoning (Tier 2),
         and an LRU query cache.
-        Custom Known.txt entries strictly take precedence over the Master Database.
         """
         tag_list = self._parse_tags(tags)
         file_list = [str(f) for f in filenames if f] if filenames else []
         if not title and not tag_list and not file_list and not content:
             return None
 
-        creator_key = str(creator_profile.get("creator_id") or "") if creator_profile else ""
         # Check in-memory LRU query cache
         cache_key = (
             title or "",
             tuple(tag_list),
             tuple(file_list),
             content[:200] if content else "",
-            self.mode,
-            creator_key,
-            self._ai_enabled,
-            getattr(self, "_ai_engine_mode", "hybrid")
         )
         if cache_key in self._lru_cache:
             return self._lru_cache[cache_key]
@@ -1512,7 +1236,7 @@ Katarin
             tag_token_list, hay_tokens, file_token_tuples, content_tokens
         )
 
-        if detected_franchise and self.mode in ("hybrid", "learning_only"):
+        if detected_franchise:
             chars_in_franchise = self.franchise_sections.get(detected_franchise, [])
             if chars_in_franchise:
                 all_context_tokens = list(expanded_title_tokens) + all_flat_tag_tokens
@@ -1551,9 +1275,9 @@ Katarin
             return (detected_franchise, "")
 
         # ═════════════════════════════════════════════════════════════════════
-        # ── PHASE 1: Custom Known.txt Checks (Highest Priority Always) ────────
+        # ── Known.txt checks ──────────────────────────────────────────────────
         # ═════════════════════════════════════════════════════════════════════
-        if self.mode in ("hybrid", "learning_only") and self._custom_exact_map:
+        if self._custom_exact_map:
             # 1A. Exact tag match in Custom Known
             for t_toks in tag_token_list:
                 if t_toks in self._custom_exact_map:
@@ -1666,62 +1390,6 @@ Katarin
                         if ngram in self._custom_exact_map:
                             fr, canonical = self._custom_exact_map[ngram]
                             return (fr or canonical, canonical)
-
-        # ═════════════════════════════════════════════════════════════════════
-        # ── PHASE 2: Master Database Fallback (Only if Custom Known had no match)
-        # ═════════════════════════════════════════════════════════════════════
-        if self.mode in ("hybrid", "database_only") and self._master_char_map:
-            # 2A. Multi-token tags in Master DB
-            for t_toks in tag_token_list:
-                if len(t_toks) >= 2 and t_toks in self._master_char_map:
-                    fr, c_name = self._master_char_map[t_toks]
-                    if fr not in ("General", "Other"):
-                        return (fr, c_name)
-                if len(t_toks) >= 2 and t_toks in self._master_franchise_map:
-                    f = self._master_franchise_map[t_toks]
-                    return (f, f)
-
-            # 2B. Title N-Grams in Master DB
-            if hay_tokens:
-                for k in range(min(5, num_toks), 0, -1):
-                    for i in range(num_toks - k + 1):
-                        ngram = tuple(hay_tokens[i:i + k])
-                        # Guard single-word entries in Master DB
-                        if k == 1:
-                            tok0 = ngram[0]
-                            if len(tok0) < 4 or tok0 in _NOISE_TAGS or tok0 in GENERIC_TITLE_WORDS:
-                                continue
-                            # Crucial: if word appears in any custom Known.txt entry, don't let Master DB steal it!
-                            if tok0 in custom_words:
-                                continue
-                        if ngram in self._master_char_map:
-                            return self._master_char_map[ngram]
-                        if ngram in self._master_franchise_map:
-                            f = self._master_franchise_map[ngram]
-                            return (f, f)
-
-            # 2C. Single-token tags in Master DB (guarded)
-            for t_toks in tag_token_list:
-                if len(t_toks) == 1:
-                    tok0 = t_toks[0]
-                    if len(tok0) < 4 or tok0 in _NOISE_TAGS or tok0 in GENERIC_TITLE_WORDS:
-                        continue
-                    if tok0 in custom_words:
-                        continue
-                    if t_toks in self._master_char_map:
-                        fr, c_name = self._master_char_map[t_toks]
-                        if fr not in ("General", "Other"):
-                            return (fr, c_name)
-                    if t_toks in self._master_franchise_map:
-                        f = self._master_franchise_map[t_toks]
-                        return (f, f)
-
-            # 2D. Filename tuples in Master DB (guarded)
-            for f_toks in file_token_tuples:
-                if len(f_toks) >= 2 and f_toks in self._master_char_map:
-                    fr, c_name = self._master_char_map[f_toks]
-                    if fr not in ("General", "Other"):
-                        return (fr, c_name)
 
         return None
 
@@ -1960,8 +1628,6 @@ Katarin
         Nothing is added: title words are too noisy ("Soon", "comics", ...) to go into the
         list automatically, so callers only report what was found.
         """
-        if self.mode == "database_only":
-            return []
         all_candidates: List[str] = []
         for p in posts:
             all_candidates.extend(self.extract_character_candidates(p))

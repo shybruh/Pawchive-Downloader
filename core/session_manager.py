@@ -218,7 +218,6 @@ class SessionManager:
             "open_folder_on_complete": False,
             "play_completion_sound": False,
             "post_download_action": "none",
-            "known_recognition_mode": "hybrid",
             "language": "auto",
             "storage_pool_enabled": False,
             "storage_pool_margin_gb": 10.0,

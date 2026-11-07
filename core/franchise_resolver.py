@@ -5,7 +5,6 @@ Features:
 - Normalized dictionary lookup across English, Romaji, and colloquial acronyms.
 - Automatic high-confidence typo and spelling tolerance (fuzzy string matching).
 - Substring & subtitle stripping (e.g. "Sword Art Online: Alicization" -> "Sword Art Online").
-- Zero-configuration online auto-discovery via AniList GraphQL with persistent local caching.
 - Zero manual burden on users: new franchises and artist abbreviations are automatically learned.
 """
 
@@ -13,33 +12,13 @@ import os
 import re
 import sys
 import json
-import time
 import difflib
 import threading
-import urllib.request
-import urllib.error
 from typing import Optional, Dict, Set, List, Tuple, Any
 from core.logger import logger
 from core.path_utils import get_app_version
 
 
-_ANILIST_GRAPHQL_URL = "https://graphql.anilist.co"
-
-_ANILIST_QUERY = """
-query ($search: String) {
-  Media (search: $search, type: ANIME) {
-    id
-    title {
-      romaji
-      english
-      native
-    }
-    synonyms
-  }
-}
-"""
-
-# Common stopwords/noise that should never be searched as a franchise
 _IGNORE_FRANCHISE_TERMS: Set[str] = {
     "nsfw", "sfw", "pack", "pics", "4k", "8k", "hd", "extras", "preview",
     "standard", "cosplay", "collab", "special", "reward", "request", "poll",
@@ -302,15 +281,13 @@ _SEED_FRANCHISES: Dict[str, Dict[str, Any]] = {
 class FranchiseResolver:
     """
     Intelligent, self-learning Franchise & Series Resolver.
-    Combines pre-seeded database, persistent local cache, fuzzy matching, and AniList auto-discovery.
+    Combines a pre-seeded catalog, a local cache of learned names, and fuzzy matching.
     """
 
     def __init__(self, cache_path: Optional[str] = None):
         self._lock = threading.Lock()
         self._alias_to_canonical: Dict[str, str] = {}
         self._canonicals: Dict[str, str] = {}  # lowercase canonical -> display canonical
-        self._negative_cache: Set[str] = set()
-        self._last_online_query_time: float = 0.0
         # Answers reused while the alias map is unchanged (_ver goes up when it changes): Known.txt asks
         # for every franchise's aliases at each reload, and each answer walked the whole 100,000-alias map
         self._ver = 0
@@ -369,25 +346,8 @@ class FranchiseResolver:
                 except Exception as ex:
                     logger.debug(f"Could not load franchise_cache.json: {ex}", category="known")
 
-    def _save(self):
-        """Persists learned canonicals and aliases to data/franchise_cache.json."""
-        try:
-            os.makedirs(os.path.dirname(self._cache_path), exist_ok=True)
-            export_data: Dict[str, List[str]] = {}
-            # Group aliases by canonical display name
-            for alias_norm, canonical in self._alias_to_canonical.items():
-                if canonical not in export_data:
-                    export_data[canonical] = []
-                if alias_norm != self._normalize(canonical) and alias_norm not in export_data[canonical]:
-                    export_data[canonical].append(alias_norm)
-
-            with open(self._cache_path, "w", encoding="utf-8") as f:
-                json.dump({"version": 1, "canonicals": export_data}, f, indent=2, ensure_ascii=False)
-        except Exception as ex:
-            logger.debug(f"Could not write franchise_cache.json: {ex}", category="known")
-
-    def register_alias(self, alias: str, canonical: str, persist: bool = True):
-        """Registers a franchise alias in memory and optionally persists to disk."""
+    def register_alias(self, alias: str, canonical: str):
+        """Registers a franchise alias (in memory)."""
         if not alias or not canonical:
             return
         a_norm = self._normalize(alias)
@@ -400,14 +360,12 @@ class FranchiseResolver:
                 self._ver += 1
             self._canonicals[c_norm] = canonical
             self._alias_to_canonical[a_norm] = canonical
-            if persist:
-                self._save()
 
     def get_aliases(self, canonical_or_alias: str) -> List[str]:
         """Returns all known aliases for the given franchise or alias."""
         if not canonical_or_alias:
             return []
-        resolved = self.resolve(canonical_or_alias, allow_online=False) or canonical_or_alias
+        resolved = self.resolve(canonical_or_alias) or canonical_or_alias
         c_norm = self._normalize(resolved)
         with self._lock:
             target_canonical = self._canonicals.get(c_norm, resolved)
@@ -420,10 +378,10 @@ class FranchiseResolver:
             aliases |= self._by_canonical.get(resolved.lower(), set())
         return sorted(aliases)
 
-    def resolve(self, text: str, allow_online: bool = True) -> Optional[str]:
+    def resolve(self, text: str) -> Optional[str]:
         """
         Resolves an input franchise candidate to its canonical name.
-        Uses exact alias match, substring containment, fuzzy matching, and AniList auto-discovery.
+        Uses exact alias match, substring containment and fuzzy matching.
         """
         if not text:
             return None
@@ -441,16 +399,6 @@ class FranchiseResolver:
             hit = self._resolve_offline(norm)
             if hit:
                 return hit
-
-        # 4. Online Auto-Discovery via AniList GraphQL
-        is_single_short_word = len(norm.split()) == 1 and len(norm) < 5
-        if allow_online and norm not in self._negative_cache and len(norm) >= 4 and not is_single_short_word:
-            discovered = self._query_anilist(text)
-            if discovered:
-                return discovered
-            else:
-                self._negative_cache.add(norm)
-
         return None
 
     def _resolve_offline(self, norm: str) -> Optional[str]:
@@ -491,86 +439,3 @@ class FranchiseResolver:
                 return best_canonical
             self._offline_miss[norm] = self._ver
         return None
-
-    def _query_anilist(self, search_term: str) -> Optional[str]:
-        """
-        Queries AniList GraphQL API to automatically resolve unknown anime titles,
-        Romaji variants, and community abbreviations with zero user intervention.
-        """
-        # Rate limit: minimum 0.5s between consecutive online requests
-        now = time.time()
-        elapsed = now - self._last_online_query_time
-        if elapsed < 0.5:
-            time.sleep(0.5 - elapsed)
-        self._last_online_query_time = time.time()
-
-        clean_search = re.sub(r'^[【\[][^】\]]+[】\]]\s*:?\s*', '', search_term)
-        clean_search = re.sub(r'[\U00010000-\U0010ffff]', '', clean_search).strip("【】[]() _|-+=~～")
-        if not clean_search or len(clean_search) < 3 or clean_search.lower() in _IGNORE_FRANCHISE_TERMS:
-            return None
-
-        try:
-            req = urllib.request.Request(
-                _ANILIST_GRAPHQL_URL,
-                data=json.dumps({"query": _ANILIST_QUERY, "variables": {"search": clean_search}}).encode("utf-8"),
-                headers={
-                    "Content-Type": "application/json",
-                    "User-Agent": f"PawchiveDownloader/{get_app_version()} (Anime Franchise Resolver)"
-                }
-            )
-            with urllib.request.urlopen(req, timeout=2.5) as resp:
-                data = json.loads(resp.read().decode("utf-8"))
-                media = data.get("data", {}).get("Media")
-                if not media:
-                    return None
-
-                titles = []
-                eng = media.get("title", {}).get("english")
-                rom = media.get("title", {}).get("romaji")
-                native = media.get("title", {}).get("native")
-                synonyms = media.get("synonyms", [])
-
-                if eng:
-                    titles.append(eng)
-                if rom:
-                    titles.append(rom)
-                if native:
-                    titles.append(native)
-                titles.extend(synonyms)
-
-                # Quality gate: verify returned anime actually corresponds to query
-                st_lower = clean_search.lower()
-                st_norm = self._normalize(clean_search)
-                best_ratio = max((difflib.SequenceMatcher(None, st_norm, self._normalize(t)).ratio() for t in titles if t), default=0.0)
-                contains = any(st_lower in t.lower() or t.lower() in st_lower for t in titles if t and len(t) >= 4)
-
-                if best_ratio < 0.70 and not contains:
-                    return None
-
-                # Canonical preference: English title if present and standard, otherwise Romaji
-                canonical = eng or rom
-                if not canonical:
-                    return None
-
-                # Register discovered aliases
-                with self._lock:
-                    c_norm = self._normalize(canonical)
-                    self._ver += 1
-                    self._canonicals[c_norm] = canonical
-                    self._alias_to_canonical[st_norm] = canonical
-                    for t in titles:
-                        if t:
-                            t_norm = self._normalize(t)
-                            if t_norm:
-                                self._alias_to_canonical[t_norm] = canonical
-                    self._save()
-
-                logger.info(
-                    f"✨ Auto-discovered anime franchise: '{clean_search}' -> '{canonical}' (via AniList)",
-                    category="known"
-                )
-                return canonical
-
-        except Exception as ex:
-            logger.debug(f"AniList auto-discovery skipped for '{search_term}': {ex}", category="known")
-            return None

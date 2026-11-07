@@ -1052,21 +1052,11 @@ class FileDownloader:
                     if isinstance(_att, dict) and _att.get("name"):
                         cand_filenames.append(_att["name"])
 
-                creator_prof = None
-                if getattr(self, "archive_manager", None) and self.archive_manager.is_enabled:
-                    creator_prof = self.archive_manager.get_creator_character_profile(
-                        service=service,
-                        creator_id=creator_clean,
-                        creator_name=creator_clean,
-                        base_dirs=[d for d in {base_dir, base_root} if d]
-                    )
-
                 matched_hierarchy = self.known_manager.find_matching_hierarchy(
                     post_title,
                     tags=post.get("tags"),
                     filenames=cand_filenames,
-                    content=post.get("content"),
-                    creator_profile=creator_prof
+                    content=post.get("content")
                 )
                 if matched_hierarchy:
                     franchise, char_name = matched_hierarchy

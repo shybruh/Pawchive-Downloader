@@ -31,11 +31,7 @@ const ARCHIVE_EXTENSIONS: &[&str] = &[".7z", ".zip", ".rar", ".tar", ".gz", ".bz
 /// What the planner asks the rest of the app
 pub trait Lookups {
     /// (franchise, character) for a post from the Known list
-    fn known_hierarchy(&self, _title: &str, _tags: Option<&Value>, _filenames: &[String], _content: Option<&Value>, _profile: Option<&Value>) -> Option<(String, String)> {
-        None
-    }
-    /// The download archive's character profile of a creator (helps the Known match)
-    fn creator_profile(&self, _service: &str, _creator: &str, _base_dirs: &[String]) -> Option<Value> {
+    fn known_hierarchy(&self, _title: &str, _tags: Option<&Value>, _filenames: &[String], _content: Option<&Value>) -> Option<(String, String)> {
         None
     }
     fn archive_enabled(&self) -> bool {
@@ -389,18 +385,7 @@ pub fn build(posts: &[Value], o: &Options, r: &Request, ctx: &dyn Lookups) -> Pl
                     names.push(pystr(nm));
                 }
             }
-            let profile = if ctx.archive_enabled() {
-                let mut dirs: Vec<String> = Vec::new();
-                for d in [r.base_dir, base_root.as_str()] {
-                    if !d.is_empty() && !dirs.iter().any(|x| x == d) {
-                        dirs.push(d.to_string());
-                    }
-                }
-                ctx.creator_profile(service, &creator_clean, &dirs)
-            } else {
-                None
-            };
-            match ctx.known_hierarchy(&post_title, post.get("tags"), &names, post.get("content"), profile.as_ref()) {
+            match ctx.known_hierarchy(&post_title, post.get("tags"), &names, post.get("content")) {
                 Some((franchise, character)) => {
                     if !franchise.trim().is_empty() && franchise != "Other" && franchise != "General" {
                         parts.push(n::clean_filesystem_text(&franchise, 60, "Franchise"));
@@ -1004,7 +989,7 @@ pub fn build(posts: &[Value], o: &Options, r: &Request, ctx: &dyn Lookups) -> Pl
 #[allow(clippy::too_many_arguments)]
 fn post_info_text(post: &Value, title: &str, post_id: &str, date: &str, post_url: &str, passwords: &[String], caption: &str, r: &Request, ctx: &dyn Lookups) -> String {
     let mut tags = n::normalize_tags(post.get("tags").unwrap_or(&Value::Null));
-    if let Some((fr, ch)) = ctx.known_hierarchy(title, None, &[], None, None) {
+    if let Some((fr, ch)) = ctx.known_hierarchy(title, None, &[], None) {
         for name in [ch, fr] {
             if !name.is_empty() && name.to_lowercase() != "general" && !tags.contains(&name) {
                 tags.insert(0, name);
@@ -1127,7 +1112,7 @@ mod tests {
     /// The stand-ins of tools/golden_plan.py
     struct Stub(HashSet<String>);
     impl Lookups for Stub {
-        fn known_hierarchy(&self, title: &str, _: Option<&Value>, _: &[String], _: Option<&Value>, _: Option<&Value>) -> Option<(String, String)> {
+        fn known_hierarchy(&self, title: &str, _: Option<&Value>, _: &[String], _: Option<&Value>) -> Option<(String, String)> {
             let low = title.to_lowercase();
             [("miku", "Vocaloid", "Hatsune Miku"), ("samus", "Metroid", "Samus"), ("general", "General", "General")]
                 .iter()

@@ -23,13 +23,14 @@ marks, AI tagging, storage breakdown.
 
 | Removed | Was |
 |---|---|
-| AI character recognition | `ai_semantic_matcher`, `ai_reasoner`, `model_manager`, `hardware_detector`, onnxruntime / tokenizers / GGUF models (`requirements-ai.txt`). Known series now matches with Known.txt and the character database only. |
+| AI character recognition | `ai_semantic_matcher`, `ai_reasoner`, `model_manager`, `hardware_detector`, onnxruntime / tokenizers / GGUF models (`requirements-ai.txt`). Known series now matches with Known.txt only. |
 | Privacy mode, PIN lock, safe mode | properties, slots and settings in `app_bridge` |
 | Storage pools (overflow to other drives) | `storage_pool_manager` and its hooks in the downloader and watchlist |
 | Old self-updater | `update_service`, `update_installer`, `updater_bridge` (the app has its own signed updater) |
 | Desktop completion reports | `report_generator` |
 | Gallery archive tools | `gallery_archive_bridge` |
 | Planner options the window no longer offered | the video-length filter (`video_probe`), manga mode (oldest first) and tag folders, in the Python and Rust planners |
+| Known matching's unused parts | the character database (`data/master_characters.json` never shipped, so it always loaded empty), the recognition mode that chose between it and Known.txt, AniList online lookups (never switched on), the AI hooks, and the download archive's creator character profile (only a cache key) |
 | Video fingerprinting, media compression | `video_fingerprinter`, `media_compressor`, the Decompressor's "compress after extracting" |
 | Python workarounds | `memory_collector`, `hang_detector` |
 | The Qt / QML interface | `qml/`, `main.py`, `updater.py`, the old build script and PyInstaller specs |

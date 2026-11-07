@@ -172,7 +172,6 @@ class AppBridge(QObject):
     filesCountTextChanged = Signal()
     harvestedLinksChanged = Signal()
     postDownloadActionChanged = Signal()
-    knownRecognitionModeChanged = Signal()
     postActionCountdownStarted = Signal(str)  # carries human label e.g. "Shutdown"
     exportCompleted = Signal(str, bool)       # (filePath, wasDownloading)
     importCompleted = Signal(int, int)        # (taskCount, creatorCount)
@@ -410,8 +409,6 @@ class AppBridge(QObject):
         self._open_folder_on_complete = bool(saved_settings.get("open_folder_on_complete", False))
         self._play_completion_sound = bool(saved_settings.get("play_completion_sound", False))
         self._post_download_action = "none" # Always default to 'none' (Do Nothing) on startup
-        self._known_recognition_mode = str(saved_settings.get("known_recognition_mode", "hybrid"))
-        self.known_manager.set_mode(self._known_recognition_mode)
         self._console_width = int(saved_settings.get("console_width", 620))
         self._current_fps = 0
         self._screen_hz = 60
@@ -1712,21 +1709,6 @@ class AppBridge(QObject):
         if self._post_download_action != val:
             self._post_download_action = val
             self.postDownloadActionChanged.emit()
-
-    @Property(str, notify=knownRecognitionModeChanged)
-    def knownRecognitionMode(self) -> str:
-        return self._known_recognition_mode
-
-    @knownRecognitionMode.setter
-    def knownRecognitionMode(self, val: str):
-        allowed = {"hybrid", "database_only", "learning_only"}
-        if val not in allowed:
-            val = "hybrid"
-        if self._known_recognition_mode != val:
-            self._known_recognition_mode = val
-            self.known_manager.set_mode(val)
-            self.knownRecognitionModeChanged.emit()
-            self.saveSettings()
 
     # Model Properties
 
@@ -4082,12 +4064,8 @@ class AppBridge(QObject):
 
         parts = [base_dir]
         if self._separate_folders_by_known:
-            creator_prof = None
-            if getattr(self, "archive_manager", None) and self.archive_manager.is_enabled:
-                creator_prof = self.archive_manager.get_creator_character_profile(
-                    service=service, creator_id=creator, creator_name=creator, base_dirs=[base_dir])
             match = self.known_manager.find_matching_hierarchy(
-                title, tags=tags, filenames=[os.path.basename(url.split("?")[0])], content=content, creator_profile=creator_prof)
+                title, tags=tags, filenames=[os.path.basename(url.split("?")[0])], content=content)
             if match:
                 franchise, char_name = match
                 if franchise and franchise.strip() and franchise not in ("Other", "General"):
@@ -4528,7 +4506,6 @@ class AppBridge(QObject):
             "open_folder_on_complete": self._open_folder_on_complete,
             "play_completion_sound": self._play_completion_sound,
             "post_download_action": "none",
-            "known_recognition_mode": self._known_recognition_mode,
             "console_width": self._console_width,
             "skip_post_covers": self._skip_post_covers,
             "download_thumbnails_only": self._download_thumbnails_only,
