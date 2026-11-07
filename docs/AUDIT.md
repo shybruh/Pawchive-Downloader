@@ -29,6 +29,7 @@ marks, AI tagging, storage breakdown.
 | Old self-updater | `update_service`, `update_installer`, `updater_bridge` (the app has its own signed updater) |
 | Desktop completion reports | `report_generator` |
 | Gallery archive tools | `gallery_archive_bridge` |
+| Planner options the window no longer offered | the video-length filter (`video_probe`), manga mode (oldest first) and tag folders, in the Python and Rust planners |
 | Video fingerprinting, media compression | `video_fingerprinter`, `media_compressor`, the Decompressor's "compress after extracting" |
 | Python workarounds | `memory_collector`, `hang_detector` |
 | The Qt / QML interface | `qml/`, `main.py`, `updater.py`, the old build script and PyInstaller specs |
@@ -37,7 +38,7 @@ marks, AI tagging, storage breakdown.
 | Qt Quick / QML in the engine | the thumbnail code no longer uses QML image providers; the packaged engine leaves out Qt Quick, QML, PDF, OpenGL and other unused Qt modules (486 MB → 124 MB) |
 | Upstream repo files | `SECURITY.md`, `.github/FUNDING.yml` |
 
-Kept on purpose: `ffmpeg_manager` (the video-length filter needs ffprobe), `franchise_resolver`
+Kept on purpose: `ffmpeg_manager` (the Decompressor uses ffmpeg), `franchise_resolver`
 (plain keyword matching from Known.txt), keyword tagging in the gallery tools.
 
 ## 3. Porting the engine to Rust

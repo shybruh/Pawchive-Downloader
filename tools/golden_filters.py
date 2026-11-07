@@ -57,12 +57,6 @@ for s in SKIPS:
     add("size_range", {"skip_words": s}, list(F.get_file_size_range_bytes(s)))
 for b in [0, 1, 1023, 1024, 1536, 10 ** 6, 1048576, 5 * 1024 ** 3 + 123, 3 * 1024 ** 4, 999999999999]:
     add("format_size_str", {"n": b}, F.format_size_str(b))
-DURS = ["", "45", "45s", "90.5", "5m", "1.5m", "10min", "1h", "2.5h", "1:30", "01:15:30", "1:2:3:4", "x", "3 hrs", "0.4", "2.5"]
-for d in DURS:
-    add("parse_duration_seconds", {"raw": d}, F.parse_duration_seconds(d))
-    add("normalize_duration_str", {"raw": d}, F.normalize_duration_str(d))
-for sec in [None, -1, 0, 0.5, 1.5, 2.5, 45, 90, 3599.5, 3665, 86400]:
-    add("format_duration_str", {"seconds": sec}, F.format_duration_str(sec))
 DATES = ["", "2024", "2024-06", "2024/6/5", "2024.02", "2023-02", "2024-02", "2024-13", "abcd", "2024-06-15", "24-1-2", "2024-06-15T10:00"]
 for d in DATES:
     add("normalize_date", {"s": d}, F.normalize_date(d))
@@ -76,7 +70,7 @@ for n in ["", "a.JPG", "b.mp4", "c.zip", "d.psd", "e.mp3", "f.txt", "g", ".hidde
 # FilterOptions normalisation (from_dict → to_dict)
 OPTION_INPUTS = [
     {}, {"min_file_size": "1g", "max_file_size": "500", "group_file_type": "POST", "file_order": "Name", "webp_quality": "nope",
-         "sidecar_format": "TXT", "sidecar_scope": "x", "min_video_duration": "90", "max_video_duration": "1:2:3", "page_start": "3"},
+         "sidecar_format": "TXT", "sidecar_scope": "x", "page_start": "3"},
     {"skip_words": "WIP", "characters": "Miku/初音ミク", "filename_template": "", "exact_extensions": "  mp4  "},
 ]
 for o in OPTION_INPUTS:
@@ -105,17 +99,16 @@ OPTS = [
     {"file_type": "images"}, {"file_type": "videos"}, {"file_type": "archives"}, {"file_type": "audio"},
     {"exact_extensions": "mp4, gif"}, {"skip_archives": True}, {"skip_archives": True, "exact_extensions": "zip"},
     {"download_thumbnails_only": True},
-    {"video_duration_filter_enabled": True, "min_video_duration": "10", "max_video_duration": "1m"},
 ]
-FILES = [("a.jpg", None, None), ("WIP_v2.png", 2_000_000, None), ("final-wip.mp4", 50_000_000, 30.0), ("song.mp3", 400, None),
-         ("pack.zip", 900_000_000, None), ("clip.webm", 5_000_000, 5.0), ("long.mp4", 5_000_000, 120.0), ("初音ミク.gif", 2048, None),
-         ("", 10, None), ("notes.txt", 100, None), ("preview_image.jpg", 600_000, None)]
+FILES = [("a.jpg", None), ("WIP_v2.png", 2_000_000), ("final-wip.mp4", 50_000_000), ("song.mp3", 400),
+         ("pack.zip", 900_000_000), ("clip.webm", 5_000_000), ("long.mp4", 5_000_000), ("初音ミク.gif", 2048),
+         ("", 10), ("notes.txt", 100), ("preview_image.jpg", 600_000)]
 for post, opt in itertools.product(POSTS, OPTS):
     keep, reason = F.should_keep_post(post, FilterOptions.from_dict(opt))
     add("should_keep_post", {"post": post, "options": opt}, [keep, reason])
-for (name, size, dur), opt in itertools.product(FILES, OPTS):
-    keep, reason = F.should_keep_file(name, FilterOptions.from_dict(opt), file_size=size, duration=dur)
-    add("should_keep_file", {"filename": name, "file_size": size, "duration": dur, "options": opt}, [keep, reason])
+for (name, size), opt in itertools.product(FILES, OPTS):
+    keep, reason = F.should_keep_file(name, FilterOptions.from_dict(opt), file_size=size)
+    add("should_keep_file", {"filename": name, "file_size": size, "options": opt}, [keep, reason])
 
 # Names
 for fname, rw in itertools.product(["cover.jpeg,", "My Art [Sample] HD.png", "x.", "name", ".hidden", "a.tar.gz",

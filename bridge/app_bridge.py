@@ -316,9 +316,6 @@ class AppBridge(QObject):
         self._date_auto_scan_pages = bool(saved_settings.get("date_auto_scan_pages", True))
         self._min_file_size = str(saved_settings.get("min_file_size", ""))
         self._max_file_size = str(saved_settings.get("max_file_size", ""))
-        self._video_duration_filter_enabled = bool(saved_settings.get("video_duration_filter_enabled", False))
-        self._min_video_duration = str(saved_settings.get("min_video_duration", ""))
-        self._max_video_duration = str(saved_settings.get("max_video_duration", ""))
         self._filter_type = "all"
         self._exact_extensions = str(saved_settings.get("exact_extensions", "")).strip()
         self._saved_custom_extensions = [
@@ -355,7 +352,6 @@ class AppBridge(QObject):
         self._auto_retry_at_end = saved_settings.get("auto_retry_at_end", False)
         self._skip_retry_404 = bool(saved_settings.get("skip_retry_404", False))
         self._auto_delete_failed = bool(saved_settings.get("auto_delete_failed", False))
-        self._manga_mode = saved_settings.get("manga_mode", False)
         self._filename_style = saved_settings.get("filename_style", "post_title")
         self._filename_template = saved_settings.get("filename_template", "{title} - {orig_name}")
         self._is_post_selection_loading = False
@@ -420,7 +416,6 @@ class AppBridge(QObject):
         self._current_fps = 0
         self._screen_hz = 60
         self._creator_name = ""
-        self._tag_folder_mode = bool(saved_settings.get("tag_folder_mode", False))
         self._group_file_type = str(saved_settings.get("group_file_type", "none"))
         self._file_order = normalize_file_order(saved_settings.get("file_order", "posted"))
         self._telegram_safety_acknowledged = bool(saved_settings.get("telegram_safety_acknowledged", False))
@@ -1856,7 +1851,6 @@ class AppBridge(QObject):
             adaptive_threading=self._adaptive_threading,
             threads_locked=self._threads_locked,
                 auto_retry_at_end=self._auto_retry_at_end,
-            manga_mode=self._manga_mode,
             filename_style=self._filename_style,
             filename_template=self._filename_template,
             proxy_url=self._proxy_url,
@@ -1865,7 +1859,6 @@ class AppBridge(QObject):
             download_delay=self._download_delay,
             save_post_metadata=self._save_post_metadata,
             download_embeds=self._download_embeds,
-            tag_folder_mode=self._tag_folder_mode,
             skip_post_covers=self._skip_post_covers,
             date_after=self._date_after,
             date_before=self._date_before,
@@ -1878,10 +1871,7 @@ class AppBridge(QObject):
             file_order=self._file_order,
             write_sidecars=self._write_sidecars,
             sidecar_format=self._sidecar_format,
-            sidecar_scope=self._sidecar_scope,
-            video_duration_filter_enabled=self._video_duration_filter_enabled,
-            min_video_duration=self._min_video_duration,
-            max_video_duration=self._max_video_duration
+            sidecar_scope=self._sidecar_scope
         )
 
     def _get_link_identity(self, parsed: URLParseResult) -> tuple[str, str, Optional[str], str]:
@@ -4518,7 +4508,6 @@ class AppBridge(QObject):
             "adaptive_threading": self._adaptive_threading,
             "threads_locked": self._threads_locked,
             "auto_retry_at_end": self._auto_retry_at_end,
-            "manga_mode": self._manga_mode,
             "filename_style": self._filename_style,
             "filename_template": self._filename_template,
             "proxy_url": self._proxy_url,
@@ -4541,7 +4530,6 @@ class AppBridge(QObject):
             "post_download_action": "none",
             "known_recognition_mode": self._known_recognition_mode,
             "console_width": self._console_width,
-            "tag_folder_mode": self._tag_folder_mode,
             "skip_post_covers": self._skip_post_covers,
             "download_thumbnails_only": self._download_thumbnails_only,
             "fallback_to_thumbnails": self._fallback_to_thumbnails,
@@ -4551,9 +4539,6 @@ class AppBridge(QObject):
             "download_pawchive_temporary_files": self._download_pawchive_temporary_files,
             "min_file_size": self._min_file_size,
             "max_file_size": self._max_file_size,
-            "video_duration_filter_enabled": self._video_duration_filter_enabled,
-            "min_video_duration": self._min_video_duration,
-            "max_video_duration": self._max_video_duration,
             "exact_extensions": self._exact_extensions,
             "saved_custom_extensions": self._saved_custom_extensions,
             "gallery_bookmarks": self._gallery_bookmarks,
@@ -4876,7 +4861,6 @@ class AppBridge(QObject):
                         "threads": self._threads_count,
                         # (no login cookie: exported files get shared, and the cookie is your login)
                         "user_agent": self._user_agent,
-                        "manga_mode": self._manga_mode,
                         "subfolder_per_post": self._subfolder_per_post,
                         "date_prefix": self._date_prefix,
                         "file_index_prefix": self._file_index_prefix,

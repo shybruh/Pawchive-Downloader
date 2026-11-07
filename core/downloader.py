@@ -38,7 +38,6 @@ from core.known_manager import KnownManager
 from core.session_manager import SessionManager
 from core.archive_manager import ArchiveManager
 from core.bandwidth_limiter import bandwidth_limiter
-from core.video_probe import VideoProbe
 
 # Services hosted on cum.st rather than Pawchive
 
@@ -743,31 +742,6 @@ class FileDownloader:
         return rp.lower()
 
     @staticmethod
-    def _resolve_candidate_video_url(fobj: dict, domain: str) -> str:
-        p = fobj.get("path") or fobj.get("storageKey") or ""
-        if not p:
-            return ""
-        if p.startswith("http://") or p.startswith("https://"):
-            return p.replace("e1.cum.st", "cdn.cum.st")
-        clean_rel = "/" + p.lstrip("/")
-        if "cum.st" in (domain or "") or re.match(r'^[0-9a-f]{16,}$', p):
-            if re.match(r'^[0-9a-f]{16,}$', p):
-                variants = fobj.get("variants") or []
-                vname = "original.mp4"
-                if isinstance(variants, list) and variants:
-                    for v in variants:
-                        if isinstance(v, dict) and "original" in (v.get("name") or "").lower():
-                            vname = v.get("name")
-                            break
-                    else:
-                        if isinstance(variants[0], dict) and variants[0].get("name"):
-                            vname = variants[0].get("name")
-                return f"https://cdn.cum.st/media/{p}/{vname}"
-            return f"https://cum.st/data{clean_rel}"
-        else:
-            return f"https://file.pawchive.pw/data{clean_rel}"
-
-    @staticmethod
     def _is_pawchive_temp_expired(fobj: Dict[str, Any]) -> bool:
         """Returns True if the temporary Pawchive URL or temp_expires has expired."""
         if not isinstance(fobj, dict):
@@ -962,24 +936,7 @@ class FileDownloader:
 
         creator_clean = FilterEngine.clean_filesystem_text(creator_name, max_len=80, fallback="creator")
 
-        # ── 1. Manga / Comic Mode Sorting ─────────────────────────────────────
         posts_to_process = list(posts)
-        if options.manga_mode:
-            logger.info("Manga Mode active: Sorting posts chronologically (oldest first)...", category="downloader")
-            def _post_date_key(p):
-                pub = p.get("published") or p.get("added") or "0000-00-00"
-                pid = str(p.get("id", "0"))
-                return (pub, pid)
-            posts_to_process.sort(key=_post_date_key)
-        elif options.tag_folder_mode:
-            logger.info("Tag Folder Mode active: Sorting posts by primary tag and chronological index...", category="downloader")
-            def _post_tag_and_index_key(p):
-                tags = FilterEngine.normalize_tags(p.get("tags"))
-                primary_tag = tags[0].strip().lower() if tags else "zzz_untagged"
-                pub = p.get("published") or p.get("added") or "0000-00-00"
-                pid = str(p.get("id", "0"))
-                return (primary_tag, pub, pid)
-            posts_to_process.sort(key=_post_tag_and_index_key)
 
         # Character name discovery from post titles (reported only; nothing is added to the Known list)
         new_chars = self.known_manager.find_candidates_in_posts(posts_to_process)
@@ -1038,53 +995,6 @@ class FileDownloader:
             if not keep_post:
                 logger.debug(f"Skipped post [{post_id}] '{post_title}': {reason}", category="filter")
                 continue
-
-            # Filter posts by video length if enabled
-            if getattr(options, "video_duration_filter_enabled", False):
-                video_candidates = []
-                mf = post.get("file")
-                if isinstance(mf, dict):
-                    mfn = (mf.get("name") or mf.get("originalFilename") or "").lower()
-                    _, ext = os.path.splitext(mfn)
-                    if ext in MediaTypes.VIDEO_EXTS or (mf.get("mimeType") or "").startswith("video/"):
-                        video_candidates.append(mf)
-
-                for att in (post.get("attachments") or []):
-                    if isinstance(att, dict):
-                        atn = (att.get("name") or att.get("originalFilename") or "").lower()
-                        _, ext = os.path.splitext(atn)
-                        if ext in MediaTypes.VIDEO_EXTS or (att.get("mimeType") or "").startswith("video/"):
-                            video_candidates.append(att)
-
-                embed_urls = LinkExtractor.extract_embed_urls(post) if options.download_embeds else []
-
-                if not video_candidates and not embed_urls:
-                    logger.debug(f"Skipped post [{post_id}] '{post_title}': Post contains no videos (Duration filter active)", category="filter")
-                    continue
-
-                has_matching_video = False
-                for vc in video_candidates:
-                    v_url = self._resolve_candidate_video_url(vc, domain or "")
-                    dur = VideoProbe.get_video_duration(v_url, session=self.session)
-                    vc["_probed_duration"] = dur
-                    ok, _ = FilterEngine.should_keep_video_duration(dur, options)
-                    if ok:
-                        has_matching_video = True
-
-                if not has_matching_video and embed_urls:
-                    for eu in embed_urls:
-                        dur = VideoProbe.get_video_duration(eu, session=self.session)
-                        ok, _ = FilterEngine.should_keep_video_duration(dur, options)
-                        if ok:
-                            has_matching_video = True
-                            break
-
-                if not has_matching_video:
-                    min_d, max_d = FilterEngine.get_effective_duration_limits(options)
-                    min_s = FilterEngine.format_duration_str(min_d)
-                    max_s = FilterEngine.format_duration_str(max_d)
-                    logger.info(f"⏭️ Skipped post [{post_id}] '{post_title}': No videos match duration range [{min_s} – {max_s}]", category="filter")
-                    continue
 
             # ── Link extraction in "Only Links" mode ───────────────────────────
             if options.file_type == MediaTypes.LINKS:
@@ -1176,15 +1086,6 @@ class FileDownloader:
                     folder_parts = [artist_dir]
                 else:
                     folder_parts = [base_dir, creator_folder]
-
-            # Tag-based subfolder (Pawchive / cum.st only — other providers have no tags)
-            if options.tag_folder_mode:
-                post_tags = FilterEngine.normalize_tags(post.get("tags"))
-                if post_tags:
-                    first_tag = FilterEngine.clean_filesystem_text(post_tags[0], max_len=60, fallback="tag")
-                    folder_parts.append(first_tag)
-                else:
-                    folder_parts.append("Untagged")
 
             creator_base_parts = list(folder_parts)
             post_subfolder_name = ""
@@ -1546,7 +1447,7 @@ class FileDownloader:
 
                 # Filter file
                 file_bytes = fobj.get("bytes")
-                keep_file, f_reason = FilterEngine.should_keep_file(raw_name, options, file_size=file_bytes, duration=fobj.get("_probed_duration"))
+                keep_file, f_reason = FilterEngine.should_keep_file(raw_name, options, file_size=file_bytes)
                 if not keep_file:
                     logger.debug(f"Skipped file '{raw_name}': {f_reason}", category="filter", to_file=False)
                     not_queued["filtered out"] += 1
@@ -3197,18 +3098,6 @@ class FileDownloader:
 
         # ── yt-dlp embedded media download execution ─────────────────────────
         if task.is_ytdlp:
-            if options and getattr(options, "video_duration_filter_enabled", False):
-                dur = VideoProbe.get_video_duration(task.url, session=self.session)
-                keep_dur, dur_reason = FilterEngine.should_keep_video_duration(dur, options)
-                if not keep_dur:
-                    logger.info(f"⏭️ Skipping [yt-dlp] {task.url}: {dur_reason}", category="filter")
-                    task.status = "skipped"
-                    task.error_msg = dur_reason
-                    task.progress_pct = 100
-                    task.eta_str = "Skipped"
-                    if self.on_task_status_changed:
-                        self.on_task_status_changed(task)
-                    return True, f"Skipped: {dur_reason}"
 
             logger.info(f"▶ [yt-dlp] Downloading embedded player media: {task.url}", category="ytdlp")
             _prev_ytdlp_bytes = [0]

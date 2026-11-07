@@ -9,7 +9,7 @@ Output:
   desktop/src-tauri/target/plan_live.json    — the real posts (for: cargo test --lib -- --ignored plan)
 
 Each case runs in desktop/src-tauri/target/plan_base with the files the case lists created first.
-The Known list, download archive, video length probe, archive passwords and post_info writes are
+The Known list, download archive, archive passwords and post_info writes are
 stand-ins, so nothing outside that folder is read or written. The Rust planner
 (src-tauri/src/downloader/plan.rs) must give the same tasks.
 """
@@ -27,7 +27,6 @@ import core.downloader as dl  # noqa: E402
 import core.archive_password_manager as apm  # noqa: E402
 from core import folder_naming  # noqa: E402
 from core.filter_engine import FilterOptions  # noqa: E402
-from core.video_probe import VideoProbe  # noqa: E402
 
 BASE = os.path.join(ROOT, "desktop", "src-tauri", "target", "plan_base")
 FIXTURE = os.path.join(ROOT, "desktop", "src-tauri", "tests", "fixtures", "plan.json")
@@ -35,7 +34,6 @@ LIVE = os.path.join(ROOT, "desktop", "src-tauri", "target", "plan_live.json")
 
 # Stand-ins, mirrored by the Rust test
 KNOWN = {"miku": ("Vocaloid", "Hatsune Miku"), "samus": ("Metroid", "Samus"), "general": ("General", "General")}
-DURATIONS = {"short": 20.0, "long": 900.0}
 
 
 class Known:
@@ -65,14 +63,6 @@ class Archive:
         pass
 
 
-def duration(url, session=None):
-    for k, v in DURATIONS.items():
-        if k in url:
-            return v
-    return None
-
-
-VideoProbe.get_video_duration = staticmethod(duration)
 apm.archive_password_manager.record_archive_password = lambda *a, **k: None
 apm.archive_password_manager.add_passwords = lambda *a, **k: None
 WRITES = []
@@ -127,12 +117,6 @@ CUMST = [
                      {"name": "plain.gif", "path": "https://cum.st/data" + h(21) + ".gif"}]},
 ]
 
-DUR = [
-    P("d1", "Short", [], [{"name": "short.mp4", "path": h(22) + ".mp4"}]),
-    P("d2", "Long", [], [{"name": "long.mp4", "path": h(23) + ".mp4"}, {"name": "pic.png", "path": h(24) + ".png"}]),
-    P("d3", "Pictures", [], [{"name": "pic.png", "path": h(25) + ".png"}]),
-]
-
 O = lambda **kw: kw
 CASES = [
     ("defaults", BASIC, PAW, O(), [], []),
@@ -150,8 +134,7 @@ CASES = [
     ("exact extensions", BASIC, PAW, O(exact_extensions="png, mp4"), [], []),
     ("name order", BASIC, PAW, O(file_order="name"), [], []),
     ("reversed", BASIC, PAW, O(file_order="reversed"), [], []),
-    ("manga mode", [p for p in BASIC if not isinstance(p.get("published"), int)], PAW, O(manga_mode=True, filename_style="numbered"), [], []),
-    ("tag folders", [p for p in BASIC if not isinstance(p.get("published"), int)], PAW, O(tag_folder_mode=True), [], []),
+    ("numbered names", BASIC, PAW, O(filename_style="numbered"), [], []),
     ("known folders", BASIC, PAW, O(separate_by_known=True), [], []),
     ("links only", BASIC, PAW, O(file_type="links"), [], []),
     ("no post info", BASIC, PAW, O(save_post_metadata=False), [], []),
@@ -169,8 +152,6 @@ CASES = [
     ("batch id", BASIC, dict(PAW, batch_id="b1"), O(), [], []),
     ("cum.st", CUMST, CUM, O(), [], []),
     ("cum.st thumbnails", CUMST, CUM, O(fallback_to_thumbnails=True), [], []),
-    ("video length", DUR, PAW, O(video_duration_filter_enabled=True, min_video_duration="1:00"), [], []),
-    ("video length max", DUR, PAW, O(video_duration_filter_enabled=True, max_video_duration="0:30"), [], []),
     ("date range", BASIC, PAW, O(date_after="2024-03-06"), [], []),
 ]
 
@@ -190,7 +171,6 @@ def run(posts, req, opts, archived):
     folder_naming.include_service = req.get("include_service", True)
     d = dl.FileDownloader(Known(), None, archive_manager=Archive(archived))
     d._resolve_pawchive_deferred_attachments = lambda post, domain="": 0
-    d.session = None          # (the Python downloader has no session: its video length filter crashes)
     WRITES.clear()
     artist = req.get("artist_dir")
     tasks = d.build_tasks_from_posts(copy.deepcopy(posts), req["creator"], req["service"], req["domain"], BASE,

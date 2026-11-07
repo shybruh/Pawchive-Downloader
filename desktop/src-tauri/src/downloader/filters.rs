@@ -24,16 +24,15 @@ fn defaults() -> Map<String, Value> {
         "characters": "", "character_scope": "title", "skip_words": "", "skip_scope": "posts", "remove_words": "",
         "file_type": "all", "skip_archives": false, "download_thumbnails_only": false, "scan_content_images": true,
         "download_dms": false, "compress_to_webp": false, "keep_duplicates": false, "favorite_mode": false,
-        "subfolder_per_post": true, "date_prefix": true, "separate_by_known": false, "tag_folder_mode": false,
+        "subfolder_per_post": true, "date_prefix": true, "separate_by_known": false,
         "download_revisions": false, "adaptive_threading": false, "threads_locked": false, "auto_retry_at_end": false,
-        "manga_mode": false, "filename_style": "post_title", "filename_template": "{title} - {orig_name}", "proxy_url": "",
+        "filename_style": "post_title", "filename_template": "{title} - {orig_name}", "proxy_url": "",
         "page_start": 1, "page_end": 999999, "download_delay": 2.0, "save_post_metadata": true, "download_embeds": true,
         "file_index_prefix": false, "skip_post_covers": false, "date_after": "", "date_before": "",
         "download_pawchive_temporary_files": true, "min_file_size": "", "max_file_size": "", "write_audio_metadata": false,
         "fallback_to_thumbnails": false, "redownload_small_files": false, "exact_extensions": "", "skip_retry_404": false,
         "group_file_type": "none", "file_order": "posted", "webp_quality": "balanced", "write_sidecars": false,
-        "sidecar_format": "json", "sidecar_scope": "per_file", "video_duration_filter_enabled": false,
-        "min_video_duration": "", "max_video_duration": ""
+        "sidecar_format": "json", "sidecar_scope": "per_file"
     }"#)
         .unwrap()
         .as_object()
@@ -74,11 +73,10 @@ impl Options {
         // the same conversions FilterOptions applies
         let bools = [
             "skip_archives", "download_thumbnails_only", "scan_content_images", "download_dms", "compress_to_webp",
-            "keep_duplicates", "favorite_mode", "subfolder_per_post", "date_prefix", "separate_by_known", "tag_folder_mode",
-            "download_revisions", "adaptive_threading", "threads_locked", "auto_retry_at_end", "manga_mode",
+            "keep_duplicates", "favorite_mode", "subfolder_per_post", "date_prefix", "separate_by_known",
+            "download_revisions", "adaptive_threading", "threads_locked", "auto_retry_at_end",
             "save_post_metadata", "download_embeds", "file_index_prefix", "skip_post_covers", "download_pawchive_temporary_files",
             "write_audio_metadata", "fallback_to_thumbnails", "redownload_small_files", "skip_retry_404", "write_sidecars",
-            "video_duration_filter_enabled",
         ];
         for k in bools {
             let b = truthy(&m[k]);
@@ -116,10 +114,6 @@ impl Options {
         m.insert("webp_quality".into(), json!(pick(&m["webp_quality"], &["lossless", "high", "balanced", "small", "smallest"], "balanced")));
         m.insert("sidecar_format".into(), json!(pick(&m["sidecar_format"], &["json", "txt", "both"], "json")));
         m.insert("sidecar_scope".into(), json!(pick(&m["sidecar_scope"], &["per_file", "per_post"], "per_file")));
-        for k in ["min_video_duration", "max_video_duration"] {
-            let raw = m[k].clone();
-            m.insert(k.into(), json!(if truthy(&raw) { normalize_duration_str(&as_text(&raw)) } else { String::new() }));
-        }
         Self(m)
     }
 
@@ -299,76 +293,6 @@ pub fn effective_size_limits(o: &Options) -> (Option<i64>, Option<i64>) {
         }
     }
     (min, max)
-}
-
-// ── Durations ───────────────────────────────────────────────────────────────
-
-/// "45", "45s", "5m", "1.5h", "1:30", "01:15:30" → seconds
-pub fn parse_duration_seconds(raw: &str) -> Option<f64> {
-    let s = raw.trim().to_lowercase();
-    if s.is_empty() {
-        return None;
-    }
-    if s.contains(':') {
-        let parts: Vec<&str> = s.split(':').collect();
-        let nums: Option<Vec<f64>> = parts.iter().map(|p| py::float(p)).collect();
-        match (parts.len(), nums) {
-            (2, Some(n)) => return Some((n[0] * 60.0 + n[1]).max(0.0)),
-            (3, Some(n)) => return Some((n[0] * 3600.0 + n[1] * 60.0 + n[2]).max(0.0)),
-            (2 | 3, None) => return None,
-            _ => {}
-        }
-    }
-    static R: OnceLock<Regex> = OnceLock::new();
-    let c = R.get_or_init(|| re(r"^([\d.]+)\s*(s|sec|secs|m|min|mins|h|hr|hrs)?$")).captures(&s)?;
-    let val = py::float(&c[1])?;
-    Some(match c.get(2).map(|m| m.as_str()) {
-        None | Some("s" | "sec" | "secs") => val.max(0.0),
-        Some("m" | "min" | "mins") => (val * 60.0).max(0.0),
-        _ => (val * 3600.0).max(0.0),
-    })
-}
-
-pub fn format_duration_str(seconds: Option<f64>) -> String {
-    let Some(sec) = seconds.filter(|s| *s >= 0.0) else { return String::new() };
-    let total = sec.round_ties_even() as i64;
-    let (h, m, s) = (total / 3600, (total % 3600) / 60, total % 60);
-    if h > 0 { format!("{h}:{m:02}:{s:02}") } else { format!("{m}:{s:02}") }
-}
-
-pub fn normalize_duration_str(raw: &str) -> String {
-    parse_duration_seconds(raw).map(|s| format_duration_str(Some(s))).unwrap_or_default()
-}
-
-fn duration_limits(o: &Options) -> (Option<f64>, Option<f64>) {
-    if !o.flag("video_duration_filter_enabled") {
-        return (None, None);
-    }
-    let (a, b) = (parse_duration_seconds(&o.str("min_video_duration")), parse_duration_seconds(&o.str("max_video_duration")));
-    match (a, b) {
-        (Some(x), Some(y)) if x > y => (Some(y), Some(x)),
-        _ => (a, b),
-    }
-}
-
-pub fn keep_video_duration(duration: Option<f64>, o: &Options) -> (bool, String) {
-    if !o.flag("video_duration_filter_enabled") {
-        return (true, "Video duration filter disabled".into());
-    }
-    let (min, max) = duration_limits(o);
-    if min.is_none() && max.is_none() {
-        return (true, "No duration limits specified".into());
-    }
-    let Some(d) = duration.filter(|d| *d > 0.0) else {
-        return (true, "Video duration could not be determined; passed filter".into());
-    };
-    if let Some(m) = min.filter(|m| d < *m) {
-        return (false, format!("Video duration ({}) is below minimum threshold ({})", format_duration_str(Some(d)), format_duration_str(Some(m))));
-    }
-    if let Some(m) = max.filter(|m| d > *m) {
-        return (false, format!("Video duration ({}) exceeds maximum threshold ({})", format_duration_str(Some(d)), format_duration_str(Some(m))));
-    }
-    (true, "Passed video duration filter".into())
 }
 
 // ── Dates ───────────────────────────────────────────────────────────────────
@@ -555,19 +479,13 @@ pub fn should_keep_post(post: &Value, o: &Options) -> (bool, String) {
     (true, "Passed filter".into())
 }
 
-pub fn should_keep_file(filename: &str, o: &Options, file_size: Option<i64>, duration: Option<f64>) -> (bool, String) {
+pub fn should_keep_file(filename: &str, o: &Options, file_size: Option<i64>) -> (bool, String) {
     if filename.is_empty() {
         return (false, "Empty filename".into());
     }
     let lower = filename.to_lowercase();
     let ext = splitext(&lower).1;
 
-    if duration.is_some_and(|d| d > 0.0) && o.flag("video_duration_filter_enabled") {
-        let (keep, why) = keep_video_duration(duration, o);
-        if !keep {
-            return (false, why);
-        }
-    }
     if let Some(size) = file_size.filter(|s| *s > 0) {
         let (min, max) = effective_size_limits(o);
         if let Some(m) = min.filter(|m| size < *m) {

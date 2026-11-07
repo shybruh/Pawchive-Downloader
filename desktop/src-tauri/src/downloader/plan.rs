@@ -46,10 +46,6 @@ pub trait Lookups {
     }
     #[allow(clippy::too_many_arguments)]
     fn record_link(&self, _service: &str, _creator_id: &str, _post_id: &str, _url: &str, _creator_name: &str, _post_title: &str, _link_title: &str) {}
-    /// A video's length in seconds (None when it can't be told)
-    fn video_duration(&self, _url: &str) -> Option<f64> {
-        None
-    }
     /// Fill in the signed links of a Pawchive post's oversized files
     fn resolve_temporary_links(&self, _post: &mut Value, _domain: &str) {}
     fn record_archive_password(&self, _archive_path: &str, _password: &str) {}
@@ -182,37 +178,6 @@ pub fn norm_rel_key(f: &Value) -> String {
     rp.to_lowercase()
 }
 
-/// Where a video can be fetched for measuring its length
-pub fn candidate_video_url(f: &Value, domain: &str) -> String {
-    let p = first_text(f, &["path", "storageKey"]);
-    if p.is_empty() {
-        return String::new();
-    }
-    if p.starts_with("http://") || p.starts_with("https://") {
-        return p.replace("e1.cum.st", "cdn.cum.st");
-    }
-    let clean = format!("/{}", p.trim_start_matches('/'));
-    let is_key = re!(r"^[0-9a-f]{16,}$").is_match(&p);
-    if domain.contains("cum.st") || is_key {
-        if is_key {
-            let mut vname = "original.mp4".to_string();
-            if let Some(vs) = f.get("variants").and_then(Value::as_array).filter(|v| !v.is_empty()) {
-                let orig = vs.iter().find_map(|v| v.get("name").and_then(Value::as_str).filter(|n| n.to_lowercase().contains("original")));
-                match orig {
-                    Some(o) => vname = o.to_string(),
-                    None => {
-                        if let Some(n) = vs[0].get("name").filter(|n| truthy(n)) {
-                            vname = pystr(n);
-                        }
-                    }
-                }
-            }
-            return format!("https://cdn.cum.st/media/{p}/{vname}");
-        }
-        return format!("https://cum.st/data{clean}");
-    }
-    format!("https://file.pawchive.pw/data{clean}")
-}
 
 /// Other names the same media may have on disk (.webp/.avif for pictures, .mp4/.mkv/.webm for videos)
 pub fn media_candidate_paths(path: &str) -> Vec<String> {
@@ -336,21 +301,6 @@ pub fn build(posts: &[Value], o: &Options, r: &Request, ctx: &dyn Lookups) -> Pl
 
     // Manga mode: oldest first. Tag folders: by first tag, then date.
     let mut posts: Vec<Value> = posts.to_vec();
-    let date_key = |p: &Value| first_text(p, &["published", "added"]).chars().collect::<String>();
-    let date_or = |p: &Value| {
-        let d = date_key(p);
-        if d.is_empty() { "0000-00-00".to_string() } else { d }
-    };
-    let id_or = |p: &Value| p.get("id").map(pystr).unwrap_or_else(|| "0".into());
-    if o.flag("manga_mode") {
-        posts.sort_by_cached_key(|p| (date_or(p), id_or(p)));
-    } else if o.flag("tag_folder_mode") {
-        posts.sort_by_cached_key(|p| {
-            let tags = n::normalize_tags(p.get("tags").unwrap_or(&Value::Null));
-            let primary = tags.first().map(|t| t.trim().to_lowercase()).unwrap_or_else(|| "zzz_untagged".into());
-            (primary, date_or(p), id_or(p))
-        });
-    }
 
     let mut extracted_links: BTreeMap<String, Vec<String>> = BTreeMap::new();
     let mut extracted_records: Vec<Value> = Vec::new();
@@ -383,43 +333,6 @@ pub fn build(posts: &[Value], o: &Options, r: &Request, ctx: &dyn Lookups) -> Pl
 
         if !f::should_keep_post(post, o).0 {
             continue;
-        }
-
-        // Video length filter: the post needs at least one video in the range
-        if o.flag("video_duration_filter_enabled") {
-            let is_video = |x: &Value| {
-                let name = first_text(x, &["name", "originalFilename"]).to_lowercase();
-                VIDEO_EXTS.contains(&splitext(&name).1) || text(x, "mimeType").starts_with("video/")
-            };
-            let embeds = if o.flag("download_embeds") { extract::embed_urls(post) } else { Vec::new() };
-            let mut targets: Vec<(bool, usize)> = Vec::new(); // (is main file, attachment index)
-            if post.get("file").is_some_and(|m| m.is_object() && is_video(m)) {
-                targets.push((true, 0));
-            }
-            if let Some(Value::Array(atts)) = post.get("attachments") {
-                targets.extend(atts.iter().enumerate().filter(|(_, a)| a.is_object() && is_video(a)).map(|(i, _)| (false, i)));
-            }
-            if targets.is_empty() && embeds.is_empty() {
-                continue;
-            }
-            let mut matching = false;
-            for (main, i) in targets {
-                let obj = if main { post.get_mut("file") } else { post.get_mut("attachments").and_then(|a| a.get_mut(i)) };
-                let Some(obj) = obj else { continue };
-                let dur = ctx.video_duration(&candidate_video_url(obj, domain));
-                if let Some(m) = obj.as_object_mut() {
-                    m.insert("_probed_duration".into(), json!(dur));
-                }
-                if f::keep_video_duration(dur, o).0 {
-                    matching = true;
-                }
-            }
-            if !matching {
-                matching = embeds.iter().any(|e| f::keep_video_duration(ctx.video_duration(e), o).0);
-            }
-            if !matching {
-                continue;
-            }
         }
 
         // Links-only scan: collect the post's external links, download nothing
@@ -509,13 +422,6 @@ pub fn build(posts: &[Value], o: &Options, r: &Request, ctx: &dyn Lookups) -> Pl
             vec![r.base_dir.to_string(), creator_folder.clone()]
         };
 
-        if o.flag("tag_folder_mode") {
-            let tags = n::normalize_tags(post.get("tags").unwrap_or(&Value::Null));
-            parts.push(match tags.first() {
-                Some(t) => n::clean_filesystem_text(t, 60, "tag"),
-                None => "Untagged".into(),
-            });
-        }
         let creator_base = parts.clone();
         let mut post_subfolder = String::new();
         if o.flag("subfolder_per_post") {
@@ -723,8 +629,7 @@ pub fn build(posts: &[Value], o: &Options, r: &Request, ctx: &dyn Lookups) -> Pl
                 continue;
             }
             let file_bytes = fobj.get("bytes").and_then(|b| b.as_i64().or_else(|| b.as_f64().map(|x| x as i64)));
-            let duration = fobj.get("_probed_duration").and_then(Value::as_f64);
-            if !f::should_keep_file(&raw_name, o, file_bytes, duration).0 {
+            if !f::should_keep_file(&raw_name, o, file_bytes).0 {
                 bump(&mut plan.not_queued, "filtered out");
                 continue;
             }
@@ -1234,9 +1139,6 @@ mod tests {
         }
         fn is_archived(&self, _: &str, _: &str, file_id: &str, _: &str) -> bool {
             self.0.contains(file_id)
-        }
-        fn video_duration(&self, url: &str) -> Option<f64> {
-            [("short", 20.0), ("long", 900.0)].iter().find(|(k, _)| url.contains(k)).map(|(_, d)| *d)
         }
     }
 

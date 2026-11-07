@@ -220,7 +220,6 @@ class SessionManager:
             "post_download_action": "none",
             "known_recognition_mode": "hybrid",
             "language": "auto",
-            "tag_folder_mode": False,
             "storage_pool_enabled": False,
             "storage_pool_margin_gb": 10.0,
             "storage_pool_drives": [],

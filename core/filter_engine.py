@@ -185,7 +185,6 @@ class FilterOptions:
         adaptive_threading: bool = False,
         threads_locked: bool = False,
         auto_retry_at_end: bool = False,
-        manga_mode: bool = False,
         filename_style: str = "post_title",
         filename_template: str = "{title} - {orig_name}",
         proxy_url: str = "",
@@ -195,7 +194,6 @@ class FilterOptions:
         save_post_metadata: bool = True,
         download_embeds: bool = True,
         file_index_prefix: bool = False,
-        tag_folder_mode: bool = False,
         skip_post_covers: bool = False,
         date_after: str = "",
         date_before: str = "",
@@ -213,9 +211,6 @@ class FilterOptions:
         write_sidecars: bool = False,
         sidecar_format: str = "json",
         sidecar_scope: str = "per_file",
-        video_duration_filter_enabled: bool = False,
-        min_video_duration: str = "",
-        max_video_duration: str = ""
     ):
         self.characters = characters
         self.character_scope = character_scope
@@ -234,12 +229,10 @@ class FilterOptions:
         self.subfolder_per_post = subfolder_per_post
         self.date_prefix = date_prefix
         self.separate_by_known = separate_by_known
-        self.tag_folder_mode = tag_folder_mode
         self.download_revisions = download_revisions
         self.adaptive_threading = adaptive_threading
         self.threads_locked = threads_locked
         self.auto_retry_at_end = auto_retry_at_end
-        self.manga_mode = manga_mode
         self.filename_style = filename_style
         self.filename_template = filename_template or "{title} - {orig_name}"
         self.proxy_url = proxy_url
@@ -268,9 +261,6 @@ class FilterOptions:
         self.write_sidecars = bool(write_sidecars)
         self.sidecar_format = str(sidecar_format).lower() if str(sidecar_format).lower() in ("json", "txt", "both") else "json"
         self.sidecar_scope = str(sidecar_scope).lower() if str(sidecar_scope).lower() in ("per_file", "per_post") else "per_file"
-        self.video_duration_filter_enabled = bool(video_duration_filter_enabled)
-        self.min_video_duration = FilterEngine.normalize_duration_str(min_video_duration) if min_video_duration else ""
-        self.max_video_duration = FilterEngine.normalize_duration_str(max_video_duration) if max_video_duration else ""
 
     def to_dict(self) -> Dict[str, Any]:
         """Serialize filter options to dictionary for persistence."""
@@ -291,12 +281,10 @@ class FilterOptions:
             "subfolder_per_post": self.subfolder_per_post,
             "date_prefix": self.date_prefix,
             "separate_by_known": self.separate_by_known,
-            "tag_folder_mode": self.tag_folder_mode,
             "download_revisions": self.download_revisions,
             "adaptive_threading": self.adaptive_threading,
             "threads_locked": self.threads_locked,
             "auto_retry_at_end": self.auto_retry_at_end,
-            "manga_mode": self.manga_mode,
             "filename_style": self.filename_style,
             "filename_template": self.filename_template,
             "proxy_url": self.proxy_url,
@@ -323,9 +311,6 @@ class FilterOptions:
             "write_sidecars": self.write_sidecars,
             "sidecar_format": self.sidecar_format,
             "sidecar_scope": self.sidecar_scope,
-            "video_duration_filter_enabled": self.video_duration_filter_enabled,
-            "min_video_duration": self.min_video_duration,
-            "max_video_duration": self.max_video_duration,
         }
 
     @classmethod
@@ -350,12 +335,10 @@ class FilterOptions:
             subfolder_per_post=bool(d.get("subfolder_per_post", True)),
             date_prefix=bool(d.get("date_prefix", True)),
             separate_by_known=bool(d.get("separate_by_known", False)),
-            tag_folder_mode=bool(d.get("tag_folder_mode", False)),
             download_revisions=bool(d.get("download_revisions", False)),
             adaptive_threading=bool(d.get("adaptive_threading", False)),
             threads_locked=bool(d.get("threads_locked", False)),
             auto_retry_at_end=bool(d.get("auto_retry_at_end", False)),
-            manga_mode=bool(d.get("manga_mode", False)),
             filename_style=d.get("filename_style", "post_title"),
             filename_template=d.get("filename_template", "{title} - {orig_name}"),
             proxy_url=d.get("proxy_url", ""),
@@ -382,9 +365,6 @@ class FilterOptions:
             write_sidecars=bool(d.get("write_sidecars", False)),
             sidecar_format=d.get("sidecar_format", "json"),
             sidecar_scope=d.get("sidecar_scope", "per_file"),
-            video_duration_filter_enabled=bool(d.get("video_duration_filter_enabled", False)),
-            min_video_duration=d.get("min_video_duration", ""),
-            max_video_duration=d.get("max_video_duration", ""),
         )
 FILTER_PROFILES = {
     "wip_sketches": {
@@ -680,121 +660,6 @@ class FilterEngine:
 
         return min_size, max_size
 
-    @staticmethod
-    def parse_duration_seconds(raw: str) -> Optional[float]:
-        """
-        Parses a duration string into seconds (float).
-        Supports:
-          - Pure seconds: '45', '45s', '90.5'
-          - Minutes: '5m', '1.5m', '10min'
-          - Hours: '1h', '2.5h'
-          - Colon format: '1:30' (MM:SS), '01:30', '01:15:30' (HH:MM:SS)
-        """
-        if not raw:
-            return None
-        s = str(raw).strip().lower()
-        if not s:
-            return None
-
-        # Colon format: HH:MM:SS or MM:SS
-        if ":" in s:
-            parts = s.split(":")
-            try:
-                if len(parts) == 2:
-                    mins = float(parts[0])
-                    secs = float(parts[1])
-                    return max(0.0, mins * 60.0 + secs)
-                elif len(parts) == 3:
-                    hrs = float(parts[0])
-                    mins = float(parts[1])
-                    secs = float(parts[2])
-                    return max(0.0, hrs * 3600.0 + mins * 60.0 + secs)
-            except ValueError:
-                return None
-
-        # Suffix format: '30s', '5m', '1h', '10min'
-        m = re.match(r"^([\d.]+)\s*(s|sec|secs|m|min|mins|h|hr|hrs)?$", s)
-        if m:
-            val_str, unit = m.groups()
-            try:
-                val = float(val_str)
-            except ValueError:
-                return None
-            if not unit or unit in ("s", "sec", "secs"):
-                return max(0.0, val)
-            if unit in ("m", "min", "mins"):
-                return max(0.0, val * 60.0)
-            if unit in ("h", "hr", "hrs"):
-                return max(0.0, val * 3600.0)
-
-        return None
-
-    @staticmethod
-    def format_duration_str(seconds: Optional[float]) -> str:
-        """
-        Formats seconds into a human-readable duration string:
-        e.g. 45 -> '0:45', 90 -> '1:30', 3665 -> '1:01:05'
-        """
-        if seconds is None or seconds < 0:
-            return ""
-        total_secs = int(round(seconds))
-        hrs = total_secs // 3600
-        mins = (total_secs % 3600) // 60
-        secs = total_secs % 60
-        if hrs > 0:
-            return f"{hrs}:{mins:02d}:{secs:02d}"
-        return f"{mins}:{secs:02d}"
-
-    @classmethod
-    def normalize_duration_str(cls, raw: str) -> str:
-        """Normalizes a raw duration string into standard format (MM:SS or HH:MM:SS)."""
-        sec = cls.parse_duration_seconds(raw)
-        return cls.format_duration_str(sec) if sec is not None else ""
-
-    @classmethod
-    def get_effective_duration_limits(cls, options: Optional[FilterOptions]) -> Tuple[Optional[float], Optional[float]]:
-        """
-        Returns (min_seconds, max_seconds). Auto-corrects inverted ranges.
-        """
-        if not options or not getattr(options, "video_duration_filter_enabled", False):
-            return None, None
-        min_dur = cls.parse_duration_seconds(getattr(options, "min_video_duration", ""))
-        max_dur = cls.parse_duration_seconds(getattr(options, "max_video_duration", ""))
-
-        # Inverted range protection (e.g. Min: 10m, Max: 2m)
-        if min_dur is not None and max_dur is not None and min_dur > max_dur:
-            min_dur, max_dur = max_dur, min_dur
-
-        return min_dur, max_dur
-
-    @classmethod
-    def should_keep_video_duration(cls, duration: Optional[float], options: FilterOptions) -> Tuple[bool, str]:
-        """
-        Evaluates whether a video with the given duration passes the duration filter.
-        """
-        if not getattr(options, "video_duration_filter_enabled", False):
-            return True, "Video duration filter disabled"
-
-        min_dur, max_dur = cls.get_effective_duration_limits(options)
-        if min_dur is None and max_dur is None:
-            return True, "No duration limits specified"
-
-        # If duration is unknown, allow it through with warning so files are not lost
-        if duration is None or duration <= 0:
-            return True, "Video duration could not be determined; passed filter"
-
-        if min_dur is not None and duration < min_dur:
-            cur_s = cls.format_duration_str(duration)
-            min_s = cls.format_duration_str(min_dur)
-            return False, f"Video duration ({cur_s}) is below minimum threshold ({min_s})"
-
-        if max_dur is not None and duration > max_dur:
-            cur_s = cls.format_duration_str(duration)
-            max_s = cls.format_duration_str(max_dur)
-            return False, f"Video duration ({cur_s}) exceeds maximum threshold ({max_s})"
-
-        return True, "Passed video duration filter"
-
     @classmethod
     def should_keep_post(cls, post: Dict[str, Any], options: FilterOptions) -> Tuple[bool, str]:
         title = post.get("title", "") or ""
@@ -872,16 +737,11 @@ class FilterEngine:
         return True, "Passed filter"
 
     @classmethod
-    def should_keep_file(cls, filename: str, options: FilterOptions, file_size: Optional[int] = None, duration: Optional[float] = None) -> Tuple[bool, str]:
+    def should_keep_file(cls, filename: str, options: FilterOptions, file_size: Optional[int] = None) -> Tuple[bool, str]:
         if not filename:
             return False, "Empty filename"
 
         _, ext = os.path.splitext(filename.lower())
-
-        if duration is not None and duration > 0 and getattr(options, "video_duration_filter_enabled", False):
-            keep_dur, dur_reason = cls.should_keep_video_duration(duration, options)
-            if not keep_dur:
-                return False, dur_reason
 
         if file_size is not None and file_size > 0:
             min_size, max_size = cls.get_effective_size_limits(options)

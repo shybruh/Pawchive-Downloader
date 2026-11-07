@@ -21,9 +21,6 @@ fn run(fun: &str, a: &Value) -> Value {
             json!([lo, hi])
         }
         "format_size_str" => json!(f::format_size_str(a["n"].as_i64().unwrap())),
-        "parse_duration_seconds" => json!(f::parse_duration_seconds(s(a, "raw"))),
-        "normalize_duration_str" => json!(f::normalize_duration_str(s(a, "raw"))),
-        "format_duration_str" => json!(f::format_duration_str(opt_f(&a["seconds"]))),
         "normalize_date" => json!(f::normalize_date(s(a, "s"))),
         "expand_date_start" => json!(f::expand_date_start(s(a, "s"))),
         "expand_date_end" => json!(f::expand_date_end(s(a, "s"))),
@@ -35,7 +32,7 @@ fn run(fun: &str, a: &Value) -> Value {
             json!([k, r])
         }
         "should_keep_file" => {
-            let (k, r) = f::should_keep_file(s(a, "filename"), &f::Options::from_dict(&a["options"]), opt_none(&a["file_size"]), opt_f(&a["duration"]));
+            let (k, r) = f::should_keep_file(s(a, "filename"), &f::Options::from_dict(&a["options"]), opt_none(&a["file_size"]));
             json!([k, r])
         }
         "sanitize_filename" => json!(n::sanitize_filename(s(a, "filename"), &f::Options::from_dict(&json!({"remove_words": s(a, "remove_words")})))),
@@ -82,7 +79,7 @@ fn same(a: &Value, b: &Value) -> bool {
 #[test]
 fn matches_python_filters_and_naming() {
     let cases: Vec<Value> = serde_json::from_str(include_str!("../../tests/fixtures/filters.json")).unwrap();
-    assert!(cases.len() >= 1000, "the reference set looks truncated");
+    assert!(cases.len() >= 900, "the reference set looks truncated");
     let mut wrong = Vec::new();
     for c in &cases {
         let fun = c["fn"].as_str().unwrap();

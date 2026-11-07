@@ -387,7 +387,7 @@ pub fn download(c: &Cell, o: &Options, hooks: &dyn Hooks, ctl: &Ctl) -> (bool, S
     let found = if o.flag("keep_duplicates") { None } else { on_disk() };
     let mut upgrade_from: Option<String> = None;
     if let Some((path, size)) = found {
-        let (keep, why) = f::should_keep_file(&filename, o, Some(size as i64), None);
+        let (keep, why) = f::should_keep_file(&filename, o, Some(size as i64));
         if !keep {
             set(&|it| {
                 it.st.status = "skipped".into();
@@ -649,7 +649,7 @@ pub fn download(c: &Cell, o: &Options, hooks: &dyn Hooks, ctl: &Ctl) -> (bool, S
 
     // The size filter, now that the size is known
     if total > 0 {
-        let (keep, why) = f::should_keep_file(&filename, o, Some(total as i64), None);
+        let (keep, why) = f::should_keep_file(&filename, o, Some(total as i64));
         if !keep {
             remove_quietly(&part_path);
             set(&|it| {
@@ -864,7 +864,7 @@ fn finalize(c: &Cell, o: &Options, hooks: &dyn Hooks, ctl: &Ctl, part_path: &str
         hooks.changed(c);
     };
     if final_size > 0 {
-        let (keep, why) = f::should_keep_file(&filename, o, Some(final_size as i64), None);
+        let (keep, why) = f::should_keep_file(&filename, o, Some(final_size as i64));
         if !keep {
             remove_quietly(part_path);
             ctl.sub_bytes(c.lock().unwrap().st.downloaded_bytes);

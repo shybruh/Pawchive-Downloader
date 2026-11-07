@@ -41,7 +41,7 @@ _keys = itertools.count(1)
 _ALREADY_LOGGED = {"Download paused.", "Download resumed.", "Download cancellation requested."}
 # The planner's questions, and the questions answered on the reading thread (they wait on nothing
 # else from Rust, and planning a big creator asks thousands of them)
-_PLAN_ASKS = {"known", "creator_profile", "archived", "plan_cancelled", "video_duration"}
+_PLAN_ASKS = {"known", "creator_profile", "archived", "plan_cancelled"}
 _QUICK_ASKS = {"known", "creator_profile", "archived", "plan_cancelled", "is_archived", "cookie", "limit"}
 
 
@@ -362,10 +362,6 @@ class RustDownloader(FileDownloader):
         self._unmatched_known_count = 0
         self.last_build_cancelled = False
         session = self._session_id          # (only a cancel issued during this build counts)
-        if options.manga_mode:
-            logger.info("Manga Mode active: Sorting posts chronologically (oldest first)...", category="downloader")
-        elif options.tag_folder_mode:
-            logger.info("Tag Folder Mode active: Sorting posts by primary tag and chronological index...", category="downloader")
         try:
             new_chars = self.known_manager.find_candidates_in_posts(posts)
         except Exception:
@@ -469,9 +465,6 @@ class RustDownloader(FileDownloader):
             service, post_id, file_id, sha = args
             return bool(self.archive_manager and self.archive_manager.is_archived(
                 service=service, post_id=post_id, file_id=file_id, file_hash=sha))
-        if fn == "video_duration":
-            from core.video_probe import VideoProbe
-            return VideoProbe.get_video_duration(args[0], getattr(self, "session", None))
         return None
 
     def _archive_db(self) -> str:

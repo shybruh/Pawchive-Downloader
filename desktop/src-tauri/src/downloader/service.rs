@@ -26,7 +26,7 @@
 //!   `{"t": "record_file", "key", "size", "path"}`
 //!   `{"t": "ask", "id", "fn", "args"}` for what the app still knows or does: is_archived, cookie,
 //!   refresh_link, special (yt-dlp / Telegram files), post_process, limit; while planning also
-//!   known, creator_profile, archived, video_duration, plan_cancelled
+//!   known, creator_profile, archived, plan_cancelled
 //!   `{"t": "note", "fn", "args"}`  the same without an answer: record_link, archive_password,
 //!   add_passwords, log
 
@@ -267,9 +267,6 @@ impl Lookups for PlanCtx {
             }
             None => self.link.note("record_link", json!([service, creator_id, post_id, url, creator_name, post_title, link_title])),
         }
-    }
-    fn video_duration(&self, url: &str) -> Option<f64> {
-        self.link.ask("video_duration", json!([url])).as_f64()
     }
     fn resolve_temporary_links(&self, post: &mut Value, domain: &str) {
         self.sites.resolve_temporary_links(post, domain);

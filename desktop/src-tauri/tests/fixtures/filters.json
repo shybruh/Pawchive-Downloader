@@ -2927,307 +2927,6 @@ null
 "result": "931.32 GB"
 },
 {
-"fn": "parse_duration_seconds",
-"args": {
-"raw": ""
-},
-"result": null
-},
-{
-"fn": "normalize_duration_str",
-"args": {
-"raw": ""
-},
-"result": ""
-},
-{
-"fn": "parse_duration_seconds",
-"args": {
-"raw": "45"
-},
-"result": 45.0
-},
-{
-"fn": "normalize_duration_str",
-"args": {
-"raw": "45"
-},
-"result": "0:45"
-},
-{
-"fn": "parse_duration_seconds",
-"args": {
-"raw": "45s"
-},
-"result": 45.0
-},
-{
-"fn": "normalize_duration_str",
-"args": {
-"raw": "45s"
-},
-"result": "0:45"
-},
-{
-"fn": "parse_duration_seconds",
-"args": {
-"raw": "90.5"
-},
-"result": 90.5
-},
-{
-"fn": "normalize_duration_str",
-"args": {
-"raw": "90.5"
-},
-"result": "1:30"
-},
-{
-"fn": "parse_duration_seconds",
-"args": {
-"raw": "5m"
-},
-"result": 300.0
-},
-{
-"fn": "normalize_duration_str",
-"args": {
-"raw": "5m"
-},
-"result": "5:00"
-},
-{
-"fn": "parse_duration_seconds",
-"args": {
-"raw": "1.5m"
-},
-"result": 90.0
-},
-{
-"fn": "normalize_duration_str",
-"args": {
-"raw": "1.5m"
-},
-"result": "1:30"
-},
-{
-"fn": "parse_duration_seconds",
-"args": {
-"raw": "10min"
-},
-"result": 600.0
-},
-{
-"fn": "normalize_duration_str",
-"args": {
-"raw": "10min"
-},
-"result": "10:00"
-},
-{
-"fn": "parse_duration_seconds",
-"args": {
-"raw": "1h"
-},
-"result": 3600.0
-},
-{
-"fn": "normalize_duration_str",
-"args": {
-"raw": "1h"
-},
-"result": "1:00:00"
-},
-{
-"fn": "parse_duration_seconds",
-"args": {
-"raw": "2.5h"
-},
-"result": 9000.0
-},
-{
-"fn": "normalize_duration_str",
-"args": {
-"raw": "2.5h"
-},
-"result": "2:30:00"
-},
-{
-"fn": "parse_duration_seconds",
-"args": {
-"raw": "1:30"
-},
-"result": 90.0
-},
-{
-"fn": "normalize_duration_str",
-"args": {
-"raw": "1:30"
-},
-"result": "1:30"
-},
-{
-"fn": "parse_duration_seconds",
-"args": {
-"raw": "01:15:30"
-},
-"result": 4530.0
-},
-{
-"fn": "normalize_duration_str",
-"args": {
-"raw": "01:15:30"
-},
-"result": "1:15:30"
-},
-{
-"fn": "parse_duration_seconds",
-"args": {
-"raw": "1:2:3:4"
-},
-"result": null
-},
-{
-"fn": "normalize_duration_str",
-"args": {
-"raw": "1:2:3:4"
-},
-"result": ""
-},
-{
-"fn": "parse_duration_seconds",
-"args": {
-"raw": "x"
-},
-"result": null
-},
-{
-"fn": "normalize_duration_str",
-"args": {
-"raw": "x"
-},
-"result": ""
-},
-{
-"fn": "parse_duration_seconds",
-"args": {
-"raw": "3 hrs"
-},
-"result": 10800.0
-},
-{
-"fn": "normalize_duration_str",
-"args": {
-"raw": "3 hrs"
-},
-"result": "3:00:00"
-},
-{
-"fn": "parse_duration_seconds",
-"args": {
-"raw": "0.4"
-},
-"result": 0.4
-},
-{
-"fn": "normalize_duration_str",
-"args": {
-"raw": "0.4"
-},
-"result": "0:00"
-},
-{
-"fn": "parse_duration_seconds",
-"args": {
-"raw": "2.5"
-},
-"result": 2.5
-},
-{
-"fn": "normalize_duration_str",
-"args": {
-"raw": "2.5"
-},
-"result": "0:02"
-},
-{
-"fn": "format_duration_str",
-"args": {
-"seconds": null
-},
-"result": ""
-},
-{
-"fn": "format_duration_str",
-"args": {
-"seconds": -1
-},
-"result": ""
-},
-{
-"fn": "format_duration_str",
-"args": {
-"seconds": 0
-},
-"result": "0:00"
-},
-{
-"fn": "format_duration_str",
-"args": {
-"seconds": 0.5
-},
-"result": "0:00"
-},
-{
-"fn": "format_duration_str",
-"args": {
-"seconds": 1.5
-},
-"result": "0:02"
-},
-{
-"fn": "format_duration_str",
-"args": {
-"seconds": 2.5
-},
-"result": "0:02"
-},
-{
-"fn": "format_duration_str",
-"args": {
-"seconds": 45
-},
-"result": "0:45"
-},
-{
-"fn": "format_duration_str",
-"args": {
-"seconds": 90
-},
-"result": "1:30"
-},
-{
-"fn": "format_duration_str",
-"args": {
-"seconds": 3599.5
-},
-"result": "1:00:00"
-},
-{
-"fn": "format_duration_str",
-"args": {
-"seconds": 3665
-},
-"result": "1:01:05"
-},
-{
-"fn": "format_duration_str",
-"args": {
-"seconds": 86400
-},
-"result": "24:00:00"
-},
-{
 "fn": "normalize_date",
 "args": {
 "s": ""
@@ -3644,12 +3343,10 @@ null
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -3675,10 +3372,7 @@ null
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 {
@@ -3692,8 +3386,6 @@ null
 "webp_quality": "nope",
 "sidecar_format": "TXT",
 "sidecar_scope": "x",
-"min_video_duration": "90",
-"max_video_duration": "1:2:3",
 "page_start": "3"
 }
 },
@@ -3714,12 +3406,10 @@ null
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -3745,10 +3435,7 @@ null
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "txt",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "1:30",
-"max_video_duration": "1:02:03"
+"sidecar_scope": "per_file"
 }
 },
 {
@@ -3778,12 +3465,10 @@ null
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -3809,10 +3494,7 @@ null
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 {
@@ -4140,25 +3822,6 @@ true,
 },
 "options": {
 "download_thumbnails_only": true
-}
-},
-"result": [
-true,
-"Passed filter"
-]
-},
-{
-"fn": "should_keep_post",
-"args": {
-"post": {
-"title": "Miku WIP sketch",
-"content": "<p>Hello <a href='x'>WIP</a></p>",
-"published": "2024-06-15T10:00:00"
-},
-"options": {
-"video_duration_filter_enabled": true,
-"min_video_duration": "10",
-"max_video_duration": "1m"
 }
 },
 "result": [
@@ -4502,25 +4165,6 @@ true,
 "fn": "should_keep_post",
 "args": {
 "post": {
-"title": "Final art",
-"content": "初音ミクのイラスト",
-"published": "2023-01-02"
-},
-"options": {
-"video_duration_filter_enabled": true,
-"min_video_duration": "10",
-"max_video_duration": "1m"
-}
-},
-"result": [
-true,
-"Passed filter"
-]
-},
-{
-"fn": "should_keep_post",
-"args": {
-"post": {
 "title": "Untitled",
 "content": "",
 "published": ""
@@ -4842,25 +4486,6 @@ true,
 },
 "options": {
 "download_thumbnails_only": true
-}
-},
-"result": [
-true,
-"Passed filter"
-]
-},
-{
-"fn": "should_keep_post",
-"args": {
-"post": {
-"title": "Untitled",
-"content": "",
-"published": ""
-},
-"options": {
-"video_duration_filter_enabled": true,
-"min_video_duration": "10",
-"max_video_duration": "1m"
 }
 },
 "result": [
@@ -5223,26 +4848,6 @@ true,
 "fn": "should_keep_post",
 "args": {
 "post": {
-"title": "Rin & Len",
-"content": "<b>sketch</b> inside",
-"added": "2025-12-31",
-"comments_text": "Miku cameo"
-},
-"options": {
-"video_duration_filter_enabled": true,
-"min_video_duration": "10",
-"max_video_duration": "1m"
-}
-},
-"result": [
-true,
-"Passed filter"
-]
-},
-{
-"fn": "should_keep_post",
-"args": {
-"post": {
 "title": "Old",
 "published": "0000-00-00"
 },
@@ -5553,29 +5158,10 @@ true,
 ]
 },
 {
-"fn": "should_keep_post",
-"args": {
-"post": {
-"title": "Old",
-"published": "0000-00-00"
-},
-"options": {
-"video_duration_filter_enabled": true,
-"min_video_duration": "10",
-"max_video_duration": "1m"
-}
-},
-"result": [
-true,
-"Passed filter"
-]
-},
-{
 "fn": "should_keep_file",
 "args": {
 "filename": "a.jpg",
 "file_size": null,
-"duration": null,
 "options": {}
 },
 "result": [
@@ -5588,7 +5174,6 @@ true,
 "args": {
 "filename": "a.jpg",
 "file_size": null,
-"duration": null,
 "options": {
 "skip_words": "WIP, sketch",
 "skip_scope": "posts"
@@ -5604,7 +5189,6 @@ true,
 "args": {
 "filename": "a.jpg",
 "file_size": null,
-"duration": null,
 "options": {
 "skip_words": "wip",
 "skip_scope": "files"
@@ -5620,7 +5204,6 @@ true,
 "args": {
 "filename": "a.jpg",
 "file_size": null,
-"duration": null,
 "options": {
 "characters": "miku",
 "character_scope": "title"
@@ -5636,7 +5219,6 @@ true,
 "args": {
 "filename": "a.jpg",
 "file_size": null,
-"duration": null,
 "options": {
 "characters": "(Rin/Len), Miku",
 "character_scope": "comments"
@@ -5652,7 +5234,6 @@ true,
 "args": {
 "filename": "a.jpg",
 "file_size": null,
-"duration": null,
 "options": {
 "characters": "初音ミク",
 "character_scope": "content"
@@ -5668,7 +5249,6 @@ true,
 "args": {
 "filename": "a.jpg",
 "file_size": null,
-"duration": null,
 "options": {
 "characters": "miku",
 "character_scope": "all"
@@ -5684,7 +5264,6 @@ true,
 "args": {
 "filename": "a.jpg",
 "file_size": null,
-"duration": null,
 "options": {
 "date_after": "2024",
 "date_before": "2024-12"
@@ -5700,7 +5279,6 @@ true,
 "args": {
 "filename": "a.jpg",
 "file_size": null,
-"duration": null,
 "options": {
 "date_after": "2025-01-01",
 "date_before": "2023"
@@ -5716,7 +5294,6 @@ true,
 "args": {
 "filename": "a.jpg",
 "file_size": null,
-"duration": null,
 "options": {
 "min_file_size": "1MB",
 "max_file_size": "10MB"
@@ -5732,7 +5309,6 @@ true,
 "args": {
 "filename": "a.jpg",
 "file_size": null,
-"duration": null,
 "options": {
 "skip_words": "preview, [>=500KB]",
 "skip_scope": "both"
@@ -5748,7 +5324,6 @@ true,
 "args": {
 "filename": "a.jpg",
 "file_size": null,
-"duration": null,
 "options": {
 "file_type": "images"
 }
@@ -5763,7 +5338,6 @@ true,
 "args": {
 "filename": "a.jpg",
 "file_size": null,
-"duration": null,
 "options": {
 "file_type": "videos"
 }
@@ -5778,7 +5352,6 @@ false,
 "args": {
 "filename": "a.jpg",
 "file_size": null,
-"duration": null,
 "options": {
 "file_type": "archives"
 }
@@ -5793,7 +5366,6 @@ false,
 "args": {
 "filename": "a.jpg",
 "file_size": null,
-"duration": null,
 "options": {
 "file_type": "audio"
 }
@@ -5808,7 +5380,6 @@ false,
 "args": {
 "filename": "a.jpg",
 "file_size": null,
-"duration": null,
 "options": {
 "exact_extensions": "mp4, gif"
 }
@@ -5823,7 +5394,6 @@ false,
 "args": {
 "filename": "a.jpg",
 "file_size": null,
-"duration": null,
 "options": {
 "skip_archives": true
 }
@@ -5838,7 +5408,6 @@ true,
 "args": {
 "filename": "a.jpg",
 "file_size": null,
-"duration": null,
 "options": {
 "skip_archives": true,
 "exact_extensions": "zip"
@@ -5854,7 +5423,6 @@ false,
 "args": {
 "filename": "a.jpg",
 "file_size": null,
-"duration": null,
 "options": {
 "download_thumbnails_only": true
 }
@@ -5867,26 +5435,8 @@ true,
 {
 "fn": "should_keep_file",
 "args": {
-"filename": "a.jpg",
-"file_size": null,
-"duration": null,
-"options": {
-"video_duration_filter_enabled": true,
-"min_video_duration": "10",
-"max_video_duration": "1m"
-}
-},
-"result": [
-true,
-"Passed file filter"
-]
-},
-{
-"fn": "should_keep_file",
-"args": {
 "filename": "WIP_v2.png",
 "file_size": 2000000,
-"duration": null,
 "options": {}
 },
 "result": [
@@ -5899,7 +5449,6 @@ true,
 "args": {
 "filename": "WIP_v2.png",
 "file_size": 2000000,
-"duration": null,
 "options": {
 "skip_words": "WIP, sketch",
 "skip_scope": "posts"
@@ -5915,7 +5464,6 @@ true,
 "args": {
 "filename": "WIP_v2.png",
 "file_size": 2000000,
-"duration": null,
 "options": {
 "skip_words": "wip",
 "skip_scope": "files"
@@ -5931,7 +5479,6 @@ false,
 "args": {
 "filename": "WIP_v2.png",
 "file_size": 2000000,
-"duration": null,
 "options": {
 "characters": "miku",
 "character_scope": "title"
@@ -5947,7 +5494,6 @@ true,
 "args": {
 "filename": "WIP_v2.png",
 "file_size": 2000000,
-"duration": null,
 "options": {
 "characters": "(Rin/Len), Miku",
 "character_scope": "comments"
@@ -5963,7 +5509,6 @@ true,
 "args": {
 "filename": "WIP_v2.png",
 "file_size": 2000000,
-"duration": null,
 "options": {
 "characters": "初音ミク",
 "character_scope": "content"
@@ -5979,7 +5524,6 @@ true,
 "args": {
 "filename": "WIP_v2.png",
 "file_size": 2000000,
-"duration": null,
 "options": {
 "characters": "miku",
 "character_scope": "all"
@@ -5995,7 +5539,6 @@ true,
 "args": {
 "filename": "WIP_v2.png",
 "file_size": 2000000,
-"duration": null,
 "options": {
 "date_after": "2024",
 "date_before": "2024-12"
@@ -6011,7 +5554,6 @@ true,
 "args": {
 "filename": "WIP_v2.png",
 "file_size": 2000000,
-"duration": null,
 "options": {
 "date_after": "2025-01-01",
 "date_before": "2023"
@@ -6027,7 +5569,6 @@ true,
 "args": {
 "filename": "WIP_v2.png",
 "file_size": 2000000,
-"duration": null,
 "options": {
 "min_file_size": "1MB",
 "max_file_size": "10MB"
@@ -6043,7 +5584,6 @@ true,
 "args": {
 "filename": "WIP_v2.png",
 "file_size": 2000000,
-"duration": null,
 "options": {
 "skip_words": "preview, [>=500KB]",
 "skip_scope": "both"
@@ -6059,7 +5599,6 @@ true,
 "args": {
 "filename": "WIP_v2.png",
 "file_size": 2000000,
-"duration": null,
 "options": {
 "file_type": "images"
 }
@@ -6074,7 +5613,6 @@ true,
 "args": {
 "filename": "WIP_v2.png",
 "file_size": 2000000,
-"duration": null,
 "options": {
 "file_type": "videos"
 }
@@ -6089,7 +5627,6 @@ false,
 "args": {
 "filename": "WIP_v2.png",
 "file_size": 2000000,
-"duration": null,
 "options": {
 "file_type": "archives"
 }
@@ -6104,7 +5641,6 @@ false,
 "args": {
 "filename": "WIP_v2.png",
 "file_size": 2000000,
-"duration": null,
 "options": {
 "file_type": "audio"
 }
@@ -6119,7 +5655,6 @@ false,
 "args": {
 "filename": "WIP_v2.png",
 "file_size": 2000000,
-"duration": null,
 "options": {
 "exact_extensions": "mp4, gif"
 }
@@ -6134,7 +5669,6 @@ false,
 "args": {
 "filename": "WIP_v2.png",
 "file_size": 2000000,
-"duration": null,
 "options": {
 "skip_archives": true
 }
@@ -6149,7 +5683,6 @@ true,
 "args": {
 "filename": "WIP_v2.png",
 "file_size": 2000000,
-"duration": null,
 "options": {
 "skip_archives": true,
 "exact_extensions": "zip"
@@ -6165,7 +5698,6 @@ false,
 "args": {
 "filename": "WIP_v2.png",
 "file_size": 2000000,
-"duration": null,
 "options": {
 "download_thumbnails_only": true
 }
@@ -6178,26 +5710,8 @@ true,
 {
 "fn": "should_keep_file",
 "args": {
-"filename": "WIP_v2.png",
-"file_size": 2000000,
-"duration": null,
-"options": {
-"video_duration_filter_enabled": true,
-"min_video_duration": "10",
-"max_video_duration": "1m"
-}
-},
-"result": [
-true,
-"Passed file filter"
-]
-},
-{
-"fn": "should_keep_file",
-"args": {
 "filename": "final-wip.mp4",
 "file_size": 50000000,
-"duration": 30.0,
 "options": {}
 },
 "result": [
@@ -6210,7 +5724,6 @@ true,
 "args": {
 "filename": "final-wip.mp4",
 "file_size": 50000000,
-"duration": 30.0,
 "options": {
 "skip_words": "WIP, sketch",
 "skip_scope": "posts"
@@ -6226,7 +5739,6 @@ true,
 "args": {
 "filename": "final-wip.mp4",
 "file_size": 50000000,
-"duration": 30.0,
 "options": {
 "skip_words": "wip",
 "skip_scope": "files"
@@ -6242,7 +5754,6 @@ false,
 "args": {
 "filename": "final-wip.mp4",
 "file_size": 50000000,
-"duration": 30.0,
 "options": {
 "characters": "miku",
 "character_scope": "title"
@@ -6258,7 +5769,6 @@ true,
 "args": {
 "filename": "final-wip.mp4",
 "file_size": 50000000,
-"duration": 30.0,
 "options": {
 "characters": "(Rin/Len), Miku",
 "character_scope": "comments"
@@ -6274,7 +5784,6 @@ true,
 "args": {
 "filename": "final-wip.mp4",
 "file_size": 50000000,
-"duration": 30.0,
 "options": {
 "characters": "初音ミク",
 "character_scope": "content"
@@ -6290,7 +5799,6 @@ true,
 "args": {
 "filename": "final-wip.mp4",
 "file_size": 50000000,
-"duration": 30.0,
 "options": {
 "characters": "miku",
 "character_scope": "all"
@@ -6306,7 +5814,6 @@ true,
 "args": {
 "filename": "final-wip.mp4",
 "file_size": 50000000,
-"duration": 30.0,
 "options": {
 "date_after": "2024",
 "date_before": "2024-12"
@@ -6322,7 +5829,6 @@ true,
 "args": {
 "filename": "final-wip.mp4",
 "file_size": 50000000,
-"duration": 30.0,
 "options": {
 "date_after": "2025-01-01",
 "date_before": "2023"
@@ -6338,7 +5844,6 @@ true,
 "args": {
 "filename": "final-wip.mp4",
 "file_size": 50000000,
-"duration": 30.0,
 "options": {
 "min_file_size": "1MB",
 "max_file_size": "10MB"
@@ -6354,7 +5859,6 @@ false,
 "args": {
 "filename": "final-wip.mp4",
 "file_size": 50000000,
-"duration": 30.0,
 "options": {
 "skip_words": "preview, [>=500KB]",
 "skip_scope": "both"
@@ -6370,7 +5874,6 @@ true,
 "args": {
 "filename": "final-wip.mp4",
 "file_size": 50000000,
-"duration": 30.0,
 "options": {
 "file_type": "images"
 }
@@ -6385,7 +5888,6 @@ false,
 "args": {
 "filename": "final-wip.mp4",
 "file_size": 50000000,
-"duration": 30.0,
 "options": {
 "file_type": "videos"
 }
@@ -6400,7 +5902,6 @@ true,
 "args": {
 "filename": "final-wip.mp4",
 "file_size": 50000000,
-"duration": 30.0,
 "options": {
 "file_type": "archives"
 }
@@ -6415,7 +5916,6 @@ false,
 "args": {
 "filename": "final-wip.mp4",
 "file_size": 50000000,
-"duration": 30.0,
 "options": {
 "file_type": "audio"
 }
@@ -6430,7 +5930,6 @@ false,
 "args": {
 "filename": "final-wip.mp4",
 "file_size": 50000000,
-"duration": 30.0,
 "options": {
 "exact_extensions": "mp4, gif"
 }
@@ -6445,7 +5944,6 @@ true,
 "args": {
 "filename": "final-wip.mp4",
 "file_size": 50000000,
-"duration": 30.0,
 "options": {
 "skip_archives": true
 }
@@ -6460,7 +5958,6 @@ true,
 "args": {
 "filename": "final-wip.mp4",
 "file_size": 50000000,
-"duration": 30.0,
 "options": {
 "skip_archives": true,
 "exact_extensions": "zip"
@@ -6476,7 +5973,6 @@ false,
 "args": {
 "filename": "final-wip.mp4",
 "file_size": 50000000,
-"duration": 30.0,
 "options": {
 "download_thumbnails_only": true
 }
@@ -6489,26 +5985,8 @@ true,
 {
 "fn": "should_keep_file",
 "args": {
-"filename": "final-wip.mp4",
-"file_size": 50000000,
-"duration": 30.0,
-"options": {
-"video_duration_filter_enabled": true,
-"min_video_duration": "10",
-"max_video_duration": "1m"
-}
-},
-"result": [
-true,
-"Passed file filter"
-]
-},
-{
-"fn": "should_keep_file",
-"args": {
 "filename": "song.mp3",
 "file_size": 400,
-"duration": null,
 "options": {}
 },
 "result": [
@@ -6521,7 +5999,6 @@ true,
 "args": {
 "filename": "song.mp3",
 "file_size": 400,
-"duration": null,
 "options": {
 "skip_words": "WIP, sketch",
 "skip_scope": "posts"
@@ -6537,7 +6014,6 @@ true,
 "args": {
 "filename": "song.mp3",
 "file_size": 400,
-"duration": null,
 "options": {
 "skip_words": "wip",
 "skip_scope": "files"
@@ -6553,7 +6029,6 @@ true,
 "args": {
 "filename": "song.mp3",
 "file_size": 400,
-"duration": null,
 "options": {
 "characters": "miku",
 "character_scope": "title"
@@ -6569,7 +6044,6 @@ true,
 "args": {
 "filename": "song.mp3",
 "file_size": 400,
-"duration": null,
 "options": {
 "characters": "(Rin/Len), Miku",
 "character_scope": "comments"
@@ -6585,7 +6059,6 @@ true,
 "args": {
 "filename": "song.mp3",
 "file_size": 400,
-"duration": null,
 "options": {
 "characters": "初音ミク",
 "character_scope": "content"
@@ -6601,7 +6074,6 @@ true,
 "args": {
 "filename": "song.mp3",
 "file_size": 400,
-"duration": null,
 "options": {
 "characters": "miku",
 "character_scope": "all"
@@ -6617,7 +6089,6 @@ true,
 "args": {
 "filename": "song.mp3",
 "file_size": 400,
-"duration": null,
 "options": {
 "date_after": "2024",
 "date_before": "2024-12"
@@ -6633,7 +6104,6 @@ true,
 "args": {
 "filename": "song.mp3",
 "file_size": 400,
-"duration": null,
 "options": {
 "date_after": "2025-01-01",
 "date_before": "2023"
@@ -6649,7 +6119,6 @@ true,
 "args": {
 "filename": "song.mp3",
 "file_size": 400,
-"duration": null,
 "options": {
 "min_file_size": "1MB",
 "max_file_size": "10MB"
@@ -6665,7 +6134,6 @@ false,
 "args": {
 "filename": "song.mp3",
 "file_size": 400,
-"duration": null,
 "options": {
 "skip_words": "preview, [>=500KB]",
 "skip_scope": "both"
@@ -6681,7 +6149,6 @@ false,
 "args": {
 "filename": "song.mp3",
 "file_size": 400,
-"duration": null,
 "options": {
 "file_type": "images"
 }
@@ -6696,7 +6163,6 @@ false,
 "args": {
 "filename": "song.mp3",
 "file_size": 400,
-"duration": null,
 "options": {
 "file_type": "videos"
 }
@@ -6711,7 +6177,6 @@ false,
 "args": {
 "filename": "song.mp3",
 "file_size": 400,
-"duration": null,
 "options": {
 "file_type": "archives"
 }
@@ -6726,7 +6191,6 @@ false,
 "args": {
 "filename": "song.mp3",
 "file_size": 400,
-"duration": null,
 "options": {
 "file_type": "audio"
 }
@@ -6741,7 +6205,6 @@ true,
 "args": {
 "filename": "song.mp3",
 "file_size": 400,
-"duration": null,
 "options": {
 "exact_extensions": "mp4, gif"
 }
@@ -6756,7 +6219,6 @@ false,
 "args": {
 "filename": "song.mp3",
 "file_size": 400,
-"duration": null,
 "options": {
 "skip_archives": true
 }
@@ -6771,7 +6233,6 @@ true,
 "args": {
 "filename": "song.mp3",
 "file_size": 400,
-"duration": null,
 "options": {
 "skip_archives": true,
 "exact_extensions": "zip"
@@ -6787,7 +6248,6 @@ false,
 "args": {
 "filename": "song.mp3",
 "file_size": 400,
-"duration": null,
 "options": {
 "download_thumbnails_only": true
 }
@@ -6800,26 +6260,8 @@ false,
 {
 "fn": "should_keep_file",
 "args": {
-"filename": "song.mp3",
-"file_size": 400,
-"duration": null,
-"options": {
-"video_duration_filter_enabled": true,
-"min_video_duration": "10",
-"max_video_duration": "1m"
-}
-},
-"result": [
-true,
-"Passed file filter"
-]
-},
-{
-"fn": "should_keep_file",
-"args": {
 "filename": "pack.zip",
 "file_size": 900000000,
-"duration": null,
 "options": {}
 },
 "result": [
@@ -6832,7 +6274,6 @@ true,
 "args": {
 "filename": "pack.zip",
 "file_size": 900000000,
-"duration": null,
 "options": {
 "skip_words": "WIP, sketch",
 "skip_scope": "posts"
@@ -6848,7 +6289,6 @@ true,
 "args": {
 "filename": "pack.zip",
 "file_size": 900000000,
-"duration": null,
 "options": {
 "skip_words": "wip",
 "skip_scope": "files"
@@ -6864,7 +6304,6 @@ true,
 "args": {
 "filename": "pack.zip",
 "file_size": 900000000,
-"duration": null,
 "options": {
 "characters": "miku",
 "character_scope": "title"
@@ -6880,7 +6319,6 @@ true,
 "args": {
 "filename": "pack.zip",
 "file_size": 900000000,
-"duration": null,
 "options": {
 "characters": "(Rin/Len), Miku",
 "character_scope": "comments"
@@ -6896,7 +6334,6 @@ true,
 "args": {
 "filename": "pack.zip",
 "file_size": 900000000,
-"duration": null,
 "options": {
 "characters": "初音ミク",
 "character_scope": "content"
@@ -6912,7 +6349,6 @@ true,
 "args": {
 "filename": "pack.zip",
 "file_size": 900000000,
-"duration": null,
 "options": {
 "characters": "miku",
 "character_scope": "all"
@@ -6928,7 +6364,6 @@ true,
 "args": {
 "filename": "pack.zip",
 "file_size": 900000000,
-"duration": null,
 "options": {
 "date_after": "2024",
 "date_before": "2024-12"
@@ -6944,7 +6379,6 @@ true,
 "args": {
 "filename": "pack.zip",
 "file_size": 900000000,
-"duration": null,
 "options": {
 "date_after": "2025-01-01",
 "date_before": "2023"
@@ -6960,7 +6394,6 @@ true,
 "args": {
 "filename": "pack.zip",
 "file_size": 900000000,
-"duration": null,
 "options": {
 "min_file_size": "1MB",
 "max_file_size": "10MB"
@@ -6976,7 +6409,6 @@ false,
 "args": {
 "filename": "pack.zip",
 "file_size": 900000000,
-"duration": null,
 "options": {
 "skip_words": "preview, [>=500KB]",
 "skip_scope": "both"
@@ -6992,7 +6424,6 @@ true,
 "args": {
 "filename": "pack.zip",
 "file_size": 900000000,
-"duration": null,
 "options": {
 "file_type": "images"
 }
@@ -7007,7 +6438,6 @@ false,
 "args": {
 "filename": "pack.zip",
 "file_size": 900000000,
-"duration": null,
 "options": {
 "file_type": "videos"
 }
@@ -7022,7 +6452,6 @@ false,
 "args": {
 "filename": "pack.zip",
 "file_size": 900000000,
-"duration": null,
 "options": {
 "file_type": "archives"
 }
@@ -7037,7 +6466,6 @@ true,
 "args": {
 "filename": "pack.zip",
 "file_size": 900000000,
-"duration": null,
 "options": {
 "file_type": "audio"
 }
@@ -7052,7 +6480,6 @@ false,
 "args": {
 "filename": "pack.zip",
 "file_size": 900000000,
-"duration": null,
 "options": {
 "exact_extensions": "mp4, gif"
 }
@@ -7067,7 +6494,6 @@ false,
 "args": {
 "filename": "pack.zip",
 "file_size": 900000000,
-"duration": null,
 "options": {
 "skip_archives": true
 }
@@ -7082,7 +6508,6 @@ false,
 "args": {
 "filename": "pack.zip",
 "file_size": 900000000,
-"duration": null,
 "options": {
 "skip_archives": true,
 "exact_extensions": "zip"
@@ -7098,7 +6523,6 @@ true,
 "args": {
 "filename": "pack.zip",
 "file_size": 900000000,
-"duration": null,
 "options": {
 "download_thumbnails_only": true
 }
@@ -7111,26 +6535,8 @@ false,
 {
 "fn": "should_keep_file",
 "args": {
-"filename": "pack.zip",
-"file_size": 900000000,
-"duration": null,
-"options": {
-"video_duration_filter_enabled": true,
-"min_video_duration": "10",
-"max_video_duration": "1m"
-}
-},
-"result": [
-true,
-"Passed file filter"
-]
-},
-{
-"fn": "should_keep_file",
-"args": {
 "filename": "clip.webm",
 "file_size": 5000000,
-"duration": 5.0,
 "options": {}
 },
 "result": [
@@ -7143,7 +6549,6 @@ true,
 "args": {
 "filename": "clip.webm",
 "file_size": 5000000,
-"duration": 5.0,
 "options": {
 "skip_words": "WIP, sketch",
 "skip_scope": "posts"
@@ -7159,7 +6564,6 @@ true,
 "args": {
 "filename": "clip.webm",
 "file_size": 5000000,
-"duration": 5.0,
 "options": {
 "skip_words": "wip",
 "skip_scope": "files"
@@ -7175,7 +6579,6 @@ true,
 "args": {
 "filename": "clip.webm",
 "file_size": 5000000,
-"duration": 5.0,
 "options": {
 "characters": "miku",
 "character_scope": "title"
@@ -7191,7 +6594,6 @@ true,
 "args": {
 "filename": "clip.webm",
 "file_size": 5000000,
-"duration": 5.0,
 "options": {
 "characters": "(Rin/Len), Miku",
 "character_scope": "comments"
@@ -7207,7 +6609,6 @@ true,
 "args": {
 "filename": "clip.webm",
 "file_size": 5000000,
-"duration": 5.0,
 "options": {
 "characters": "初音ミク",
 "character_scope": "content"
@@ -7223,7 +6624,6 @@ true,
 "args": {
 "filename": "clip.webm",
 "file_size": 5000000,
-"duration": 5.0,
 "options": {
 "characters": "miku",
 "character_scope": "all"
@@ -7239,7 +6639,6 @@ true,
 "args": {
 "filename": "clip.webm",
 "file_size": 5000000,
-"duration": 5.0,
 "options": {
 "date_after": "2024",
 "date_before": "2024-12"
@@ -7255,7 +6654,6 @@ true,
 "args": {
 "filename": "clip.webm",
 "file_size": 5000000,
-"duration": 5.0,
 "options": {
 "date_after": "2025-01-01",
 "date_before": "2023"
@@ -7271,7 +6669,6 @@ true,
 "args": {
 "filename": "clip.webm",
 "file_size": 5000000,
-"duration": 5.0,
 "options": {
 "min_file_size": "1MB",
 "max_file_size": "10MB"
@@ -7287,7 +6684,6 @@ true,
 "args": {
 "filename": "clip.webm",
 "file_size": 5000000,
-"duration": 5.0,
 "options": {
 "skip_words": "preview, [>=500KB]",
 "skip_scope": "both"
@@ -7303,7 +6699,6 @@ true,
 "args": {
 "filename": "clip.webm",
 "file_size": 5000000,
-"duration": 5.0,
 "options": {
 "file_type": "images"
 }
@@ -7318,7 +6713,6 @@ false,
 "args": {
 "filename": "clip.webm",
 "file_size": 5000000,
-"duration": 5.0,
 "options": {
 "file_type": "videos"
 }
@@ -7333,7 +6727,6 @@ true,
 "args": {
 "filename": "clip.webm",
 "file_size": 5000000,
-"duration": 5.0,
 "options": {
 "file_type": "archives"
 }
@@ -7348,7 +6741,6 @@ false,
 "args": {
 "filename": "clip.webm",
 "file_size": 5000000,
-"duration": 5.0,
 "options": {
 "file_type": "audio"
 }
@@ -7363,7 +6755,6 @@ false,
 "args": {
 "filename": "clip.webm",
 "file_size": 5000000,
-"duration": 5.0,
 "options": {
 "exact_extensions": "mp4, gif"
 }
@@ -7378,7 +6769,6 @@ false,
 "args": {
 "filename": "clip.webm",
 "file_size": 5000000,
-"duration": 5.0,
 "options": {
 "skip_archives": true
 }
@@ -7393,7 +6783,6 @@ true,
 "args": {
 "filename": "clip.webm",
 "file_size": 5000000,
-"duration": 5.0,
 "options": {
 "skip_archives": true,
 "exact_extensions": "zip"
@@ -7409,7 +6798,6 @@ false,
 "args": {
 "filename": "clip.webm",
 "file_size": 5000000,
-"duration": 5.0,
 "options": {
 "download_thumbnails_only": true
 }
@@ -7422,26 +6810,8 @@ true,
 {
 "fn": "should_keep_file",
 "args": {
-"filename": "clip.webm",
-"file_size": 5000000,
-"duration": 5.0,
-"options": {
-"video_duration_filter_enabled": true,
-"min_video_duration": "10",
-"max_video_duration": "1m"
-}
-},
-"result": [
-false,
-"Video duration (0:05) is below minimum threshold (0:10)"
-]
-},
-{
-"fn": "should_keep_file",
-"args": {
 "filename": "long.mp4",
 "file_size": 5000000,
-"duration": 120.0,
 "options": {}
 },
 "result": [
@@ -7454,7 +6824,6 @@ true,
 "args": {
 "filename": "long.mp4",
 "file_size": 5000000,
-"duration": 120.0,
 "options": {
 "skip_words": "WIP, sketch",
 "skip_scope": "posts"
@@ -7470,7 +6839,6 @@ true,
 "args": {
 "filename": "long.mp4",
 "file_size": 5000000,
-"duration": 120.0,
 "options": {
 "skip_words": "wip",
 "skip_scope": "files"
@@ -7486,7 +6854,6 @@ true,
 "args": {
 "filename": "long.mp4",
 "file_size": 5000000,
-"duration": 120.0,
 "options": {
 "characters": "miku",
 "character_scope": "title"
@@ -7502,7 +6869,6 @@ true,
 "args": {
 "filename": "long.mp4",
 "file_size": 5000000,
-"duration": 120.0,
 "options": {
 "characters": "(Rin/Len), Miku",
 "character_scope": "comments"
@@ -7518,7 +6884,6 @@ true,
 "args": {
 "filename": "long.mp4",
 "file_size": 5000000,
-"duration": 120.0,
 "options": {
 "characters": "初音ミク",
 "character_scope": "content"
@@ -7534,7 +6899,6 @@ true,
 "args": {
 "filename": "long.mp4",
 "file_size": 5000000,
-"duration": 120.0,
 "options": {
 "characters": "miku",
 "character_scope": "all"
@@ -7550,7 +6914,6 @@ true,
 "args": {
 "filename": "long.mp4",
 "file_size": 5000000,
-"duration": 120.0,
 "options": {
 "date_after": "2024",
 "date_before": "2024-12"
@@ -7566,7 +6929,6 @@ true,
 "args": {
 "filename": "long.mp4",
 "file_size": 5000000,
-"duration": 120.0,
 "options": {
 "date_after": "2025-01-01",
 "date_before": "2023"
@@ -7582,7 +6944,6 @@ true,
 "args": {
 "filename": "long.mp4",
 "file_size": 5000000,
-"duration": 120.0,
 "options": {
 "min_file_size": "1MB",
 "max_file_size": "10MB"
@@ -7598,7 +6959,6 @@ true,
 "args": {
 "filename": "long.mp4",
 "file_size": 5000000,
-"duration": 120.0,
 "options": {
 "skip_words": "preview, [>=500KB]",
 "skip_scope": "both"
@@ -7614,7 +6974,6 @@ true,
 "args": {
 "filename": "long.mp4",
 "file_size": 5000000,
-"duration": 120.0,
 "options": {
 "file_type": "images"
 }
@@ -7629,7 +6988,6 @@ false,
 "args": {
 "filename": "long.mp4",
 "file_size": 5000000,
-"duration": 120.0,
 "options": {
 "file_type": "videos"
 }
@@ -7644,7 +7002,6 @@ true,
 "args": {
 "filename": "long.mp4",
 "file_size": 5000000,
-"duration": 120.0,
 "options": {
 "file_type": "archives"
 }
@@ -7659,7 +7016,6 @@ false,
 "args": {
 "filename": "long.mp4",
 "file_size": 5000000,
-"duration": 120.0,
 "options": {
 "file_type": "audio"
 }
@@ -7674,7 +7030,6 @@ false,
 "args": {
 "filename": "long.mp4",
 "file_size": 5000000,
-"duration": 120.0,
 "options": {
 "exact_extensions": "mp4, gif"
 }
@@ -7689,7 +7044,6 @@ true,
 "args": {
 "filename": "long.mp4",
 "file_size": 5000000,
-"duration": 120.0,
 "options": {
 "skip_archives": true
 }
@@ -7704,7 +7058,6 @@ true,
 "args": {
 "filename": "long.mp4",
 "file_size": 5000000,
-"duration": 120.0,
 "options": {
 "skip_archives": true,
 "exact_extensions": "zip"
@@ -7720,7 +7073,6 @@ false,
 "args": {
 "filename": "long.mp4",
 "file_size": 5000000,
-"duration": 120.0,
 "options": {
 "download_thumbnails_only": true
 }
@@ -7733,26 +7085,8 @@ true,
 {
 "fn": "should_keep_file",
 "args": {
-"filename": "long.mp4",
-"file_size": 5000000,
-"duration": 120.0,
-"options": {
-"video_duration_filter_enabled": true,
-"min_video_duration": "10",
-"max_video_duration": "1m"
-}
-},
-"result": [
-false,
-"Video duration (2:00) exceeds maximum threshold (1:00)"
-]
-},
-{
-"fn": "should_keep_file",
-"args": {
 "filename": "初音ミク.gif",
 "file_size": 2048,
-"duration": null,
 "options": {}
 },
 "result": [
@@ -7765,7 +7099,6 @@ true,
 "args": {
 "filename": "初音ミク.gif",
 "file_size": 2048,
-"duration": null,
 "options": {
 "skip_words": "WIP, sketch",
 "skip_scope": "posts"
@@ -7781,7 +7114,6 @@ true,
 "args": {
 "filename": "初音ミク.gif",
 "file_size": 2048,
-"duration": null,
 "options": {
 "skip_words": "wip",
 "skip_scope": "files"
@@ -7797,7 +7129,6 @@ true,
 "args": {
 "filename": "初音ミク.gif",
 "file_size": 2048,
-"duration": null,
 "options": {
 "characters": "miku",
 "character_scope": "title"
@@ -7813,7 +7144,6 @@ true,
 "args": {
 "filename": "初音ミク.gif",
 "file_size": 2048,
-"duration": null,
 "options": {
 "characters": "(Rin/Len), Miku",
 "character_scope": "comments"
@@ -7829,7 +7159,6 @@ true,
 "args": {
 "filename": "初音ミク.gif",
 "file_size": 2048,
-"duration": null,
 "options": {
 "characters": "初音ミク",
 "character_scope": "content"
@@ -7845,7 +7174,6 @@ true,
 "args": {
 "filename": "初音ミク.gif",
 "file_size": 2048,
-"duration": null,
 "options": {
 "characters": "miku",
 "character_scope": "all"
@@ -7861,7 +7189,6 @@ true,
 "args": {
 "filename": "初音ミク.gif",
 "file_size": 2048,
-"duration": null,
 "options": {
 "date_after": "2024",
 "date_before": "2024-12"
@@ -7877,7 +7204,6 @@ true,
 "args": {
 "filename": "初音ミク.gif",
 "file_size": 2048,
-"duration": null,
 "options": {
 "date_after": "2025-01-01",
 "date_before": "2023"
@@ -7893,7 +7219,6 @@ true,
 "args": {
 "filename": "初音ミク.gif",
 "file_size": 2048,
-"duration": null,
 "options": {
 "min_file_size": "1MB",
 "max_file_size": "10MB"
@@ -7909,7 +7234,6 @@ false,
 "args": {
 "filename": "初音ミク.gif",
 "file_size": 2048,
-"duration": null,
 "options": {
 "skip_words": "preview, [>=500KB]",
 "skip_scope": "both"
@@ -7925,7 +7249,6 @@ false,
 "args": {
 "filename": "初音ミク.gif",
 "file_size": 2048,
-"duration": null,
 "options": {
 "file_type": "images"
 }
@@ -7940,7 +7263,6 @@ true,
 "args": {
 "filename": "初音ミク.gif",
 "file_size": 2048,
-"duration": null,
 "options": {
 "file_type": "videos"
 }
@@ -7955,7 +7277,6 @@ false,
 "args": {
 "filename": "初音ミク.gif",
 "file_size": 2048,
-"duration": null,
 "options": {
 "file_type": "archives"
 }
@@ -7970,7 +7291,6 @@ false,
 "args": {
 "filename": "初音ミク.gif",
 "file_size": 2048,
-"duration": null,
 "options": {
 "file_type": "audio"
 }
@@ -7985,7 +7305,6 @@ false,
 "args": {
 "filename": "初音ミク.gif",
 "file_size": 2048,
-"duration": null,
 "options": {
 "exact_extensions": "mp4, gif"
 }
@@ -8000,7 +7319,6 @@ true,
 "args": {
 "filename": "初音ミク.gif",
 "file_size": 2048,
-"duration": null,
 "options": {
 "skip_archives": true
 }
@@ -8015,7 +7333,6 @@ true,
 "args": {
 "filename": "初音ミク.gif",
 "file_size": 2048,
-"duration": null,
 "options": {
 "skip_archives": true,
 "exact_extensions": "zip"
@@ -8031,7 +7348,6 @@ false,
 "args": {
 "filename": "初音ミク.gif",
 "file_size": 2048,
-"duration": null,
 "options": {
 "download_thumbnails_only": true
 }
@@ -8044,26 +7360,8 @@ true,
 {
 "fn": "should_keep_file",
 "args": {
-"filename": "初音ミク.gif",
-"file_size": 2048,
-"duration": null,
-"options": {
-"video_duration_filter_enabled": true,
-"min_video_duration": "10",
-"max_video_duration": "1m"
-}
-},
-"result": [
-true,
-"Passed file filter"
-]
-},
-{
-"fn": "should_keep_file",
-"args": {
 "filename": "",
 "file_size": 10,
-"duration": null,
 "options": {}
 },
 "result": [
@@ -8076,7 +7374,6 @@ false,
 "args": {
 "filename": "",
 "file_size": 10,
-"duration": null,
 "options": {
 "skip_words": "WIP, sketch",
 "skip_scope": "posts"
@@ -8092,7 +7389,6 @@ false,
 "args": {
 "filename": "",
 "file_size": 10,
-"duration": null,
 "options": {
 "skip_words": "wip",
 "skip_scope": "files"
@@ -8108,7 +7404,6 @@ false,
 "args": {
 "filename": "",
 "file_size": 10,
-"duration": null,
 "options": {
 "characters": "miku",
 "character_scope": "title"
@@ -8124,7 +7419,6 @@ false,
 "args": {
 "filename": "",
 "file_size": 10,
-"duration": null,
 "options": {
 "characters": "(Rin/Len), Miku",
 "character_scope": "comments"
@@ -8140,7 +7434,6 @@ false,
 "args": {
 "filename": "",
 "file_size": 10,
-"duration": null,
 "options": {
 "characters": "初音ミク",
 "character_scope": "content"
@@ -8156,7 +7449,6 @@ false,
 "args": {
 "filename": "",
 "file_size": 10,
-"duration": null,
 "options": {
 "characters": "miku",
 "character_scope": "all"
@@ -8172,7 +7464,6 @@ false,
 "args": {
 "filename": "",
 "file_size": 10,
-"duration": null,
 "options": {
 "date_after": "2024",
 "date_before": "2024-12"
@@ -8188,7 +7479,6 @@ false,
 "args": {
 "filename": "",
 "file_size": 10,
-"duration": null,
 "options": {
 "date_after": "2025-01-01",
 "date_before": "2023"
@@ -8204,7 +7494,6 @@ false,
 "args": {
 "filename": "",
 "file_size": 10,
-"duration": null,
 "options": {
 "min_file_size": "1MB",
 "max_file_size": "10MB"
@@ -8220,7 +7509,6 @@ false,
 "args": {
 "filename": "",
 "file_size": 10,
-"duration": null,
 "options": {
 "skip_words": "preview, [>=500KB]",
 "skip_scope": "both"
@@ -8236,7 +7524,6 @@ false,
 "args": {
 "filename": "",
 "file_size": 10,
-"duration": null,
 "options": {
 "file_type": "images"
 }
@@ -8251,7 +7538,6 @@ false,
 "args": {
 "filename": "",
 "file_size": 10,
-"duration": null,
 "options": {
 "file_type": "videos"
 }
@@ -8266,7 +7552,6 @@ false,
 "args": {
 "filename": "",
 "file_size": 10,
-"duration": null,
 "options": {
 "file_type": "archives"
 }
@@ -8281,7 +7566,6 @@ false,
 "args": {
 "filename": "",
 "file_size": 10,
-"duration": null,
 "options": {
 "file_type": "audio"
 }
@@ -8296,7 +7580,6 @@ false,
 "args": {
 "filename": "",
 "file_size": 10,
-"duration": null,
 "options": {
 "exact_extensions": "mp4, gif"
 }
@@ -8311,7 +7594,6 @@ false,
 "args": {
 "filename": "",
 "file_size": 10,
-"duration": null,
 "options": {
 "skip_archives": true
 }
@@ -8326,7 +7608,6 @@ false,
 "args": {
 "filename": "",
 "file_size": 10,
-"duration": null,
 "options": {
 "skip_archives": true,
 "exact_extensions": "zip"
@@ -8342,7 +7623,6 @@ false,
 "args": {
 "filename": "",
 "file_size": 10,
-"duration": null,
 "options": {
 "download_thumbnails_only": true
 }
@@ -8355,26 +7635,8 @@ false,
 {
 "fn": "should_keep_file",
 "args": {
-"filename": "",
-"file_size": 10,
-"duration": null,
-"options": {
-"video_duration_filter_enabled": true,
-"min_video_duration": "10",
-"max_video_duration": "1m"
-}
-},
-"result": [
-false,
-"Empty filename"
-]
-},
-{
-"fn": "should_keep_file",
-"args": {
 "filename": "notes.txt",
 "file_size": 100,
-"duration": null,
 "options": {}
 },
 "result": [
@@ -8387,7 +7649,6 @@ true,
 "args": {
 "filename": "notes.txt",
 "file_size": 100,
-"duration": null,
 "options": {
 "skip_words": "WIP, sketch",
 "skip_scope": "posts"
@@ -8403,7 +7664,6 @@ true,
 "args": {
 "filename": "notes.txt",
 "file_size": 100,
-"duration": null,
 "options": {
 "skip_words": "wip",
 "skip_scope": "files"
@@ -8419,7 +7679,6 @@ true,
 "args": {
 "filename": "notes.txt",
 "file_size": 100,
-"duration": null,
 "options": {
 "characters": "miku",
 "character_scope": "title"
@@ -8435,7 +7694,6 @@ true,
 "args": {
 "filename": "notes.txt",
 "file_size": 100,
-"duration": null,
 "options": {
 "characters": "(Rin/Len), Miku",
 "character_scope": "comments"
@@ -8451,7 +7709,6 @@ true,
 "args": {
 "filename": "notes.txt",
 "file_size": 100,
-"duration": null,
 "options": {
 "characters": "初音ミク",
 "character_scope": "content"
@@ -8467,7 +7724,6 @@ true,
 "args": {
 "filename": "notes.txt",
 "file_size": 100,
-"duration": null,
 "options": {
 "characters": "miku",
 "character_scope": "all"
@@ -8483,7 +7739,6 @@ true,
 "args": {
 "filename": "notes.txt",
 "file_size": 100,
-"duration": null,
 "options": {
 "date_after": "2024",
 "date_before": "2024-12"
@@ -8499,7 +7754,6 @@ true,
 "args": {
 "filename": "notes.txt",
 "file_size": 100,
-"duration": null,
 "options": {
 "date_after": "2025-01-01",
 "date_before": "2023"
@@ -8515,7 +7769,6 @@ true,
 "args": {
 "filename": "notes.txt",
 "file_size": 100,
-"duration": null,
 "options": {
 "min_file_size": "1MB",
 "max_file_size": "10MB"
@@ -8531,7 +7784,6 @@ false,
 "args": {
 "filename": "notes.txt",
 "file_size": 100,
-"duration": null,
 "options": {
 "skip_words": "preview, [>=500KB]",
 "skip_scope": "both"
@@ -8547,7 +7799,6 @@ false,
 "args": {
 "filename": "notes.txt",
 "file_size": 100,
-"duration": null,
 "options": {
 "file_type": "images"
 }
@@ -8562,7 +7813,6 @@ false,
 "args": {
 "filename": "notes.txt",
 "file_size": 100,
-"duration": null,
 "options": {
 "file_type": "videos"
 }
@@ -8577,7 +7827,6 @@ false,
 "args": {
 "filename": "notes.txt",
 "file_size": 100,
-"duration": null,
 "options": {
 "file_type": "archives"
 }
@@ -8592,7 +7841,6 @@ false,
 "args": {
 "filename": "notes.txt",
 "file_size": 100,
-"duration": null,
 "options": {
 "file_type": "audio"
 }
@@ -8607,7 +7855,6 @@ false,
 "args": {
 "filename": "notes.txt",
 "file_size": 100,
-"duration": null,
 "options": {
 "exact_extensions": "mp4, gif"
 }
@@ -8622,7 +7869,6 @@ false,
 "args": {
 "filename": "notes.txt",
 "file_size": 100,
-"duration": null,
 "options": {
 "skip_archives": true
 }
@@ -8637,7 +7883,6 @@ true,
 "args": {
 "filename": "notes.txt",
 "file_size": 100,
-"duration": null,
 "options": {
 "skip_archives": true,
 "exact_extensions": "zip"
@@ -8653,7 +7898,6 @@ false,
 "args": {
 "filename": "notes.txt",
 "file_size": 100,
-"duration": null,
 "options": {
 "download_thumbnails_only": true
 }
@@ -8666,26 +7910,8 @@ false,
 {
 "fn": "should_keep_file",
 "args": {
-"filename": "notes.txt",
-"file_size": 100,
-"duration": null,
-"options": {
-"video_duration_filter_enabled": true,
-"min_video_duration": "10",
-"max_video_duration": "1m"
-}
-},
-"result": [
-true,
-"Passed file filter"
-]
-},
-{
-"fn": "should_keep_file",
-"args": {
 "filename": "preview_image.jpg",
 "file_size": 600000,
-"duration": null,
 "options": {}
 },
 "result": [
@@ -8698,7 +7924,6 @@ true,
 "args": {
 "filename": "preview_image.jpg",
 "file_size": 600000,
-"duration": null,
 "options": {
 "skip_words": "WIP, sketch",
 "skip_scope": "posts"
@@ -8714,7 +7939,6 @@ true,
 "args": {
 "filename": "preview_image.jpg",
 "file_size": 600000,
-"duration": null,
 "options": {
 "skip_words": "wip",
 "skip_scope": "files"
@@ -8730,7 +7954,6 @@ true,
 "args": {
 "filename": "preview_image.jpg",
 "file_size": 600000,
-"duration": null,
 "options": {
 "characters": "miku",
 "character_scope": "title"
@@ -8746,7 +7969,6 @@ true,
 "args": {
 "filename": "preview_image.jpg",
 "file_size": 600000,
-"duration": null,
 "options": {
 "characters": "(Rin/Len), Miku",
 "character_scope": "comments"
@@ -8762,7 +7984,6 @@ true,
 "args": {
 "filename": "preview_image.jpg",
 "file_size": 600000,
-"duration": null,
 "options": {
 "characters": "初音ミク",
 "character_scope": "content"
@@ -8778,7 +7999,6 @@ true,
 "args": {
 "filename": "preview_image.jpg",
 "file_size": 600000,
-"duration": null,
 "options": {
 "characters": "miku",
 "character_scope": "all"
@@ -8794,7 +8014,6 @@ true,
 "args": {
 "filename": "preview_image.jpg",
 "file_size": 600000,
-"duration": null,
 "options": {
 "date_after": "2024",
 "date_before": "2024-12"
@@ -8810,7 +8029,6 @@ true,
 "args": {
 "filename": "preview_image.jpg",
 "file_size": 600000,
-"duration": null,
 "options": {
 "date_after": "2025-01-01",
 "date_before": "2023"
@@ -8826,7 +8044,6 @@ true,
 "args": {
 "filename": "preview_image.jpg",
 "file_size": 600000,
-"duration": null,
 "options": {
 "min_file_size": "1MB",
 "max_file_size": "10MB"
@@ -8842,7 +8059,6 @@ false,
 "args": {
 "filename": "preview_image.jpg",
 "file_size": 600000,
-"duration": null,
 "options": {
 "skip_words": "preview, [>=500KB]",
 "skip_scope": "both"
@@ -8858,7 +8074,6 @@ false,
 "args": {
 "filename": "preview_image.jpg",
 "file_size": 600000,
-"duration": null,
 "options": {
 "file_type": "images"
 }
@@ -8873,7 +8088,6 @@ true,
 "args": {
 "filename": "preview_image.jpg",
 "file_size": 600000,
-"duration": null,
 "options": {
 "file_type": "videos"
 }
@@ -8888,7 +8102,6 @@ false,
 "args": {
 "filename": "preview_image.jpg",
 "file_size": 600000,
-"duration": null,
 "options": {
 "file_type": "archives"
 }
@@ -8903,7 +8116,6 @@ false,
 "args": {
 "filename": "preview_image.jpg",
 "file_size": 600000,
-"duration": null,
 "options": {
 "file_type": "audio"
 }
@@ -8918,7 +8130,6 @@ false,
 "args": {
 "filename": "preview_image.jpg",
 "file_size": 600000,
-"duration": null,
 "options": {
 "exact_extensions": "mp4, gif"
 }
@@ -8933,7 +8144,6 @@ false,
 "args": {
 "filename": "preview_image.jpg",
 "file_size": 600000,
-"duration": null,
 "options": {
 "skip_archives": true
 }
@@ -8948,7 +8158,6 @@ true,
 "args": {
 "filename": "preview_image.jpg",
 "file_size": 600000,
-"duration": null,
 "options": {
 "skip_archives": true,
 "exact_extensions": "zip"
@@ -8964,26 +8173,8 @@ false,
 "args": {
 "filename": "preview_image.jpg",
 "file_size": 600000,
-"duration": null,
 "options": {
 "download_thumbnails_only": true
-}
-},
-"result": [
-true,
-"Passed file filter"
-]
-},
-{
-"fn": "should_keep_file",
-"args": {
-"filename": "preview_image.jpg",
-"file_size": 600000,
-"duration": null,
-"options": {
-"video_duration_filter_enabled": true,
-"min_video_duration": "10",
-"max_video_duration": "1m"
 }
 },
 "result": [
@@ -9182,12 +8373,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -9213,10 +8402,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "img_001.PNG"
@@ -9252,12 +8438,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -9283,10 +8467,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "img_001.PNG"
@@ -9322,12 +8503,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -9353,10 +8532,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "video.mp4"
@@ -9392,12 +8568,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -9423,10 +8597,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "video.mp4"
@@ -9462,12 +8633,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -9493,10 +8662,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "noext"
@@ -9532,12 +8698,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -9563,10 +8727,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "noext"
@@ -9602,12 +8763,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -9633,10 +8792,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "a b.c.d.gif"
@@ -9672,12 +8828,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -9703,10 +8857,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "a b.c.d.gif"
@@ -9742,12 +8893,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -9773,10 +8922,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_img_001.PNG"
@@ -9812,12 +8958,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -9843,10 +8987,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "007_img_001.PNG"
@@ -9882,12 +9023,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -9913,10 +9052,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_video.mp4"
@@ -9952,12 +9088,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -9983,10 +9117,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "007_video.mp4"
@@ -10022,12 +9153,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -10053,10 +9182,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_noext"
@@ -10092,12 +9218,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -10123,10 +9247,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "007_noext"
@@ -10162,12 +9283,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -10193,10 +9312,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_a b.c.d.gif"
@@ -10232,12 +9348,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -10263,10 +9377,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "007_a b.c.d.gif"
@@ -10302,12 +9413,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -10333,10 +9442,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024-06-15 - My Post - img_001.PNG"
@@ -10372,12 +9478,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -10403,10 +9507,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024-06-15 - My Post - img_001.PNG"
@@ -10442,12 +9543,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -10473,10 +9572,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2023-01-02 - First line second - video.mp4"
@@ -10512,12 +9608,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -10543,10 +9637,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2023-01-02 - First line second - video.mp4"
@@ -10582,12 +9673,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -10613,10 +9702,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "Post - noext"
@@ -10652,12 +9738,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -10683,10 +9767,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "Post - noext"
@@ -10722,12 +9803,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -10753,10 +9832,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024 - Title_With_Bad_Chars - a b.c.d.gif"
@@ -10792,12 +9868,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -10823,10 +9897,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024 - Title_With_Bad_Chars - a b.c.d.gif"
@@ -10862,12 +9933,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -10893,10 +9962,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_2024-06-15 - My Post - img_001.PNG"
@@ -10932,12 +9998,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -10963,10 +10027,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "007_2024-06-15 - My Post - img_001.PNG"
@@ -11002,12 +10063,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -11033,10 +10092,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_2023-01-02 - First line second - video.mp4"
@@ -11072,12 +10128,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -11103,10 +10157,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "007_2023-01-02 - First line second - video.mp4"
@@ -11142,12 +10193,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -11173,10 +10222,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_Post - noext"
@@ -11212,12 +10258,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -11243,10 +10287,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "007_Post - noext"
@@ -11282,12 +10323,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -11313,10 +10352,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_2024 - Title_With_Bad_Chars - a b.c.d.gif"
@@ -11352,12 +10388,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_post_title",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -11383,10 +10417,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "007_2024 - Title_With_Bad_Chars - a b.c.d.gif"
@@ -11422,12 +10453,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_based",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -11453,10 +10482,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024-06-15_001_01.PNG"
@@ -11492,12 +10518,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_based",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -11523,10 +10547,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024-06-15_003_12.PNG"
@@ -11562,12 +10583,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_based",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -11593,10 +10612,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2023-01-02_001_01.mp4"
@@ -11632,12 +10648,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_based",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -11663,10 +10677,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2023-01-02_003_12.mp4"
@@ -11702,12 +10713,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_based",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -11733,10 +10742,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_01"
@@ -11772,12 +10778,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_based",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -11803,10 +10807,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "003_12"
@@ -11842,12 +10843,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_based",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -11873,10 +10872,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024_001_01.gif"
@@ -11912,12 +10908,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_based",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -11943,10 +10937,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024_003_12.gif"
@@ -11982,12 +10973,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_based",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -12013,10 +11002,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_2024-06-15_001_01.PNG"
@@ -12052,12 +11038,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_based",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -12083,10 +11067,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "007_2024-06-15_003_12.PNG"
@@ -12122,12 +11103,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_based",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -12153,10 +11132,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_2023-01-02_001_01.mp4"
@@ -12192,12 +11168,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_based",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -12223,10 +11197,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "007_2023-01-02_003_12.mp4"
@@ -12262,12 +11233,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_based",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -12293,10 +11262,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_001_01"
@@ -12332,12 +11298,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_based",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -12363,10 +11327,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "007_003_12"
@@ -12402,12 +11363,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_based",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -12433,10 +11392,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_2024_001_01.gif"
@@ -12472,12 +11428,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "date_based",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -12503,10 +11457,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "007_2024_003_12.gif"
@@ -12542,12 +11493,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title_global_numbering",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -12573,10 +11522,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_My Post_01.PNG"
@@ -12612,12 +11558,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title_global_numbering",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -12643,10 +11587,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "003_My Post_12.PNG"
@@ -12682,12 +11623,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title_global_numbering",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -12713,10 +11652,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_First line second_01.mp4"
@@ -12752,12 +11688,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title_global_numbering",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -12783,10 +11717,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "003_First line second_12.mp4"
@@ -12822,12 +11753,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title_global_numbering",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -12853,10 +11782,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_Post_01"
@@ -12892,12 +11818,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title_global_numbering",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -12923,10 +11847,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "003_Post_12"
@@ -12962,12 +11883,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title_global_numbering",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -12993,10 +11912,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_Title_With_Bad_Chars_01.gif"
@@ -13032,12 +11948,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title_global_numbering",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -13063,10 +11977,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "003_Title_With_Bad_Chars_12.gif"
@@ -13102,12 +12013,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title_global_numbering",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -13133,10 +12042,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_001_My Post_01.PNG"
@@ -13172,12 +12078,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title_global_numbering",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -13203,10 +12107,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "007_003_My Post_12.PNG"
@@ -13242,12 +12143,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title_global_numbering",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -13273,10 +12172,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_001_First line second_01.mp4"
@@ -13312,12 +12208,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title_global_numbering",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -13343,10 +12237,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "007_003_First line second_12.mp4"
@@ -13382,12 +12273,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title_global_numbering",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -13413,10 +12302,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_001_Post_01"
@@ -13452,12 +12338,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title_global_numbering",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -13483,10 +12367,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "007_003_Post_12"
@@ -13522,12 +12403,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title_global_numbering",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -13553,10 +12432,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "001_001_Title_With_Bad_Chars_01.gif"
@@ -13592,12 +12468,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "post_title_global_numbering",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -13623,10 +12497,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "007_003_Title_With_Bad_Chars_12.gif"
@@ -13662,12 +12533,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -13693,10 +12562,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "My Post - img_001.PNG"
@@ -13732,12 +12598,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -13763,10 +12627,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "My Post - img_001.PNG"
@@ -13802,12 +12663,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -13833,10 +12692,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "First line second - video.mp4"
@@ -13872,12 +12728,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -13903,10 +12757,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "First line second - video.mp4"
@@ -13942,12 +12793,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -13973,10 +12822,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "Post - noext"
@@ -14012,12 +12858,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -14043,10 +12887,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "Post - noext"
@@ -14082,12 +12923,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -14113,10 +12952,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "Title_With_Bad_Chars - a b.c.d.gif"
@@ -14152,12 +12988,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -14183,10 +13017,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "Title_With_Bad_Chars - a b.c.d.gif"
@@ -14222,12 +13053,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{date}_{artist}_{file_index}.{ext}",
 "proxy_url": "",
@@ -14253,10 +13082,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024-06-15_Some Artist_01.PNG"
@@ -14292,12 +13118,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{date}_{artist}_{file_index}.{ext}",
 "proxy_url": "",
@@ -14323,10 +13147,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024-06-15_Some Artist_12.PNG"
@@ -14362,12 +13183,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{date}_{artist}_{file_index}.{ext}",
 "proxy_url": "",
@@ -14393,10 +13212,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2023-01-02_Some Artist_01.mp4"
@@ -14432,12 +13248,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{date}_{artist}_{file_index}.{ext}",
 "proxy_url": "",
@@ -14463,10 +13277,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2023-01-02_Some Artist_12.mp4"
@@ -14502,12 +13313,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{date}_{artist}_{file_index}.{ext}",
 "proxy_url": "",
@@ -14533,10 +13342,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "Some Artist_01"
@@ -14572,12 +13378,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{date}_{artist}_{file_index}.{ext}",
 "proxy_url": "",
@@ -14603,10 +13407,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "Some Artist_12"
@@ -14642,12 +13443,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{date}_{artist}_{file_index}.{ext}",
 "proxy_url": "",
@@ -14673,10 +13472,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024_Some Artist_01.gif"
@@ -14712,12 +13508,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{date}_{artist}_{file_index}.{ext}",
 "proxy_url": "",
@@ -14743,10 +13537,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024_Some Artist_12.gif"
@@ -14782,12 +13573,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{post_id}-{seq_idx}",
 "proxy_url": "",
@@ -14813,10 +13602,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "123-001.PNG"
@@ -14852,12 +13638,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{post_id}-{seq_idx}",
 "proxy_url": "",
@@ -14883,10 +13667,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "123-007.PNG"
@@ -14922,12 +13703,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{post_id}-{seq_idx}",
 "proxy_url": "",
@@ -14953,10 +13732,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "123-001.mp4"
@@ -14992,12 +13768,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{post_id}-{seq_idx}",
 "proxy_url": "",
@@ -15023,10 +13797,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "123-007.mp4"
@@ -15062,12 +13833,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{post_id}-{seq_idx}",
 "proxy_url": "",
@@ -15093,10 +13862,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "123-001"
@@ -15132,12 +13898,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{post_id}-{seq_idx}",
 "proxy_url": "",
@@ -15163,10 +13927,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "123-007"
@@ -15202,12 +13963,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{post_id}-{seq_idx}",
 "proxy_url": "",
@@ -15233,10 +13992,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "123-001.gif"
@@ -15272,12 +14028,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{post_id}-{seq_idx}",
 "proxy_url": "",
@@ -15303,10 +14057,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "123-007.gif"
@@ -15342,12 +14093,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{year}/{month}/{day} {name}{ext}",
 "proxy_url": "",
@@ -15373,10 +14122,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024_06_15 img_001.PNG"
@@ -15412,12 +14158,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{year}/{month}/{day} {name}{ext}",
 "proxy_url": "",
@@ -15443,10 +14187,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024_06_15 img_001.PNG"
@@ -15482,12 +14223,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{year}/{month}/{day} {name}{ext}",
 "proxy_url": "",
@@ -15513,10 +14252,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2023_01_02 video.mp4"
@@ -15552,12 +14288,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{year}/{month}/{day} {name}{ext}",
 "proxy_url": "",
@@ -15583,10 +14317,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2023_01_02 video.mp4"
@@ -15622,12 +14353,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{year}/{month}/{day} {name}{ext}",
 "proxy_url": "",
@@ -15653,10 +14382,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "noext"
@@ -15692,12 +14418,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{year}/{month}/{day} {name}{ext}",
 "proxy_url": "",
@@ -15723,10 +14447,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "noext"
@@ -15762,12 +14483,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{year}/{month}/{day} {name}{ext}",
 "proxy_url": "",
@@ -15793,10 +14512,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024_ a b.c.d.gif"
@@ -15832,12 +14548,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{year}/{month}/{day} {name}{ext}",
 "proxy_url": "",
@@ -15863,10 +14577,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024_ a b.c.d.gif"
@@ -15902,12 +14613,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{caption}",
 "proxy_url": "",
@@ -15933,10 +14642,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "My Post.PNG"
@@ -15972,12 +14678,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{caption}",
 "proxy_url": "",
@@ -16003,10 +14707,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "My Post.PNG"
@@ -16042,12 +14743,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{caption}",
 "proxy_url": "",
@@ -16073,10 +14772,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "First line second.mp4"
@@ -16112,12 +14808,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{caption}",
 "proxy_url": "",
@@ -16143,10 +14837,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "First line second.mp4"
@@ -16182,12 +14873,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{caption}",
 "proxy_url": "",
@@ -16213,10 +14902,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "Post"
@@ -16252,12 +14938,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{caption}",
 "proxy_url": "",
@@ -16283,10 +14967,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "Post"
@@ -16322,12 +15003,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{caption}",
 "proxy_url": "",
@@ -16353,10 +15032,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "cap.gif"
@@ -16392,12 +15068,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{caption}",
 "proxy_url": "",
@@ -16423,10 +15097,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "cap.gif"
@@ -16462,12 +15133,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "..{ext}",
 "proxy_url": "",
@@ -16493,10 +15162,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "PNG"
@@ -16532,12 +15198,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "..{ext}",
 "proxy_url": "",
@@ -16563,10 +15227,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "PNG"
@@ -16602,12 +15263,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "..{ext}",
 "proxy_url": "",
@@ -16633,10 +15292,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "mp4"
@@ -16672,12 +15328,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "..{ext}",
 "proxy_url": "",
@@ -16703,10 +15357,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "mp4"
@@ -16742,12 +15393,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "..{ext}",
 "proxy_url": "",
@@ -16773,10 +15422,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "noext"
@@ -16812,12 +15458,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "..{ext}",
 "proxy_url": "",
@@ -16843,10 +15487,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "noext"
@@ -16882,12 +15523,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "..{ext}",
 "proxy_url": "",
@@ -16913,10 +15552,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "gif"
@@ -16952,12 +15588,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "..{ext}",
 "proxy_url": "",
@@ -16983,10 +15617,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "gif"
@@ -17022,12 +15653,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{service}_{user_id}_{post_index}_{folder_index}",
 "proxy_url": "",
@@ -17053,10 +15682,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "patreon_99_001_001.PNG"
@@ -17092,12 +15718,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{service}_{user_id}_{post_index}_{folder_index}",
 "proxy_url": "",
@@ -17123,10 +15747,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "patreon_99_003_007.PNG"
@@ -17162,12 +15783,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{service}_{user_id}_{post_index}_{folder_index}",
 "proxy_url": "",
@@ -17193,10 +15812,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "patreon_99_001_001.mp4"
@@ -17232,12 +15848,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{service}_{user_id}_{post_index}_{folder_index}",
 "proxy_url": "",
@@ -17263,10 +15877,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "patreon_99_003_007.mp4"
@@ -17302,12 +15913,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{service}_{user_id}_{post_index}_{folder_index}",
 "proxy_url": "",
@@ -17333,10 +15942,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "patreon_99_001_001"
@@ -17372,12 +15978,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{service}_{user_id}_{post_index}_{folder_index}",
 "proxy_url": "",
@@ -17403,10 +16007,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "patreon_99_003_007"
@@ -17442,12 +16043,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{service}_{user_id}_{post_index}_{folder_index}",
 "proxy_url": "",
@@ -17473,10 +16072,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "patreon_99_001_001.gif"
@@ -17512,12 +16108,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{service}_{user_id}_{post_index}_{folder_index}",
 "proxy_url": "",
@@ -17543,10 +16137,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "patreon_99_003_007.gif"
@@ -17582,12 +16173,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -17613,10 +16202,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "My Post - img_001.PNG"
@@ -17652,12 +16238,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -17683,10 +16267,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "My Post - img_001.PNG"
@@ -17722,12 +16303,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -17753,10 +16332,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "First line second - video.mp4"
@@ -17792,12 +16368,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -17823,10 +16397,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "First line second - video.mp4"
@@ -17862,12 +16433,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -17893,10 +16462,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "Post - noext"
@@ -17932,12 +16498,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -17963,10 +16527,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "Post - noext"
@@ -18002,12 +16563,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -18033,10 +16592,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "Title_With_Bad_Chars - a b.c.d.gif"
@@ -18072,12 +16628,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{title} - {orig_name}",
 "proxy_url": "",
@@ -18103,10 +16657,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "Title_With_Bad_Chars - a b.c.d.gif"
@@ -18142,12 +16693,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{date}_{artist}_{file_index}.{ext}",
 "proxy_url": "",
@@ -18173,10 +16722,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024-06-15_Some Artist_01.PNG"
@@ -18212,12 +16758,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{date}_{artist}_{file_index}.{ext}",
 "proxy_url": "",
@@ -18243,10 +16787,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024-06-15_Some Artist_12.PNG"
@@ -18282,12 +16823,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{date}_{artist}_{file_index}.{ext}",
 "proxy_url": "",
@@ -18313,10 +16852,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2023-01-02_Some Artist_01.mp4"
@@ -18352,12 +16888,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{date}_{artist}_{file_index}.{ext}",
 "proxy_url": "",
@@ -18383,10 +16917,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2023-01-02_Some Artist_12.mp4"
@@ -18422,12 +16953,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{date}_{artist}_{file_index}.{ext}",
 "proxy_url": "",
@@ -18453,10 +16982,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "Some Artist_01"
@@ -18492,12 +17018,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{date}_{artist}_{file_index}.{ext}",
 "proxy_url": "",
@@ -18523,10 +17047,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "Some Artist_12"
@@ -18562,12 +17083,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{date}_{artist}_{file_index}.{ext}",
 "proxy_url": "",
@@ -18593,10 +17112,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024_Some Artist_01.gif"
@@ -18632,12 +17148,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{date}_{artist}_{file_index}.{ext}",
 "proxy_url": "",
@@ -18663,10 +17177,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024_Some Artist_12.gif"
@@ -18702,12 +17213,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{post_id}-{seq_idx}",
 "proxy_url": "",
@@ -18733,10 +17242,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "123-001.PNG"
@@ -18772,12 +17278,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{post_id}-{seq_idx}",
 "proxy_url": "",
@@ -18803,10 +17307,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "123-007.PNG"
@@ -18842,12 +17343,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{post_id}-{seq_idx}",
 "proxy_url": "",
@@ -18873,10 +17372,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "123-001.mp4"
@@ -18912,12 +17408,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{post_id}-{seq_idx}",
 "proxy_url": "",
@@ -18943,10 +17437,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "123-007.mp4"
@@ -18982,12 +17473,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{post_id}-{seq_idx}",
 "proxy_url": "",
@@ -19013,10 +17502,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "123-001"
@@ -19052,12 +17538,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{post_id}-{seq_idx}",
 "proxy_url": "",
@@ -19083,10 +17567,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "123-007"
@@ -19122,12 +17603,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{post_id}-{seq_idx}",
 "proxy_url": "",
@@ -19153,10 +17632,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "123-001.gif"
@@ -19192,12 +17668,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{post_id}-{seq_idx}",
 "proxy_url": "",
@@ -19223,10 +17697,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "123-007.gif"
@@ -19262,12 +17733,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{year}/{month}/{day} {name}{ext}",
 "proxy_url": "",
@@ -19293,10 +17762,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024_06_15 img_001.PNG"
@@ -19332,12 +17798,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{year}/{month}/{day} {name}{ext}",
 "proxy_url": "",
@@ -19363,10 +17827,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024_06_15 img_001.PNG"
@@ -19402,12 +17863,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{year}/{month}/{day} {name}{ext}",
 "proxy_url": "",
@@ -19433,10 +17892,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2023_01_02 video.mp4"
@@ -19472,12 +17928,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{year}/{month}/{day} {name}{ext}",
 "proxy_url": "",
@@ -19503,10 +17957,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2023_01_02 video.mp4"
@@ -19542,12 +17993,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{year}/{month}/{day} {name}{ext}",
 "proxy_url": "",
@@ -19573,10 +18022,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "noext"
@@ -19612,12 +18058,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{year}/{month}/{day} {name}{ext}",
 "proxy_url": "",
@@ -19643,10 +18087,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "noext"
@@ -19682,12 +18123,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{year}/{month}/{day} {name}{ext}",
 "proxy_url": "",
@@ -19713,10 +18152,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024_ a b.c.d.gif"
@@ -19752,12 +18188,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{year}/{month}/{day} {name}{ext}",
 "proxy_url": "",
@@ -19783,10 +18217,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "2024_ a b.c.d.gif"
@@ -19822,12 +18253,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{caption}",
 "proxy_url": "",
@@ -19853,10 +18282,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "My Post.PNG"
@@ -19892,12 +18318,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{caption}",
 "proxy_url": "",
@@ -19923,10 +18347,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "My Post.PNG"
@@ -19962,12 +18383,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{caption}",
 "proxy_url": "",
@@ -19993,10 +18412,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "First line second.mp4"
@@ -20032,12 +18448,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{caption}",
 "proxy_url": "",
@@ -20063,10 +18477,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "First line second.mp4"
@@ -20102,12 +18513,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{caption}",
 "proxy_url": "",
@@ -20133,10 +18542,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "Post"
@@ -20172,12 +18578,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{caption}",
 "proxy_url": "",
@@ -20203,10 +18607,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "Post"
@@ -20242,12 +18643,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{caption}",
 "proxy_url": "",
@@ -20273,10 +18672,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "cap.gif"
@@ -20312,12 +18708,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{caption}",
 "proxy_url": "",
@@ -20343,10 +18737,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "cap.gif"
@@ -20382,12 +18773,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "..{ext}",
 "proxy_url": "",
@@ -20413,10 +18802,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "PNG"
@@ -20452,12 +18838,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "..{ext}",
 "proxy_url": "",
@@ -20483,10 +18867,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "PNG"
@@ -20522,12 +18903,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "..{ext}",
 "proxy_url": "",
@@ -20553,10 +18932,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "mp4"
@@ -20592,12 +18968,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "..{ext}",
 "proxy_url": "",
@@ -20623,10 +18997,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "mp4"
@@ -20662,12 +19033,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "..{ext}",
 "proxy_url": "",
@@ -20693,10 +19062,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "noext"
@@ -20732,12 +19098,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "..{ext}",
 "proxy_url": "",
@@ -20763,10 +19127,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "noext"
@@ -20802,12 +19163,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "..{ext}",
 "proxy_url": "",
@@ -20833,10 +19192,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "gif"
@@ -20872,12 +19228,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "..{ext}",
 "proxy_url": "",
@@ -20903,10 +19257,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "gif"
@@ -20942,12 +19293,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{service}_{user_id}_{post_index}_{folder_index}",
 "proxy_url": "",
@@ -20973,10 +19322,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "patreon_99_001_001.PNG"
@@ -21012,12 +19358,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{service}_{user_id}_{post_index}_{folder_index}",
 "proxy_url": "",
@@ -21043,10 +19387,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "patreon_99_003_007.PNG"
@@ -21082,12 +19423,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{service}_{user_id}_{post_index}_{folder_index}",
 "proxy_url": "",
@@ -21113,10 +19452,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "patreon_99_001_001.mp4"
@@ -21152,12 +19488,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{service}_{user_id}_{post_index}_{folder_index}",
 "proxy_url": "",
@@ -21183,10 +19517,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "patreon_99_003_007.mp4"
@@ -21222,12 +19553,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{service}_{user_id}_{post_index}_{folder_index}",
 "proxy_url": "",
@@ -21253,10 +19582,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "patreon_99_001_001"
@@ -21292,12 +19618,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{service}_{user_id}_{post_index}_{folder_index}",
 "proxy_url": "",
@@ -21323,10 +19647,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "patreon_99_003_007"
@@ -21362,12 +19683,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{service}_{user_id}_{post_index}_{folder_index}",
 "proxy_url": "",
@@ -21393,10 +19712,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "patreon_99_001_001.gif"
@@ -21432,12 +19748,10 @@ true,
 "subfolder_per_post": true,
 "date_prefix": true,
 "separate_by_known": false,
-"tag_folder_mode": false,
 "download_revisions": false,
 "adaptive_threading": false,
 "threads_locked": false,
 "auto_retry_at_end": false,
-"manga_mode": false,
 "filename_style": "custom",
 "filename_template": "{service}_{user_id}_{post_index}_{folder_index}",
 "proxy_url": "",
@@ -21463,10 +19777,7 @@ true,
 "webp_quality": "balanced",
 "write_sidecars": false,
 "sidecar_format": "json",
-"sidecar_scope": "per_file",
-"video_duration_filter_enabled": false,
-"min_video_duration": "",
-"max_video_duration": ""
+"sidecar_scope": "per_file"
 }
 },
 "result": "patreon_99_003_007.gif"

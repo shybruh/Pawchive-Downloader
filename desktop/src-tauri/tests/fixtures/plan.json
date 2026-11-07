@@ -10568,7 +10568,7 @@
   }
  },
  {
-  "name": "manga mode",
+  "name": "numbered names",
   "posts": [
    {
     "id": "1",
@@ -10649,6 +10649,41 @@
     "comments_text": "pw: comm1"
    },
    {
+    "id": "4",
+    "user": "152819670",
+    "service": "patreon",
+    "title": "",
+    "published": 1709632800,
+    "attachments": [
+     {
+      "name": "a.png",
+      "path": "https://n4.pawchive.pw/data/00/00/000000000000000000000000000000000000000000000000000000000000000c.png?f=a.png"
+     },
+     {
+      "name": "big.mp4",
+      "path": "https://t1.pawchive.pw/f/884966d8/big.mp4?e=99&s=ab",
+      "is_temporary": true
+     },
+     {
+      "name": "prev.jpg",
+      "path": "/00/00/000000000000000000000000000000000000000000000000000000000000000d.jpg",
+      "preview_only": true
+     },
+     {
+      "name": "thumb.png",
+      "path": "https://img.pawchive.pw/thumbnail/data/00/00/000000000000000000000000000000000000000000000000000000000000000e.png"
+     },
+     {
+      "name": "x_low.jpg",
+      "path": "/00/00/000000000000000000000000000000000000000000000000000000000000000f.jpg"
+     },
+     {
+      "name": "kem.png",
+      "path": "https://kemono.su/data/00/00/0000000000000000000000000000000000000000000000000000000000000010.png"
+     }
+    ]
+   },
+   {
     "id": "5",
     "user": "152819670",
     "service": "patreon",
@@ -10706,40 +10741,12 @@
    "user_id": "152819670"
   },
   "options": {
-   "manga_mode": true,
    "filename_style": "numbered"
   },
   "files": [],
   "archived": [],
   "result": {
    "tasks": [
-    {
-     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000013.png?f=pic.png",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\Album\\pic.png",
-     "filename": "pic.png",
-     "post_title": "Album",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "https://example.com/album/1",
-     "file_id": "https://example.com/album/1_/00/00/0000000000000000000000000000000000000000000000000000000000000013.png",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_https://example.com/album/1",
-     "post_url": "https://pawchive.pw/patreon/post/https://example.com/album/1",
-     "post_date": "",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\Album\\post_info.txt"
-    },
     {
      "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000002.png?f=pic.png",
      "target_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] First post\\pic.png",
@@ -11013,6 +11020,89 @@
      "post_info_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] First post [2]\\post_info.txt"
     },
     {
+     "url": "https://n4.pawchive.pw/data/00/00/000000000000000000000000000000000000000000000000000000000000000c.png?f=a.png",
+     "target_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Untitled\\a.png",
+     "filename": "a.png",
+     "post_title": "Untitled",
+     "creator_name": "Silly Teshii",
+     "service": "patreon",
+     "post_id": "4",
+     "file_id": "4_/00/00/000000000000000000000000000000000000000000000000000000000000000c.png",
+     "file_size": 0,
+     "downloaded_bytes": 0,
+     "status": "pending",
+     "error_msg": "",
+     "retry_count": 0,
+     "is_ytdlp": false,
+     "is_telegram": false,
+     "telegram_channel_id": "",
+     "telegram_message_id": 0,
+     "batch_id": "patreon_Silly Teshii_4",
+     "post_url": "https://pawchive.pw/patreon/user/152819670/post/4",
+     "post_date": "2024-03-05",
+     "user_id": "152819670",
+     "expected_sha256": "",
+     "fallback_urls": [
+      "https://file.pawchive.pw/data/00/00/000000000000000000000000000000000000000000000000000000000000000c.png?f=a.png"
+     ],
+     "used_preview": false,
+     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Untitled\\post_info.txt"
+    },
+    {
+     "url": "https://t1.pawchive.pw/f/884966d8/big.mp4?e=99&s=ab",
+     "target_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Untitled\\big.mp4",
+     "filename": "big.mp4",
+     "post_title": "Untitled",
+     "creator_name": "Silly Teshii",
+     "service": "patreon",
+     "post_id": "4",
+     "file_id": "4_/f/884966d8/big.mp4",
+     "file_size": 0,
+     "downloaded_bytes": 0,
+     "status": "pending",
+     "error_msg": "",
+     "retry_count": 0,
+     "is_ytdlp": false,
+     "is_telegram": false,
+     "telegram_channel_id": "",
+     "telegram_message_id": 0,
+     "batch_id": "patreon_Silly Teshii_4",
+     "post_url": "https://pawchive.pw/patreon/user/152819670/post/4",
+     "post_date": "2024-03-05",
+     "user_id": "152819670",
+     "expected_sha256": "",
+     "fallback_urls": [],
+     "used_preview": false,
+     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Untitled\\post_info.txt"
+    },
+    {
+     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000010.png?f=kem.png",
+     "target_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Untitled\\kem.png",
+     "filename": "kem.png",
+     "post_title": "Untitled",
+     "creator_name": "Silly Teshii",
+     "service": "patreon",
+     "post_id": "4",
+     "file_id": "4_/00/00/0000000000000000000000000000000000000000000000000000000000000010.png",
+     "file_size": 0,
+     "downloaded_bytes": 0,
+     "status": "pending",
+     "error_msg": "",
+     "retry_count": 0,
+     "is_ytdlp": false,
+     "is_telegram": false,
+     "telegram_channel_id": "",
+     "telegram_message_id": 0,
+     "batch_id": "patreon_Silly Teshii_4",
+     "post_url": "https://pawchive.pw/patreon/user/152819670/post/4",
+     "post_date": "2024-03-05",
+     "user_id": "152819670",
+     "expected_sha256": "",
+     "fallback_urls": [],
+     "used_preview": false,
+     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Untitled\\post_info.txt"
+    },
+    {
      "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000011.mp4?f=Miku.mp4",
      "target_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Miku dance\\Miku.mp4",
      "filename": "Miku.mp4",
@@ -11094,6 +11184,33 @@
      "post_info_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Miku dance\\post_info.txt"
     },
     {
+     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000013.png?f=pic.png",
+     "target_path": "{BASE}\\Silly Teshii [patreon]\\Album\\pic.png",
+     "filename": "pic.png",
+     "post_title": "Album",
+     "creator_name": "Silly Teshii",
+     "service": "patreon",
+     "post_id": "https://example.com/album/1",
+     "file_id": "https://example.com/album/1_/00/00/0000000000000000000000000000000000000000000000000000000000000013.png",
+     "file_size": 0,
+     "downloaded_bytes": 0,
+     "status": "pending",
+     "error_msg": "",
+     "retry_count": 0,
+     "is_ytdlp": false,
+     "is_telegram": false,
+     "telegram_channel_id": "",
+     "telegram_message_id": 0,
+     "batch_id": "patreon_Silly Teshii_https://example.com/album/1",
+     "post_url": "https://pawchive.pw/patreon/post/https://example.com/album/1",
+     "post_date": "",
+     "user_id": "152819670",
+     "expected_sha256": "",
+     "fallback_urls": [],
+     "used_preview": false,
+     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\Album\\post_info.txt"
+    },
+    {
      "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000014.jpg?f=preview.jpg",
      "target_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Samus\\preview.jpg",
      "filename": "preview.jpg",
@@ -11156,613 +11273,18 @@
       "7"
      ],
      "Title: Samus\nPost ID: 7\nCreator: Silly Teshii [patreon]\nCreator URL: https://pawchive.pw/patreon/user/152819670\nPost URL: https://pawchive.pw/patreon/user/152819670/post/7\nPublished: 2024-03-05\nTags: Metroid, Samus, metroid, samus\n\n--- Content ---\n\n\n--- Attached Files ---\n  preview.jpg\n"
+    ],
+    [
+     [
+      "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Untitled\\post_info.txt",
+      "4"
+     ],
+     "Title: Untitled\nPost ID: 4\nCreator: Silly Teshii [patreon]\nCreator URL: https://pawchive.pw/patreon/user/152819670\nPost URL: https://pawchive.pw/patreon/user/152819670/post/4\nPublished: 2024-03-05\n\n--- Content ---\n\n\n--- Attached Files ---\n  a.png\n  big.mp4\n  prev.jpg\n  thumb.png\n  x_low.jpg\n  kem.png\n"
     ]
    ],
    "writes": [
     [
      "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Text only\\post_info.txt",
-     "3",
-     "Title: Text only\nPost ID: 3\nCreator: Silly Teshii [patreon]\nCreator URL: https://pawchive.pw/patreon/user/152819670\nPost URL: https://pawchive.pw/patreon/user/152819670/post/3\nPublished: 2024-03-05\n\n--- Detected Password(s) ---\n  zz-top\n  comm1\n\n--- Content ---\nJust words. Mirror https://gofile.io/d/AbC pass: zz-top\n\n--- Comments ---\npw: comm1\n\n--- External Links ---\n  [GOFILE] https://gofile.io/d/AbC\n"
-    ]
-   ],
-   "harvested_links": {},
-   "harvested_records": [],
-   "unmatched_known": 0
-  }
- },
- {
-  "name": "tag folders",
-  "posts": [
-   {
-    "id": "1",
-    "user": "152819670",
-    "service": "patreon",
-    "title": "First post",
-    "published": "2024-03-05T10:00:00",
-    "file": {
-     "name": "cover.jpg",
-     "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000001.jpg"
-    },
-    "attachments": [
-     {
-      "name": "pic.png",
-      "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000002.png",
-      "bytes": 1000
-     },
-     {
-      "name": "pic.png",
-      "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000003.png"
-     },
-     {
-      "name": "clip.mp4",
-      "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000004.mp4",
-      "node": 2
-     },
-     {
-      "name": "pic.png",
-      "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000002.png"
-     },
-     {
-      "name": "doc.zip,",
-      "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000005.zip"
-     },
-     {
-      "name": "locked.png",
-      "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000006.png",
-      "locked": true
-     }
-    ],
-    "content": "Text <br> with password: hunter22 and <a href=\"https://mega.nz/file/x#y\">mega</a> <img src=\"https://img.pawchive.pw/thumbnail/data/00/00/0000000000000000000000000000000000000000000000000000000000000007.jpg\"> <iframe src=\"https://www.youtube.com/embed/abc\"></iframe>"
-   },
-   {
-    "id": "2",
-    "user": "152819670",
-    "service": "patreon",
-    "title": "First post",
-    "published": "2024-03-05T10:00:00",
-    "attachments": [
-     {
-      "name": "pic.png",
-      "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000008.png"
-     },
-     {
-      "name": "",
-      "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000009.webp",
-      "mimeType": "image/webp"
-     },
-     {
-      "path": "/00/00/000000000000000000000000000000000000000000000000000000000000000a",
-      "mimeType": "video/mp4; codecs=x"
-     },
-     {
-      "name": "noext",
-      "path": "/00/00/000000000000000000000000000000000000000000000000000000000000000b",
-      "mimeType": "audio/mpeg"
-     }
-    ]
-   },
-   {
-    "id": "3",
-    "user": "152819670",
-    "service": "patreon",
-    "title": "Text only",
-    "published": "2024-03-05T10:00:00",
-    "attachments": [],
-    "content": "Just words. Mirror https://gofile.io/d/AbC pass: zz-top",
-    "comments_text": "pw: comm1"
-   },
-   {
-    "id": "5",
-    "user": "152819670",
-    "service": "patreon",
-    "title": "Miku dance",
-    "published": "2024-03-05T10:00:00",
-    "file": {
-     "name": "Miku.mp4",
-     "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000011.mp4"
-    },
-    "attachments": [
-     {
-      "name": "Miku 2.mp4",
-      "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000012.mp4"
-     }
-    ],
-    "tags": [
-     "vocaloid",
-     "dance"
-    ],
-    "embed": {
-     "url": "https://vimeo.com/123456"
-    }
-   },
-   {
-    "id": "https://example.com/album/1",
-    "user": null,
-    "service": "patreon",
-    "title": "Album",
-    "published": null,
-    "attachments": [
-     {
-      "name": "pic.png",
-      "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000013.png"
-     }
-    ]
-   },
-   {
-    "id": "7",
-    "user": "152819670",
-    "service": "patreon",
-    "title": "Samus",
-    "published": "2024-03-05T10:00:00",
-    "file": {
-     "name": "preview.jpg",
-     "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000014.jpg"
-    },
-    "attachments": [],
-    "tags": "metroid,samus"
-   }
-  ],
-  "request": {
-   "creator": "Silly Teshii",
-   "service": "patreon",
-   "domain": "pawchive.pw",
-   "user_id": "152819670"
-  },
-  "options": {
-   "tag_folder_mode": true
-  },
-  "files": [],
-  "archived": [],
-  "result": {
-   "tasks": [
-    {
-     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000014.jpg?f=preview.jpg",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\metroid\\[2024-03-05] Samus\\preview.jpg",
-     "filename": "preview.jpg",
-     "post_title": "Samus",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "7",
-     "file_id": "7_/00/00/0000000000000000000000000000000000000000000000000000000000000014.jpg",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_7",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/7",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\metroid\\[2024-03-05] Samus\\post_info.txt"
-    },
-    {
-     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000011.mp4?f=Miku.mp4",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\vocaloid\\[2024-03-05] Miku dance\\Miku.mp4",
-     "filename": "Miku.mp4",
-     "post_title": "Miku dance",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "5",
-     "file_id": "5_/00/00/0000000000000000000000000000000000000000000000000000000000000011.mp4",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_5",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/5",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\vocaloid\\[2024-03-05] Miku dance\\post_info.txt"
-    },
-    {
-     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000012.mp4?f=Miku%202.mp4",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\vocaloid\\[2024-03-05] Miku dance\\Miku 2.mp4",
-     "filename": "Miku 2.mp4",
-     "post_title": "Miku dance",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "5",
-     "file_id": "5_/00/00/0000000000000000000000000000000000000000000000000000000000000012.mp4",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_5",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/5",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\vocaloid\\[2024-03-05] Miku dance\\post_info.txt"
-    },
-    {
-     "url": "https://vimeo.com/123456",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\vocaloid\\[2024-03-05] Miku dance\\embed_1_vimeocom.mp4",
-     "filename": "embed_1_vimeocom.mp4",
-     "post_title": "Miku dance",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "5",
-     "file_id": "embed_5_1",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": true,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_5",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/5",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\vocaloid\\[2024-03-05] Miku dance\\post_info.txt"
-    },
-    {
-     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000013.png?f=pic.png",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\Album\\pic.png",
-     "filename": "pic.png",
-     "post_title": "Album",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "https://example.com/album/1",
-     "file_id": "https://example.com/album/1_/00/00/0000000000000000000000000000000000000000000000000000000000000013.png",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_https://example.com/album/1",
-     "post_url": "https://pawchive.pw/patreon/post/https://example.com/album/1",
-     "post_date": "",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\Album\\post_info.txt"
-    },
-    {
-     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000002.png?f=pic.png",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post\\pic.png",
-     "filename": "pic.png",
-     "post_title": "First post",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "1",
-     "file_id": "1_/00/00/0000000000000000000000000000000000000000000000000000000000000002.png",
-     "file_size": 1000,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_1",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/1",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post\\post_info.txt"
-    },
-    {
-     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000003.png?f=pic_000003.png",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post\\pic_000003.png",
-     "filename": "pic_000003.png",
-     "post_title": "First post",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "1",
-     "file_id": "1_/00/00/0000000000000000000000000000000000000000000000000000000000000003.png",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_1",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/1",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post\\post_info.txt"
-    },
-    {
-     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000004.mp4?f=clip.mp4",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post\\clip.mp4",
-     "filename": "clip.mp4",
-     "post_title": "First post",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "1",
-     "file_id": "1_/00/00/0000000000000000000000000000000000000000000000000000000000000004.mp4",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_1",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/1",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [
-      "https://n2.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000004.mp4?f=clip.mp4"
-     ],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post\\post_info.txt"
-    },
-    {
-     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000005.zip?f=doc.zip",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post\\doc.zip",
-     "filename": "doc.zip",
-     "post_title": "First post",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "1",
-     "file_id": "1_/00/00/0000000000000000000000000000000000000000000000000000000000000005.zip",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_1",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/1",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post\\post_info.txt"
-    },
-    {
-     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000007.jpg?f=0000000000000000000000000000000000000000000000000000000000000007.jpg",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post\\0000000000000000000000000000000000000000000000000000000000000007.jpg",
-     "filename": "0000000000000000000000000000000000000000000000000000000000000007.jpg",
-     "post_title": "First post",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "1",
-     "file_id": "1_/00/00/0000000000000000000000000000000000000000000000000000000000000007.jpg",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_1",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/1",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post\\post_info.txt"
-    },
-    {
-     "url": "https://www.youtube.com/embed/abc",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post\\embed_1_wwwyoutubecom.mp4",
-     "filename": "embed_1_wwwyoutubecom.mp4",
-     "post_title": "First post",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "1",
-     "file_id": "embed_1_1",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": true,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_1",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/1",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post\\post_info.txt"
-    },
-    {
-     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000008.png?f=pic.png",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post [2]\\pic.png",
-     "filename": "pic.png",
-     "post_title": "First post",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "2",
-     "file_id": "2_/00/00/0000000000000000000000000000000000000000000000000000000000000008.png",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_2",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/2",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post [2]\\post_info.txt"
-    },
-    {
-     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000009.webp?f=file_2.webp",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post [2]\\file_2.webp",
-     "filename": "file_2.webp",
-     "post_title": "First post",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "2",
-     "file_id": "2_/00/00/0000000000000000000000000000000000000000000000000000000000000009.webp",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_2",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/2",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post [2]\\post_info.txt"
-    },
-    {
-     "url": "https://file.pawchive.pw/data/00/00/000000000000000000000000000000000000000000000000000000000000000a?f=file_3.mp4",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post [2]\\file_3.mp4",
-     "filename": "file_3.mp4",
-     "post_title": "First post",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "2",
-     "file_id": "2_/00/00/000000000000000000000000000000000000000000000000000000000000000a",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_2",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/2",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post [2]\\post_info.txt"
-    },
-    {
-     "url": "https://file.pawchive.pw/data/00/00/000000000000000000000000000000000000000000000000000000000000000b?f=noext.mp3",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post [2]\\noext.mp3",
-     "filename": "noext.mp3",
-     "post_title": "First post",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "2",
-     "file_id": "2_/00/00/000000000000000000000000000000000000000000000000000000000000000b",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_2",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/2",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post [2]\\post_info.txt"
-    }
-   ],
-   "pending_post_infos": [
-    [
-     [
-      "{BASE}\\Silly Teshii [patreon]\\Untagged\\Album\\post_info.txt",
-      "https://example.com/album/1"
-     ],
-     "Title: Album\nPost ID: https://example.com/album/1\nCreator: Silly Teshii [patreon]\nCreator URL: https://pawchive.pw/patreon\nPost URL: https://pawchive.pw/patreon/post/https://example.com/album/1\nPublished: \n\n--- Content ---\n\n\n--- Attached Files ---\n  pic.png\n"
-    ],
-    [
-     [
-      "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post [2]\\post_info.txt",
-      "2"
-     ],
-     "Title: First post\nPost ID: 2\nCreator: Silly Teshii [patreon]\nCreator URL: https://pawchive.pw/patreon/user/152819670\nPost URL: https://pawchive.pw/patreon/user/152819670/post/2\nPublished: 2024-03-05\n\n--- Content ---\n\n\n--- Attached Files ---\n  pic.png\n  noext\n"
-    ],
-    [
-     [
-      "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] First post\\post_info.txt",
-      "1"
-     ],
-     "Title: First post\nPost ID: 1\nCreator: Silly Teshii [patreon]\nCreator URL: https://pawchive.pw/patreon/user/152819670\nPost URL: https://pawchive.pw/patreon/user/152819670/post/1\nPublished: 2024-03-05\n\n--- Detected Password(s) ---\n  hunter22\n\n--- Content ---\nText \n with password: hunter22 and mega\n\n--- Attached Files ---\n  cover.jpg\n  pic.png\n  pic.png\n  clip.mp4\n  doc.zip\n  locked.png\n\n--- External Links ---\n  [MEGA] https://mega.nz/file/x#y\n  [OTHER] https://www.youtube.com/embed/abc\n\n--- Embedded Media ---\n  https://www.youtube.com/embed/abc\n"
-    ],
-    [
-     [
-      "{BASE}\\Silly Teshii [patreon]\\metroid\\[2024-03-05] Samus\\post_info.txt",
-      "7"
-     ],
-     "Title: Samus\nPost ID: 7\nCreator: Silly Teshii [patreon]\nCreator URL: https://pawchive.pw/patreon/user/152819670\nPost URL: https://pawchive.pw/patreon/user/152819670/post/7\nPublished: 2024-03-05\nTags: Metroid, Samus, metroid, samus\n\n--- Content ---\n\n\n--- Attached Files ---\n  preview.jpg\n"
-    ],
-    [
-     [
-      "{BASE}\\Silly Teshii [patreon]\\vocaloid\\[2024-03-05] Miku dance\\post_info.txt",
-      "5"
-     ],
-     "Title: Miku dance\nPost ID: 5\nCreator: Silly Teshii [patreon]\nCreator URL: https://pawchive.pw/patreon/user/152819670\nPost URL: https://pawchive.pw/patreon/user/152819670/post/5\nPublished: 2024-03-05\nTags: Vocaloid, Hatsune Miku, vocaloid, dance\n\n--- Content ---\n\n\n--- Attached Files ---\n  Miku.mp4\n  Miku 2.mp4\n\n--- External Links ---\n  [OTHER] https://vimeo.com/123456\n\n--- Embedded Media ---\n  https://vimeo.com/123456\n"
-    ]
-   ],
-   "writes": [
-    [
-     "{BASE}\\Silly Teshii [patreon]\\Untagged\\[2024-03-05] Text only\\post_info.txt",
      "3",
      "Title: Text only\nPost ID: 3\nCreator: Silly Teshii [patreon]\nCreator URL: https://pawchive.pw/patreon/user/152819670\nPost URL: https://pawchive.pw/patreon/user/152819670/post/3\nPublished: 2024-03-05\n\n--- Detected Password(s) ---\n  zz-top\n  comm1\n\n--- Content ---\nJust words. Mirror https://gofile.io/d/AbC pass: zz-top\n\n--- Comments ---\npw: comm1\n\n--- External Links ---\n  [GOFILE] https://gofile.io/d/AbC\n"
     ]
@@ -12682,12 +12204,12 @@
    "pending_post_infos": [],
    "writes": [],
    "harvested_links": {
+    "mega": [
+     "https://mega.nz/file/x#y"
+    ],
     "other": [
      "https://vimeo.com/123456",
      "https://www.youtube.com/embed/abc"
-    ],
-    "mega": [
-     "https://mega.nz/file/x#y"
     ],
     "gofile": [
      "https://gofile.io/d/AbC"
@@ -21515,336 +21037,6 @@
       "c1"
      ],
      "Title: Cum post\nPost ID: c1\nCreator: Cum Creator [onlyfans]\nCreator URL: https://cum.st/onlyfans/user/ccc\nPost URL: https://cum.st/onlyfans/user/ccc/post/c1\nPublished: 2023-01-02\n\n--- Content ---\n\n\n--- Attached Files ---\n  vid.mp4\n  e1.jpg\n  plain.gif\n"
-    ]
-   ],
-   "writes": [],
-   "harvested_links": {},
-   "harvested_records": [],
-   "unmatched_known": 0
-  }
- },
- {
-  "name": "video length",
-  "posts": [
-   {
-    "id": "d1",
-    "user": "152819670",
-    "service": "patreon",
-    "title": "Short",
-    "published": "2024-03-05T10:00:00",
-    "attachments": [
-     {
-      "name": "short.mp4",
-      "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000016.mp4"
-     }
-    ]
-   },
-   {
-    "id": "d2",
-    "user": "152819670",
-    "service": "patreon",
-    "title": "Long",
-    "published": "2024-03-05T10:00:00",
-    "attachments": [
-     {
-      "name": "long.mp4",
-      "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000017.mp4"
-     },
-     {
-      "name": "pic.png",
-      "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000018.png"
-     }
-    ]
-   },
-   {
-    "id": "d3",
-    "user": "152819670",
-    "service": "patreon",
-    "title": "Pictures",
-    "published": "2024-03-05T10:00:00",
-    "attachments": [
-     {
-      "name": "pic.png",
-      "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000019.png"
-     }
-    ]
-   }
-  ],
-  "request": {
-   "creator": "Silly Teshii",
-   "service": "patreon",
-   "domain": "pawchive.pw",
-   "user_id": "152819670"
-  },
-  "options": {
-   "video_duration_filter_enabled": true,
-   "min_video_duration": "1:00"
-  },
-  "files": [],
-  "archived": [],
-  "result": {
-   "tasks": [
-    {
-     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000016.mp4?f=short.mp4",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Short\\short.mp4",
-     "filename": "short.mp4",
-     "post_title": "Short",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "d1",
-     "file_id": "d1_/00/00/0000000000000000000000000000000000000000000000000000000000000016.mp4",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_d1",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/d1",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Short\\post_info.txt"
-    },
-    {
-     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000017.mp4?f=long.mp4",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Long\\long.mp4",
-     "filename": "long.mp4",
-     "post_title": "Long",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "d2",
-     "file_id": "d2_/00/00/0000000000000000000000000000000000000000000000000000000000000017.mp4",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_d2",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/d2",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Long\\post_info.txt"
-    },
-    {
-     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000018.png?f=pic.png",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Long\\pic.png",
-     "filename": "pic.png",
-     "post_title": "Long",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "d2",
-     "file_id": "d2_/00/00/0000000000000000000000000000000000000000000000000000000000000018.png",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_d2",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/d2",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Long\\post_info.txt"
-    }
-   ],
-   "pending_post_infos": [
-    [
-     [
-      "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Long\\post_info.txt",
-      "d2"
-     ],
-     "Title: Long\nPost ID: d2\nCreator: Silly Teshii [patreon]\nCreator URL: https://pawchive.pw/patreon/user/152819670\nPost URL: https://pawchive.pw/patreon/user/152819670/post/d2\nPublished: 2024-03-05\n\n--- Content ---\n\n\n--- Attached Files ---\n  long.mp4\n  pic.png\n"
-    ],
-    [
-     [
-      "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Short\\post_info.txt",
-      "d1"
-     ],
-     "Title: Short\nPost ID: d1\nCreator: Silly Teshii [patreon]\nCreator URL: https://pawchive.pw/patreon/user/152819670\nPost URL: https://pawchive.pw/patreon/user/152819670/post/d1\nPublished: 2024-03-05\n\n--- Content ---\n\n\n--- Attached Files ---\n  short.mp4\n"
-    ]
-   ],
-   "writes": [],
-   "harvested_links": {},
-   "harvested_records": [],
-   "unmatched_known": 0
-  }
- },
- {
-  "name": "video length max",
-  "posts": [
-   {
-    "id": "d1",
-    "user": "152819670",
-    "service": "patreon",
-    "title": "Short",
-    "published": "2024-03-05T10:00:00",
-    "attachments": [
-     {
-      "name": "short.mp4",
-      "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000016.mp4"
-     }
-    ]
-   },
-   {
-    "id": "d2",
-    "user": "152819670",
-    "service": "patreon",
-    "title": "Long",
-    "published": "2024-03-05T10:00:00",
-    "attachments": [
-     {
-      "name": "long.mp4",
-      "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000017.mp4"
-     },
-     {
-      "name": "pic.png",
-      "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000018.png"
-     }
-    ]
-   },
-   {
-    "id": "d3",
-    "user": "152819670",
-    "service": "patreon",
-    "title": "Pictures",
-    "published": "2024-03-05T10:00:00",
-    "attachments": [
-     {
-      "name": "pic.png",
-      "path": "/00/00/0000000000000000000000000000000000000000000000000000000000000019.png"
-     }
-    ]
-   }
-  ],
-  "request": {
-   "creator": "Silly Teshii",
-   "service": "patreon",
-   "domain": "pawchive.pw",
-   "user_id": "152819670"
-  },
-  "options": {
-   "video_duration_filter_enabled": true,
-   "max_video_duration": "0:30"
-  },
-  "files": [],
-  "archived": [],
-  "result": {
-   "tasks": [
-    {
-     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000016.mp4?f=short.mp4",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Short\\short.mp4",
-     "filename": "short.mp4",
-     "post_title": "Short",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "d1",
-     "file_id": "d1_/00/00/0000000000000000000000000000000000000000000000000000000000000016.mp4",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_d1",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/d1",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Short\\post_info.txt"
-    },
-    {
-     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000017.mp4?f=long.mp4",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Long\\long.mp4",
-     "filename": "long.mp4",
-     "post_title": "Long",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "d2",
-     "file_id": "d2_/00/00/0000000000000000000000000000000000000000000000000000000000000017.mp4",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_d2",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/d2",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Long\\post_info.txt"
-    },
-    {
-     "url": "https://file.pawchive.pw/data/00/00/0000000000000000000000000000000000000000000000000000000000000018.png?f=pic.png",
-     "target_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Long\\pic.png",
-     "filename": "pic.png",
-     "post_title": "Long",
-     "creator_name": "Silly Teshii",
-     "service": "patreon",
-     "post_id": "d2",
-     "file_id": "d2_/00/00/0000000000000000000000000000000000000000000000000000000000000018.png",
-     "file_size": 0,
-     "downloaded_bytes": 0,
-     "status": "pending",
-     "error_msg": "",
-     "retry_count": 0,
-     "is_ytdlp": false,
-     "is_telegram": false,
-     "telegram_channel_id": "",
-     "telegram_message_id": 0,
-     "batch_id": "patreon_Silly Teshii_d2",
-     "post_url": "https://pawchive.pw/patreon/user/152819670/post/d2",
-     "post_date": "2024-03-05",
-     "user_id": "152819670",
-     "expected_sha256": "",
-     "fallback_urls": [],
-     "used_preview": false,
-     "post_info_path": "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Long\\post_info.txt"
-    }
-   ],
-   "pending_post_infos": [
-    [
-     [
-      "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Long\\post_info.txt",
-      "d2"
-     ],
-     "Title: Long\nPost ID: d2\nCreator: Silly Teshii [patreon]\nCreator URL: https://pawchive.pw/patreon/user/152819670\nPost URL: https://pawchive.pw/patreon/user/152819670/post/d2\nPublished: 2024-03-05\n\n--- Content ---\n\n\n--- Attached Files ---\n  long.mp4\n  pic.png\n"
-    ],
-    [
-     [
-      "{BASE}\\Silly Teshii [patreon]\\[2024-03-05] Short\\post_info.txt",
-      "d1"
-     ],
-     "Title: Short\nPost ID: d1\nCreator: Silly Teshii [patreon]\nCreator URL: https://pawchive.pw/patreon/user/152819670\nPost URL: https://pawchive.pw/patreon/user/152819670/post/d1\nPublished: 2024-03-05\n\n--- Content ---\n\n\n--- Attached Files ---\n  short.mp4\n"
     ]
    ],
    "writes": [],
