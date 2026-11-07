@@ -82,6 +82,11 @@ pub struct Task {
     pub fallback_urls: Vec<String>,
     /// post_info.txt to write once this post's first file is saved
     pub post_info_path: String,
+    #[serde(default)]
+    pub is_telegram: bool,
+    /// The queue's name for this file (the app's own task object)
+    #[serde(default)]
+    pub key: String,
 }
 
 impl Task {
@@ -994,6 +999,8 @@ pub fn build(posts: &[Value], o: &Options, r: &Request, ctx: &dyn Lookups) -> Pl
                 user_id,
                 fallback_urls: cands.get(1..).map(<[String]>::to_vec).unwrap_or_default(),
                 post_info_path: String::new(),
+                is_telegram: false,
+                key: String::new(),
             });
         }
 
@@ -1190,6 +1197,7 @@ pub fn write_post_info(path: &str, content: &str, post_id: &str) {
 pub fn task_dict(t: &Task, o: &Options) -> Value {
     let mut m: Map<String, Value> = serde_json::to_value(t).unwrap().as_object().cloned().unwrap();
     m.remove("post_info_path");
+    m.remove("key");
     m.insert("filename".into(), json!(basename(&t.target_path)));
     for (k, v) in [("downloaded_bytes", json!(0)), ("status", json!("pending")), ("error_msg", json!("")), ("retry_count", json!(0)), ("is_telegram", json!(false)), ("telegram_channel_id", json!("")), ("telegram_message_id", json!(0)), ("used_preview", json!(false))] {
         m.insert(k.into(), v);

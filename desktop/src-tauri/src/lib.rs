@@ -62,6 +62,10 @@ pub fn run() {
             let transfer = transfer::start()?;
             engine.set_env("PAWCHIVE_TRANSFER_URL", &transfer.url);
             engine.set_env("PAWCHIVE_TRANSFER_TOKEN", &transfer.token);
+            // The download queue the Python app hands its downloads to
+            let queue = downloader::service::start()?;
+            engine.set_env("PAWCHIVE_QUEUE_URL", &queue.url);
+            engine.set_env("PAWCHIVE_QUEUE_TOKEN", &queue.token);
             engine.start()?;
             // Thumbnails, pictures and files for the UI
             let media = media::start()?;

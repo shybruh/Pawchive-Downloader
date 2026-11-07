@@ -424,7 +424,7 @@ pub fn download(c: &Cell, o: &Options, hooks: &dyn Hooks, ctl: &Ctl) -> (bool, S
         return (false, "Cancelled".into());
     }
 
-    if task.is_ytdlp || task.url.starts_with("tg://") || task.service == "telegram" {
+    if task.is_ytdlp || task.is_telegram || task.url.starts_with("tg://") || task.service == "telegram" {
         return hooks.special(c, o, ctl);
     }
 
@@ -877,15 +877,18 @@ fn finalize(c: &Cell, o: &Options, hooks: &dyn Hooks, ctl: &Ctl, part_path: &str
         }
     }
     // The checksum, before any post-processing changes the bytes
-    if let Some(problem) = verify_hash(&task, part_path, sha.as_deref(), strict) {
-        remove_quietly(part_path);
+    let verified = match verify_hash(&task, part_path, sha.as_deref(), strict) {
+        Ok(v) => v,
+        Err(problem) => {
+            remove_quietly(part_path);
         ctl.sub_bytes(c.lock().unwrap().st.downloaded_bytes);
         set(&|it| {
             it.st.downloaded_bytes = 0;
             it.st.progress_pct = 0;
         });
-        return (false, problem);
-    }
+            return (false, problem);
+        }
+    };
     // One step: an older small copy under the same name stays until the full file replaces it
     if std::fs::rename(part_path, &task.target_path).is_err() {
         let _ = std::fs::remove_file(&task.target_path);
@@ -906,37 +909,38 @@ fn finalize(c: &Cell, o: &Options, hooks: &dyn Hooks, ctl: &Ctl, part_path: &str
     if delay > 0.0 {
         ctl.nap(delay);
     }
-    (true, "Success".into())
+    // "Success" — with what checked it, for the log
+    (true, verified.map(|a| format!("Success, {a} verified")).unwrap_or_else(|| "Success".into()))
 }
 
-/// A damaged file: Some(message). Only the content hash in a Pawchive file name counts, and only
+/// Err(message) for a damaged file; Ok(Some("SHA-256" / "MD5")) when the checksum matched. Only the content hash in a Pawchive file name counts, and only
 /// when `strict` (the size couldn't confirm the file, or pieces of two attempts were joined).
-fn verify_hash(t: &Task, path: &str, precomputed: Option<&str>, strict: bool) -> Option<String> {
+fn verify_hash(t: &Task, path: &str, precomputed: Option<&str>, strict: bool) -> Result<Option<&'static str>, String> {
     let url_hash = content_hash_from_url(&t.url);
     let raw = if url_hash.is_empty() { t.expected_sha256.trim().to_lowercase() } else { url_hash.clone() };
     if raw.is_empty() || !Path::new(path).exists() {
-        return None;
+        return Ok(None);
     }
     let hex = raw.chars().all(|c| c.is_ascii_hexdigit());
     let sha = match raw.len() {
         64 if hex => true,
         32 if hex => false,
-        _ => return None,
+        _ => return Ok(None),
     };
     let ext = super::py::splitext(&t.target_path.to_lowercase()).1.to_string();
     let is_video = [".mp4", ".mkv", ".webm", ".mov", ".m4v", ".avi"].contains(&ext.as_str());
     if (t.url.contains("cum.st/media/") || t.url.contains("e1.cum.st") || t.url.contains("cdn.cum.st")) && is_video {
-        return None;
+        return Ok(None);
     }
     let computed = match precomputed.filter(|_| sha) {
         Some(h) => h.to_lowercase(),
         None => {
-            let mut file = std::fs::File::open(path).ok()?;
+            let Ok(mut file) = std::fs::File::open(path) else { return Ok(None) };
             let mut buf = vec![0u8; 1 << 20];
             let mut s256 = Sha256::new();
             let mut m5 = Md5::new();
             loop {
-                let n = file.read(&mut buf).ok()?;
+                let Ok(n) = file.read(&mut buf) else { return Ok(None) };
                 if n == 0 {
                     break;
                 }
@@ -950,5 +954,11 @@ fn verify_hash(t: &Task, path: &str, precomputed: Option<&str>, strict: bool) ->
             bytes.iter().map(|b| format!("{b:02x}")).collect()
         }
     };
-    (computed != raw && !url_hash.is_empty() && strict).then(|| "The file arrived damaged (checksum mismatch); it downloads again on retry".into())
+    if computed == raw {
+        Ok(Some(if sha { "SHA-256" } else { "MD5" }))
+    } else if !url_hash.is_empty() && strict {
+        Err("The file arrived damaged (checksum mismatch); it downloads again on retry".into())
+    } else {
+        Ok(None)
+    }
 }

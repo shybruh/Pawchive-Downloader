@@ -272,7 +272,10 @@ class AppBridge(QObject):
             enabled=self._enable_download_archive
         )
         self.archive_manager.on_repair_finished = self._on_archive_repaired
-        self.downloader = FileDownloader(
+        # Downloads run in the desktop shell's Rust engine when it's there (services/rust_queue.py)
+        from services import rust_queue
+        downloader_class = rust_queue.RustDownloader if rust_queue.available() else FileDownloader
+        self.downloader = downloader_class(
             known_manager=self.known_manager,
             session_manager=self.session_manager,
             max_workers=4,

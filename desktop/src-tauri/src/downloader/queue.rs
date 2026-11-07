@@ -52,7 +52,7 @@ const FATAL_AUTH: &[&str] = &["key is not registered", "session expired", "sessi
 const ACTIVE: &[&str] = &["pending", "downloading", "retrying"];
 
 fn is_telegram(t: &Task) -> bool {
-    t.service == "telegram" || t.url.starts_with("tg://")
+    t.is_telegram || t.service == "telegram" || t.url.starts_with("tg://")
 }
 
 fn is_404(it: &Item) -> bool {
@@ -293,6 +293,73 @@ impl Queue {
     /// Replaces the whole queue (a restored session)
     pub fn set_items(&self, cells: Vec<Cell>) {
         *self.items.lock().unwrap() = cells;
+    }
+
+    /// The app's queue as it is now, by key: files already here keep their download state (the
+    /// app reports status changes separately), new ones come with theirs, missing ones leave
+    /// (unless they're being downloaded)
+    /// With `replace_state` (before a run starts) the app's statuses win for every file.
+    pub fn sync(&self, incoming: Vec<(Task, fetch::State, Option<Arc<Options>>)>, replace_state: bool) {
+        let mut items = self.items.lock().unwrap();
+        let mut by_key: HashMap<String, Cell> = items.drain(..).map(|c| {
+            let k = c.lock().unwrap().task.key.clone();
+            (k, c)
+        }).collect();
+        let mut out = Vec::with_capacity(incoming.len());
+        for (task, st, o) in incoming {
+            match by_key.remove(&task.key) {
+                Some(c) => {
+                    {
+                        let mut it = c.lock().unwrap();
+                        if o.is_some() {
+                            it.options = o;
+                        }
+                        if it.st.status != "downloading" {
+                            it.task = task;
+                            if replace_state {
+                                it.st = st;
+                            }
+                        }
+                    }
+                    out.push(c);
+                }
+                None => out.push(Arc::new(Mutex::new(Item { task, st, options: o }))),
+            }
+        }
+        out.extend(by_key.into_values().filter(|c| c.lock().unwrap().st.status == "downloading"));
+        *items = out;
+    }
+
+    pub fn find_key(&self, key: &str) -> Option<Cell> {
+        self.cells().into_iter().find(|c| c.lock().unwrap().task.key == key)
+    }
+
+    /// The app changed a file's status (paused, cancelled, put back in line…)
+    pub fn set_state(&self, key: &str, status: &str, error_msg: Option<&str>, retry_count: Option<u32>) {
+        let Some(c) = self.find_key(key) else { return };
+        let mut it = c.lock().unwrap();
+        it.st.status = status.into();
+        if let Some(e) = error_msg {
+            it.st.error_msg = e.into();
+        }
+        if let Some(n) = retry_count {
+            it.st.retry_count = n;
+        }
+        if status == "pending" {
+            drop(it);
+            self.rescan();
+        }
+    }
+
+    pub fn set_batch_paused(&self, batch: &str, paused: bool) {
+        let mut b = self.ctl.paused_batches.lock().unwrap();
+        if paused {
+            b.insert(batch.into());
+        } else {
+            b.remove(batch);
+            drop(b);
+            self.rescan();
+        }
     }
 
     /// Starts downloading the queue's pending files
@@ -914,8 +981,35 @@ impl Queue {
         self.finish_run(&options);
     }
 
+    /// One line in the log for a file's result, as the Python downloader wrote them
+    fn log_result(&self, c: &Cell, ok: bool, msg: &str) {
+        let (name, size) = {
+            let it = c.lock().unwrap();
+            (basename(&it.task.target_path).to_string(), it.task.file_size.max(it.st.downloaded_bytes as i64))
+        };
+        let mb = size as f64 / 1048576.0;
+        if ok {
+            if let Some(rest) = msg.strip_prefix("Success") {
+                let check = rest.trim_start_matches(", ");
+                let check = if check.is_empty() { String::new() } else { format!(", {check}") };
+                self.hooks.log("success", &format!("✔ {name}  ({mb:.2} MB saved{check})"));
+            } else if msg == "Already downloaded" {
+                self.hooks.log("info", &format!("⏳ Skipping existing file: '{name}' (already present on disk)"));
+            } else if msg == "Already archived" {
+                self.hooks.log("info", &format!("📦 Skipping archived file: '{name}' (present in download archive)"));
+            } else if let Some(why) = msg.strip_prefix("Skipped:") {
+                self.hooks.log("info", &format!("⏭️ Skipping {name}: {}", why.trim()));
+            }
+        } else if msg.starts_with("429_RATE_LIMIT") {
+            self.hooks.log("warning", &format!("⚠ {name}: HTTP 429 Too Many Requests (Rate limited)"));
+        } else if !["Cancelled", "Batch paused by user", "Paused"].contains(&msg) {
+            self.hooks.log("warning", &format!("✖ {name}: {msg}"));
+        }
+    }
+
     /// What happens when a file's download ends
     fn file_done(&self, c: &Cell, ok: bool, msg: &str, successes: &mut usize, locked: bool) {
+        self.log_result(c, ok, msg);
         let task = c.lock().unwrap().task.clone();
         if ok {
             let skipped = {

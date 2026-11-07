@@ -271,6 +271,10 @@ from core.audio_tagger import AudioTagger
 from services.telegram_service import TelegramService
 
 
+# Told about every status change of a task (services/rust_queue.py passes them to the Rust queue)
+status_listener: Optional[Callable[[Any], None]] = None
+
+
 class StatusCounter:
     """How many tasks are in each status, kept up to date as statuses change (DownloadTask.status).
     Counting a big queue by looping over it a few times a second used a lot of CPU and, holding
@@ -322,6 +326,8 @@ class DownloadTask:
             c = d.get("_counter")
             if c is not None and d.get("_counter_gen") == c.gen:
                 c.move(old, value, self)
+            if status_listener is not None:
+                status_listener(self)
 
     def __init__(
         self,
