@@ -3845,11 +3845,6 @@ class AppBridge(QObject):
         except Exception:
             pass
         try:
-            from services.multipart_downloader import cancel_all_multipart
-            cancel_all_multipart()
-        except Exception:
-            pass
-        try:
             if hasattr(self.downloader, "ytdlp_manager") and self.downloader.ytdlp_manager:
                 self.downloader.ytdlp_manager.cancel_all()
         except Exception:

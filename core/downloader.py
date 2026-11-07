@@ -264,7 +264,7 @@ def _write_post_info(path: str, content: str, post_id: str = "") -> None:
         logger.debug(f"Could not save {path}: {ex}", category="file")
 
 
-from services.multipart_downloader import download_multipart_file
+from services import transfer_client
 from services.link_extractor import LinkExtractor
 from services.ytdlp_manager import YtDlpManager
 from core.audio_tagger import AudioTagger
@@ -574,12 +574,7 @@ class FileDownloader:
         except Exception:
             pass
 
-        # 2. Instantly abort all active multipart downloads (Bunkr, Pawchive, cum.st, Erome, etc.)
-        try:
-            from services.multipart_downloader import cancel_all_multipart
-            cancel_all_multipart()
-        except Exception:
-            pass
+        # (file transfers in the download engine stop on their own: they check for cancel)
 
         # 3. Instantly kill all active yt-dlp child processes
         try:
@@ -3384,7 +3379,10 @@ class FileDownloader:
         existing_size = 0
         mode = "wb"
         range_headers = {}
-        if os.path.exists(part_path):
+        # The download engine's record of which 8 MB chunks are already on disk: it resumes from
+        # those itself, so the probe below asks for the file from the start
+        has_journal = os.path.exists(part_path + ".chunks")
+        if os.path.exists(part_path) and not has_journal:
             existing_size = os.path.getsize(part_path)
             if task.file_size > 0 and existing_size > task.file_size:
                 _remove_quietly(part_path)      # bigger than the file itself: not a usable start
@@ -3396,7 +3394,7 @@ class FileDownloader:
                     f"  ↪ Resume: {task.filename}  already have {existing_size // 1024}KB",
                     category="file"
                 )
-        resumed = existing_size > 0
+        resumed = existing_size > 0 or has_journal
 
         # Unsupported sites are skipped, also for files queued before
         # Automatically migrate any legacy e1.cum.st URLs to the modern cdn.cum.st endpoint
@@ -3759,279 +3757,110 @@ class FileDownloader:
             except Exception:
                 pass
 
-            # ── Fast-path: Multipart chunking for large files (>= 25 MB) ─────
-            # NOTE: For Pawchive, we intentionally use 1 continuous resumable stream
-            # to protect their storage backend from multi-socket connection exhaustion.
+            # ── The transfer: the desktop shell's download engine ───────────────
+            # 8 MB chunks recorded as they finish (an interruption resumes from the last good
+            # chunk), retries on dropped connections. Pawchive asks for one continuous stream per
+            # file; other hosts get parallel connections for big files.
             accept_ranges = resp.headers.get("Accept-Ranges", "").lower()
+            ranges_ok = status == 206 or "bytes" in accept_ranges
             is_pawchive = "pawchive" in (task.url or "").lower() or (getattr(task, "service", None) and "pawchive" in str(task.service).lower())
-            if not is_pawchive and task.file_size >= 25 * 1024 * 1024 and existing_size == 0 and ("bytes" in accept_ranges or status == 206):
-                resp.close()
-                resp = None
-                logger.info(f"  ⚡ Activating 4-part parallel chunked download for {task.filename} ({size_str})", category="file")
-
-                _prev_mp_bytes = [0]
-                _last_mp_emit = [time.time()]
-                _last_mp_speed_bytes = [0]
-
-                def _on_mp_progress(curr_bytes: int, total_b: int):
-                    if curr_bytes < _prev_mp_bytes[0]:
-                        _prev_mp_bytes[0] = curr_bytes
-                    else:
-                        delta = curr_bytes - _prev_mp_bytes[0]
-                        if delta > 0:
-                            with self._lock:
-                                self.downloaded_bytes += delta
-                            _prev_mp_bytes[0] = curr_bytes
-
-                    task.downloaded_bytes = curr_bytes
-                    if total_b > 0:
-                        task.file_size = total_b
-                        task.progress_pct = min(99, int(curr_bytes / total_b * 100))
-
-                    now_poll = time.time()
-                    dt_poll = now_poll - _last_mp_emit[0]
-                    if dt_poll >= 1.0:
-                        bytes_diff = max(0, curr_bytes - _last_mp_speed_bytes[0])
-                        _last_mp_speed_bytes[0] = curr_bytes
-                        _last_mp_emit[0] = now_poll
-
-                        if task.file_size > 0:
-                            spd_bps = max(0.0, bytes_diff / max(0.1, dt_poll))
-                            task.speed_bps = int(spd_bps)
-                            task.speed_str = FileDownloader.format_speed(task.speed_bps)
-                            if task.speed_bps > 0:
-                                rem = max(0, task.file_size - curr_bytes)
-                                s = int(rem / task.speed_bps)
-                                task.eta_str = f"{s//60}m {s%60}s" if s > 60 else f"{s}s"
-                            else:
-                                task.eta_str = "--"
-
-                        stats = self._queue_stats(now_poll)
-                        completed_c = int(stats.get("done_n", 0))
-                        failed_c = sum(1 for t in self.tasks if t.status == "failed")
-                        self._emit_progress(completed_c, failed_c, len(self.tasks))
-
-                        if self.on_task_status_changed:
-                            self.on_task_status_changed(task)
-
-                mp_ok, mp_err = download_multipart_file(
-                    url=task.url,
-                    target_path=task.target_path,
-                    headers=req_headers,
-                    num_chunks=4,
-                    progress_callback=_on_mp_progress,
-                    cancel_event=self._cancel_event,
-                    pause_event=self._pause_event,
-                    timeout=(25, 60),
-                    session=session
-                )
-
-                if mp_ok:
-                    final_mp_size = os.path.getsize(task.target_path) if os.path.exists(task.target_path) else 0
-                    if task.file_size > 0 and final_mp_size == 0:
-                        if os.path.exists(task.target_path):
-                            try:
-                                os.remove(task.target_path)
-                            except OSError:
-                                pass
-                        mp_ok = False
-                        mp_err = "Multipart download resulted in empty 0-byte file"
-                    else:
-                        if final_mp_size > 0 and options:
-                            keep_file, f_reason = FilterEngine.should_keep_file(task.filename, options, file_size=final_mp_size)
-                            if not keep_file:
-                                if os.path.exists(task.target_path):
-                                    try:
-                                        os.remove(task.target_path)
-                                    except OSError:
-                                        pass
-                                with self._lock:
-                                    self.downloaded_bytes = max(0, self.downloaded_bytes - task.downloaded_bytes)
-                                size_disp = FilterEngine.format_size_str(final_mp_size)
-                                logger.info(f"⏭️ Skipping {task.filename} ({size_disp}): {f_reason}", category="filter")
-                                task.status = "skipped"
-                                task.error_msg = f_reason
-                                task.progress_pct = 100
-                                task.eta_str = "Skipped"
-                                if self.on_task_status_changed:
-                                    self.on_task_status_changed(task)
-                                return True, f"Skipped: {f_reason}"
-
-                        problem = self._verify_file_hash(task, final_mp_size)
-                        if problem:
-                            _remove_quietly(task.target_path)
-                            logger.error(f"  ✖ {task.filename}: {problem}", category="file", details=self._task_context(task))
-                            return False, problem
-                        self._post_process_downloaded_file(task, options)
-                        task.status = "completed"
-                        task.downloaded_bytes = task.file_size
-                        task.progress_pct = 100
-                        if self.on_task_status_changed:
-                            self.on_task_status_changed(task)
-                        return True, "Completed"
-
-                if not mp_ok:
-                    if self._cancel_event.is_set():
-                        return False, "Cancelled"
-
-                    # Clean up temporary file from multipart attempt
-                    if os.path.exists(f"{task.target_path}.tmp"):
-                        try:
-                            os.remove(f"{task.target_path}.tmp")
-                        except OSError:
-                            pass
-
-                    # Reset task progress tracking
-                    with self._lock:
-                        if task.downloaded_bytes > 0:
-                            self.downloaded_bytes = max(0, self.downloaded_bytes - task.downloaded_bytes)
-                    task.downloaded_bytes = 0
-                    task.progress_pct = 0
-                    task.speed_bps = 0
-                    task.speed_str = "0 KB/s"
-                    task.eta_str = "--"
-
-                    if "Disk full" in mp_err:
-                        return False, mp_err
-
-                    logger.info(f"  ↪ Multipart fallback: {mp_err} — switching to standard single stream download...", category="file")
-                    existing_size = 0
-                    mode = "wb"
-                    resumed = False
-
-                    # Re-acquire single stream response stream since resp was closed for multipart
-                    try:
-                        resp = session.get(task.url, stream=True, timeout=(25, 60), headers=req_headers)
-                        if resp.status_code not in (200, 206):
-                            clean_resp = requests.get(task.url, stream=True, timeout=(25, 60), headers=browser_headers)
-                            if clean_resp.status_code in (200, 206):
-                                resp.close()
-                                resp = clean_resp
-                            else:
-                                clean_resp.close()
-                        if resp.status_code not in (200, 206):
-                            msg = f"HTTP {resp.status_code} on single-stream fallback"
-                            logger.warning(f"  ✖ {task.filename}: {msg}", category="file", details=self._task_context(task))
-                            resp.close()
-                            resp = None
-                            return False, msg
-                    except Exception as ex:
-                        if resp:
-                            try:
-                                resp.close()
-                            except Exception:
-                                pass
-                            resp = None
-                        msg = f"Single-stream fallback connection error: {ex}"
-                        logger.error(f"  ✖ {task.filename}: {msg}", category="file", details=self._task_context(task))
-                        return False, msg
-
-            # ── Standard single stream download loop ──────────────────────────
-            chunk_size = 131072 if (task.file_size > 10 * 1024 * 1024 or not task.file_size) else 65536
-            last_speed_time = time.time()
-            bytes_since_speed = 0
+            connections = 1 if (is_pawchive or task.file_size < 25 * 1024 * 1024) else 4
+            send_headers = {k: v for k, v in resp.request.headers.items()
+                            if k.lower() not in ("range", "content-length", "connection", "accept-encoding")}
+            resp.close()
+            resp = None
+            # Start over unless there's something on disk the engine can continue from
+            restart = not has_journal and mode != "ab"
 
             _, max_size_limit = FilterEngine.get_effective_size_limits(options)
             stream_aborted_reason = None
-
-            # SHA-256 computed while downloading (a resumed file first reads what it already has)
+            want_hash = bool(content_hash_from_url(task.url) or len((task.expected_sha256 or "").strip()) == 64)
             hasher = None
-            if content_hash_from_url(task.url) or len((task.expected_sha256 or "").strip()) == 64:
-                hasher = hashlib.sha256()
-                if mode == "ab" and existing_size > 0:
-                    with open(part_path, "rb") as pf:
-                        while True:
-                            buf = pf.read(1024 * 1024)
-                            if not buf:
-                                break
-                            hasher.update(buf)
+            speed = {"t": time.time(), "b": task.downloaded_bytes, "first": True}
 
-            with self._active_resp_lock:
-                self._active_responses.add(resp)
-            try:
-                with open(part_path, mode) as f:
-                    for chunk in resp.iter_content(chunk_size=chunk_size):
-                        if self._cancel_event.is_set():
-                            try:
-                                resp.close()
-                            except Exception:
-                                pass
-                            return False, "Cancelled"
-                        if self.is_batch_paused(task) or task.status == "paused":
-                            try:
-                                resp.close()
-                            except Exception:
-                                pass
-                            return False, "Batch paused by user"
-                        was_paused = False
-                        while self._pause_event.is_set():
-                            was_paused = True
-                            time.sleep(0.3)
-                            if self._cancel_event.is_set():
-                                try:
-                                    resp.close()
-                                except Exception:
-                                    pass
-                                return False, "Cancelled"
-                        if was_paused:
-                            last_speed_time = time.time()
-                            bytes_since_speed = 0
+            def _progress(done: int, total: int):
+                if speed["first"]:
+                    # What was already on disk doesn't count as downloaded in this session
+                    speed["first"] = False
+                    speed["b"] = done
+                else:
+                    with self._lock:
+                        self.downloaded_bytes += max(0, done - task.downloaded_bytes)
+                task.downloaded_bytes = done
+                if total:
+                    task.file_size = total
+                now = time.time()
+                dt = now - speed["t"]
+                if dt >= 0.5:
+                    task.speed_bps = int(max(0, done - speed["b"]) / dt)
+                    task.speed_str = FileDownloader.format_speed(task.speed_bps)
+                    if task.file_size > 0:
+                        task.progress_pct = int(done / task.file_size * 100)
+                        rem = max(0, task.file_size - done)
+                        if task.speed_bps > 0:
+                            sec = int(rem / task.speed_bps)
+                            task.eta_str = f"{sec//60}m {sec%60}s" if sec > 60 else f"{sec}s"
+                    speed["t"], speed["b"] = now, done
+                    if self.on_task_status_changed:
+                        self.on_task_status_changed(task)
 
-                        if not chunk:
-                            continue
+            def _stop():
+                if self._cancel_event.is_set():
+                    return "Cancelled"
+                if self.is_batch_paused(task) or task.status == "paused":
+                    return "Batch paused by user"
+                if self._pause_event.is_set():
+                    return "Paused"
+                if max_size_limit and task.downloaded_bytes > max_size_limit:
+                    return "Too big"
+                return None
 
-                        if not bandwidth_limiter.wait_for(len(chunk), self._cancel_event, self._pause_event):
-                            try:
-                                resp.close()
-                            except Exception:
-                                pass
-                            return False, "Cancelled"
+            if not transfer_client.available():
+                return False, "The download engine isn't running (start the app normally)"
+            while True:
+                result = transfer_client.transfer(
+                    task.url, part_path, send_headers, task.file_size, ranges_ok, connections, restart, want_hash,
+                    bandwidth_limiter.get_rate_bps(), on_progress=_progress, should_stop=_stop)
+                if result.get("ok"):
+                    break
+                err = str(result.get("error") or "")
+                if result.get("kind") == "stopped" and err == "Paused":
+                    # Wait out the pause, then continue from what's on disk
+                    while self._pause_event.is_set() and not self._cancel_event.is_set():
+                        time.sleep(0.3)
+                    if self._cancel_event.is_set():
+                        return False, "Cancelled"
+                    restart = False
+                    speed["first"] = True
+                    speed["t"] = time.time()
+                    continue
+                if result.get("kind") == "stopped" and err == "Too big":
+                    stream_aborted_reason = (f"File size ({FilterEngine.format_size_str(task.downloaded_bytes)}) exceeds "
+                                             f"maximum threshold ({FilterEngine.format_size_str(max_size_limit)})")
+                    logger.info(f"⏭️ Aborted downloading {task.filename}: {stream_aborted_reason}", category="filter")
+                    break
+                if result.get("kind") in ("stopped", "cancelled"):
+                    return False, err or "Cancelled"
+                if result.get("kind") == "http" and result.get("status"):
+                    task.http_status = int(result["status"])
+                msg = err or "The download didn't finish"
+                if result.get("kind") == "network":
+                    msg += " (it continues from there on retry)"
+                logger.error(f"  ✖ {task.filename}: {msg}", category="file", details=self._task_context(task))
+                return False, msg
 
-                        f.write(chunk)
-                        if hasher is not None:
-                            hasher.update(chunk)
-                        chunk_len = len(chunk)
-                        task.downloaded_bytes += chunk_len
-                        with self._lock:
-                            self.downloaded_bytes += chunk_len
-
-                        # Check if streaming has exceeded maximum file size limit (for chunked streams)
-                        if max_size_limit and task.downloaded_bytes > max_size_limit:
-                            try:
-                                resp.close()
-                            except Exception:
-                                pass
-                            stream_aborted_reason = f"File size ({FilterEngine.format_size_str(task.downloaded_bytes)}) exceeds maximum threshold ({FilterEngine.format_size_str(max_size_limit)})"
-                            logger.info(f"⏭️ Aborted streaming {task.filename}: {stream_aborted_reason}", category="filter")
-                            break
-
-                        bytes_since_speed += chunk_len
-                        now = time.time()
-
-                        # Speed calculation every 0.5 s
-                        delta_speed = now - last_speed_time
-                        if delta_speed >= 0.5:
-                            task.speed_bps = int(bytes_since_speed / delta_speed)
-                            task.speed_str = FileDownloader.format_speed(task.speed_bps)
-                            if task.file_size > 0:
-                                rem_bytes = max(0, task.file_size - task.downloaded_bytes)
-                                task.progress_pct = int(task.downloaded_bytes / task.file_size * 100)
-                                if task.speed_bps > 0:
-                                    s = int(rem_bytes / task.speed_bps)
-                                    task.eta_str = f"{s//60}m {s%60}s" if s > 60 else f"{s}s"
-                            bytes_since_speed = 0
-                            last_speed_time = now
-                            if self.on_task_status_changed:
-                                self.on_task_status_changed(task)
-            finally:
-                with self._active_resp_lock:
-                    self._active_responses.discard(resp)
-
+            if result.get("ok"):
+                if result.get("resumedFrom"):
+                    resumed = True
+                if want_hash and result.get("sha256"):
+                    hasher = transfer_client.Sha256Result(result["sha256"])
+                task.speed_bps = 0
 
             final_size = os.path.getsize(part_path) if os.path.exists(part_path) else 0
 
             if stream_aborted_reason or (max_size_limit and final_size > max_size_limit):
                 _remove_quietly(part_path)
+                _remove_quietly(part_path + ".chunks")
                 with self._lock:
                     self.downloaded_bytes = max(0, self.downloaded_bytes - task.downloaded_bytes)
                 task.status = "skipped"

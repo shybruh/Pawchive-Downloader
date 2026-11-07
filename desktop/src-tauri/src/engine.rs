@@ -42,6 +42,7 @@ pub struct Engine {
     ready: Condvar,
     running: Mutex<Option<Running>>,
     log_dir: Option<PathBuf>,
+    env: Mutex<Vec<(String, String)>>,
 }
 
 const READY_PREFIX: &str = "PAWCHIVE_SIDECAR_READY ";
@@ -53,7 +54,13 @@ impl Engine {
             ready: Condvar::new(),
             running: Mutex::new(None),
             log_dir,
+            env: Mutex::new(Vec::new()),
         }
+    }
+
+    /// Extra environment for the engine process (e.g. where the download engine listens).
+    pub fn set_env(&self, key: &str, value: &str) {
+        self.env.lock().unwrap().push((key.to_string(), value.to_string()));
     }
 
     fn repo_root() -> PathBuf {
@@ -106,6 +113,7 @@ impl Engine {
         cmd.args(["--port", &port.to_string(), "--token", &token])
             .env("PYTHONUNBUFFERED", "1")
             .env("PYTHONIOENCODING", "utf-8")
+            .envs(self.env.lock().unwrap().clone())
             .stdin(Stdio::piped())
             .stdout(Stdio::piped())
             .stderr(Stdio::piped());

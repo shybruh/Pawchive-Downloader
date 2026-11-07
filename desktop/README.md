@@ -71,7 +71,7 @@ Handy for UI work: give the host (and the engine behind it) a fixed port and tok
 second Vite at the host.
 
 ```bash
-PAWCHIVE_HOST_PORT=47322 PAWCHIVE_HOST_TOKEN=devtoken PAWCHIVE_ENGINE_PORT=47321 PAWCHIVE_ENGINE_TOKEN=enginetoken npm run tauri dev
+PAWCHIVE_HOST_PORT=47322 PAWCHIVE_HOST_TOKEN=devtoken PAWCHIVE_ENGINE_PORT=47321 PAWCHIVE_ENGINE_TOKEN=enginetoken PAWCHIVE_TRANSFER_PORT=47323 PAWCHIVE_TRANSFER_TOKEN=xfertoken npm run tauri dev
 VITE_ENGINE_PORT=47322 VITE_ENGINE_TOKEN=devtoken npx vite --port 1430
 ```
 

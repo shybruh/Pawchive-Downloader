@@ -7,6 +7,7 @@ mod engine;
 mod accounts;
 mod host;
 mod media;
+mod transfer;
 mod proc_group;
 mod site_login;
 
@@ -56,6 +57,10 @@ pub fn run() {
         .setup(|app| {
             let log_dir = app.path().app_log_dir().ok();
             let engine = Arc::new(Engine::new(log_dir));
+            // The download engine the Python downloader hands its file transfers to
+            let transfer = transfer::start()?;
+            engine.set_env("PAWCHIVE_TRANSFER_URL", &transfer.url);
+            engine.set_env("PAWCHIVE_TRANSFER_TOKEN", &transfer.token);
             engine.start()?;
             // Thumbnails, pictures and files for the UI
             let media = media::start()?;

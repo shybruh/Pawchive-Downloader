@@ -76,8 +76,8 @@ each other. Port a part together with everything that writes its data.
 | 2 | Media server (thumbnails, images and files for the Gallery and previews): `src-tauri/src/media/`, same thumbnail cache | done |
 | 3 | Accounts and the credential vault: `src-tauri/src/accounts/` (same encrypted file; sign-in, Test, browser import). Python keeps a small reader (`core/auth_manager.py`) that re-reads the vault when it changes | done |
 | 4 | Scheduler | removed: the scheduler was dropped from the app instead of ported |
-| 5 | Link vault (`linkVault`, `core/link_vault_manager.py`) and cloud hosts (`services/cloud_downloader.py`) | next |
-| 6 | Downloader core: link parsing, site clients, filters and naming, downloader and queue (`core/parser.py`, `api_client.py`, `filter_engine.py`, `folder_naming.py`, `downloader.py`, `bridge/queue_model.py`) — the largest part | |
+| 5 | Link vault (`linkVault`, `core/link_vault_manager.py`) and cloud hosts (`services/cloud_downloader.py`): after step 6, since collecting links needs the site client and cloud downloads run in the queue | |
+| 6 | Downloader core: link parsing, site clients, filters and naming, downloader and queue (`core/parser.py`, `api_client.py`, `filter_engine.py`, `folder_naming.py`, `downloader.py`, `bridge/queue_model.py`) — the largest part | in progress: file transfers done (`src-tauri/src/transfer/`: 8 MB chunks with a journal, resume from the last good chunk, retries, parallel where allowed) |
 | 7 | Archive, watchlist, Known series (SQLite and JSON) | |
 | 8 | Gallery tools, Decompressor (still runs 7-Zip), Bunkr / Erome / nHentai, embeds (still run yt-dlp) | |
 | 9 | Telegram, then remove the Python engine and PyInstaller from the build | |
