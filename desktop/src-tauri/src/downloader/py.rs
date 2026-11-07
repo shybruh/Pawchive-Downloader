@@ -204,3 +204,104 @@ pub fn html_unescape(s: &str) -> String {
     })
     .into_owned()
 }
+
+// ── os.path on Windows (ntpath) ─────────────────────────────────────────────
+
+fn is_sep(c: char) -> bool {
+    c == '\\' || c == '/'
+}
+
+/// ntpath.splitroot: (drive, root, rest)
+fn splitroot(p: &str) -> (&str, &str, &str) {
+    let b = p.as_bytes();
+    if b.len() >= 2 && is_sep(b[0] as char) && is_sep(b[1] as char) {
+        // UNC: \server\share
+        let rest = &p[2..];
+        let i = rest.find(['\\', '/']).map(|i| i + 2).unwrap_or(p.len());
+        let j = p[(i + 1).min(p.len())..].find(['\\', '/']).map(|j| j + i + 1).unwrap_or(p.len());
+        let (drive, tail) = p.split_at(j);
+        return if tail.starts_with(is_sep) { (drive, &tail[..1], &tail[1..]) } else { (drive, "", tail) };
+    }
+    if b.len() >= 2 && b[1] == b':' && (b[0] as char).is_ascii() {
+        let (drive, tail) = p.split_at(2);
+        return if tail.starts_with(is_sep) { (drive, &tail[..1], &tail[1..]) } else { (drive, "", tail) };
+    }
+    if p.starts_with(is_sep) {
+        return ("", &p[..1], &p[1..]);
+    }
+    ("", "", p)
+}
+
+/// os.path.join
+pub fn join(parts: &[&str]) -> String {
+    let Some(first) = parts.first() else { return String::new() };
+    let (d, r, p) = splitroot(first);
+    let (mut drive, mut root, mut path) = (d.to_string(), r.to_string(), p.to_string());
+    for part in &parts[1..] {
+        let (pd, pr, pp) = splitroot(part);
+        if !pr.is_empty() {
+            if !pd.is_empty() || drive.is_empty() {
+                drive = pd.to_string();
+            }
+            root = pr.to_string();
+            path = pp.to_string();
+            continue;
+        } else if !pd.is_empty() && pd != drive {
+            if pd.to_lowercase() != drive.to_lowercase() {
+                drive = pd.to_string();
+                root = pr.to_string();
+                path = pp.to_string();
+                continue;
+            }
+            drive = pd.to_string();
+        }
+        if !path.is_empty() && !path.ends_with(is_sep) {
+            path.push('\\');
+        }
+        path.push_str(pp);
+    }
+    if !path.is_empty() && root.is_empty() && !drive.is_empty() && !drive.ends_with([':', '\\', '/']) {
+        return format!("{drive}\\{path}");
+    }
+    format!("{drive}{root}{path}")
+}
+
+/// os.path.normpath
+pub fn normpath(p: &str) -> String {
+    let p = p.replace('/', "\\");
+    let (drive, root, rest) = splitroot(&p);
+    let mut out: Vec<&str> = Vec::new();
+    for c in rest.split('\\') {
+        match c {
+            "" | "." => {}
+            ".." => {
+                if out.last().is_some_and(|l| *l != "..") {
+                    out.pop();
+                } else if root.is_empty() {
+                    out.push("..");
+                }
+            }
+            c => out.push(c),
+        }
+    }
+    let s = format!("{drive}{root}{}", out.join("\\"));
+    if s.is_empty() { ".".into() } else { s }
+}
+
+/// os.path.dirname
+pub fn dirname(p: &str) -> String {
+    let (drive, root, rest) = splitroot(p);
+    let i = rest.rfind(is_sep).map(|i| i + 1).unwrap_or(0);
+    let head = rest[..i].trim_end_matches(is_sep);
+    format!("{drive}{root}{head}")
+}
+
+/// str(value) of a JSON value, as Python would print it
+pub fn pystr(v: &serde_json::Value) -> String {
+    match v {
+        serde_json::Value::String(s) => s.clone(),
+        serde_json::Value::Null => "None".into(),
+        serde_json::Value::Bool(b) => if *b { "True".into() } else { "False".into() },
+        other => other.to_string(),
+    }
+}

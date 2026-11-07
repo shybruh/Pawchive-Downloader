@@ -351,7 +351,7 @@ fn duration_limits(o: &Options) -> (Option<f64>, Option<f64>) {
     }
 }
 
-fn keep_video_duration(duration: Option<f64>, o: &Options) -> (bool, String) {
+pub fn keep_video_duration(duration: Option<f64>, o: &Options) -> (bool, String) {
     if !o.flag("video_duration_filter_enabled") {
         return (true, "Video duration filter disabled".into());
     }

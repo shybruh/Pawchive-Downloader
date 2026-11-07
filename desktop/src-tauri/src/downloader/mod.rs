@@ -9,6 +9,7 @@ pub mod filters;
 pub mod links;
 pub mod naming;
 pub mod order;
+pub mod plan;
 pub mod sites;
 mod py;
 
