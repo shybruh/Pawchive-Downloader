@@ -107,7 +107,6 @@ For a local build, run `python build_desktop.py` from the repository root (see t
 | Archive | stats, search & filters, creators → posts → files, check files on disk, forget missing, import / export, rebuild from a folder |
 | Link vault | creators → posts → links with health and passwords, collect links from a creator, check links, export, send passwords to the Decompressor |
 | Decompressor | scan folders, grouped selection, extract with live progress, password prompts and bank, options |
-| Scheduler | watchlist checks and creator downloads on an interval or daily, night hours, pace |
 | Settings | downloads, files & naming, network, accounts (incl. Telegram QR), appearance, updates, about |
 
 The webview's own right-click menu and browser shortcuts are switched off (`src/components/app-guards.tsx`);

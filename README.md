@@ -41,7 +41,6 @@ like a modern app.
 | **Archive** | A record of every downloaded file so nothing is fetched twice — search it, check files on disk, import, export or rebuild it from folders |
 | **Link vault** | External links (MEGA, Google Drive, Dropbox…) collected from posts, with their passwords and link health checks |
 | **Decompressor** | Find and extract archives in bulk, with a password bank and prompts for locked files |
-| **Scheduler** | Check the watchlist or download a creator every few hours or once a day, with night-time hours |
 | **And more** | Activity log, download history, known-series sorting, accounts (incl. Telegram), bandwidth limits, proxy |
 
 ### Supported sites

@@ -1,6 +1,6 @@
 import type { ComponentType } from "react";
 import {
-  ArchiveIcon, BookmarkIcon, CalendarClockIcon, DownloadIcon, FileArchiveIcon, HistoryIcon, ImagesIcon,
+  ArchiveIcon, BookmarkIcon, DownloadIcon, FileArchiveIcon, HistoryIcon, ImagesIcon,
   LinkIcon, ListOrderedIcon, ScrollTextIcon, SettingsIcon, TagsIcon,
 } from "lucide-react";
 import { useProp } from "@/lib/engine";
@@ -73,7 +73,6 @@ export function AppSidebar() {
         ]} />
         <Group label="Tools" view={view} onNavigate={onNavigate} items={[
           { id: "decompressor", label: "Decompressor", icon: FileArchiveIcon },
-          { id: "scheduler", label: "Scheduler", icon: CalendarClockIcon },
         ]} />
       </nav>
 

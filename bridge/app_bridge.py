@@ -248,7 +248,6 @@ class AppBridge(QObject):
     _watchlist_resolve_lock = threading.Lock()
     _watchlist_checker = None
     _watchlistArtistResultSignal = Signal(str, str, int)  # (userId, service, newCount)
-    _scheduledCreatorSyncSignal = Signal(str)  # scheduler thread -> GUI thread
     # Slow folder scans run in the background; QML gets the answer here: (request id, result)
     asyncResultReady = Signal(str, 'QVariant')
     _callOnGui = Signal(object)      # a function to run on the window thread (from background jobs)
@@ -471,14 +470,6 @@ class AppBridge(QObject):
         from bridge.link_vault_bridge import LinkVaultBridge
         self.link_vault = LinkVaultBridge(self)
 
-        try:
-            from core.task_scheduler import task_scheduler
-            task_scheduler.on_trigger_watchlist_sync = self._run_scheduled_watchlist_sync
-            task_scheduler.on_trigger_creator_sync = self._run_scheduled_creator_sync
-            task_scheduler.start()
-        except Exception as e:
-            logger.debug(f"Scheduler/StoragePool init note: {e}", category="system")
-
         # Check saved session & recovery journal
         self.recovery_manager = getattr(self.session_manager, "recovery_manager", None)
         if not self.recovery_manager:
@@ -524,9 +515,7 @@ class AppBridge(QObject):
         self._appendTasksSignal.connect(self._handle_append_tasks, Qt.QueuedConnection)
         self._watchlistResultSignal.connect(self._handle_watchlist_result, Qt.QueuedConnection)
         self._watchlistArtistResultSignal.connect(self._handle_watchlist_artist_result, Qt.QueuedConnection)
-        self._scheduledCreatorSyncSignal.connect(self._handle_scheduled_creator_sync, Qt.QueuedConnection)
-        # Keep the computer awake while downloads run (Scheduler → "Sleep prevention")
-        self._scheduled_sweep_retry = False
+        # Keep the computer awake while downloads run
         self.isDownloadingChanged.connect(self._update_sleep_prevention)
 
         # Auto-check watchlist entries on startup (background, non-blocking): the artists with
@@ -1853,8 +1842,7 @@ class AppBridge(QObject):
             download_revisions=self._download_revisions,
             adaptive_threading=self._adaptive_threading,
             threads_locked=self._threads_locked,
-            # Scheduled runs with "Sweep auto-retry pass" retry failed files at the end
-            auto_retry_at_end=self._auto_retry_at_end or getattr(self, "_scheduled_sweep_retry", False),
+                auto_retry_at_end=self._auto_retry_at_end,
             manga_mode=self._manga_mode,
             filename_style=self._filename_style,
             filename_template=self._filename_template,
@@ -5192,7 +5180,6 @@ class AppBridge(QObject):
             return
         self._is_downloading = False
         self._active_queue_model.clear()
-        self._scheduled_sweep_retry = False
         if self._auto_delete_failed:
             try:
                 self.deleteFailedLeftovers()
@@ -5733,9 +5720,6 @@ class AppBridge(QObject):
         if page_start > 1 or page_end < 999999:
             options.page_start = page_start
             options.page_end = page_end
-        if self._scheduled_sweep_retry:
-            options.auto_retry_at_end = True     # Scheduler → "Sweep auto-retry pass"
-
         if custom_dir:
             artist_folder = self.resolve_artist_download_dir_for_folder(
                 custom_dir,
@@ -6360,55 +6344,14 @@ class AppBridge(QObject):
                 category="watchlist"
             )
 
-    # ── Scheduled runs (the scheduler screen is bridge/scheduler_bridge.py) ─────
+    # ── Keeping the computer awake ───────────────────────────────────────────
     @Slot()
     def _update_sleep_prevention(self):
         try:
-            from core.task_scheduler import task_scheduler
             from core.power import sleep_inhibitor
-            sleep_inhibitor.set_active(bool(self._is_downloading and task_scheduler.prevent_sleep))
+            sleep_inhibitor.set_active(bool(self._is_downloading))
         except Exception as e:
             logger.debug(f"Sleep prevention update failed: {e}", category="system")
-
-    def _run_scheduled_watchlist_sync(self):
-        """Called by the TaskScheduler (in its background thread) when a Watchlist Sync schedule
-        triggers: checks every watchlist artist, then downloads their new posts. (It used to only
-        count new posts, so nothing was ever downloaded automatically.)"""
-        from core.task_scheduler import task_scheduler
-        from core.providers import is_disabled
-        logger.info("Scheduler: Watchlist Sync — checking all watchlist artists for new posts...", category="scheduler")
-        self._async_watchlist_check(wait_if_running=True)    # runs right here, in the scheduler's thread
-        updated = [e for e in list(self._watchlist_manager.entries)
-                   if (getattr(e, "new_post_count", 0) or 0) > 0 and not is_disabled(e.domain)]
-        if not updated:
-            logger.info("Scheduler: Watchlist Sync — nothing new to download.", category="scheduler")
-            return
-        self._scheduled_sweep_retry = bool(task_scheduler.sweep_retry)
-        logger.info(f"Scheduler: Watchlist Sync — downloading new posts for {len(updated)} artist(s)...", category="scheduler")
-        for e in updated:
-            try:
-                self._process_watchlist_entry_download(e)
-            except Exception as err:
-                logger.error(f"Scheduler: could not download updates for {e.creator_name!r}: {err}", category="scheduler")
-
-    def _run_scheduled_creator_sync(self, url: str):
-        """Called by the TaskScheduler (background thread) when a Creator schedule triggers.
-        The download is started on the GUI thread."""
-        if url:
-            self._scheduledCreatorSyncSignal.emit(url)
-
-    @Slot(str)
-    def _handle_scheduled_creator_sync(self, url: str):
-        from core.task_scheduler import task_scheduler
-        self._scheduled_sweep_retry = bool(task_scheduler.sweep_retry)
-        self.currentUrl = url
-        if self._is_downloading:
-            # A download is already running: add this creator to it instead of skipping the schedule
-            logger.info(f"Scheduler: a download is running — adding '{url}' to the queue.", category="scheduler")
-            self.addToQueue()
-        else:
-            logger.info(f"Scheduler: Initiating automated Creator Sync for '{url}'...", category="scheduler")
-            self.startDownload()
 
     # ── Integrated File Explorer & Media Gallery ─────────────────────────────
 

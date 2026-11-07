@@ -24,7 +24,6 @@ import { GalleryView } from "@/views/gallery";
 import { ArchiveView } from "@/views/archive";
 import { VaultView } from "@/views/vault";
 import { DecompressorView } from "@/views/decompressor";
-import { SchedulerView } from "@/views/scheduler";
 import { PostSelectionDialog } from "@/components/post-selection";
 import logo from "@/assets/logo.png";
 
@@ -138,7 +137,6 @@ function Shell() {
       case "known": return <KnownView />;
       case "vault": return <VaultView />;
       case "decompressor": return <DecompressorView />;
-      case "scheduler": return <SchedulerView />;
       case "settings": return <SettingsView />;
     }
   })();
