@@ -288,6 +288,38 @@ pub fn normpath(p: &str) -> String {
     if s.is_empty() { ".".into() } else { s }
 }
 
+/// os.path.splitdrive
+pub fn splitdrive(p: &str) -> (&str, &str) {
+    let (drive, _, _) = splitroot(p);
+    (drive, &p[drive.len()..])
+}
+
+/// os.path.normcase (Windows: lower case, backslashes)
+pub fn normcase(p: &str) -> String {
+    p.replace('/', "\\").to_lowercase()
+}
+
+/// os.path.abspath (Windows: GetFullPathNameW, then normpath)
+pub fn abspath(p: &str) -> String {
+    let full = std::path::absolute(if p.is_empty() { "." } else { p }).map(|x| x.to_string_lossy().into_owned()).unwrap_or_else(|_| p.to_string());
+    normpath(&full)
+}
+
+/// os.path.relpath(path, start); None when they are on different drives (Python raises)
+pub fn relpath(path: &str, start: &str) -> Option<String> {
+    let (p, s) = (abspath(path), abspath(start));
+    let ((pd, _, prest), (sd, _, srest)) = (splitroot(&p), splitroot(&s));
+    if normcase(pd) != normcase(sd) {
+        return None;
+    }
+    let parts = |r: &str| r.split('\\').filter(|x| !x.is_empty()).map(str::to_string).collect::<Vec<_>>();
+    let (pl, sl) = (parts(prest), parts(srest));
+    let common = pl.iter().zip(&sl).take_while(|(a, b)| normcase(a) == normcase(b)).count();
+    let mut rel: Vec<String> = vec!["..".to_string(); sl.len() - common];
+    rel.extend(pl[common..].iter().cloned());
+    Some(if rel.is_empty() { ".".into() } else { rel.join("\\") })
+}
+
 /// os.path.dirname
 pub fn dirname(p: &str) -> String {
     let (drive, root, rest) = splitroot(p);

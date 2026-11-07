@@ -15,7 +15,7 @@ pub mod queue;
 pub mod queue_view;
 pub mod service;
 pub mod sites;
-mod py;
+pub(crate) mod py;
 
 #[cfg(test)]
 mod golden;

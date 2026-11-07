@@ -60,11 +60,11 @@ def _key(t) -> str:
 _LEVELS = ("debug", "info", "warning", "error", "success")
 
 
-def _log(level: str, message: str, to_file: bool = True, category: str = "downloader") -> None:
+def _log(level: str, message: str, to_file: bool = True, category: str = "downloader", details: str = "") -> None:
     if level in ("debug", "info") and not to_file:      # (only these two can stay out of the log file)
-        getattr(logger, level)(message, category=category, to_file=False)
+        getattr(logger, level)(message, category=category, details=details, to_file=False)
     else:
-        getattr(logger, level if level in _LEVELS else "info")(message, category=category)
+        getattr(logger, level if level in _LEVELS else "info")(message, category=category, details=details)
 
 
 class _Link:
@@ -161,9 +161,9 @@ class _Link:
             return True
         if t == "note":
             fn, args = msg.get("fn"), msg.get("args") or []
-            if fn == "log":            # [level, message, to_file, category] (the planner's: no category)
-                level, message, to_file, category = (list(args) + [None] * 4)[:4]
-                _log(str(level), str(message), to_file is not False, category or "file")
+            if fn == "log":            # [level, message, to_file, category, details] (the planner's: no category)
+                level, message, to_file, category, details = (list(args) + [None] * 5)[:5]
+                _log(str(level), str(message), to_file is not False, category or "file", details or "")
                 return True
             if fn == "progress":
                 cb = self._progress.get(args[0]) if args else None

@@ -56,7 +56,8 @@ fn natives(app_version: &str, engine: &Arc<Engine>, events: &Events) -> Natives 
         objects.push((queue::GROUPS, g));
         queue::start_pump(events.clone());
     }
-    Natives::new(objects)
+    let app_bridge: Arc<dyn native::Overlay> = crate::bridge::AppBridge::new(events.clone());
+    Natives::new(objects, vec![("appBridge", app_bridge)])
 }
 
 impl Host {
@@ -159,6 +160,24 @@ async fn serve(
 
     let patches: Arc<Mutex<HashMap<i64, Patch>>> = Arc::default();
 
+    // Calls answered by Rust parts of Python objects (native::Overlay), one after another
+    let (rust_calls, calls_rx) = std::sync::mpsc::channel::<(Arc<dyn native::Overlay>, String, Vec<Value>, Value)>();
+    let calls_out = out_tx.clone();
+    std::thread::Builder::new()
+        .name("host-calls".into())
+        .spawn(move || {
+            for (ov, method, args, id) in calls_rx {
+                let reply = match ov.call(&method, args) {
+                    Ok(result) => json!({"id": id, "ok": true, "result": result}),
+                    Err(error) => json!({"id": id, "ok": false, "error": error}),
+                };
+                if calls_out.send(reply.to_string()).is_err() {
+                    break;
+                }
+            }
+        })
+        .map_err(|e| e.to_string())?;
+
     // Python → UI
     let (py_out, py_patches, py_natives) = (out_tx.clone(), patches.clone(), natives.clone());
     let from_python = tauri::async_runtime::spawn(async move {
@@ -184,6 +203,16 @@ async fn serve(
         let op = req.get("op").and_then(Value::as_str).unwrap_or("");
         let target = req.get("obj").and_then(Value::as_str).unwrap_or("");
 
+        if op == "call" {
+            let method = req.get("method").and_then(Value::as_str).unwrap_or("");
+            if let Some(ov) = natives.overlay(target, method) {
+                // (on this connection's worker thread, in the order they came, like Python answered
+                // them; a big folder or a slow drive doesn't hold up the requests Python answers)
+                let args = req.get("args").and_then(Value::as_array).cloned().unwrap_or_default();
+                let _ = rust_calls.send((ov, method.to_string(), args, id));
+                continue;
+            }
+        }
         if let Some(obj) = natives.get(target) {
             let reply = match natives.handle(obj, &req) {
                 Ok(result) => json!({"id": id, "ok": true, "result": result}),

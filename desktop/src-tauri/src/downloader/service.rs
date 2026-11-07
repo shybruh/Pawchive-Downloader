@@ -349,6 +349,11 @@ fn site_call(id: u64, a: &Value) -> Result<Value, String> {
     Ok(out)
 }
 
+/// A line in the app's log (and log file), with details shown when it's expanded
+pub fn log_app(level: &str, message: &str, category: &str, details: &str) {
+    link().note("log", json!([level, message, true, category, details]));
+}
+
 /// Asks the app (for the window's requests it still handles); Err when it isn't connected or
 /// the request failed there
 pub fn ask_app(f: &str, args: Value) -> Result<Value, String> {

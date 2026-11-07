@@ -7,6 +7,7 @@ mod downloader;
 mod engine;
 mod accounts;
 mod host;
+mod bridge;
 mod media;
 mod transfer;
 mod proc_group;

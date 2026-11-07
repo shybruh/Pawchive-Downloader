@@ -290,6 +290,9 @@ class AppBridge(QObject):
         # The window's queue view is worked out in Rust (services/rust_queue_view.py)
         from services import rust_queue_view
         self._queue_model = rust_queue_view.RustQueueModel(self) if rust_queue_view.available() else QueueModel(self)
+        if rust_queue_view.available():
+            # The Rust part of the bridge (src-tauri/src/bridge/) asks for the download folder
+            rust_queue.shared_link().handlers["download_dir"] = lambda args: self._download_dir or ""
         self._active_queue_model = QueueModel(self, enable_groups=False)
         self._active_queue_model.filterStatus = "downloading"
         self._active_queue_model.minFileSize = 50 * 1024 * 1024  # 50 MB threshold
@@ -7005,6 +7008,336 @@ class AppBridge(QObject):
             cache.clear()
         cache[key] = (now, info)
         return dict(info)
+
+    def _path_safety_info(self, path: str) -> dict:
+        """getPathSafetyInfo's answer (worked out once per path, see the cache there)."""
+        if not path or not path.strip():
+            return {
+                "is_blocked": True,
+                "is_system_root": False,
+                "is_system_dir": False,
+                "is_drive_root": False,
+                "is_other_root": False,
+                "system_drive": "C:",
+                "drive_letter": "",
+                "path": "",
+                "message": "Empty or invalid folder path."
+            }
+
+        norm = os.path.normpath(os.path.abspath(path.strip()))
+        norm_case = os.path.normcase(norm)
+
+        # 1. Detect OS System Drive & System Root
+        windir = os.environ.get("WINDIR") or os.environ.get("SystemRoot") or "C:\\Windows"
+        system_drive_env = os.environ.get("SystemDrive")
+        if not system_drive_env and windir:
+            drive_part, _ = os.path.splitdrive(windir)
+            system_drive_env = drive_part if drive_part else "C:"
+        elif not system_drive_env:
+            system_drive_env = "C:"
+        system_drive = system_drive_env.upper().rstrip(":") + ":"
+        sys_drive_root = system_drive + "\\"
+        norm_sys_root = os.path.normcase(os.path.normpath(sys_drive_root))
+
+        drive, tail = os.path.splitdrive(norm)
+        drive_letter = drive.upper() if drive else ""
+        tail_stripped = tail.strip("\\/")
+
+        if sys.platform == "win32":
+            is_drive_root = bool(drive_letter and (tail_stripped == ""))
+            is_system_root = is_drive_root and (drive_letter == system_drive)
+        else:
+            is_drive_root = (norm == "/" or os.path.ismount(norm))
+            is_system_root = (norm == "/")
+
+        if is_system_root:
+            return {
+                "is_blocked": True,
+                "is_system_root": True,
+                "is_system_dir": False,
+                "is_drive_root": True,
+                "is_other_root": False,
+                "system_drive": system_drive,
+                "drive_letter": drive_letter,
+                "path": norm,
+                "message": f"Operations are permanently disabled on the operating system drive root ({drive_letter}\\) for system stability."
+            }
+
+        # 2. Windows system & core OS directories
+        if sys.platform == "win32":
+            protected_system_dirs = [
+                windir,
+                os.path.join(sys_drive_root, "Windows"),
+                os.path.join(sys_drive_root, "System Volume Information"),
+                os.path.join(sys_drive_root, "$Recycle.Bin"),
+                os.path.join(sys_drive_root, "Recovery"),
+                os.path.join(sys_drive_root, "PerfLogs"),
+                os.path.join(sys_drive_root, "Boot"),
+                os.path.join(sys_drive_root, "Documents and Settings"),
+                os.path.join(sys_drive_root, "MSOCache"),
+                os.path.join(sys_drive_root, "Config.Msi"),
+                os.path.join(sys_drive_root, "inetpub"),
+            ]
+            for s_dir in protected_system_dirs:
+                p_case = os.path.normcase(os.path.normpath(s_dir))
+                if norm_case == p_case or norm_case.startswith(p_case + os.path.sep):
+                    return {
+                        "is_blocked": True,
+                        "is_system_root": False,
+                        "is_system_dir": True,
+                        "is_drive_root": False,
+                        "is_other_root": False,
+                        "system_drive": system_drive,
+                        "drive_letter": drive_letter,
+                        "path": norm,
+                        "message": "Operations are permanently disabled on protected operating system directories."
+                    }
+
+            # Check for $ prefix on system drive (e.g. $Windows.~BT, $WinREAgent)
+            if norm_case.startswith(norm_sys_root) and any(part.startswith("$") for part in norm_case.split(os.path.sep)):
+                return {
+                    "is_blocked": True,
+                    "is_system_root": False,
+                    "is_system_dir": True,
+                    "is_drive_root": False,
+                    "is_other_root": False,
+                    "system_drive": system_drive,
+                    "drive_letter": drive_letter,
+                    "path": norm,
+                    "message": "Operations are permanently disabled on Windows system cache/recovery directories."
+                }
+        else:
+            def _blocked(message: str) -> dict:
+                return {
+                    "is_blocked": True,
+                    "is_system_root": False,
+                    "is_system_dir": True,
+                    "is_drive_root": False,
+                    "is_other_root": False,
+                    "system_drive": system_drive,
+                    "drive_letter": drive_letter,
+                    "path": norm,
+                    "message": message
+                }
+
+            # Removable / extra disks are mounted below these; the disks themselves are allowed
+            # (as drive roots, with double confirmation), the folders holding them are not
+            mount_parents = ["/media", "/mnt", "/run/media", "/Volumes"]
+            protected_unix_dirs = [
+                "/bin", "/boot", "/dev", "/etc", "/lib", "/lib32", "/lib64", "/libx32", "/opt",
+                "/proc", "/root", "/sbin", "/snap", "/sys", "/usr", "/var",
+                "/System", "/Library", "/Applications", "/private", "/cores",
+            ]
+            for u_dir in protected_unix_dirs:
+                if norm == u_dir or norm.startswith(u_dir + "/"):
+                    return _blocked(f"Operations are permanently disabled on protected system directory ({u_dir}).")
+            if norm == "/run" or (norm.startswith("/run/") and not norm.startswith("/run/media/")):
+                return _blocked("Operations are permanently disabled on protected system directory (/run).")
+
+            # Home folders: the same protection Windows gets for C:\Users (this was Windows-only, so
+            # Flatten / Auto-sort / Delete / Batch rename could run on /home/<user> or ~/.ssh)
+            home = os.path.normpath(os.path.expanduser("~"))
+            user_roots = ["/home", "/Users"]
+            if norm in user_roots or norm in mount_parents:
+                return _blocked(f"Operations are permanently disabled on {norm}, which holds user accounts or disks.")
+            if os.path.dirname(norm) in user_roots or norm == home:
+                return _blocked("Operations are permanently disabled directly on a home folder to protect its settings "
+                                "and hidden folders. Please select a subfolder (such as Downloads or Pictures).")
+            for m_parent in ("/media", "/run/media"):
+                if os.path.dirname(norm) == m_parent:      # /media/<user>: holds that user's disks
+                    return _blocked(f"Operations are permanently disabled on {norm}, which holds mounted disks.")
+            in_home = norm.startswith(home + "/") or any(norm.startswith(r + "/") for r in user_roots)
+            if in_home:
+                for part in norm.split("/"):
+                    if part.startswith(".") and part not in (".", ".."):
+                        return _blocked(f"Operations are permanently disabled on hidden application configuration folders ({part}).")
+
+        # 3. Program Files & ProgramData (on any drive)
+        parts = [p.lower() for p in norm_case.split(os.path.sep)]
+        if "program files" in parts or "program files (x86)" in parts or "programdata" in parts or "windowsapps" in parts:
+            return {
+                "is_blocked": True,
+                "is_system_root": False,
+                "is_system_dir": True,
+                "is_drive_root": False,
+                "is_other_root": False,
+                "system_drive": system_drive,
+                "drive_letter": drive_letter,
+                "path": norm,
+                "message": "Operations are permanently disabled inside Program Files / ProgramData to protect installed software."
+            }
+
+        # 4. Users Directory & Profile Roots
+        if sys.platform == "win32":
+            users_dir_case = os.path.normcase(os.path.join(sys_drive_root, "Users"))
+            if norm_case == users_dir_case:
+                return {
+                    "is_blocked": True,
+                    "is_system_root": False,
+                    "is_system_dir": True,
+                    "is_drive_root": False,
+                    "is_other_root": False,
+                    "system_drive": system_drive,
+                    "drive_letter": drive_letter,
+                    "path": norm,
+                    "message": f"Operations are permanently disabled on the Users directory ({drive_letter}\\Users) to protect user account data."
+                }
+
+            # Check if target is directly a User profile root (e.g. C:\Users\silvi or C:\Users\Public)
+            if os.path.normcase(os.path.dirname(norm)) == users_dir_case:
+                return {
+                    "is_blocked": True,
+                    "is_system_root": False,
+                    "is_system_dir": True,
+                    "is_drive_root": False,
+                    "is_other_root": False,
+                    "system_drive": system_drive,
+                    "drive_letter": drive_letter,
+                    "path": norm,
+                    "message": "Operations are permanently disabled directly on your User Profile home folder to protect profile configuration and system directories. Please select a subfolder (such as Downloads or Pictures)."
+                }
+
+            # Inside user directory: AppData, Application Data, Local Settings (except system Temp dir)
+            import tempfile
+            sys_temp_case = os.path.normcase(os.path.normpath(tempfile.gettempdir()))
+            is_temp_dir = (norm_case == sys_temp_case or norm_case.startswith(sys_temp_case + os.path.sep))
+            if not is_temp_dir and ("appdata" in parts or "application data" in parts or "local settings" in parts):
+                return {
+                    "is_blocked": True,
+                    "is_system_root": False,
+                    "is_system_dir": True,
+                    "is_drive_root": False,
+                    "is_other_root": False,
+                    "system_drive": system_drive,
+                    "drive_letter": drive_letter,
+                    "path": norm,
+                    "message": "Operations are permanently disabled inside AppData to protect application configurations and local data."
+                }
+
+            # Inside user directory: dot-configuration folders (.vscode, .cargo, .gemini, etc.)
+            if norm_case.startswith(users_dir_case + os.path.sep):
+                for part in parts:
+                    if part.startswith(".") and part not in (".", ".."):
+                        return {
+                            "is_blocked": True,
+                            "is_system_root": False,
+                            "is_system_dir": True,
+                            "is_drive_root": False,
+                            "is_other_root": False,
+                            "system_drive": system_drive,
+                            "drive_letter": drive_letter,
+                            "path": norm,
+                            "message": f"Operations are permanently disabled on hidden application configuration folders ({part})."
+                        }
+
+        # 5. Python & Runtime Environment Installations
+        for part in parts:
+            if part.startswith(("python", "pymanager", "miniconda", "anaconda", "virtualenv", "venv")):
+                return {
+                    "is_blocked": True,
+                    "is_system_root": False,
+                    "is_system_dir": True,
+                    "is_drive_root": False,
+                    "is_other_root": False,
+                    "system_drive": system_drive,
+                    "drive_letter": drive_letter,
+                    "path": norm,
+                    "message": "Operations are permanently disabled on Python and runtime environment installations."
+                }
+
+        # Check for python executables or venv marker in directory or immediate parent
+        check_dirs = [norm]
+        parent_dir = os.path.dirname(norm)
+        if parent_dir and parent_dir != norm:
+            check_dirs.append(parent_dir)
+        for cd in check_dirs:
+            try:
+                if os.path.exists(os.path.join(cd, "python.exe")) or \
+                   os.path.exists(os.path.join(cd, "py.exe")) or \
+                   os.path.exists(os.path.join(cd, "pyvenv.cfg")) or \
+                   os.path.exists(os.path.join(cd, "Scripts", "pip.exe")):
+                    return {
+                        "is_blocked": True,
+                        "is_system_root": False,
+                        "is_system_dir": True,
+                        "is_drive_root": False,
+                        "is_other_root": False,
+                        "system_drive": system_drive,
+                        "drive_letter": drive_letter,
+                        "path": norm,
+                        "message": "Operations are permanently disabled on Python and runtime environment installations."
+                    }
+            except OSError:
+                pass
+
+        # 6. Apps, Games, Web Servers, and Tool Directories on System Drive (C:\)
+        if sys.platform == "win32" and norm_case.startswith(norm_sys_root):
+            rel_to_sys = os.path.relpath(norm, sys_drive_root)
+            top_folder = rel_to_sys.split(os.path.sep)[0].lower()
+
+            known_c_app_folders = {
+                "games", "xboxgames", "riot games", "steamcmd", "steam", "steamlibrary",
+                "epic games", "gog games", "ubisoft", "battle.net",
+                "qt", "certbot", "xamp", "xampp", "wamp", "nginx", "apache",
+                "tools", "bin", "vcpkg", "mingw", "cygwin", "msys", "llvm",
+                "prism hub", "rootline prism"
+            }
+            if top_folder in known_c_app_folders or top_folder.startswith(("borderless", "app", "game")):
+                return {
+                    "is_blocked": True,
+                    "is_system_root": False,
+                    "is_system_dir": True,
+                    "is_drive_root": False,
+                    "is_other_root": False,
+                    "system_drive": system_drive,
+                    "drive_letter": drive_letter,
+                    "path": norm,
+                    "message": f"Operations are permanently disabled on application and game installation directories ({top_folder})."
+                }
+
+            # Check if top-level directory on C:\ contains application executables/binaries
+            top_abs = os.path.join(sys_drive_root, top_folder)
+            safe_c_folders = {
+                "downloads", "testdownloads", "test", "tmp", "workspace",
+                "media", "data", "backup", "kemono", "pawchive"
+            }
+            if top_folder not in safe_c_folders:
+                try:
+                    for item in os.scandir(top_abs):
+                        ext = os.path.splitext(item.name)[1].lower()
+                        if ext in (".exe", ".dll", ".sys") or item.name.lower().startswith(("uninstall", "unins")):
+                            return {
+                                "is_blocked": True,
+                                "is_system_root": False,
+                                "is_system_dir": True,
+                                "is_drive_root": False,
+                                "is_other_root": False,
+                                "system_drive": system_drive,
+                                "drive_letter": drive_letter,
+                                "path": norm,
+                                "message": f"Operations are permanently disabled on application and software directories ({top_folder})."
+                            }
+                except OSError:
+                    pass
+
+        # 7. Other Root Disks (e.g. D:\)
+        is_other_root = is_drive_root and not is_system_root
+        msg = ""
+        if is_other_root:
+            where = f"{drive_letter}\\" if sys.platform == "win32" else norm
+            msg = f"Target is the root of drive ({where}). Executing operations here affects the entire drive and requires double confirmation."
+
+        return {
+            "is_blocked": False,
+            "is_system_root": False,
+            "is_system_dir": False,
+            "is_drive_root": is_drive_root,
+            "is_other_root": is_other_root,
+            "system_drive": system_drive,
+            "drive_letter": drive_letter,
+            "path": norm,
+            "message": msg
+        }
 
     def _refuse_if_disabled(self, url_or_domain: str, context: str = "link") -> bool:
         """True (after telling the user) when the link belongs to a switched-off site.

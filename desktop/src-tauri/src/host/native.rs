@@ -102,15 +102,30 @@ pub trait NativeObject: Send + Sync {
 
 /// The Rust-owned objects, by name.
 #[derive(Clone, Default)]
-pub struct Natives(Arc<HashMap<String, Arc<dyn NativeObject>>>);
+pub struct Natives(Arc<HashMap<String, Arc<dyn NativeObject>>>, Arc<HashMap<String, Arc<dyn Overlay>>>);
+
+/// Some methods of an object Python still serves, answered in Rust instead (the object is
+/// being ported a part at a time; Python keeps describing it and answering the rest)
+pub trait Overlay: Send + Sync {
+    fn handles(&self, method: &str) -> bool;
+    fn call(&self, method: &str, args: Vec<Value>) -> Result<Value, String>;
+}
 
 impl Natives {
-    pub fn new(objects: Vec<(&str, Arc<dyn NativeObject>)>) -> Self {
-        Self(Arc::new(objects.into_iter().map(|(n, o)| (n.to_string(), o)).collect()))
+    pub fn new(objects: Vec<(&str, Arc<dyn NativeObject>)>, overlays: Vec<(&str, Arc<dyn Overlay>)>) -> Self {
+        Self(
+            Arc::new(objects.into_iter().map(|(n, o)| (n.to_string(), o)).collect()),
+            Arc::new(overlays.into_iter().map(|(n, o)| (n.to_string(), o)).collect()),
+        )
     }
 
     pub fn get(&self, name: &str) -> Option<&Arc<dyn NativeObject>> {
         self.0.get(name)
+    }
+
+    /// The Rust part of a Python object that answers this method
+    pub fn overlay(&self, obj: &str, method: &str) -> Option<Arc<dyn Overlay>> {
+        self.1.get(obj).filter(|o| o.handles(method)).cloned()
     }
 
     pub fn describe_all(&self) -> Map<String, Value> {

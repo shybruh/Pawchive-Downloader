@@ -95,11 +95,15 @@ Each step is checked against the running app before its Python code is deleted. 
   | `accounts` (`bridge/accounts_bridge.py`) | site sign-in, cookies, session test | done |
   | `scheduler` | removed with the scheduler | — |
   | `linkVault` (`bridge/link_vault_bridge.py`) | saved cloud links: collect, check, edit, export (downloading them stays with downloads) | done |
+  | Gallery file explorer (in `appBridge`) | folder listing and sizes, breadcrumbs, drives, move, rename, duplicates, path safety, open / reveal | in Rust (`src-tauri/src/bridge/gallery.rs`, answered by the host for `appBridge`); Recycle Bin delete and the bookmarks still in Python |
   | `favorites` | account favorites browse / download | next |
   | `watchlist` | watchlist slots and the background check | |
   | `postSelection` | "Select posts…" fetch and the picker's results | |
   | `downloads` | start / stop / pause, queue import and export, run results | |
   | `settings` | the option properties (what remains in `appBridge`) | last |
+
+  Parts of `appBridge` can move to Rust before the whole object does: the host answers the
+  methods a Rust part handles (`host/native.rs` `Overlay`) and passes the rest to Python.
 
   The bridge members nothing used (~2,300 lines: Qt-interface leftovers, and engine features the
   new UI never exposed such as batch rename, auto-sort, broken-file scan and the video-length
