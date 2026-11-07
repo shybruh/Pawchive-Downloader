@@ -3201,8 +3201,8 @@ class AppBridge(QObject):
                         from core.auth_manager import auth_manager
                         prov_id = self.get_provider_for_domain(parsed.domain)
                         if not auth_manager.is_logged_in(prov_id):
-                            meta = auth_manager.get_provider_summary(prov_id)
-                            pname = meta.get("name", prov_id.capitalize())
+                            from core.providers import PROVIDER_NAMES
+                            pname = PROVIDER_NAMES.get(prov_id, prov_id.capitalize())
                             logger.warning(f"⭐ Favorite Mode active but not logged into {pname}. Showing auth prompt.", category="auth")
                             self.favoriteAuthRequired.emit(pname)
                         else:

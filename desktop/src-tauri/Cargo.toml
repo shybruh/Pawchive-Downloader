@@ -33,11 +33,16 @@ tokio = { version = "1", features = ["net", "sync", "macros", "rt"] }
 tiny_http = "0.12"
 sha1 = "0.10"
 image = { version = "0.25", default-features = false, features = ["jpeg", "png", "gif", "webp", "bmp", "tiff", "ico"] }
+rusqlite = { version = "0.37", features = ["bundled"] }
+aes-gcm = "0.10"
+base64 = "0.22"
+sha2 = "0.10"
+reqwest = { version = "0.13", features = ["blocking", "form", "json"] }
 
 
 [target.'cfg(windows)'.dependencies]
 webview2-com = "0.39"
-windows = { version = "0.62", features = ["Win32_Foundation", "Win32_Graphics_Gdi", "Win32_System_Com", "Win32_UI_Shell"] }
+windows = { version = "0.62", features = ["Win32_Foundation", "Win32_Graphics_Gdi", "Win32_Security_Cryptography", "Win32_System_Com", "Win32_System_Memory", "Win32_UI_Shell"] }
 windows-core = "0.62"
 windows-sys = { version = "0.59", features = [
   "Win32_Foundation",

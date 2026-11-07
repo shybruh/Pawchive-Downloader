@@ -17,6 +17,12 @@ use std::time::{Duration, Instant};
 pub struct EngineInfo {
     pub port: u16,
     pub token: String,
+    /// Where the engine keeps its data and settings (installed: AppData; portable: next to the
+    /// app). The Rust parts use the same files.
+    #[serde(skip)]
+    pub data_dir: std::path::PathBuf,
+    #[serde(skip)]
+    pub config_dir: std::path::PathBuf,
 }
 
 enum Status {
@@ -143,12 +149,16 @@ impl Engine {
             for line in BufReader::new(stdout).lines().map_while(Result::ok) {
                 if !announced {
                     if let Some(json) = line.strip_prefix(READY_PREFIX) {
-                        let port = serde_json::from_str::<serde_json::Value>(json)
-                            .ok()
-                            .and_then(|v| v.get("port").and_then(|p| p.as_u64()))
-                            .unwrap_or(0) as u16;
+                        let ready = serde_json::from_str::<serde_json::Value>(json).unwrap_or_default();
+                        let port = ready.get("port").and_then(|p| p.as_u64()).unwrap_or(0) as u16;
+                        let dir = |k: &str| std::path::PathBuf::from(ready.get(k).and_then(|v| v.as_str()).unwrap_or(""));
                         this.set_status(if port > 0 {
-                            Status::Ready(EngineInfo { port, token: token.clone() })
+                            Status::Ready(EngineInfo {
+                                port,
+                                token: token.clone(),
+                                data_dir: dir("dataDir"),
+                                config_dir: dir("configDir"),
+                            })
                         } else {
                             Status::Failed("The engine started without a port".into())
                         });

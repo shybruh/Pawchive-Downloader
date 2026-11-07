@@ -399,7 +399,6 @@ class Hub(QObject):
 
 def build_engine():
     from bridge.app_bridge import AppBridge
-    from bridge.accounts_bridge import AccountsBridge
     from bridge.scheduler_bridge import SchedulerBridge
     from bridge.gallery_tools_bridge import GalleryToolsBridge
     from bridge.gallery_updates import GalleryUpdates
@@ -414,7 +413,6 @@ def build_engine():
         "decompressorBridge": app_bridge.decompressorBridge,
         "telegramBridge": app_bridge.telegramBridge,
         "appBridge": app_bridge,
-        "accounts": AccountsBridge(),
         "scheduler": SchedulerBridge(app_bridge),
         "linkVault": app_bridge.link_vault,
         "galleryTools": tools,
@@ -471,7 +469,12 @@ def main():
         threading.Thread(target=_watch_stdin, name="stdin-watch", daemon=True).start()
 
     logger.success("Engine ready (headless sidecar).", category="system")
-    print("PAWCHIVE_SIDECAR_READY " + json.dumps({"port": hub.port, "objects": len(hub.exposed)}), flush=True)
+    from core.path_utils import get_config_dir, get_data_dir
+    # The shell's Rust parts read and write the same files
+    print("PAWCHIVE_SIDECAR_READY " + json.dumps({
+        "port": hub.port, "objects": len(hub.exposed),
+        "dataDir": os.path.join(get_data_dir(), "data"), "configDir": get_config_dir(),
+    }), flush=True)
     sys.exit(app.exec())
 
 

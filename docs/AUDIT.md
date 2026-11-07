@@ -74,8 +74,8 @@ each other. Port a part together with everything that writes its data.
 |---|---|---|
 | 1 | Engine host in the shell (pass-through, `shell` object) | done |
 | 2 | Media server (thumbnails, images and files for the Gallery and previews): `src-tauri/src/media/`, same thumbnail cache | done |
-| 3 | Accounts and the credential vault (`accounts`, `core/auth_manager.py`, `services/cookie_importer.py`); the downloader reads cookies from the vault, so it must re-read it  next |
-| 4 | Scheduler with its runner (`scheduler`, `core/task_scheduler.py`) | |
+| 3 | Accounts and the credential vault: `src-tauri/src/accounts/` (same encrypted file; sign-in, Test, browser import). Python keeps a small reader (`core/auth_manager.py`) that re-reads the vault when it changes | done |
+| 4 | Scheduler with its runner (`scheduler`, `core/task_scheduler.py`) | next |
 | 5 | Link vault (`linkVault`, `core/link_vault_manager.py`) and cloud hosts (`services/cloud_downloader.py`) | |
 | 6 | Downloader core: link parsing, site clients, filters and naming, downloader and queue (`core/parser.py`, `api_client.py`, `filter_engine.py`, `folder_naming.py`, `downloader.py`, `bridge/queue_model.py`) — the largest part | |
 | 7 | Archive, watchlist, Known series (SQLite and JSON) | |

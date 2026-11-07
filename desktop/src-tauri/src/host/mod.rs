@@ -42,9 +42,11 @@ enum Patch {
     Info,
 }
 
-fn natives(app_version: &str) -> Natives {
+/// The engine objects implemented in Rust. Their names hide the Python objects of the same name.
+fn natives(app_version: &str, engine: &Arc<Engine>, events: &Events) -> Natives {
     let shell: Arc<dyn NativeObject> = Arc::new(Shell { version: app_version.to_string() });
-    Natives::new(vec![("shell", shell)])
+    let accounts: Arc<dyn NativeObject> = Arc::new(crate::accounts::Accounts::new(engine.clone(), events.clone()));
+    Natives::new(vec![("shell", shell), ("accounts", accounts)])
 }
 
 impl Host {
@@ -62,8 +64,8 @@ impl Host {
         let port = std_listener.local_addr().map_err(|e| e.to_string())?.port();
         let host = Arc::new(Host { info: HostInfo { port, token: token.clone() } });
 
-        let natives = natives(&app_version);
         let events = Events::new();
+        let natives = natives(&app_version, &engine, &events);
         tauri::async_runtime::spawn(async move {
             let listener = match TcpListener::from_std(std_listener) {
                 Ok(l) => l,

@@ -4,6 +4,7 @@
 //! port and secret token to the React UI, and stops the engine when the app exits.
 
 mod engine;
+mod accounts;
 mod host;
 mod media;
 mod proc_group;
