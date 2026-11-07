@@ -31,6 +31,20 @@ FILE_TYPE_CATEGORIES = {
 }
 
 
+_NO_RUST = object()
+
+
+def _rust(op: str, path: str, **args):
+    """The desktop shell's engine does the archive's lookups and records (services/rust_archive.py);
+    _NO_RUST when it isn't there (the Python code answers)."""
+    try:
+        from services import rust_archive
+    except ImportError:
+        return _NO_RUST
+    r = rust_archive.call(path, op, **args)
+    return _NO_RUST if r is rust_archive.FAILED else r
+
+
 class ArchiveManager:
     """Manages the download archive SQLite database with complete opt-in isolation."""
 
@@ -105,6 +119,7 @@ class ArchiveManager:
             logger.error(f"Failed to initialize download archive database: {e}", category="archive")
             self._conn = None
             return
+        _rust("release", self.db_path)
         self._start_backfill()
 
     def _create_schema(self, conn: sqlite3.Connection, summaries: bool = True) -> None:
@@ -401,6 +416,9 @@ class ArchiveManager:
 
     def _close_unlocked(self) -> None:
         """Close database connection (must be called with self._lock held)."""
+        # The engine lets go of the file too: until it's opened again (a repair, a clear), or for good
+        # when the archive is turned off or the app closes
+        _rust("off" if (not self._enabled or self._maintenance_stop.is_set()) else "hold", self.db_path)
         with self._rlock:
             if self._rconn is not None:
                 try:
@@ -952,6 +970,11 @@ class ArchiveManager:
             if self._conn is None:
                 return False
 
+            # The desktop shell's engine answers (services/rust_archive.py)
+            r = _rust("is_archived", self.db_path, service=str(service or ""), post_id=str(post_id or ""),
+                      file_id=str(file_id or ""), file_hash=str(file_hash or ""))
+            if r is not _NO_RUST:
+                return bool(r)
             try:
                 cursor = self._conn.cursor()
                 # Fast path: check by service + post_id + file_id
@@ -1005,6 +1028,14 @@ class ArchiveManager:
             if self._conn is None:
                 return False
 
+            r = _rust("record_file", self.db_path, service=str(service or ""), creator_id=str(creator_id or ""),
+                      post_id=str(post_id or ""), file_id=str(file_id or ""), file_hash=str(file_hash or ""),
+                      filename=str(filename or ""), creator_name=str(creator_name or ""), post_title=str(post_title or ""),
+                      file_size=int(file_size or 0), file_ext=str(file_ext or ""), file_path=str(file_path or ""))
+            if r is not _NO_RUST:
+                if r:
+                    self._stats_cache = None
+                return bool(r)
             try:
                 now_str = datetime.datetime.now().isoformat()
                 clean_hash = (file_hash or "").strip()

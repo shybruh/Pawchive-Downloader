@@ -1,0 +1,940 @@
+{
+ "ops": [
+  {
+   "fn": "is_archived",
+   "args": {
+    "service": "patreon",
+    "post_id": "1",
+    "file_id": "1_/ab/a.png",
+    "file_hash": ""
+   },
+   "result": false
+  },
+  {
+   "fn": "record_file",
+   "args": {
+    "service": "patreon",
+    "creator_id": "152819670",
+    "creator_name": "SillyTeshii",
+    "post_id": "1",
+    "post_title": "First",
+    "file_id": "1_/ab/a.png",
+    "file_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "filename": "a.png",
+    "file_size": 1000,
+    "file_ext": "",
+    "file_path": "D:\\Art\\a.png"
+   },
+   "result": true
+  },
+  {
+   "fn": "is_archived",
+   "args": {
+    "service": "PATREON",
+    "post_id": "1",
+    "file_id": "1_/ab/a.png",
+    "file_hash": ""
+   },
+   "result": true
+  },
+  {
+   "fn": "is_archived",
+   "args": {
+    "service": "patreon",
+    "post_id": "9",
+    "file_id": "other",
+    "file_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+   },
+   "result": true
+  },
+  {
+   "fn": "is_archived",
+   "args": {
+    "service": "patreon",
+    "post_id": "9",
+    "file_id": "other",
+    "file_hash": "  "
+   },
+   "result": false
+  },
+  {
+   "fn": "record_file",
+   "args": {
+    "service": "patreon",
+    "creator_id": "152819670",
+    "creator_name": "SillyTeshii",
+    "post_id": "1",
+    "post_title": "First",
+    "file_id": "1_/cd/b.MP4",
+    "file_hash": "",
+    "filename": "Clip B.MP4",
+    "file_size": 0,
+    "file_ext": "",
+    "file_path": ""
+   },
+   "result": true
+  },
+  {
+   "fn": "record_file",
+   "args": {
+    "service": "Fanbox",
+    "creator_id": "77",
+    "creator_name": "",
+    "post_id": "2",
+    "post_title": "",
+    "file_id": "2_x",
+    "file_hash": "",
+    "filename": "",
+    "file_size": 5,
+    "file_ext": "ZIP",
+    "file_path": ""
+   },
+   "result": true
+  },
+  {
+   "fn": "record_file",
+   "args": {
+    "service": "patreon",
+    "creator_id": "152819670",
+    "creator_name": "Silly T",
+    "post_id": "1",
+    "post_title": "",
+    "file_id": "1_/cd/b.MP4",
+    "file_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "filename": "",
+    "file_size": 0,
+    "file_ext": "",
+    "file_path": "D:\\Art\\Clip B.mp4"
+   },
+   "result": true
+  },
+  {
+   "fn": "record_file",
+   "args": {
+    "service": "fanbox",
+    "creator_id": "77",
+    "creator_name": "Seventy",
+    "post_id": "2",
+    "post_title": "Pack",
+    "file_id": "2_x",
+    "file_hash": "",
+    "filename": "pack.zip",
+    "file_size": 1000,
+    "file_ext": "",
+    "file_path": ""
+   },
+   "result": true
+  },
+  {
+   "fn": "record_link",
+   "args": {
+    "service": "patreon",
+    "creator_id": "152819670",
+    "post_id": "1",
+    "url": "  https://mega.nz/file/x#y ",
+    "creator_name": "SillyTeshii",
+    "post_title": "First",
+    "link_title": "[MEGA] https://mega.nz/file/x#y"
+   },
+   "result": true
+  },
+  {
+   "fn": "record_link",
+   "args": {
+    "service": "patreon",
+    "creator_id": "152819670",
+    "post_id": "3",
+    "url": "https://gofile.io/d/AbC",
+    "creator_name": "",
+    "post_title": "Third",
+    "link_title": "  "
+   },
+   "result": true
+  },
+  {
+   "fn": "record_link",
+   "args": {
+    "service": "patreon",
+    "creator_id": "1",
+    "post_id": "3",
+    "url": "   ",
+    "creator_name": "",
+    "post_title": "",
+    "link_title": ""
+   },
+   "result": false
+  },
+  {
+   "fn": "record_file",
+   "args": {
+    "service": "patreon",
+    "creator_id": "152819670",
+    "creator_name": "SillyTeshii",
+    "post_id": "4",
+    "post_title": "Ärger 日本",
+    "file_id": "4_ü",
+    "file_hash": "",
+    "filename": "Ünïcode ✨.png",
+    "file_size": 1000,
+    "file_ext": "",
+    "file_path": ""
+   },
+   "result": true
+  },
+  {
+   "fn": "is_archived",
+   "args": {
+    "service": "patreon",
+    "post_id": "4",
+    "file_id": "4_ü",
+    "file_hash": ""
+   },
+   "result": true
+  }
+ ],
+ "tables": {
+  "downloaded_files": {
+   "columns": [
+    "id",
+    "service",
+    "creator_id",
+    "creator_name",
+    "post_id",
+    "post_title",
+    "file_id",
+    "file_hash",
+    "filename",
+    "file_size",
+    "file_ext",
+    "file_path",
+    "is_missing"
+   ],
+   "rows": [
+    [
+     1,
+     "patreon",
+     "152819670",
+     "SillyTeshii",
+     "1",
+     "First",
+     "1_/ab/a.png",
+     "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+     "a.png",
+     1000,
+     ".png",
+     "D:\\Art\\a.png",
+     0
+    ],
+    [
+     2,
+     "patreon",
+     "152819670",
+     "Silly T",
+     "1",
+     "First",
+     "1_/cd/b.MP4",
+     "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+     "Clip B.MP4",
+     0,
+     ".mp4",
+     "D:\\Art\\Clip B.mp4",
+     0
+    ],
+    [
+     3,
+     "fanbox",
+     "77",
+     "Seventy",
+     "2",
+     "Pack",
+     "2_x",
+     "",
+     "pack.zip",
+     1000,
+     ".zip",
+     "",
+     -1
+    ],
+    [
+     6,
+     "patreon",
+     "152819670",
+     "SillyTeshii",
+     "1",
+     "First",
+     "link_8fe07b74d8f42e59",
+     "8fe07b74d8f42e598a1834d4b6e4593ab352dc011375185d3259cfdca47c68b2",
+     "[MEGA] https://mega.nz/file/x#y",
+     0,
+     "link",
+     "",
+     -1
+    ],
+    [
+     7,
+     "patreon",
+     "152819670",
+     "",
+     "3",
+     "Third",
+     "link_ee590f00c7571e1a",
+     "ee590f00c7571e1ae779b73093c4c799723de680060f4f80bc64304b9d4134a6",
+     "https://gofile.io/d/AbC",
+     0,
+     "link",
+     "",
+     -1
+    ],
+    [
+     8,
+     "patreon",
+     "152819670",
+     "SillyTeshii",
+     "4",
+     "Ärger 日本",
+     "4_ü",
+     "",
+     "Ünïcode ✨.png",
+     1000,
+     ".png",
+     "",
+     -1
+    ]
+   ]
+  },
+  "archive_creator_cats": {
+   "columns": [
+    "cat",
+    "service",
+    "creator_id",
+    "creator_name",
+    "files",
+    "missing",
+    "verified",
+    "posts",
+    "max_id",
+    "newest_id"
+   ],
+   "rows": [
+    [
+     "archives",
+     "fanbox",
+     "77",
+     "Seventy",
+     1,
+     0,
+     0,
+     1,
+     3,
+     3
+    ],
+    [
+     "images",
+     "patreon",
+     "152819670",
+     "SillyTeshii",
+     2,
+     0,
+     1,
+     2,
+     8,
+     8
+    ],
+    [
+     "links",
+     "patreon",
+     "152819670",
+     "",
+     1,
+     0,
+     0,
+     1,
+     7,
+     7
+    ],
+    [
+     "links",
+     "patreon",
+     "152819670",
+     "SillyTeshii",
+     1,
+     0,
+     0,
+     1,
+     6,
+     6
+    ],
+    [
+     "videos",
+     "patreon",
+     "152819670",
+     "Silly T",
+     1,
+     0,
+     1,
+     1,
+     2,
+     2
+    ]
+   ]
+  },
+  "archive_creators": {
+   "columns": [
+    "service",
+    "creator_id",
+    "creator_name",
+    "files",
+    "missing",
+    "verified",
+    "posts",
+    "max_id",
+    "newest_id"
+   ],
+   "rows": [
+    [
+     "fanbox",
+     "77",
+     "Seventy",
+     1,
+     0,
+     0,
+     1,
+     3,
+     3
+    ],
+    [
+     "patreon",
+     "152819670",
+     "",
+     1,
+     0,
+     0,
+     1,
+     7,
+     7
+    ],
+    [
+     "patreon",
+     "152819670",
+     "Silly T",
+     1,
+     0,
+     1,
+     1,
+     2,
+     2
+    ],
+    [
+     "patreon",
+     "152819670",
+     "SillyTeshii",
+     3,
+     0,
+     1,
+     2,
+     8,
+     8
+    ]
+   ]
+  },
+  "archive_ext_cats": {
+   "columns": [
+    "ext",
+    "cat"
+   ],
+   "rows": [
+    [
+     ".001",
+     "archives"
+    ],
+    [
+     ".7z",
+     "archives"
+    ],
+    [
+     ".aac",
+     "audio"
+    ],
+    [
+     ".ai",
+     "graphics"
+    ],
+    [
+     ".avi",
+     "videos"
+    ],
+    [
+     ".avif",
+     "images"
+    ],
+    [
+     ".bmp",
+     "images"
+    ],
+    [
+     ".bz2",
+     "archives"
+    ],
+    [
+     ".cbr",
+     "archives"
+    ],
+    [
+     ".cbz",
+     "archives"
+    ],
+    [
+     ".clip",
+     "graphics"
+    ],
+    [
+     ".cpt",
+     "graphics"
+    ],
+    [
+     ".csv",
+     "documents"
+    ],
+    [
+     ".doc",
+     "documents"
+    ],
+    [
+     ".docx",
+     "documents"
+    ],
+    [
+     ".epub",
+     "documents"
+    ],
+    [
+     ".flac",
+     "audio"
+    ],
+    [
+     ".flv",
+     "videos"
+    ],
+    [
+     ".gif",
+     "images"
+    ],
+    [
+     ".gz",
+     "archives"
+    ],
+    [
+     ".ico",
+     "images"
+    ],
+    [
+     ".jfif",
+     "images"
+    ],
+    [
+     ".jpeg",
+     "images"
+    ],
+    [
+     ".jpg",
+     "images"
+    ],
+    [
+     ".json",
+     "documents"
+    ],
+    [
+     ".kra",
+     "graphics"
+    ],
+    [
+     ".link",
+     "links"
+    ],
+    [
+     ".m4a",
+     "audio"
+    ],
+    [
+     ".m4s",
+     "videos"
+    ],
+    [
+     ".m4v",
+     "videos"
+    ],
+    [
+     ".md",
+     "documents"
+    ],
+    [
+     ".mid",
+     "audio"
+    ],
+    [
+     ".midi",
+     "audio"
+    ],
+    [
+     ".mkv",
+     "videos"
+    ],
+    [
+     ".mov",
+     "videos"
+    ],
+    [
+     ".mp3",
+     "audio"
+    ],
+    [
+     ".mp4",
+     "videos"
+    ],
+    [
+     ".ogg",
+     "audio"
+    ],
+    [
+     ".opus",
+     "audio"
+    ],
+    [
+     ".pdf",
+     "documents"
+    ],
+    [
+     ".png",
+     "images"
+    ],
+    [
+     ".psb",
+     "graphics"
+    ],
+    [
+     ".psd",
+     "graphics"
+    ],
+    [
+     ".rar",
+     "archives"
+    ],
+    [
+     ".rtf",
+     "documents"
+    ],
+    [
+     ".sai",
+     "graphics"
+    ],
+    [
+     ".sai2",
+     "graphics"
+    ],
+    [
+     ".svg",
+     "images"
+    ],
+    [
+     ".tar",
+     "archives"
+    ],
+    [
+     ".tif",
+     "images"
+    ],
+    [
+     ".tiff",
+     "images"
+    ],
+    [
+     ".ts",
+     "videos"
+    ],
+    [
+     ".txt",
+     "documents"
+    ],
+    [
+     ".url",
+     "links"
+    ],
+    [
+     ".vob",
+     "videos"
+    ],
+    [
+     ".wav",
+     "audio"
+    ],
+    [
+     ".webm",
+     "videos"
+    ],
+    [
+     ".webp",
+     "images"
+    ],
+    [
+     ".wma",
+     "audio"
+    ],
+    [
+     ".wmv",
+     "videos"
+    ],
+    [
+     ".xcf",
+     "graphics"
+    ],
+    [
+     ".xlsx",
+     "documents"
+    ],
+    [
+     ".xz",
+     "archives"
+    ],
+    [
+     ".zip",
+     "archives"
+    ],
+    [
+     "link",
+     "links"
+    ],
+    [
+     "url",
+     "links"
+    ]
+   ]
+  },
+  "archive_exts": {
+   "columns": [
+    "ext",
+    "files"
+   ],
+   "rows": [
+    [
+     ".mp4",
+     1
+    ],
+    [
+     ".png",
+     2
+    ],
+    [
+     ".zip",
+     1
+    ],
+    [
+     "link",
+     2
+    ]
+   ]
+  },
+  "archive_post_cats": {
+   "columns": [
+    "service",
+    "creator_id",
+    "creator_name",
+    "cat",
+    "post_id",
+    "files",
+    "missing",
+    "verified",
+    "max_id",
+    "newest_id"
+   ],
+   "rows": [
+    [
+     "fanbox",
+     "77",
+     "Seventy",
+     "archives",
+     "2",
+     1,
+     0,
+     0,
+     3,
+     3
+    ],
+    [
+     "patreon",
+     "152819670",
+     "",
+     "links",
+     "3",
+     1,
+     0,
+     0,
+     7,
+     7
+    ],
+    [
+     "patreon",
+     "152819670",
+     "Silly T",
+     "videos",
+     "1",
+     1,
+     0,
+     1,
+     2,
+     2
+    ],
+    [
+     "patreon",
+     "152819670",
+     "SillyTeshii",
+     "images",
+     "1",
+     1,
+     0,
+     1,
+     1,
+     1
+    ],
+    [
+     "patreon",
+     "152819670",
+     "SillyTeshii",
+     "images",
+     "4",
+     1,
+     0,
+     0,
+     8,
+     8
+    ],
+    [
+     "patreon",
+     "152819670",
+     "SillyTeshii",
+     "links",
+     "1",
+     1,
+     0,
+     0,
+     6,
+     6
+    ]
+   ]
+  },
+  "archive_posts": {
+   "columns": [
+    "service",
+    "creator_id",
+    "creator_name",
+    "post_id",
+    "files",
+    "missing",
+    "verified",
+    "max_id",
+    "newest_id"
+   ],
+   "rows": [
+    [
+     "fanbox",
+     "77",
+     "Seventy",
+     "2",
+     1,
+     0,
+     0,
+     3,
+     3
+    ],
+    [
+     "patreon",
+     "152819670",
+     "",
+     "3",
+     1,
+     0,
+     0,
+     7,
+     7
+    ],
+    [
+     "patreon",
+     "152819670",
+     "Silly T",
+     "1",
+     1,
+     0,
+     1,
+     2,
+     2
+    ],
+    [
+     "patreon",
+     "152819670",
+     "SillyTeshii",
+     "1",
+     2,
+     0,
+     1,
+     6,
+     6
+    ],
+    [
+     "patreon",
+     "152819670",
+     "SillyTeshii",
+     "4",
+     1,
+     0,
+     0,
+     8,
+     8
+    ]
+   ]
+  },
+  "archive_state": {
+   "columns": [
+    "id",
+    "watermark",
+    "done_upto",
+    "paused",
+    "fts"
+   ],
+   "rows": [
+    [
+     1,
+     0,
+     0,
+     0,
+     1
+    ]
+   ]
+  }
+ },
+ "searches": {
+  "Clip": [
+   2
+  ],
+  "pack": [
+   3
+  ],
+  "SillyTeshii": [
+   1,
+   6,
+   8
+  ],
+  "日本語": [],
+  "Ärger": [
+   8
+  ],
+  "mega.nz": [
+   6
+  ],
+  "152819670": [
+   1,
+   2,
+   6,
+   7,
+   8
+  ]
+ }
+}

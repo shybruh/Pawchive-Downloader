@@ -384,6 +384,7 @@ class RustDownloader(FileDownloader):
                 "posts": posts,
                 "options": options.to_dict(),
                 "archive": bool(self.archive_manager and self.archive_manager.is_enabled),
+                "archive_db": self._archive_db(),
                 "request": {"creator_name": creator_name or "", "service": service or "", "domain": domain or "",
                             "base_dir": base_dir or "", "batch_id": batch_id or "", "artist_dir": artist_dir or "",
                             "user_id": str(user_id or ""), "include_service": bool(folder_naming.include_service)},
@@ -473,9 +474,27 @@ class RustDownloader(FileDownloader):
             return VideoProbe.get_video_duration(args[0], getattr(self, "session", None))
         return None
 
+    def _archive_db(self) -> str:
+        """The download archive's file, for the engine (it looks files up and records them itself);
+        "" when the archive is off or not open"""
+        am = self.archive_manager
+        if not (am and am.is_enabled) or not getattr(am, "db_path", "") or not hasattr(am, "_init_db"):
+            return ""                            # (then the engine asks here)
+        if getattr(am, "_conn", None) is None:
+            am._init_db()                        # (the engine needs the tables to exist)
+        return am.db_path if getattr(am, "_conn", None) is not None else ""
+
     def _note(self, fn: str, args: List[Any]) -> None:
         try:
-            if fn == "record_link":
+            if fn == "archive_changed":
+                if self.archive_manager:
+                    self.archive_manager._stats_cache = None
+            elif fn == "archive_error":
+                message, error = (list(args) + ["", ""])[:2]
+                logger.warning(str(message), category="archive")
+                if self.archive_manager:
+                    self.archive_manager._note_error(Exception(str(error)))
+            elif fn == "record_link":
                 if self.archive_manager and self.archive_manager.is_enabled:
                     service, creator_id, post_id, url, creator_name, post_title, link_title = args
                     self.archive_manager.record_link(
@@ -516,7 +535,8 @@ class RustDownloader(FileDownloader):
         self._finished.clear()
         self._sync(replace=True)
         archive = bool(self.archive_manager and self.archive_manager.is_enabled)
-        self._link.send({"op": "start", "options": options.to_dict(), "archive": archive, "workers": self._mw})
+        self._link.send({"op": "start", "options": options.to_dict(), "archive": archive, "workers": self._mw,
+                         "archive_db": self._archive_db()})
         sig = (id(self.tasks), len(self.tasks))
         while not self._finished.wait(0.5):
             if session_id != self._session_id:

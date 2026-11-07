@@ -9,6 +9,7 @@ mod accounts;
 mod host;
 mod bridge;
 mod watchlist;
+mod archive;
 mod media;
 mod transfer;
 mod proc_group;
