@@ -379,6 +379,7 @@ class RustDownloader(FileDownloader):
                 "options": options.to_dict(),
                 "archive": bool(self.archive_manager and self.archive_manager.is_enabled),
                 "archive_db": self._archive_db(),
+                **self._known_files(),
                 "request": {"creator_name": creator_name or "", "service": service or "", "domain": domain or "",
                             "base_dir": base_dir or "", "batch_id": batch_id or "", "artist_dir": artist_dir or "",
                             "user_id": str(user_id or ""), "include_service": bool(folder_naming.include_service)},
@@ -450,6 +451,15 @@ class RustDownloader(FileDownloader):
             return bool(self.archive_manager and self.archive_manager.is_archived(
                 service=service, post_id=post_id, file_id=file_id, file_hash=sha))
         return None
+
+    def _known_files(self) -> Dict[str, str]:
+        """Known.txt and the learned franchise names, for the engine (it matches posts itself)"""
+        km = self.known_manager
+        path = getattr(km, "file_path", "") if km else ""
+        if not path or not os.path.exists(path):
+            return {}                            # (then the engine asks here)
+        return {"known_txt": path,
+                "franchise_cache": getattr(getattr(km, "franchise_resolver", None), "_cache_path", "") or ""}
 
     def _archive_db(self) -> str:
         """The download archive's file, for the engine (it looks files up and records them itself);

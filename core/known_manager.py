@@ -151,6 +151,53 @@ _STOP_CHAR_WORDS: Set[str] = {
 
 from core.franchise_resolver import FranchiseResolver
 
+# Built-in multi-lingual franchise synonyms across supported tutorial languages (ZH, JA, KO, RU, EN)
+MULTILINGUAL_FRANCHISE_MAP = {
+    "genshin": ["原神", "げんしん", "원신", "геншин", "геншин импакт"],
+    "quintuplet": [
+        "五等分的新娘", "五等分", "五等分の花嫁", "ごとうぶんのはなよめ",
+        "ごとうぶん", "5등분의 신부", "5등분", "5toubun", "gotoubun"
+    ],
+    "star rail": [
+        "崩坏：星穹铁道", "崩坏星穹铁道", "星穹铁道", "星铁", "崩壊：スターレイル",
+        "スターレイル", "붕괴: 스타레일", "스타레일", "хонкай стар рейл", "стар рейл"
+    ],
+    "fate": [
+        "命运-冠位指定", "命运冠位指定", "フェイト・グランドオーダー",
+        "フェイト", "페이트 그랜드 오더", "페그오", "fgo"
+    ],
+    "final fantasy": [
+        "最终幻想", "最终幻想7", "ファイナルファンタジー", "파이널 판타지", "финалка"
+    ],
+    "witcher": [
+        "巫师", "巫师3", "ウィッチャー", "위쳐", "ведьмак"
+    ],
+    "overwatch": [
+        "守望先锋", "守望先锋2", "オーバーウォッチ", "오버워치", "овервотч", "ow", "ow2"
+    ],
+    "blue archive": [
+        "碧蓝档案", "蔚蓝档案", "ブルーアーカイブ", "ブルアカ", "블루 아카이브", "블아"
+    ],
+    "zenless": [
+        "绝区零", "ゼンレスゾーンゼロ", "ゼンゼロ", "젠레스 존 제로", "젠존제"
+    ],
+    "azur lane": [
+        "碧蓝航线", "アズールレーン", "アズレン", "벽람항로"
+    ],
+    "arknights": [
+        "明日方舟", "アークナイツ", "명일방주"
+    ]
+}
+
+# Multi-lingual honorific & affix expansion (JA, ZH, KO, EN)
+MULTILINGUAL_HONORIFIC_SUFFIXES = (
+    "chan", "san", "sama", "kun", "senpai", "sensei", "tan", "dono", "chama",
+    "ちゃん", "さん", "さま", "様", "くん", "君", "せんぱい", "先輩", "せんせい", "先生", "殿",
+    "酱", "桑", "大人", "君", "学姐", "学长", "前辈", "老师", "殿下", "小姐", "女士", "太太", "娘",
+    "양", "군", "씨", "님", "선배", "선생님", "짱"
+)
+DIMINUTIVE_PREFIXES = ("小", "阿")
+
 
 
 _BLOCKED_FRANCHISES: Set[str] = {
@@ -358,43 +405,6 @@ Katarin
             # Build custom franchise map with auto-generated and explicit aliases
             custom_franchise_map = {}
 
-            # Built-in multi-lingual franchise synonyms across supported tutorial languages (ZH, JA, KO, RU, EN)
-            MULTILINGUAL_FRANCHISE_MAP = {
-                "genshin": ["原神", "げんしん", "원신", "геншин", "геншин импакт"],
-                "quintuplet": [
-                    "五等分的新娘", "五等分", "五等分の花嫁", "ごとうぶんのはなよめ",
-                    "ごとうぶん", "5등분의 신부", "5등분", "5toubun", "gotoubun"
-                ],
-                "star rail": [
-                    "崩坏：星穹铁道", "崩坏星穹铁道", "星穹铁道", "星铁", "崩壊：スターレイル",
-                    "スターレイル", "붕괴: 스타레일", "스타레일", "хонкай стар рейл", "стар рейл"
-                ],
-                "fate": [
-                    "命运-冠位指定", "命运冠位指定", "フェイト・グランドオーダー",
-                    "フェイト", "페이트 그랜드 오더", "페그오", "fgo"
-                ],
-                "final fantasy": [
-                    "最终幻想", "最终幻想7", "ファイナルファンタジー", "파이널 판타지", "финалка"
-                ],
-                "witcher": [
-                    "巫师", "巫师3", "ウィッチャー", "위쳐", "ведьмак"
-                ],
-                "overwatch": [
-                    "守望先锋", "守望先锋2", "オーバーウォッチ", "오버워치", "овервотч", "ow", "ow2"
-                ],
-                "blue archive": [
-                    "碧蓝档案", "蔚蓝档案", "ブルーアーカイブ", "ブルアカ", "블루 아카이브", "블아"
-                ],
-                "zenless": [
-                    "绝区零", "ゼンレスゾーンゼロ", "ゼンゼロ", "젠레스 존 제로", "젠존제"
-                ],
-                "azur lane": [
-                    "碧蓝航线", "アズールレーン", "アズレン", "벽람항로"
-                ],
-                "arknights": [
-                    "明日方舟", "アークナイツ", "명일방주"
-                ]
-            }
 
             for fr in franchise_sections:
                 fr_toks = tuple(self._tokenize(fr))
@@ -1196,14 +1206,7 @@ Katarin
                 or bool(_ONLY_JUNK.match(tok))
             )
 
-        # Multi-lingual honorific & affix expansion (JA, ZH, KO, EN)
-        MULTILINGUAL_HONORIFIC_SUFFIXES = (
-            "chan", "san", "sama", "kun", "senpai", "sensei", "tan", "dono", "chama",
-            "ちゃん", "さん", "さま", "様", "くん", "君", "せんぱい", "先輩", "せんせい", "先生", "殿",
-            "酱", "桑", "大人", "君", "学姐", "学长", "前辈", "老师", "殿下", "小姐", "女士", "太太", "娘",
-            "양", "군", "씨", "님", "선배", "선생님", "짱"
-        )
-        DIMINUTIVE_PREFIXES = ("小", "阿")
+        # (honorific & affix expansion: MULTILINGUAL_HONORIFIC_SUFFIXES, DIMINUTIVE_PREFIXES)
         expanded_title_tokens = list(hay_tokens)
         custom_words = getattr(self, "_custom_words", set())
         cjk_names = getattr(self, "_custom_cjk_names", set())

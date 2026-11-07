@@ -236,10 +236,19 @@ struct PlanCtx {
     /// The download archive (None: asked of the app)
     db: Option<Arc<crate::archive::Archive>>,
     sites: SiteClient,
+    /// Known.txt and the learned franchise names ("": asked of the app)
+    known_txt: String,
+    franchise_cache: String,
 }
 
 impl Lookups for PlanCtx {
     fn known_hierarchy(&self, title: &str, tags: Option<&Value>, filenames: &[String], content: Option<&Value>) -> Option<(String, String)> {
+        if !self.known_txt.is_empty() {
+            let text = content.and_then(Value::as_str).unwrap_or("");
+            if let Some(hit) = crate::known::with_list(&self.known_txt, &self.franchise_cache, |k| k.find_matching_hierarchy(title, tags, filenames, text)) {
+                return hit;
+            }
+        }
         let a = self.link.ask("known", json!([title, tags, filenames, content]));
         let a = a.as_array()?;
         let s = |i: usize| a.get(i).and_then(Value::as_str).unwrap_or("").to_string();
@@ -307,7 +316,8 @@ fn plan_call(id: u64, args: &Value) -> Result<Value, String> {
     sites.set_log(Box::new(move |level: &str, category: &str, msg: &str| lg.note("log", json!([level, msg, true, category]))));
     let archive = args["archive"].as_bool().unwrap_or(false);
     let db = if archive { archive_at(&l, args["archive_db"].as_str().unwrap_or("")) } else { None };
-    let ctx = PlanCtx { link: l, id, archive, db, sites };
+    let text = |k: &str| args.get(k).and_then(Value::as_str).unwrap_or("").to_string();
+    let ctx = PlanCtx { link: l, id, archive, db, sites, known_txt: text("known_txt"), franchise_cache: text("franchise_cache") };
     let p = plan::build(posts, &o, &req, &ctx);
     Ok(json!({
         "tasks": p.tasks,

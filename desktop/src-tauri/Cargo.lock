@@ -3128,6 +3128,7 @@ dependencies = [
  "getrandom 0.3.4",
  "html-escape",
  "image",
+ "indexmap 2.14.2",
  "md-5",
  "regex",
  "reqwest",
