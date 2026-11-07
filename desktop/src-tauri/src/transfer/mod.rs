@@ -7,7 +7,7 @@
 //! `{"t":"done","ok":false,"kind":"http|network|disk|cancelled|other","status":…,"error":"…"}`.
 //! Closing the connection stops the transfer; what's on disk is kept for the next try.
 
-mod download;
+pub mod download;
 mod limiter;
 
 use download::{Job, Progress};

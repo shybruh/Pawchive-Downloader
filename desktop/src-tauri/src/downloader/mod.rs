@@ -5,13 +5,17 @@
 #![allow(dead_code)] // used once the Rust downloader takes over from the Python one
 
 pub mod extract;
+pub mod fetch;
 pub mod filters;
 pub mod links;
 pub mod naming;
 pub mod order;
 pub mod plan;
+pub mod queue;
 pub mod sites;
 mod py;
 
 #[cfg(test)]
 mod golden;
+#[cfg(test)]
+mod engine_tests;

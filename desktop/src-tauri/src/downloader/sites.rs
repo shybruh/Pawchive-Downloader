@@ -48,7 +48,7 @@ fn sleep_cancellable(secs: f64, cancel: Option<&AtomicBool>) {
     }
 }
 
-fn uniform(a: f64, b: f64) -> f64 {
+pub fn uniform(a: f64, b: f64) -> f64 {
     let mut x = [0u8; 4];
     let _ = getrandom::fill(&mut x);
     a + (b - a) * (u32::from_le_bytes(x) as f64 / u32::MAX as f64)
