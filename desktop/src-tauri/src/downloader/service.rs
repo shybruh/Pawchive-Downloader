@@ -11,6 +11,7 @@
 //!   `{"op": "state", "key", "status", "error_msg", "retry_count"}`  a file's status changed there
 //!   `{"op": "batch", "batch", "paused": true}`
 //!   `{"op": "view", "order", "rows", "meta"}`  the window's queue list changed (queue_view.rs)
+//!   `{"op": "watchlist_view", "order", "rows", "meta", "full"}`  the same for the watchlist
 //!   `{"t": "reply", "id", "value"}`  the answer to a question below
 //!   `{"op": "call", "id", "fn", "args"}`  work done here for the app, answered with
 //!   `{"t": "result", "id", "value"}` (or `"error"`): fn "plan" builds the download tasks of
@@ -505,6 +506,19 @@ fn handle(msg: &Value) {
                 v.paused_batches = m["paused"].as_array().into_iter().flatten().filter_map(|p| p.as_str().map(str::to_string)).collect();
                 v.skip_404 = m["skip_404"].as_bool().unwrap_or(false);
                 v.saved_failed = (m["saved_failed"][0].as_i64().unwrap_or(0), m["saved_failed"][1].as_i64().unwrap_or(0));
+            }
+        }
+        "watchlist_view" => {
+            let rows: Vec<crate::watchlist::view::Row> = msg["rows"].as_array().into_iter().flatten().filter_map(|r| serde_json::from_value(r.clone()).ok()).collect();
+            let order = msg["order"].as_array().map(|o| o.iter().filter_map(|k| k.as_str().map(str::to_string)).collect());
+            let mut v = crate::watchlist::view::global().lock().unwrap();
+            v.apply(order, rows);
+            if let Some(m) = msg.get("meta").filter(|m| m.is_object()) {
+                v.base_dir = m["base_dir"].as_str().unwrap_or("").to_string();
+                v.include_service = m["include_service"].as_bool().unwrap_or(true);
+            }
+            if msg["full"].as_bool().unwrap_or(false) {
+                v.invalidate_disk();
             }
         }
         "cancel_call" => {

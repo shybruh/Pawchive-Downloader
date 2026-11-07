@@ -431,7 +431,10 @@ class AppBridge(QObject):
         self._watchlist_manager = WatchlistManager(self.session_manager.config_dir)
         self._watchlist_manager.load()
         self._watchlist_manager.background_saves = True     # written off the window thread
-        self._watchlist_model = WatchlistModel(self._watchlist_manager, self)
+        # The window's watchlist is worked out in Rust (services/rust_watchlist_view.py)
+        from services import rust_watchlist_view
+        self._watchlist_model = (rust_watchlist_view.RustWatchlistModel(self._watchlist_manager, self)
+                                 if rust_watchlist_view.available() else WatchlistModel(self._watchlist_manager, self))
         self._archive_creators_model = ArchiveCreatorsModel(self)
         # Watchlist downloads: new posts that needed no files (already saved or filtered out),
         # counted as done when the download finishes

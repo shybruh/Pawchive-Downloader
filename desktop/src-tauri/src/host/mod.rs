@@ -11,6 +11,7 @@
 
 pub mod native;
 pub mod queue;
+pub mod watchlist;
 
 use crate::engine::Engine;
 use crate::media::MediaInfo;
@@ -55,6 +56,9 @@ fn natives(app_version: &str, engine: &Arc<Engine>, events: &Events) -> Natives 
         objects.push((queue::QUEUE, q));
         objects.push((queue::GROUPS, g));
         queue::start_pump(events.clone());
+        let w: Arc<dyn NativeObject> = Arc::new(watchlist::WatchlistModel);
+        objects.push((watchlist::NAME, w));
+        watchlist::start_pump(events.clone());
     }
     let app_bridge: Arc<dyn native::Overlay> = crate::bridge::AppBridge::new(events.clone());
     Natives::new(objects, vec![("appBridge", app_bridge)])

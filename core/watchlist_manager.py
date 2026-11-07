@@ -276,6 +276,8 @@ class WatchlistManager:
         self._index_src: Optional[list] = None
         self._index_len = -1
         self._index_stale = True
+        # Told about every change to a creator (the window's list, kept in the desktop shell)
+        self.change_listeners: List = []
 
     @property
     def entries(self) -> List[WatchlistEntry]:
@@ -298,6 +300,11 @@ class WatchlistManager:
                 self._dirty[rid] = e
             if name in ("user_id", "service"):
                 self._index_stale = True
+        for listener in self.change_listeners:
+            try:
+                listener(e)
+            except Exception:
+                pass
 
     def _adopt(self, e: WatchlistEntry, at_head: bool = False, rid: Optional[int] = None,
                seq: Optional[int] = None) -> None:

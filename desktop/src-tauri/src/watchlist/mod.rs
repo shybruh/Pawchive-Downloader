@@ -4,6 +4,7 @@
 //! themselves are still kept, and changed, by Python.
 
 pub mod store;
+pub mod view;
 
 use chrono::TimeZone;
 use serde_json::Value;

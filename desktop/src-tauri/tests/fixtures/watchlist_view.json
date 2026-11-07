@@ -1,0 +1,2182 @@
+{
+ "dirs": [
+  "Alice [patreon]",
+  "bob",
+  "Own Folder",
+  "Deep\\Nested"
+ ],
+ "include_service": true,
+ "rows": [
+  {
+   "key": "w1",
+   "url": "https://pawchive.pw/patreon/user/1",
+   "creator_name": "Alice",
+   "service": "patreon",
+   "domain": "pawchive.pw",
+   "user_id": "1",
+   "last_post_date": "2026-11-01",
+   "last_post_id": "10",
+   "added_at": "2026-10-01T00:00:00",
+   "auto_check": true,
+   "new_post_count": 3,
+   "download_dir": "",
+   "download_dirs": [],
+   "ignored_count": 0,
+   "posts": [
+    {
+     "id": "11",
+     "title": "  Spaced title  ",
+     "published": "2026-11-02T08:00:00",
+     "file": {
+      "name": "a.png",
+      "path": "/aa/a.png"
+     },
+     "attachments": [
+      {
+       "name": "a.png",
+       "path": "/AA/A.PNG"
+      },
+      {
+       "path": "/bb/b.png"
+      }
+     ]
+    },
+    {
+     "id": 12,
+     "title": "",
+     "captionText": "From caption",
+     "added": "2026-11-03",
+     "file": {
+      "name": "only.png"
+     }
+    },
+    {
+     "id": "13",
+     "caption": "Cap",
+     "published": 1782600000,
+     "attachments": [
+      {
+       "storageKey": "k1"
+      },
+      {
+       "storageKey": "k1"
+      },
+      {
+       "name": "x"
+      }
+     ]
+    }
+   ],
+   "is_favorite": true
+  },
+  {
+   "key": "w2",
+   "url": "https://pawchive.pw/fanbox/user/2",
+   "creator_name": "bob",
+   "service": "fanbox",
+   "domain": "pawchive.pw",
+   "user_id": "2",
+   "last_post_date": "",
+   "last_post_id": "",
+   "added_at": "2026-10-01T00:00:00",
+   "auto_check": false,
+   "new_post_count": 0,
+   "download_dir": "",
+   "download_dirs": [],
+   "ignored_count": 2,
+   "posts": [],
+   "is_favorite": false
+  },
+  {
+   "key": "w3",
+   "url": "https://pawchive.pw/patreon/user/3",
+   "creator_name": "Carol",
+   "service": "patreon",
+   "domain": "pawchive.pw",
+   "user_id": "3",
+   "last_post_date": "",
+   "last_post_id": "",
+   "added_at": "2026-10-01T00:00:00",
+   "auto_check": true,
+   "new_post_count": 0,
+   "download_dir": "{BASE}\\Own Folder",
+   "download_dirs": [
+    "{BASE}\\Own Folder",
+    "Z:\\gone"
+   ],
+   "ignored_count": 0,
+   "posts": [],
+   "is_favorite": false
+  },
+  {
+   "key": "w4",
+   "url": "https://pawchive.pw/patreon/user/4",
+   "creator_name": "dave",
+   "service": "patreon",
+   "domain": "pawchive.pw",
+   "user_id": "4",
+   "last_post_date": "",
+   "last_post_id": "",
+   "added_at": "2026-10-01T00:00:00",
+   "auto_check": true,
+   "new_post_count": 1,
+   "download_dir": "",
+   "download_dirs": [
+    "Z:\\missing",
+    "{BASE}\\Deep\\Nested"
+   ],
+   "ignored_count": 0,
+   "posts": [
+    {
+     "id": null,
+     "file": {},
+     "attachments": []
+    },
+    {
+     "title": "No id",
+     "file": {
+      "path": "/cc/c.png"
+     },
+     "attachments": [
+      {
+       "path": "/dd/d.png"
+      }
+     ]
+    }
+   ],
+   "is_favorite": false
+  },
+  {
+   "key": "w5",
+   "url": "https://cum.st/onlyfans/user/5555",
+   "creator_name": "",
+   "service": "onlyfans",
+   "domain": "cum.st",
+   "user_id": "5555",
+   "last_post_date": "",
+   "last_post_id": "",
+   "added_at": "2026-10-01T00:00:00",
+   "auto_check": true,
+   "new_post_count": 0,
+   "download_dir": "",
+   "download_dirs": [],
+   "ignored_count": 0,
+   "posts": [],
+   "is_favorite": true
+  },
+  {
+   "key": "w6",
+   "url": "https://kemono.su/patreon/user/6",
+   "creator_name": "Eve",
+   "service": "patreon",
+   "domain": "kemono.su",
+   "user_id": "6",
+   "last_post_date": "",
+   "last_post_id": "",
+   "added_at": "2026-10-01T00:00:00",
+   "auto_check": true,
+   "new_post_count": 2,
+   "download_dir": "",
+   "download_dirs": [],
+   "ignored_count": 0,
+   "posts": [
+    {
+     "id": 12,
+     "title": "",
+     "captionText": "From caption",
+     "added": "2026-11-03",
+     "file": {
+      "name": "only.png"
+     }
+    }
+   ],
+   "is_favorite": false
+  },
+  {
+   "key": "w7",
+   "url": "https://pawchive.pw/fanbox/user/7",
+   "creator_name": "alice",
+   "service": "fanbox",
+   "domain": "pawchive.pw",
+   "user_id": "7",
+   "last_post_date": "",
+   "last_post_id": "",
+   "added_at": "2026-10-01T00:00:00",
+   "auto_check": true,
+   "new_post_count": 0,
+   "download_dir": "Z:\\nope",
+   "download_dirs": [],
+   "ignored_count": 0,
+   "posts": [],
+   "is_favorite": false
+  },
+  {
+   "key": "w8",
+   "url": "https://pawchive.pw/patreon/user/8",
+   "creator_name": "Ünïcode Ärtist",
+   "service": "patreon",
+   "domain": "pawchive.pw",
+   "user_id": "8",
+   "last_post_date": "",
+   "last_post_id": "",
+   "added_at": "2026-10-01T00:00:00",
+   "auto_check": true,
+   "new_post_count": 0,
+   "download_dir": "",
+   "download_dirs": [],
+   "ignored_count": 0,
+   "posts": [],
+   "is_favorite": false
+  }
+ ],
+ "cases": [
+  {
+   "search": "",
+   "filter": "all",
+   "want": {
+    "rows": [
+     {
+      "url": "https://pawchive.pw/patreon/user/1",
+      "creatorName": "Alice",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "1",
+      "lastPostDate": "2026-11-01",
+      "lastPostId": "10",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 3,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "11",
+        "title": "Spaced title",
+        "published": "2026-11-02",
+        "fileCount": 2
+       },
+       {
+        "id": "12",
+        "title": "From caption",
+        "published": "2026-11-03",
+        "fileCount": 1
+       },
+       {
+        "id": "13",
+        "title": "Cap",
+        "published": "1782600000",
+        "fileCount": 1
+       }
+      ],
+      "isFavorite": true,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "Alice"
+     },
+     {
+      "url": "https://pawchive.pw/patreon/user/4",
+      "creatorName": "dave",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "4",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 1,
+      "downloadDir": "",
+      "downloadDirs": [
+       "Z:\\missing",
+       "{BASE}\\Deep\\Nested"
+      ],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "None",
+        "title": "Untitled",
+        "published": "",
+        "fileCount": 0
+       },
+       {
+        "id": "",
+        "title": "No id",
+        "published": "",
+        "fileCount": 2
+       }
+      ],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "dave"
+     },
+     {
+      "url": "https://kemono.su/patreon/user/6",
+      "creatorName": "Eve",
+      "service": "patreon",
+      "domain": "kemono.su",
+      "userId": "6",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 2,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "12",
+        "title": "From caption",
+        "published": "2026-11-03",
+        "fileCount": 1
+       }
+      ],
+      "isFavorite": false,
+      "provider": "unsupported",
+      "isOnDisk": false,
+      "display": "Eve"
+     },
+     {
+      "url": "https://cum.st/onlyfans/user/5555",
+      "creatorName": "",
+      "service": "onlyfans",
+      "domain": "cum.st",
+      "userId": "5555",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 0,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [],
+      "isFavorite": true,
+      "provider": "cumst",
+      "isOnDisk": false,
+      "display": ""
+     },
+     {
+      "url": "https://pawchive.pw/fanbox/user/7",
+      "creatorName": "alice",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "userId": "7",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 0,
+      "downloadDir": "Z:\\nope",
+      "downloadDirs": [
+       "Z:\\nope"
+      ],
+      "ignoredCount": 0,
+      "cachedNewPosts": [],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": false,
+      "display": "alice"
+     },
+     {
+      "url": "https://pawchive.pw/fanbox/user/2",
+      "creatorName": "bob",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "userId": "2",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": false,
+      "newPostCount": 0,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 2,
+      "cachedNewPosts": [],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "bob"
+     },
+     {
+      "url": "https://pawchive.pw/patreon/user/3",
+      "creatorName": "Carol",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "3",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 0,
+      "downloadDir": "{BASE}\\Own Folder",
+      "downloadDirs": [
+       "{BASE}\\Own Folder",
+       "Z:\\gone"
+      ],
+      "ignoredCount": 0,
+      "cachedNewPosts": [],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "Carol"
+     },
+     {
+      "url": "https://pawchive.pw/patreon/user/8",
+      "creatorName": "Ünïcode Ärtist",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "8",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 0,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": false,
+      "display": "Ünïcode Ärtist"
+     }
+    ],
+    "counts": [
+     8,
+     8,
+     3,
+     6,
+     7,
+     2,
+     4
+    ],
+    "get0": {
+     "url": "https://pawchive.pw/patreon/user/1",
+     "creatorName": "Alice",
+     "service": "patreon",
+     "domain": "pawchive.pw",
+     "userId": "1",
+     "lastPostDate": "2026-11-01",
+     "lastPostId": "10",
+     "addedAt": "2026-10-01T00:00:00",
+     "autoCheck": true,
+     "newPostCount": 3,
+     "downloadDir": "",
+     "downloadDirs": [],
+     "ignoredCount": 0,
+     "cachedNewPosts": [
+      {
+       "id": "11",
+       "title": "Spaced title",
+       "published": "2026-11-02",
+       "fileCount": 2
+      },
+      {
+       "id": "12",
+       "title": "From caption",
+       "published": "2026-11-03",
+       "fileCount": 1
+      },
+      {
+       "id": "13",
+       "title": "Cap",
+       "published": "1782600000",
+       "fileCount": 1
+      }
+     ],
+     "isFavorite": true,
+     "provider": "pawchive",
+     "isOnDisk": true
+    }
+   }
+  },
+  {
+   "search": "",
+   "filter": "updates",
+   "want": {
+    "rows": [
+     {
+      "url": "https://pawchive.pw/patreon/user/1",
+      "creatorName": "Alice",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "1",
+      "lastPostDate": "2026-11-01",
+      "lastPostId": "10",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 3,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "11",
+        "title": "Spaced title",
+        "published": "2026-11-02",
+        "fileCount": 2
+       },
+       {
+        "id": "12",
+        "title": "From caption",
+        "published": "2026-11-03",
+        "fileCount": 1
+       },
+       {
+        "id": "13",
+        "title": "Cap",
+        "published": "1782600000",
+        "fileCount": 1
+       }
+      ],
+      "isFavorite": true,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "Alice"
+     },
+     {
+      "url": "https://pawchive.pw/patreon/user/4",
+      "creatorName": "dave",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "4",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 1,
+      "downloadDir": "",
+      "downloadDirs": [
+       "Z:\\missing",
+       "{BASE}\\Deep\\Nested"
+      ],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "None",
+        "title": "Untitled",
+        "published": "",
+        "fileCount": 0
+       },
+       {
+        "id": "",
+        "title": "No id",
+        "published": "",
+        "fileCount": 2
+       }
+      ],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "dave"
+     },
+     {
+      "url": "https://kemono.su/patreon/user/6",
+      "creatorName": "Eve",
+      "service": "patreon",
+      "domain": "kemono.su",
+      "userId": "6",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 2,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "12",
+        "title": "From caption",
+        "published": "2026-11-03",
+        "fileCount": 1
+       }
+      ],
+      "isFavorite": false,
+      "provider": "unsupported",
+      "isOnDisk": false,
+      "display": "Eve"
+     }
+    ],
+    "counts": [
+     3,
+     8,
+     3,
+     6,
+     7,
+     2,
+     4
+    ],
+    "get0": {
+     "url": "https://pawchive.pw/patreon/user/1",
+     "creatorName": "Alice",
+     "service": "patreon",
+     "domain": "pawchive.pw",
+     "userId": "1",
+     "lastPostDate": "2026-11-01",
+     "lastPostId": "10",
+     "addedAt": "2026-10-01T00:00:00",
+     "autoCheck": true,
+     "newPostCount": 3,
+     "downloadDir": "",
+     "downloadDirs": [],
+     "ignoredCount": 0,
+     "cachedNewPosts": [
+      {
+       "id": "11",
+       "title": "Spaced title",
+       "published": "2026-11-02",
+       "fileCount": 2
+      },
+      {
+       "id": "12",
+       "title": "From caption",
+       "published": "2026-11-03",
+       "fileCount": 1
+      },
+      {
+       "id": "13",
+       "title": "Cap",
+       "published": "1782600000",
+       "fileCount": 1
+      }
+     ],
+     "isFavorite": true,
+     "provider": "pawchive",
+     "isOnDisk": true
+    }
+   }
+  },
+  {
+   "search": "",
+   "filter": "favorites",
+   "want": {
+    "rows": [
+     {
+      "url": "https://pawchive.pw/patreon/user/1",
+      "creatorName": "Alice",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "1",
+      "lastPostDate": "2026-11-01",
+      "lastPostId": "10",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 3,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "11",
+        "title": "Spaced title",
+        "published": "2026-11-02",
+        "fileCount": 2
+       },
+       {
+        "id": "12",
+        "title": "From caption",
+        "published": "2026-11-03",
+        "fileCount": 1
+       },
+       {
+        "id": "13",
+        "title": "Cap",
+        "published": "1782600000",
+        "fileCount": 1
+       }
+      ],
+      "isFavorite": true,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "Alice"
+     },
+     {
+      "url": "https://cum.st/onlyfans/user/5555",
+      "creatorName": "",
+      "service": "onlyfans",
+      "domain": "cum.st",
+      "userId": "5555",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 0,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [],
+      "isFavorite": true,
+      "provider": "cumst",
+      "isOnDisk": false,
+      "display": ""
+     }
+    ],
+    "counts": [
+     2,
+     8,
+     3,
+     6,
+     7,
+     2,
+     4
+    ],
+    "get0": {
+     "url": "https://pawchive.pw/patreon/user/1",
+     "creatorName": "Alice",
+     "service": "patreon",
+     "domain": "pawchive.pw",
+     "userId": "1",
+     "lastPostDate": "2026-11-01",
+     "lastPostId": "10",
+     "addedAt": "2026-10-01T00:00:00",
+     "autoCheck": true,
+     "newPostCount": 3,
+     "downloadDir": "",
+     "downloadDirs": [],
+     "ignoredCount": 0,
+     "cachedNewPosts": [
+      {
+       "id": "11",
+       "title": "Spaced title",
+       "published": "2026-11-02",
+       "fileCount": 2
+      },
+      {
+       "id": "12",
+       "title": "From caption",
+       "published": "2026-11-03",
+       "fileCount": 1
+      },
+      {
+       "id": "13",
+       "title": "Cap",
+       "published": "1782600000",
+       "fileCount": 1
+      }
+     ],
+     "isFavorite": true,
+     "provider": "pawchive",
+     "isOnDisk": true
+    }
+   }
+  },
+  {
+   "search": "",
+   "filter": "synced",
+   "want": {
+    "rows": [
+     {
+      "url": "https://pawchive.pw/patreon/user/1",
+      "creatorName": "Alice",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "1",
+      "lastPostDate": "2026-11-01",
+      "lastPostId": "10",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 3,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "11",
+        "title": "Spaced title",
+        "published": "2026-11-02",
+        "fileCount": 2
+       },
+       {
+        "id": "12",
+        "title": "From caption",
+        "published": "2026-11-03",
+        "fileCount": 1
+       },
+       {
+        "id": "13",
+        "title": "Cap",
+        "published": "1782600000",
+        "fileCount": 1
+       }
+      ],
+      "isFavorite": true,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "Alice"
+     },
+     {
+      "url": "https://pawchive.pw/patreon/user/4",
+      "creatorName": "dave",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "4",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 1,
+      "downloadDir": "",
+      "downloadDirs": [
+       "Z:\\missing",
+       "{BASE}\\Deep\\Nested"
+      ],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "None",
+        "title": "Untitled",
+        "published": "",
+        "fileCount": 0
+       },
+       {
+        "id": "",
+        "title": "No id",
+        "published": "",
+        "fileCount": 2
+       }
+      ],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "dave"
+     },
+     {
+      "url": "https://pawchive.pw/fanbox/user/2",
+      "creatorName": "bob",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "userId": "2",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": false,
+      "newPostCount": 0,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 2,
+      "cachedNewPosts": [],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "bob"
+     },
+     {
+      "url": "https://pawchive.pw/patreon/user/3",
+      "creatorName": "Carol",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "3",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 0,
+      "downloadDir": "{BASE}\\Own Folder",
+      "downloadDirs": [
+       "{BASE}\\Own Folder",
+       "Z:\\gone"
+      ],
+      "ignoredCount": 0,
+      "cachedNewPosts": [],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "Carol"
+     }
+    ],
+    "counts": [
+     4,
+     8,
+     3,
+     6,
+     7,
+     2,
+     4
+    ],
+    "get0": {
+     "url": "https://pawchive.pw/patreon/user/1",
+     "creatorName": "Alice",
+     "service": "patreon",
+     "domain": "pawchive.pw",
+     "userId": "1",
+     "lastPostDate": "2026-11-01",
+     "lastPostId": "10",
+     "addedAt": "2026-10-01T00:00:00",
+     "autoCheck": true,
+     "newPostCount": 3,
+     "downloadDir": "",
+     "downloadDirs": [],
+     "ignoredCount": 0,
+     "cachedNewPosts": [
+      {
+       "id": "11",
+       "title": "Spaced title",
+       "published": "2026-11-02",
+       "fileCount": 2
+      },
+      {
+       "id": "12",
+       "title": "From caption",
+       "published": "2026-11-03",
+       "fileCount": 1
+      },
+      {
+       "id": "13",
+       "title": "Cap",
+       "published": "1782600000",
+       "fileCount": 1
+      }
+     ],
+     "isFavorite": true,
+     "provider": "pawchive",
+     "isOnDisk": true
+    }
+   }
+  },
+  {
+   "search": "",
+   "filter": "on_disk",
+   "want": {
+    "rows": [
+     {
+      "url": "https://pawchive.pw/patreon/user/1",
+      "creatorName": "Alice",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "1",
+      "lastPostDate": "2026-11-01",
+      "lastPostId": "10",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 3,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "11",
+        "title": "Spaced title",
+        "published": "2026-11-02",
+        "fileCount": 2
+       },
+       {
+        "id": "12",
+        "title": "From caption",
+        "published": "2026-11-03",
+        "fileCount": 1
+       },
+       {
+        "id": "13",
+        "title": "Cap",
+        "published": "1782600000",
+        "fileCount": 1
+       }
+      ],
+      "isFavorite": true,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "Alice"
+     },
+     {
+      "url": "https://pawchive.pw/patreon/user/4",
+      "creatorName": "dave",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "4",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 1,
+      "downloadDir": "",
+      "downloadDirs": [
+       "Z:\\missing",
+       "{BASE}\\Deep\\Nested"
+      ],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "None",
+        "title": "Untitled",
+        "published": "",
+        "fileCount": 0
+       },
+       {
+        "id": "",
+        "title": "No id",
+        "published": "",
+        "fileCount": 2
+       }
+      ],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "dave"
+     },
+     {
+      "url": "https://pawchive.pw/fanbox/user/2",
+      "creatorName": "bob",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "userId": "2",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": false,
+      "newPostCount": 0,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 2,
+      "cachedNewPosts": [],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "bob"
+     },
+     {
+      "url": "https://pawchive.pw/patreon/user/3",
+      "creatorName": "Carol",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "3",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 0,
+      "downloadDir": "{BASE}\\Own Folder",
+      "downloadDirs": [
+       "{BASE}\\Own Folder",
+       "Z:\\gone"
+      ],
+      "ignoredCount": 0,
+      "cachedNewPosts": [],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "Carol"
+     }
+    ],
+    "counts": [
+     4,
+     8,
+     3,
+     6,
+     7,
+     2,
+     4
+    ],
+    "get0": {
+     "url": "https://pawchive.pw/patreon/user/1",
+     "creatorName": "Alice",
+     "service": "patreon",
+     "domain": "pawchive.pw",
+     "userId": "1",
+     "lastPostDate": "2026-11-01",
+     "lastPostId": "10",
+     "addedAt": "2026-10-01T00:00:00",
+     "autoCheck": true,
+     "newPostCount": 3,
+     "downloadDir": "",
+     "downloadDirs": [],
+     "ignoredCount": 0,
+     "cachedNewPosts": [
+      {
+       "id": "11",
+       "title": "Spaced title",
+       "published": "2026-11-02",
+       "fileCount": 2
+      },
+      {
+       "id": "12",
+       "title": "From caption",
+       "published": "2026-11-03",
+       "fileCount": 1
+      },
+      {
+       "id": "13",
+       "title": "Cap",
+       "published": "1782600000",
+       "fileCount": 1
+      }
+     ],
+     "isFavorite": true,
+     "provider": "pawchive",
+     "isOnDisk": true
+    }
+   }
+  },
+  {
+   "search": "",
+   "filter": "fanbox",
+   "want": {
+    "rows": [
+     {
+      "url": "https://pawchive.pw/fanbox/user/7",
+      "creatorName": "alice",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "userId": "7",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 0,
+      "downloadDir": "Z:\\nope",
+      "downloadDirs": [
+       "Z:\\nope"
+      ],
+      "ignoredCount": 0,
+      "cachedNewPosts": [],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": false,
+      "display": "alice"
+     },
+     {
+      "url": "https://pawchive.pw/fanbox/user/2",
+      "creatorName": "bob",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "userId": "2",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": false,
+      "newPostCount": 0,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 2,
+      "cachedNewPosts": [],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "bob"
+     }
+    ],
+    "counts": [
+     2,
+     8,
+     3,
+     6,
+     7,
+     2,
+     4
+    ],
+    "get0": {
+     "url": "https://pawchive.pw/fanbox/user/7",
+     "creatorName": "alice",
+     "service": "fanbox",
+     "domain": "pawchive.pw",
+     "userId": "7",
+     "lastPostDate": "",
+     "lastPostId": "",
+     "addedAt": "2026-10-01T00:00:00",
+     "autoCheck": true,
+     "newPostCount": 0,
+     "downloadDir": "Z:\\nope",
+     "downloadDirs": [
+      "Z:\\nope"
+     ],
+     "ignoredCount": 0,
+     "cachedNewPosts": [],
+     "isFavorite": false,
+     "provider": "pawchive",
+     "isOnDisk": false
+    }
+   }
+  },
+  {
+   "search": "",
+   "filter": "PATREON",
+   "want": {
+    "rows": [
+     {
+      "url": "https://pawchive.pw/patreon/user/1",
+      "creatorName": "Alice",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "1",
+      "lastPostDate": "2026-11-01",
+      "lastPostId": "10",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 3,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "11",
+        "title": "Spaced title",
+        "published": "2026-11-02",
+        "fileCount": 2
+       },
+       {
+        "id": "12",
+        "title": "From caption",
+        "published": "2026-11-03",
+        "fileCount": 1
+       },
+       {
+        "id": "13",
+        "title": "Cap",
+        "published": "1782600000",
+        "fileCount": 1
+       }
+      ],
+      "isFavorite": true,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "Alice"
+     },
+     {
+      "url": "https://pawchive.pw/patreon/user/4",
+      "creatorName": "dave",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "4",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 1,
+      "downloadDir": "",
+      "downloadDirs": [
+       "Z:\\missing",
+       "{BASE}\\Deep\\Nested"
+      ],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "None",
+        "title": "Untitled",
+        "published": "",
+        "fileCount": 0
+       },
+       {
+        "id": "",
+        "title": "No id",
+        "published": "",
+        "fileCount": 2
+       }
+      ],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "dave"
+     },
+     {
+      "url": "https://kemono.su/patreon/user/6",
+      "creatorName": "Eve",
+      "service": "patreon",
+      "domain": "kemono.su",
+      "userId": "6",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 2,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "12",
+        "title": "From caption",
+        "published": "2026-11-03",
+        "fileCount": 1
+       }
+      ],
+      "isFavorite": false,
+      "provider": "unsupported",
+      "isOnDisk": false,
+      "display": "Eve"
+     },
+     {
+      "url": "https://pawchive.pw/patreon/user/3",
+      "creatorName": "Carol",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "3",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 0,
+      "downloadDir": "{BASE}\\Own Folder",
+      "downloadDirs": [
+       "{BASE}\\Own Folder",
+       "Z:\\gone"
+      ],
+      "ignoredCount": 0,
+      "cachedNewPosts": [],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "Carol"
+     },
+     {
+      "url": "https://pawchive.pw/patreon/user/8",
+      "creatorName": "Ünïcode Ärtist",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "8",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 0,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": false,
+      "display": "Ünïcode Ärtist"
+     }
+    ],
+    "counts": [
+     5,
+     8,
+     3,
+     6,
+     7,
+     2,
+     4
+    ],
+    "get0": {
+     "url": "https://pawchive.pw/patreon/user/1",
+     "creatorName": "Alice",
+     "service": "patreon",
+     "domain": "pawchive.pw",
+     "userId": "1",
+     "lastPostDate": "2026-11-01",
+     "lastPostId": "10",
+     "addedAt": "2026-10-01T00:00:00",
+     "autoCheck": true,
+     "newPostCount": 3,
+     "downloadDir": "",
+     "downloadDirs": [],
+     "ignoredCount": 0,
+     "cachedNewPosts": [
+      {
+       "id": "11",
+       "title": "Spaced title",
+       "published": "2026-11-02",
+       "fileCount": 2
+      },
+      {
+       "id": "12",
+       "title": "From caption",
+       "published": "2026-11-03",
+       "fileCount": 1
+      },
+      {
+       "id": "13",
+       "title": "Cap",
+       "published": "1782600000",
+       "fileCount": 1
+      }
+     ],
+     "isFavorite": true,
+     "provider": "pawchive",
+     "isOnDisk": true
+    }
+   }
+  },
+  {
+   "search": "ali",
+   "filter": "all",
+   "want": {
+    "rows": [
+     {
+      "url": "https://pawchive.pw/patreon/user/1",
+      "creatorName": "Alice",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "1",
+      "lastPostDate": "2026-11-01",
+      "lastPostId": "10",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 3,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "11",
+        "title": "Spaced title",
+        "published": "2026-11-02",
+        "fileCount": 2
+       },
+       {
+        "id": "12",
+        "title": "From caption",
+        "published": "2026-11-03",
+        "fileCount": 1
+       },
+       {
+        "id": "13",
+        "title": "Cap",
+        "published": "1782600000",
+        "fileCount": 1
+       }
+      ],
+      "isFavorite": true,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "Alice"
+     },
+     {
+      "url": "https://pawchive.pw/fanbox/user/7",
+      "creatorName": "alice",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "userId": "7",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 0,
+      "downloadDir": "Z:\\nope",
+      "downloadDirs": [
+       "Z:\\nope"
+      ],
+      "ignoredCount": 0,
+      "cachedNewPosts": [],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": false,
+      "display": "alice"
+     }
+    ],
+    "counts": [
+     2,
+     8,
+     3,
+     6,
+     7,
+     2,
+     4
+    ],
+    "get0": {
+     "url": "https://pawchive.pw/patreon/user/1",
+     "creatorName": "Alice",
+     "service": "patreon",
+     "domain": "pawchive.pw",
+     "userId": "1",
+     "lastPostDate": "2026-11-01",
+     "lastPostId": "10",
+     "addedAt": "2026-10-01T00:00:00",
+     "autoCheck": true,
+     "newPostCount": 3,
+     "downloadDir": "",
+     "downloadDirs": [],
+     "ignoredCount": 0,
+     "cachedNewPosts": [
+      {
+       "id": "11",
+       "title": "Spaced title",
+       "published": "2026-11-02",
+       "fileCount": 2
+      },
+      {
+       "id": "12",
+       "title": "From caption",
+       "published": "2026-11-03",
+       "fileCount": 1
+      },
+      {
+       "id": "13",
+       "title": "Cap",
+       "published": "1782600000",
+       "fileCount": 1
+      }
+     ],
+     "isFavorite": true,
+     "provider": "pawchive",
+     "isOnDisk": true
+    }
+   }
+  },
+  {
+   "search": "55",
+   "filter": "all",
+   "want": {
+    "rows": [
+     {
+      "url": "https://cum.st/onlyfans/user/5555",
+      "creatorName": "",
+      "service": "onlyfans",
+      "domain": "cum.st",
+      "userId": "5555",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 0,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [],
+      "isFavorite": true,
+      "provider": "cumst",
+      "isOnDisk": false,
+      "display": ""
+     }
+    ],
+    "counts": [
+     1,
+     8,
+     3,
+     6,
+     7,
+     2,
+     4
+    ],
+    "get0": {
+     "url": "https://cum.st/onlyfans/user/5555",
+     "creatorName": "",
+     "service": "onlyfans",
+     "domain": "cum.st",
+     "userId": "5555",
+     "lastPostDate": "",
+     "lastPostId": "",
+     "addedAt": "2026-10-01T00:00:00",
+     "autoCheck": true,
+     "newPostCount": 0,
+     "downloadDir": "",
+     "downloadDirs": [],
+     "ignoredCount": 0,
+     "cachedNewPosts": [],
+     "isFavorite": true,
+     "provider": "cumst",
+     "isOnDisk": false
+    }
+   }
+  },
+  {
+   "search": "ALICE",
+   "filter": "updates",
+   "want": {
+    "rows": [
+     {
+      "url": "https://pawchive.pw/patreon/user/1",
+      "creatorName": "Alice",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "1",
+      "lastPostDate": "2026-11-01",
+      "lastPostId": "10",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 3,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "11",
+        "title": "Spaced title",
+        "published": "2026-11-02",
+        "fileCount": 2
+       },
+       {
+        "id": "12",
+        "title": "From caption",
+        "published": "2026-11-03",
+        "fileCount": 1
+       },
+       {
+        "id": "13",
+        "title": "Cap",
+        "published": "1782600000",
+        "fileCount": 1
+       }
+      ],
+      "isFavorite": true,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "Alice"
+     }
+    ],
+    "counts": [
+     1,
+     8,
+     3,
+     6,
+     7,
+     2,
+     4
+    ],
+    "get0": {
+     "url": "https://pawchive.pw/patreon/user/1",
+     "creatorName": "Alice",
+     "service": "patreon",
+     "domain": "pawchive.pw",
+     "userId": "1",
+     "lastPostDate": "2026-11-01",
+     "lastPostId": "10",
+     "addedAt": "2026-10-01T00:00:00",
+     "autoCheck": true,
+     "newPostCount": 3,
+     "downloadDir": "",
+     "downloadDirs": [],
+     "ignoredCount": 0,
+     "cachedNewPosts": [
+      {
+       "id": "11",
+       "title": "Spaced title",
+       "published": "2026-11-02",
+       "fileCount": 2
+      },
+      {
+       "id": "12",
+       "title": "From caption",
+       "published": "2026-11-03",
+       "fileCount": 1
+      },
+      {
+       "id": "13",
+       "title": "Cap",
+       "published": "1782600000",
+       "fileCount": 1
+      }
+     ],
+     "isFavorite": true,
+     "provider": "pawchive",
+     "isOnDisk": true
+    }
+   }
+  },
+  {
+   "search": "zzz",
+   "filter": "all",
+   "want": {
+    "rows": [],
+    "counts": [
+     0,
+     8,
+     3,
+     6,
+     7,
+     2,
+     4
+    ],
+    "get0": {}
+   }
+  },
+  {
+   "search": "  ",
+   "filter": "",
+   "want": {
+    "rows": [
+     {
+      "url": "https://pawchive.pw/patreon/user/1",
+      "creatorName": "Alice",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "1",
+      "lastPostDate": "2026-11-01",
+      "lastPostId": "10",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 3,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "11",
+        "title": "Spaced title",
+        "published": "2026-11-02",
+        "fileCount": 2
+       },
+       {
+        "id": "12",
+        "title": "From caption",
+        "published": "2026-11-03",
+        "fileCount": 1
+       },
+       {
+        "id": "13",
+        "title": "Cap",
+        "published": "1782600000",
+        "fileCount": 1
+       }
+      ],
+      "isFavorite": true,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "Alice"
+     },
+     {
+      "url": "https://pawchive.pw/patreon/user/4",
+      "creatorName": "dave",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "4",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 1,
+      "downloadDir": "",
+      "downloadDirs": [
+       "Z:\\missing",
+       "{BASE}\\Deep\\Nested"
+      ],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "None",
+        "title": "Untitled",
+        "published": "",
+        "fileCount": 0
+       },
+       {
+        "id": "",
+        "title": "No id",
+        "published": "",
+        "fileCount": 2
+       }
+      ],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "dave"
+     },
+     {
+      "url": "https://kemono.su/patreon/user/6",
+      "creatorName": "Eve",
+      "service": "patreon",
+      "domain": "kemono.su",
+      "userId": "6",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 2,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "12",
+        "title": "From caption",
+        "published": "2026-11-03",
+        "fileCount": 1
+       }
+      ],
+      "isFavorite": false,
+      "provider": "unsupported",
+      "isOnDisk": false,
+      "display": "Eve"
+     },
+     {
+      "url": "https://cum.st/onlyfans/user/5555",
+      "creatorName": "",
+      "service": "onlyfans",
+      "domain": "cum.st",
+      "userId": "5555",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 0,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [],
+      "isFavorite": true,
+      "provider": "cumst",
+      "isOnDisk": false,
+      "display": ""
+     },
+     {
+      "url": "https://pawchive.pw/fanbox/user/7",
+      "creatorName": "alice",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "userId": "7",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 0,
+      "downloadDir": "Z:\\nope",
+      "downloadDirs": [
+       "Z:\\nope"
+      ],
+      "ignoredCount": 0,
+      "cachedNewPosts": [],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": false,
+      "display": "alice"
+     },
+     {
+      "url": "https://pawchive.pw/fanbox/user/2",
+      "creatorName": "bob",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "userId": "2",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": false,
+      "newPostCount": 0,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 2,
+      "cachedNewPosts": [],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "bob"
+     },
+     {
+      "url": "https://pawchive.pw/patreon/user/3",
+      "creatorName": "Carol",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "3",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 0,
+      "downloadDir": "{BASE}\\Own Folder",
+      "downloadDirs": [
+       "{BASE}\\Own Folder",
+       "Z:\\gone"
+      ],
+      "ignoredCount": 0,
+      "cachedNewPosts": [],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "Carol"
+     },
+     {
+      "url": "https://pawchive.pw/patreon/user/8",
+      "creatorName": "Ünïcode Ärtist",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "8",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 0,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": false,
+      "display": "Ünïcode Ärtist"
+     }
+    ],
+    "counts": [
+     8,
+     8,
+     3,
+     6,
+     7,
+     2,
+     4
+    ],
+    "get0": {
+     "url": "https://pawchive.pw/patreon/user/1",
+     "creatorName": "Alice",
+     "service": "patreon",
+     "domain": "pawchive.pw",
+     "userId": "1",
+     "lastPostDate": "2026-11-01",
+     "lastPostId": "10",
+     "addedAt": "2026-10-01T00:00:00",
+     "autoCheck": true,
+     "newPostCount": 3,
+     "downloadDir": "",
+     "downloadDirs": [],
+     "ignoredCount": 0,
+     "cachedNewPosts": [
+      {
+       "id": "11",
+       "title": "Spaced title",
+       "published": "2026-11-02",
+       "fileCount": 2
+      },
+      {
+       "id": "12",
+       "title": "From caption",
+       "published": "2026-11-03",
+       "fileCount": 1
+      },
+      {
+       "id": "13",
+       "title": "Cap",
+       "published": "1782600000",
+       "fileCount": 1
+      }
+     ],
+     "isFavorite": true,
+     "provider": "pawchive",
+     "isOnDisk": true
+    }
+   }
+  },
+  {
+   "search": "e",
+   "filter": "ondisk",
+   "want": {
+    "rows": [
+     {
+      "url": "https://pawchive.pw/patreon/user/1",
+      "creatorName": "Alice",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "1",
+      "lastPostDate": "2026-11-01",
+      "lastPostId": "10",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 3,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "11",
+        "title": "Spaced title",
+        "published": "2026-11-02",
+        "fileCount": 2
+       },
+       {
+        "id": "12",
+        "title": "From caption",
+        "published": "2026-11-03",
+        "fileCount": 1
+       },
+       {
+        "id": "13",
+        "title": "Cap",
+        "published": "1782600000",
+        "fileCount": 1
+       }
+      ],
+      "isFavorite": true,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "Alice"
+     },
+     {
+      "url": "https://pawchive.pw/patreon/user/4",
+      "creatorName": "dave",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "4",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 1,
+      "downloadDir": "",
+      "downloadDirs": [
+       "Z:\\missing",
+       "{BASE}\\Deep\\Nested"
+      ],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "None",
+        "title": "Untitled",
+        "published": "",
+        "fileCount": 0
+       },
+       {
+        "id": "",
+        "title": "No id",
+        "published": "",
+        "fileCount": 2
+       }
+      ],
+      "isFavorite": false,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "dave"
+     }
+    ],
+    "counts": [
+     2,
+     8,
+     3,
+     6,
+     7,
+     2,
+     4
+    ],
+    "get0": {
+     "url": "https://pawchive.pw/patreon/user/1",
+     "creatorName": "Alice",
+     "service": "patreon",
+     "domain": "pawchive.pw",
+     "userId": "1",
+     "lastPostDate": "2026-11-01",
+     "lastPostId": "10",
+     "addedAt": "2026-10-01T00:00:00",
+     "autoCheck": true,
+     "newPostCount": 3,
+     "downloadDir": "",
+     "downloadDirs": [],
+     "ignoredCount": 0,
+     "cachedNewPosts": [
+      {
+       "id": "11",
+       "title": "Spaced title",
+       "published": "2026-11-02",
+       "fileCount": 2
+      },
+      {
+       "id": "12",
+       "title": "From caption",
+       "published": "2026-11-03",
+       "fileCount": 1
+      },
+      {
+       "id": "13",
+       "title": "Cap",
+       "published": "1782600000",
+       "fileCount": 1
+      }
+     ],
+     "isFavorite": true,
+     "provider": "pawchive",
+     "isOnDisk": true
+    }
+   }
+  },
+  {
+   "search": "",
+   "filter": "favorite",
+   "want": {
+    "rows": [
+     {
+      "url": "https://pawchive.pw/patreon/user/1",
+      "creatorName": "Alice",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "userId": "1",
+      "lastPostDate": "2026-11-01",
+      "lastPostId": "10",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 3,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [
+       {
+        "id": "11",
+        "title": "Spaced title",
+        "published": "2026-11-02",
+        "fileCount": 2
+       },
+       {
+        "id": "12",
+        "title": "From caption",
+        "published": "2026-11-03",
+        "fileCount": 1
+       },
+       {
+        "id": "13",
+        "title": "Cap",
+        "published": "1782600000",
+        "fileCount": 1
+       }
+      ],
+      "isFavorite": true,
+      "provider": "pawchive",
+      "isOnDisk": true,
+      "display": "Alice"
+     },
+     {
+      "url": "https://cum.st/onlyfans/user/5555",
+      "creatorName": "",
+      "service": "onlyfans",
+      "domain": "cum.st",
+      "userId": "5555",
+      "lastPostDate": "",
+      "lastPostId": "",
+      "addedAt": "2026-10-01T00:00:00",
+      "autoCheck": true,
+      "newPostCount": 0,
+      "downloadDir": "",
+      "downloadDirs": [],
+      "ignoredCount": 0,
+      "cachedNewPosts": [],
+      "isFavorite": true,
+      "provider": "cumst",
+      "isOnDisk": false,
+      "display": ""
+     }
+    ],
+    "counts": [
+     2,
+     8,
+     3,
+     6,
+     7,
+     2,
+     4
+    ],
+    "get0": {
+     "url": "https://pawchive.pw/patreon/user/1",
+     "creatorName": "Alice",
+     "service": "patreon",
+     "domain": "pawchive.pw",
+     "userId": "1",
+     "lastPostDate": "2026-11-01",
+     "lastPostId": "10",
+     "addedAt": "2026-10-01T00:00:00",
+     "autoCheck": true,
+     "newPostCount": 3,
+     "downloadDir": "",
+     "downloadDirs": [],
+     "ignoredCount": 0,
+     "cachedNewPosts": [
+      {
+       "id": "11",
+       "title": "Spaced title",
+       "published": "2026-11-02",
+       "fileCount": 2
+      },
+      {
+       "id": "12",
+       "title": "From caption",
+       "published": "2026-11-03",
+       "fileCount": 1
+      },
+      {
+       "id": "13",
+       "title": "Cap",
+       "published": "1782600000",
+       "fileCount": 1
+      }
+     ],
+     "isFavorite": true,
+     "provider": "pawchive",
+     "isOnDisk": true
+    }
+   }
+  }
+ ]
+}
