@@ -10,6 +10,7 @@
 //! Python still needs it, deleting the Python side).
 
 pub mod native;
+pub mod queue;
 
 use crate::engine::Engine;
 use crate::media::MediaInfo;
@@ -46,7 +47,16 @@ enum Patch {
 fn natives(app_version: &str, engine: &Arc<Engine>, events: &Events) -> Natives {
     let shell: Arc<dyn NativeObject> = Arc::new(Shell { version: app_version.to_string() });
     let accounts: Arc<dyn NativeObject> = Arc::new(crate::accounts::Accounts::new(engine.clone(), events.clone()));
-    Natives::new(vec![("shell", shell), ("accounts", accounts)])
+    let mut objects = vec![("shell", shell), ("accounts", accounts)];
+    // The download queue's view, kept by the app's Rust queue model (not with the old Python downloader)
+    if std::env::var("PAWCHIVE_PYTHON_DOWNLOADER").ok().as_deref() != Some("1") {
+        let q: Arc<dyn NativeObject> = Arc::new(queue::QueueModel);
+        let g: Arc<dyn NativeObject> = Arc::new(queue::GroupsModel);
+        objects.push((queue::QUEUE, q));
+        objects.push((queue::GROUPS, g));
+        queue::start_pump(events.clone());
+    }
+    Natives::new(objects)
 }
 
 impl Host {
@@ -155,6 +165,9 @@ async fn serve(
         while let Some(Ok(msg)) = py_rx.next().await {
             let Message::Text(text) = msg else { continue };
             let text = text.to_string();
+            if hidden_event(&text, &py_natives) {
+                continue;
+            }
             let patched = patch_answer(&text, &py_patches, &py_natives, &media);
             if py_out.send(patched.unwrap_or(text)).is_err() {
                 break;
@@ -199,6 +212,16 @@ async fn serve(
     event_pump.abort();
     writer.abort();
     Ok(())
+}
+
+/// A Python event about the state of an object Rust answers for (its own events say that);
+/// Python's signals still pass (the app runs the object's actions)
+fn hidden_event(text: &str, natives: &Natives) -> bool {
+    if !(text.starts_with("{\"event\": \"props\"") || text.starts_with("{\"event\": \"model\"")) {
+        return false;
+    }
+    let Ok(msg) = serde_json::from_str::<Value>(text) else { return false };
+    msg.get("obj").and_then(Value::as_str).is_some_and(|o| natives.get(o).is_some())
 }
 
 /// Adds what the host knows to Python's answers to `describe` and `info`.

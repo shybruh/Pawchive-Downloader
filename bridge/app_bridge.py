@@ -287,7 +287,9 @@ class AppBridge(QObject):
 
         # Models
         self._log_model = LogModel(self)
-        self._queue_model = QueueModel(self)
+        # The window's queue view is worked out in Rust (services/rust_queue_view.py)
+        from services import rust_queue_view
+        self._queue_model = rust_queue_view.RustQueueModel(self) if rust_queue_view.available() else QueueModel(self)
         self._active_queue_model = QueueModel(self, enable_groups=False)
         self._active_queue_model.filterStatus = "downloading"
         self._active_queue_model.minFileSize = 50 * 1024 * 1024  # 50 MB threshold

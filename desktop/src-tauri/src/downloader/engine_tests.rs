@@ -251,6 +251,17 @@ fn pause_resume_and_cancel() {
     assert!(started.elapsed() < Duration::from_secs(3), "cancel took {:?}", started.elapsed());
     let part = format!("{}.part", c.lock().unwrap().task.target_path);
     assert!(std::path::Path::new(&part).exists());
+
+    // One file cancelled while it downloads (its post's "Cancel remaining"): it stops too
+    let ctl = Arc::new(Ctl::default());
+    let c = fetch::cell(task(&d, "slow3.bin", &[format!("{s}/file/slow3?size=3000000&slow=1")]));
+    let (c2, ctl2, o2) = (c.clone(), ctl.clone(), Arc::new(opts(json!({}))));
+    let worker = std::thread::spawn(move || fetch::download(&c2, &o2, &Rec::default(), &ctl2));
+    std::thread::sleep(Duration::from_millis(1000));
+    c.lock().unwrap().st.status = "cancelled".into();
+    let started = Instant::now();
+    assert_eq!(worker.join().unwrap(), (false, "Cancelled".into()));
+    assert!(started.elapsed() < Duration::from_secs(3), "cancel took {:?}", started.elapsed());
 }
 
 fn wait_finished(rec: &Rec, secs: u64) -> (bool, String) {

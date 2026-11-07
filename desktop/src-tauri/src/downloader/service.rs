@@ -10,6 +10,7 @@
 //!   `{"op": "pause"}`, `resume`, `cancel`, `reset`, `{"op": "workers", "n": 4}`
 //!   `{"op": "state", "key", "status", "error_msg", "retry_count"}`  a file's status changed there
 //!   `{"op": "batch", "batch", "paused": true}`
+//!   `{"op": "view", "order", "rows", "meta"}`  the window's queue list changed (queue_view.rs)
 //!   `{"t": "reply", "id", "value"}`  the answer to a question below
 //!   `{"op": "call", "id", "fn", "args"}`  work done here for the app, answered with
 //!   `{"t": "result", "id", "value"}` (or `"error"`): fn "plan" builds the download tasks of
@@ -348,6 +349,20 @@ fn site_call(id: u64, a: &Value) -> Result<Value, String> {
     Ok(out)
 }
 
+/// Asks the app (for the window's requests it still handles); Err when it isn't connected or
+/// the request failed there
+pub fn ask_app(f: &str, args: Value) -> Result<Value, String> {
+    let l = link();
+    if l.out.lock().unwrap().is_none() {
+        return Err("the engine isn't connected yet".into());
+    }
+    let v = l.ask(f, args);
+    match v.get("$error").and_then(Value::as_str) {
+        Some(e) => Err(e.to_string()),
+        None => Ok(v),
+    }
+}
+
 fn link() -> &'static Arc<Link> {
     static L: OnceLock<Arc<Link>> = OnceLock::new();
     L.get_or_init(Arc::default)
@@ -457,6 +472,17 @@ fn handle(msg: &Value) {
         "workers" => q.set_max_workers(msg["n"].as_u64().unwrap_or(1) as usize),
         "state" => q.set_state(&s("key"), &s("status"), msg.get("error_msg").and_then(Value::as_str), msg.get("retry_count").and_then(Value::as_u64).map(|n| n as u32)),
         "batch" => q.set_batch_paused(&s("batch"), msg["paused"].as_bool().unwrap_or(false)),
+        "view" => {
+            let rows: Vec<super::queue_view::Row> = msg["rows"].as_array().into_iter().flatten().filter_map(|r| serde_json::from_value(r.clone()).ok()).collect();
+            let order = msg["order"].as_array().map(|o| o.iter().filter_map(|k| k.as_str().map(str::to_string)).collect());
+            let mut v = super::queue_view::global().lock().unwrap();
+            v.apply(order, rows);
+            if let Some(m) = msg.get("meta").filter(|m| m.is_object()) {
+                v.paused_batches = m["paused"].as_array().into_iter().flatten().filter_map(|p| p.as_str().map(str::to_string)).collect();
+                v.skip_404 = m["skip_404"].as_bool().unwrap_or(false);
+                v.saved_failed = (m["saved_failed"][0].as_i64().unwrap_or(0), m["saved_failed"][1].as_i64().unwrap_or(0));
+            }
+        }
         "cancel_call" => {
             let id = msg["id"].as_u64().unwrap_or(0);
             call_flags().lock().unwrap().entry(id).or_default().store(true, Ordering::Relaxed);

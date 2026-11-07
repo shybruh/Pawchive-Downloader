@@ -80,6 +80,8 @@ class _Link:
         self._progress: Dict[int, Any] = {}
         self._call_ids = itertools.count(1)
         self._unreachable_said = False
+        self.handlers: Dict[str, Any] = {}        # questions from Rust answered by other parts of the app
+        self.on_connect: List[Any] = []           # called after (re)connecting
 
     @property
     def up(self) -> bool:
@@ -104,7 +106,12 @@ class _Link:
             self._unreachable_said = False
             self._sock = s
             threading.Thread(target=self._read, args=(s,), name="rust-queue-read", daemon=True).start()
-            return True
+        for cb in list(self.on_connect):
+            try:
+                cb()
+            except Exception:
+                pass
+        return True
 
     def send(self, obj: Dict[str, Any]) -> bool:
         s = self._sock
@@ -173,6 +180,16 @@ class _Link:
                     except Exception as e:
                         logger.debug(f"Progress callback failed: {e}", category="api")
                 return True
+        if t == "ask" and msg.get("fn") in self.handlers:
+            def answer(handler=self.handlers[msg.get("fn")]):
+                value = None
+                try:
+                    value = handler(msg.get("args") or [])
+                except Exception as e:
+                    value = {"$error": f"{type(e).__name__}: {e}"}
+                self.send({"t": "reply", "id": msg.get("id"), "value": value})
+            threading.Thread(target=answer, daemon=True).start()
+            return True
         if t == "ask" and msg.get("fn") == "account_cookie":
             value = ""
             try:

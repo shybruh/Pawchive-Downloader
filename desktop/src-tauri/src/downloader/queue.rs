@@ -1065,6 +1065,15 @@ impl Queue {
                 self.pause();
                 self.hooks.log("warning", "⚠️ [Disk Full Alert] Destination drive ran out of space! Downloads paused to prevent file corruption. Please free space on your drive and click Resume.");
             }
+        } else if it.st.status == "cancelled" {
+            // Cancelled while it was downloading: it stays cancelled
+            if it.st.error_msg.is_empty() {
+                it.st.error_msg = "Download cancelled by user".into();
+            }
+            it.st.stop_moving();
+            it.st.eta_str = "--".into();
+            drop(it);
+            self.hooks.changed(c);
         } else if msg.contains("Batch paused by user") || it.st.status == "paused" {
             it.st.status = "paused".into();
             it.st.error_msg.clear();

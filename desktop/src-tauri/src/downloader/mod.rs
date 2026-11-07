@@ -12,6 +12,7 @@ pub mod naming;
 pub mod order;
 pub mod plan;
 pub mod queue;
+pub mod queue_view;
 pub mod service;
 pub mod sites;
 mod py;

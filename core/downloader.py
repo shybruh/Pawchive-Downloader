@@ -2261,7 +2261,12 @@ class FileDownloader:
 
         logger.info(f"Batch resumed: {batch_id} ({len(resumed_tasks)} tasks restored to pending)", category="downloader")
 
-        if not self._is_running and resumed_tasks:
+        # (the window's queue model puts the files back in line before this is called, so "waiting"
+        # files of the batch also start the queue, as resume_task does for one file)
+        waiting = resumed_tasks or [
+            t for t in self.tasks if t.status == "pending" and (getattr(t, "batch_id", "") or
+                f"{getattr(t, 'service', '')}_{getattr(t, 'creator_name', '')}_{getattr(t, 'post_id', '')}".strip("_")) == batch_id]
+        if not self._is_running and waiting:
             opts = options or self.current_options or FilterOptions()
             cookie = cookie_str or self._clean_cookie
             self.start_download_queue(self.tasks, opts, cookie)

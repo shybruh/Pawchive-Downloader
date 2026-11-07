@@ -65,6 +65,14 @@ pub trait NativeObject: Send + Sync {
     fn call(&self, method: &str, _args: Vec<Value>) -> Result<Value, String> {
         Err(format!("no method {method:?}"))
     }
+    /// A list model's role names (None: not a list model)
+    fn model_roles(&self) -> Option<&'static [&'static str]> {
+        None
+    }
+    /// A list model's rows: {"total", "start", "rows": [{role: value}]}
+    fn rows(&self, _start: usize, _count: Option<usize>) -> Result<Value, String> {
+        Err("not a list model".into())
+    }
 
     /// The object's entry in `describe`, in the Python engine's format.
     fn describe(&self) -> Value {
@@ -81,7 +89,14 @@ pub trait NativeObject: Send + Sync {
             .into_iter()
             .map(|(m, params)| (m.to_string(), json!(params)))
             .collect();
-        json!({"props": props, "methods": methods, "signals": self.signals()})
+        let mut out = json!({"props": props, "methods": methods, "signals": self.signals()});
+        if let Some(roles) = self.model_roles() {
+            // (numbered like Qt's: UserRole + 1, + 2…)
+            let roles: Map<String, Value> = roles.iter().enumerate().map(|(i, r)| ((257 + i).to_string(), json!(r))).collect();
+            let count = self.rows(0, Some(0)).ok().and_then(|r| r["total"].as_u64()).unwrap_or(0);
+            out["model"] = json!({"count": count, "roles": roles});
+        }
+        out
     }
 }
 
@@ -112,7 +127,11 @@ impl Natives {
                 let args = msg.get("args").and_then(Value::as_array).cloned().unwrap_or_default();
                 obj.call(&s("method"), args)
             }
-            "rows" => Err("not a list model".into()),
+            "rows" => {
+                let start = msg.get("start").and_then(Value::as_u64).unwrap_or(0) as usize;
+                let count = msg.get("count").and_then(Value::as_u64).map(|c| c as usize);
+                obj.rows(start, count)
+            }
             op => Err(format!("unknown op {op:?}")),
         }
     }

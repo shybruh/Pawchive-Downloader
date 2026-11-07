@@ -819,7 +819,8 @@ fn run_transfer(c: &Cell, job: &Job, hooks: &dyn Hooks, ctl: &Ctl, max_size: Opt
                 }
                 let why = {
                     let it = c.lock().unwrap();
-                    if ctl.cancelled() {
+                    // (a file cancelled on its own, e.g. "Cancel remaining" of its post, stops too)
+                    if ctl.cancelled() || it.st.status == "cancelled" {
                         Some("Cancelled")
                     } else if ctl.batch_paused(&it.task.batch_id) || it.st.status == "paused" {
                         Some("Batch paused by user")
