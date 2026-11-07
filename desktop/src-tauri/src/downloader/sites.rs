@@ -101,7 +101,7 @@ pub fn clean_text(text: &str) -> String {
     if text.is_empty() {
         return String::new();
     }
-    let mut s = html_escape::decode_html_entities(text).into_owned();
+    let mut s = super::py::html_unescape(text);
     const MARKERS: [&str; 8] = ["ï»¿", "ðŸ", "â€™", "â€œ", "â€”", "Ã©", "Ã", "ð"];
     if MARKERS.iter().any(|m| s.contains(m)) {
         if let Some(fixed) = redecode(&s, false).or_else(|| redecode(&s, true)) {

@@ -94,3 +94,46 @@ fn matches_python_filters_and_naming() {
     let shown: Vec<_> = wrong.iter().take(25).cloned().collect();
     assert!(wrong.is_empty(), "{} of {} cases differ (first {}):\n{}", wrong.len(), cases.len(), shown.len(), shown.join("\n"));
 }
+
+/// tests/fixtures/extract.json (python tools/golden_extract.py)
+fn run_extract(fun: &str, a: &Value) -> Value {
+    use super::{extract as x, order as o};
+    let s = |k: &str| a[k].as_str().unwrap_or("").to_string();
+    match fun {
+        "clean_and_normalize_url" => json!(x::clean_and_normalize_url(&s("s"))),
+        "categorize_url" => json!(x::categorize_url(&s("s"))),
+        "is_non_media_host" => json!(x::is_non_media_host(&s("s"))),
+        "links_from_text" => json!(x::links_from_text(&s("s"))),
+        "rescue" => json!(x::rescue_obfuscated_and_base64(&s("s"))),
+        "passwords_with_positions" => json!(x::passwords_with_positions(&s("s")).into_iter().map(|p| json!([p.password, p.start, p.end])).collect::<Vec<_>>()),
+        "links_with_details" => json!(x::links_with_details(&s("s"))),
+        "clean_password_candidate" => json!(x::clean_password_candidate(&s("s"))),
+        "links_from_post" => json!(x::links_from_post(&a["post"])),
+        "embed_urls" => json!(x::embed_urls(&a["post"])),
+        "order_files" => {
+            let names: Vec<String> = serde_json::from_value(a["names"].clone()).unwrap();
+            json!(o::order_files(names, &s("order"), |n| n.clone()))
+        }
+        "cmp" => json!(match o::name_sort_key(&s("a")).cmp(&o::name_sort_key(&s("b"))) {
+            std::cmp::Ordering::Less => -1,
+            std::cmp::Ordering::Equal => 0,
+            std::cmp::Ordering::Greater => 1,
+        }),
+        other => panic!("no Rust counterpart for {other}"),
+    }
+}
+
+#[test]
+fn matches_python_extractor_and_order() {
+    let cases: Vec<Value> = serde_json::from_str(include_str!("../../tests/fixtures/extract.json")).unwrap();
+    let mut wrong = Vec::new();
+    for c in &cases {
+        let fun = c["fn"].as_str().unwrap();
+        let got = run_extract(fun, &c["args"]);
+        if !same(&got, &c["result"]) {
+            wrong.push(format!("{fun} {}\n  python: {}\n  rust:   {}", c["args"], c["result"], got));
+        }
+    }
+    let shown: Vec<_> = wrong.iter().take(30).cloned().collect();
+    assert!(wrong.is_empty(), "{} of {} cases differ (first {}):\n{}", wrong.len(), cases.len(), shown.len(), shown.join("\n"));
+}

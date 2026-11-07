@@ -131,3 +131,76 @@ pub fn float(s: &str) -> Option<f64> {
 pub fn int(s: &str) -> Option<i64> {
     s.trim().parse::<i64>().ok()
 }
+
+/// Entity names HTML5 also accepts without the closing ";" (html.entities.html5)
+const LEGACY_ENTITIES: &[&str] = &[
+    "AElig", "AMP", "Aacute", "Acirc", "Agrave", "Aring", "Atilde", "Auml", "COPY", "Ccedil", "ETH", "Eacute", "Ecirc", "Egrave",
+    "Euml", "GT", "Iacute", "Icirc", "Igrave", "Iuml", "LT", "Ntilde", "Oacute", "Ocirc", "Ograve", "Oslash", "Otilde", "Ouml",
+    "QUOT", "REG", "THORN", "Uacute", "Ucirc", "Ugrave", "Uuml", "Yacute", "aacute", "acirc", "acute", "aelig", "agrave", "amp",
+    "aring", "atilde", "auml", "brvbar", "ccedil", "cedil", "cent", "copy", "curren", "deg", "divide", "eacute", "ecirc", "egrave",
+    "eth", "euml", "frac12", "frac14", "frac34", "gt", "iacute", "icirc", "iexcl", "igrave", "iquest", "iuml", "laquo", "lt", "macr",
+    "micro", "middot", "nbsp", "not", "ntilde", "oacute", "ocirc", "ograve", "ordf", "ordm", "oslash", "otilde", "ouml", "para",
+    "plusmn", "pound", "quot", "raquo", "reg", "sect", "shy", "sup1", "sup2", "sup3", "szlig", "thorn", "times", "uacute", "ucirc",
+    "ugrave", "uml", "uuml", "yacute", "yen", "yuml",
+];
+
+/// The text a named entity ("amp;", or an old name without ";" like "copy") stands for
+fn named_entity(name: &str) -> Option<String> {
+    let full = match name.strip_suffix(';') {
+        Some(n) => n,
+        None if LEGACY_ENTITIES.contains(&name) => name,
+        None => return None,
+    };
+    let probe = format!("&{full};");
+    let out = html_escape::decode_html_entities(&probe);
+    (out != probe).then(|| out.into_owned())
+}
+
+/// A numeric character reference, the way html.unescape treats odd numbers
+fn char_ref(num: Option<u32>) -> String {
+    const CP1252: [char; 32] = [
+        '\u{20ac}', '\u{81}', '\u{201a}', '\u{0192}', '\u{201e}', '\u{2026}', '\u{2020}', '\u{2021}', '\u{02c6}', '\u{2030}', '\u{0160}',
+        '\u{2039}', '\u{0152}', '\u{8d}', '\u{017d}', '\u{8f}', '\u{90}', '\u{2018}', '\u{2019}', '\u{201c}', '\u{201d}', '\u{2022}',
+        '\u{2013}', '\u{2014}', '\u{02dc}', '\u{2122}', '\u{0161}', '\u{203a}', '\u{0153}', '\u{9d}', '\u{017e}', '\u{0178}',
+    ];
+    let Some(n) = num.filter(|n| *n <= 0x10FFFF && !(0xD800..=0xDFFF).contains(n)) else { return "\u{fffd}".into() };
+    match n {
+        0 => "\u{fffd}".into(),
+        0x0d => "\r".into(),
+        0x80..=0x9f => CP1252[(n - 0x80) as usize].to_string(),
+        0x1..=0x8 | 0xb | 0xe..=0x1f | 0x7f | 0xfdd0..=0xfdef => String::new(),
+        n if n & 0xFFFE == 0xFFFE => String::new(),
+        n => char::from_u32(n).map(String::from).unwrap_or_default(),
+    }
+}
+
+/// html.unescape, exactly (numeric references, HTML5 names, old names without ";")
+pub fn html_unescape(s: &str) -> String {
+    if !s.contains('&') {
+        return s.to_string();
+    }
+    static R: std::sync::OnceLock<regex::Regex> = std::sync::OnceLock::new();
+    let r = R.get_or_init(|| regex::Regex::new(r"&(#[0-9]+;?|#[xX][0-9a-fA-F]+;?|[^\t\n\x0c <&#;]{1,32};?)").unwrap());
+    r.replace_all(s, |c: &regex::Captures| {
+        let m = &c[1];
+        if let Some(num) = m.strip_prefix('#') {
+            let num = num.trim_end_matches(';');
+            let v = match num.strip_prefix(['x', 'X']) {
+                Some(hex) => u32::from_str_radix(hex, 16).ok(),
+                None => num.parse::<u32>().ok(),
+            };
+            return char_ref(v);
+        }
+        if let Some(v) = named_entity(m) {
+            return v;
+        }
+        let cuts: Vec<usize> = m.char_indices().map(|(i, _)| i).collect();
+        for x in (2..cuts.len()).rev() {
+            if let Some(v) = named_entity(&m[..cuts[x]]) {
+                return format!("{v}{}", &m[cuts[x]..]);
+            }
+        }
+        format!("&{m}")
+    })
+    .into_owned()
+}

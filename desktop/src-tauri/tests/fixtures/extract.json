@@ -1,0 +1,13372 @@
+[
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": ""
+  },
+  "result": null
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": ""
+  },
+  "result": "other"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": ""
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "  "
+  },
+  "result": null
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "  "
+  },
+  "result": "other"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "  "
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "https://mega.nz/file/abc#key"
+  },
+  "result": "https://mega.nz/file/abc#key"
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "https://mega.nz/file/abc#key"
+  },
+  "result": "mega"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://mega.nz/file/abc#key"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "https://mega.nz/#!abc!key!"
+  },
+  "result": "https://mega.nz/#!abc!key!"
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "https://mega.nz/#!abc!key!"
+  },
+  "result": "mega"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://mega.nz/#!abc!key!"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "(https://mega.nz/folder/x#y)."
+  },
+  "result": "https://mega.nz/folder/x#y"
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "(https://mega.nz/folder/x#y)."
+  },
+  "result": "mega"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "(https://mega.nz/folder/x#y)."
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "//drive.google.com/file/d/abc/view"
+  },
+  "result": "https://drive.google.com/file/d/abc/view"
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "//drive.google.com/file/d/abc/view"
+  },
+  "result": "gdrive"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "//drive.google.com/file/d/abc/view"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "mega.nz/file/zzz"
+  },
+  "result": "https://mega.nz/file/zzz"
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "mega.nz/file/zzz"
+  },
+  "result": "mega"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "mega.nz/file/zzz"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "dropbox.com/s/abc?dl=0,"
+  },
+  "result": "https://dropbox.com/s/abc?dl=0"
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "dropbox.com/s/abc?dl=0,"
+  },
+  "result": "dropbox"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "dropbox.com/s/abc?dl=0,"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "&quot;https://gofile.io/d/AbC&quot;"
+  },
+  "result": "https://gofile.io/d/AbC"
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "&quot;https://gofile.io/d/AbC&quot;"
+  },
+  "result": "gofile"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "&quot;https://gofile.io/d/AbC&quot;"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "https://example.com/a?x=1&amp;y=2"
+  },
+  "result": "https://example.com/a?x=1&y=2"
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "https://example.com/a?x=1&amp;y=2"
+  },
+  "result": "other"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://example.com/a?x=1&amp;y=2"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "https://pawchive.pw/patreon/user/1"
+  },
+  "result": null
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "https://pawchive.pw/patreon/user/1"
+  },
+  "result": "other"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://pawchive.pw/patreon/user/1"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "https://pawchive.pw/external?url=https%3A%2F%2Fmega.nz%2Ffile%2Fq"
+  },
+  "result": "https://mega.nz/file/q"
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "https://pawchive.pw/external?url=https%3A%2F%2Fmega.nz%2Ffile%2Fq"
+  },
+  "result": "mega"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://pawchive.pw/external?url=https%3A%2F%2Fmega.nz%2Ffile%2Fq"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "https://kemono.su/x?url=https://pixeldrain.com/u/abc"
+  },
+  "result": "https://pixeldrain.com/u/abc"
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "https://kemono.su/x?url=https://pixeldrain.com/u/abc"
+  },
+  "result": "pixeldrain"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://kemono.su/x?url=https://pixeldrain.com/u/abc"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "https://cdn.example.com/app.js"
+  },
+  "result": null
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "https://cdn.example.com/app.js"
+  },
+  "result": "other"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://cdn.example.com/app.js"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "https://x.com/style.CSS"
+  },
+  "result": null
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "https://x.com/style.CSS"
+  },
+  "result": "other"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://x.com/style.CSS"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "http://localhost:8000/a"
+  },
+  "result": null
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "http://localhost:8000/a"
+  },
+  "result": "other"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "http://localhost:8000/a"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "https://nodot/a"
+  },
+  "result": null
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "https://nodot/a"
+  },
+  "result": "other"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://nodot/a"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "ftp://x.com/a"
+  },
+  "result": null
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "ftp://x.com/a"
+  },
+  "result": "other"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "ftp://x.com/a"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "https://[::1/a"
+  },
+  "result": null
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "https://[::1/a"
+  },
+  "result": "other"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://[::1/a"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "https://user@pawchive.pw/a"
+  },
+  "result": "https://user@pawchive.pw/a"
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "https://user@pawchive.pw/a"
+  },
+  "result": "other"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://user@pawchive.pw/a"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "https://pawchive.pw:443/a"
+  },
+  "result": "https://pawchive.pw:443/a"
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "https://pawchive.pw:443/a"
+  },
+  "result": "other"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://pawchive.pw:443/a"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "https://pawchive.pw/external?link=&url="
+  },
+  "result": null
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "https://pawchive.pw/external?link=&url="
+  },
+  "result": "other"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://pawchive.pw/external?link=&url="
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "https://a.b/c?x=1&copy=2"
+  },
+  "result": "https://a.b/c?x=1©=2"
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "https://a.b/c?x=1&copy=2"
+  },
+  "result": "other"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://a.b/c?x=1&copy=2"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "https://a.b/c?x=1&amp"
+  },
+  "result": "https://a.b/c?x=1&"
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "https://a.b/c?x=1&amp"
+  },
+  "result": "other"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://a.b/c?x=1&amp"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "https://a.b/&#x41;&#66;"
+  },
+  "result": "https://a.b/AB"
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "https://a.b/&#x41;&#66;"
+  },
+  "result": "other"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://a.b/&#x41;&#66;"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "https://a.b/&notit;"
+  },
+  "result": "https://a.b/¬it"
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "https://a.b/&notit;"
+  },
+  "result": "other"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://a.b/&notit;"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "https://pawchive.pw/external?url=https%3A%2F%2Fexample.com%2Fa.js"
+  },
+  "result": null
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "https://pawchive.pw/external?url=https%3A%2F%2Fexample.com%2Fa.js"
+  },
+  "result": "other"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://pawchive.pw/external?url=https%3A%2F%2Fexample.com%2Fa.js"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "'https://bunkr.si/a/xyz'"
+  },
+  "result": "https://bunkr.si/a/xyz"
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "'https://bunkr.si/a/xyz'"
+  },
+  "result": "bunkr"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "'https://bunkr.si/a/xyz'"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "{https://catbox.moe/abc.zip}"
+  },
+  "result": "https://catbox.moe/abc.zip"
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "{https://catbox.moe/abc.zip}"
+  },
+  "result": "catbox"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "{https://catbox.moe/abc.zip}"
+  },
+  "result": false
+ },
+ {
+  "fn": "clean_and_normalize_url",
+  "args": {
+   "s": "https://mega.io/folder/x#F!key!"
+  },
+  "result": "https://mega.io/folder/x#F!key!"
+ },
+ {
+  "fn": "categorize_url",
+  "args": {
+   "s": "https://mega.io/folder/x#F!key!"
+  },
+  "result": "mega"
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://mega.io/folder/x#F!key!"
+  },
+  "result": false
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://paypal.me/x"
+  },
+  "result": true
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://www.ko-fi.com/a"
+  },
+  "result": true
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://notpaypal.me/a"
+  },
+  "result": false
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://user@discord.gg:80/x"
+  },
+  "result": true
+ },
+ {
+  "fn": "is_non_media_host",
+  "args": {
+   "s": "https://[discord.gg]/"
+  },
+  "result": false
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": ""
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": ""
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": ""
+  },
+  "result": []
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": ""
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "Get it <a href=\"https://mega.nz/file/abc#key\">here</a> or <a href=https://www.mediafire.com/file/x/y.zip>mirror</a>."
+  },
+  "result": {
+   "mega": [
+    "https://mega.nz/file/abc#key"
+   ],
+   "mediafire": [
+    "https://www.mediafire.com/file/x/y.zip"
+   ]
+  }
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "Get it <a href=\"https://mega.nz/file/abc#key\">here</a> or <a href=https://www.mediafire.com/file/x/y.zip>mirror</a>."
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "Get it <a href=\"https://mega.nz/file/abc#key\">here</a> or <a href=https://www.mediafire.com/file/x/y.zip>mirror</a>."
+  },
+  "result": []
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "Get it <a href=\"https://mega.nz/file/abc#key\">here</a> or <a href=https://www.mediafire.com/file/x/y.zip>mirror</a>."
+  },
+  "result": [
+   {
+    "url": "https://mega.nz/file/abc#key",
+    "platform": "mega",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   },
+   {
+    "url": "https://www.mediafire.com/file/x/y.zip",
+    "platform": "mediafire",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   }
+  ]
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "[Download](https://drive.google.com/file/d/123/view) and [other](https://example.org/page)"
+  },
+  "result": {
+   "gdrive": [
+    "https://drive.google.com/file/d/123/view"
+   ],
+   "other": [
+    "https://example.org/page"
+   ]
+  }
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "[Download](https://drive.google.com/file/d/123/view) and [other](https://example.org/page)"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "[Download](https://drive.google.com/file/d/123/view) and [other](https://example.org/page)"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "[Download](https://drive.google.com/file/d/123/view) and [other](https://example.org/page)"
+  },
+  "result": [
+   {
+    "url": "https://drive.google.com/file/d/123/view",
+    "platform": "gdrive",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   },
+   {
+    "url": "https://example.org/page",
+    "platform": "other",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   }
+  ]
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "raw https://gofile.io/d/AbCd, and //pixeldrain.com/u/xyz plus mega.nz/folder/qq#zz and dropbox.com/s/abc"
+  },
+  "result": {
+   "pixeldrain": [
+    "https://pixeldrain.com/u/xyz"
+   ],
+   "mega": [
+    "https://mega.nz/folder/qq#zz"
+   ],
+   "gofile": [
+    "https://gofile.io/d/AbCd"
+   ],
+   "dropbox": [
+    "https://dropbox.com/s/abc"
+   ]
+  }
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "raw https://gofile.io/d/AbCd, and //pixeldrain.com/u/xyz plus mega.nz/folder/qq#zz and dropbox.com/s/abc"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "raw https://gofile.io/d/AbCd, and //pixeldrain.com/u/xyz plus mega.nz/folder/qq#zz and dropbox.com/s/abc"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "raw https://gofile.io/d/AbCd, and //pixeldrain.com/u/xyz plus mega.nz/folder/qq#zz and dropbox.com/s/abc"
+  },
+  "result": [
+   {
+    "url": "https://dropbox.com/s/abc",
+    "platform": "dropbox",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   },
+   {
+    "url": "https://gofile.io/d/AbCd",
+    "platform": "gofile",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   },
+   {
+    "url": "https://mega.nz/folder/qq#zz",
+    "platform": "mega",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   },
+   {
+    "url": "https://pixeldrain.com/u/xyz",
+    "platform": "pixeldrain",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   }
+  ]
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "defanged hxxps://mega[.]nz/file/abc and h**ps://pixeldrain(dot)com/u/zz"
+  },
+  "result": {
+   "pixeldrain": [
+    "https://pixeldrain.com/u/zz"
+   ],
+   "mega": [
+    "https://mega.nz/file/abc"
+   ]
+  }
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "defanged hxxps://mega[.]nz/file/abc and h**ps://pixeldrain(dot)com/u/zz"
+  },
+  "result": [
+   "https://mega.nz/file/abc",
+   "https://pixeldrain.com/u/zz",
+   "mega.nz/file/abc",
+   "pixeldrain.com/u/zz"
+  ]
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "defanged hxxps://mega[.]nz/file/abc and h**ps://pixeldrain(dot)com/u/zz"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "defanged hxxps://mega[.]nz/file/abc and h**ps://pixeldrain(dot)com/u/zz"
+  },
+  "result": [
+   {
+    "url": "https://mega.nz/file/abc",
+    "platform": "mega",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   },
+   {
+    "url": "https://pixeldrain.com/u/zz",
+    "platform": "pixeldrain",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   }
+  ]
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "encoded aHR0cHM6Ly9tZWdhLm56L2ZpbGUvZW5jb2RlZCNrZXk= and bWVnYS5uei9maWxlL25vbGluaw== junk QUJDREVGR0hJSktMTU5PUA=="
+  },
+  "result": {
+   "mega": [
+    "https://mega.nz/file/encoded#key"
+   ]
+  }
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "encoded aHR0cHM6Ly9tZWdhLm56L2ZpbGUvZW5jb2RlZCNrZXk= and bWVnYS5uei9maWxlL25vbGluaw== junk QUJDREVGR0hJSktMTU5PUA=="
+  },
+  "result": [
+   "https://mega.nz/file/encoded#key"
+  ]
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "encoded aHR0cHM6Ly9tZWdhLm56L2ZpbGUvZW5jb2RlZCNrZXk= and bWVnYS5uei9maWxlL25vbGluaw== junk QUJDREVGR0hJSktMTU5PUA=="
+  },
+  "result": []
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "encoded aHR0cHM6Ly9tZWdhLm56L2ZpbGUvZW5jb2RlZCNrZXk= and bWVnYS5uei9maWxlL25vbGluaw== junk QUJDREVGR0hJSktMTU5PUA=="
+  },
+  "result": [
+   {
+    "url": "https://mega.nz/file/encoded#key",
+    "platform": "mega",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   }
+  ]
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "<iframe src=\"https://www.youtube.com/embed/abc123\"></iframe> https://bunkr.si/a/qwe https://balbums.st/a/z"
+  },
+  "result": {
+   "bunkr": [
+    "https://balbums.st/a/z",
+    "https://bunkr.si/a/qwe"
+   ],
+   "other": [
+    "https://www.youtube.com/embed/abc123"
+   ]
+  }
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "<iframe src=\"https://www.youtube.com/embed/abc123\"></iframe> https://bunkr.si/a/qwe https://balbums.st/a/z"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "<iframe src=\"https://www.youtube.com/embed/abc123\"></iframe> https://bunkr.si/a/qwe https://balbums.st/a/z"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "<iframe src=\"https://www.youtube.com/embed/abc123\"></iframe> https://bunkr.si/a/qwe https://balbums.st/a/z"
+  },
+  "result": [
+   {
+    "url": "https://balbums.st/a/z",
+    "platform": "bunkr",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   },
+   {
+    "url": "https://bunkr.si/a/qwe",
+    "platform": "bunkr",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   },
+   {
+    "url": "https://www.youtube.com/embed/abc123",
+    "platform": "other",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   }
+  ]
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "https://1fichier.com/?abc https://terabox.com/s/1x https://workupload.com/file/x https://qiwi.gg/file/y https://catbox.moe/a.zip https://erome.com/a/abc https://nhentai.net/g/1/ https://saint2.su/d/x https://simpcity.su/t/x"
+  },
+  "result": {
+   "qiwi": [
+    "https://qiwi.gg/file/y"
+   ],
+   "saint2": [
+    "https://saint2.su/d/x"
+   ],
+   "1fichier": [
+    "https://1fichier.com/?abc"
+   ],
+   "nhentai": [
+    "https://nhentai.net/g/1/"
+   ],
+   "terabox": [
+    "https://terabox.com/s/1x"
+   ],
+   "erome": [
+    "https://erome.com/a/abc"
+   ],
+   "catbox": [
+    "https://catbox.moe/a.zip"
+   ],
+   "workupload": [
+    "https://workupload.com/file/x"
+   ],
+   "simpcity": [
+    "https://simpcity.su/t/x"
+   ]
+  }
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "https://1fichier.com/?abc https://terabox.com/s/1x https://workupload.com/file/x https://qiwi.gg/file/y https://catbox.moe/a.zip https://erome.com/a/abc https://nhentai.net/g/1/ https://saint2.su/d/x https://simpcity.su/t/x"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "https://1fichier.com/?abc https://terabox.com/s/1x https://workupload.com/file/x https://qiwi.gg/file/y https://catbox.moe/a.zip https://erome.com/a/abc https://nhentai.net/g/1/ https://saint2.su/d/x https://simpcity.su/t/x"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "https://1fichier.com/?abc https://terabox.com/s/1x https://workupload.com/file/x https://qiwi.gg/file/y https://catbox.moe/a.zip https://erome.com/a/abc https://nhentai.net/g/1/ https://saint2.su/d/x https://simpcity.su/t/x"
+  },
+  "result": [
+   {
+    "url": "https://1fichier.com/?abc",
+    "platform": "1fichier",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   },
+   {
+    "url": "https://catbox.moe/a.zip",
+    "platform": "catbox",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   },
+   {
+    "url": "https://erome.com/a/abc",
+    "platform": "erome",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   },
+   {
+    "url": "https://nhentai.net/g/1/",
+    "platform": "nhentai",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   },
+   {
+    "url": "https://qiwi.gg/file/y",
+    "platform": "qiwi",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   },
+   {
+    "url": "https://saint2.su/d/x",
+    "platform": "saint2",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   },
+   {
+    "url": "https://simpcity.su/t/x",
+    "platform": "simpcity",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   },
+   {
+    "url": "https://terabox.com/s/1x",
+    "platform": "terabox",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   },
+   {
+    "url": "https://workupload.com/file/x",
+    "platform": "workupload",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   }
+  ]
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "pawchive inside https://pawchive.pw/patreon/user/1 and https://pawchive.pw/external?url=https%3A%2F%2Fwww.dropbox.com%2Fs%2Fq"
+  },
+  "result": {
+   "dropbox": [
+    "https://www.dropbox.com/s/q"
+   ]
+  }
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "pawchive inside https://pawchive.pw/patreon/user/1 and https://pawchive.pw/external?url=https%3A%2F%2Fwww.dropbox.com%2Fs%2Fq"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "pawchive inside https://pawchive.pw/patreon/user/1 and https://pawchive.pw/external?url=https%3A%2F%2Fwww.dropbox.com%2Fs%2Fq"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "pawchive inside https://pawchive.pw/patreon/user/1 and https://pawchive.pw/external?url=https%3A%2F%2Fwww.dropbox.com%2Fs%2Fq"
+  },
+  "result": [
+   {
+    "url": "https://www.dropbox.com/s/q",
+    "platform": "dropbox",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   }
+  ]
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x https://mega.nz/file/far#k y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y password: farpw"
+  },
+  "result": {
+   "mega": [
+    "https://mega.nz/file/far#k"
+   ]
+  }
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x https://mega.nz/file/far#k y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y password: farpw"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x https://mega.nz/file/far#k y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y password: farpw"
+  },
+  "result": [
+   [
+    "farpw",
+    937,
+    942
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x x https://mega.nz/file/far#k y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y y password: farpw"
+  },
+  "result": [
+   {
+    "url": "https://mega.nz/file/far#k",
+    "platform": "mega",
+    "passwords": [
+     "farpw"
+    ],
+    "all_post_passwords": [
+     "farpw"
+    ],
+    "password_source": "post"
+   }
+  ]
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "Password: hunter22\nhttps://mega.nz/file/near#k"
+  },
+  "result": {
+   "mega": [
+    "https://mega.nz/file/near#k"
+   ]
+  }
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "Password: hunter22\nhttps://mega.nz/file/near#k"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "Password: hunter22\nhttps://mega.nz/file/near#k"
+  },
+  "result": [
+   [
+    "hunter22",
+    10,
+    18
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "Password: hunter22\nhttps://mega.nz/file/near#k"
+  },
+  "result": [
+   {
+    "url": "https://mega.nz/file/near#k",
+    "platform": "mega",
+    "passwords": [
+     "hunter22"
+    ],
+    "all_post_passwords": [
+     "hunter22"
+    ],
+    "password_source": "proximity"
+   }
+  ]
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "<a href='https://www.dropbox.com/scl/fi/x?rlkey=1&amp;dl=0'>d</a>"
+  },
+  "result": {
+   "dropbox": [
+    "https://www.dropbox.com/scl/fi/x?rlkey=1&dl=0"
+   ]
+  }
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "<a href='https://www.dropbox.com/scl/fi/x?rlkey=1&amp;dl=0'>d</a>"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "<a href='https://www.dropbox.com/scl/fi/x?rlkey=1&amp;dl=0'>d</a>"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "<a href='https://www.dropbox.com/scl/fi/x?rlkey=1&amp;dl=0'>d</a>"
+  },
+  "result": [
+   {
+    "url": "https://www.dropbox.com/scl/fi/x?rlkey=1&dl=0",
+    "platform": "dropbox",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   }
+  ]
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "https://docs.google.com/document/d/1/edit https://drive.usercontent.google.com/download?id=2"
+  },
+  "result": {
+   "gdrive": [
+    "https://docs.google.com/document/d/1/edit",
+    "https://drive.usercontent.google.com/download?id=2"
+   ]
+  }
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "https://docs.google.com/document/d/1/edit https://drive.usercontent.google.com/download?id=2"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "https://docs.google.com/document/d/1/edit https://drive.usercontent.google.com/download?id=2"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "https://docs.google.com/document/d/1/edit https://drive.usercontent.google.com/download?id=2"
+  },
+  "result": [
+   {
+    "url": "https://docs.google.com/document/d/1/edit",
+    "platform": "gdrive",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   },
+   {
+    "url": "https://drive.usercontent.google.com/download?id=2",
+    "platform": "gdrive",
+    "passwords": [],
+    "all_post_passwords": [],
+    "password_source": "post"
+   }
+  ]
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "日本語 https://mega.nz/file/jp#k パスワード：nihon123です"
+  },
+  "result": {
+   "mega": [
+    "https://mega.nz/file/jp#k"
+   ]
+  }
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "日本語 https://mega.nz/file/jp#k パスワード：nihon123です"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "日本語 https://mega.nz/file/jp#k パスワード：nihon123です"
+  },
+  "result": [
+   [
+    "nihon123",
+    36,
+    46
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "日本語 https://mega.nz/file/jp#k パスワード：nihon123です"
+  },
+  "result": [
+   {
+    "url": "https://mega.nz/file/jp#k",
+    "platform": "mega",
+    "passwords": [
+     "nihon123"
+    ],
+    "all_post_passwords": [
+     "nihon123"
+    ],
+    "password_source": "proximity"
+   }
+  ]
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": ""
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": ""
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": ""
+  },
+  "result": []
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": ""
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "password: hunter2"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "password: hunter2"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "password: hunter2"
+  },
+  "result": [
+   [
+    "hunter2",
+    10,
+    17
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "password: hunter2"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "PW = abc123, more"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "PW = abc123, more"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "PW = abc123, more"
+  },
+  "result": [
+   [
+    "abc123",
+    5,
+    11
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "PW = abc123, more"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "pass:x"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "pass:x"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "pass:x"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "pass:x"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "Password is s3cret."
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "Password is s3cret."
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "Password is s3cret."
+  },
+  "result": [
+   [
+    "s3cret",
+    12,
+    19
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "Password is s3cret."
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "[PW: zipme]"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "[PW: zipme]"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "[PW: zipme]"
+  },
+  "result": [
+   [
+    "zipme",
+    5,
+    11
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "[PW: zipme]"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "(password=bracket)"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "(password=bracket)"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "(password=bracket)"
+  },
+  "result": [
+   [
+    "bracket",
+    10,
+    18
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "(password=bracket)"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "パスワードは「kagi123」です"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "パスワードは「kagi123」です"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "パスワードは「kagi123」です"
+  },
+  "result": [
+   [
+    "kagi123",
+    6,
+    17
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "パスワードは「kagi123」です"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "パス：lamb2024になります"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "パス：lamb2024になります"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "パス：lamb2024になります"
+  },
+  "result": [
+   [
+    "lamb2024",
+    3,
+    16
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "パス：lamb2024になります"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "解凍パス abcdefです。"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "解凍パス abcdefです。"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "解凍パス abcdefです。"
+  },
+  "result": [
+   [
+    "abcdef",
+    5,
+    14
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "解凍パス abcdefです。"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "【パス: 鍵abc】"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "【パス: 鍵abc】"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "【パス: 鍵abc】"
+  },
+  "result": [
+   [
+    "鍵abc",
+    5,
+    10
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "【パス: 鍵abc】"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "解压密码为：20240901请勿外传"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "解压密码为：20240901请勿外传"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "解压密码为：20240901请勿外传"
+  },
+  "result": [
+   [
+    "20240901",
+    6,
+    18
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "解压密码为：20240901请勿外传"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "密碼: tw_pass"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "密碼: tw_pass"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "密碼: tw_pass"
+  },
+  "result": [
+   [
+    "tw_pass",
+    4,
+    11
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "密碼: tw_pass"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "пароль: секрет123"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "пароль: секрет123"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "пароль: секрет123"
+  },
+  "result": [
+   [
+    "секрет123",
+    8,
+    17
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "пароль: секрет123"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "비밀번호: 한국pw12"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "비밀번호: 한국pw12"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "비밀번호: 한국pw12"
+  },
+  "result": [
+   [
+    "한국pw12",
+    6,
+    12
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "비밀번호: 한국pw12"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "mot de passe: motpw!"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "mot de passe: motpw!"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "mot de passe: motpw!"
+  },
+  "result": [
+   [
+    "motpw",
+    14,
+    20
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "mot de passe: motpw!"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "Passwort: geheim"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "Passwort: geheim"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "Passwort: geheim"
+  },
+  "result": [
+   [
+    "geheim",
+    10,
+    16
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "Passwort: geheim"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "pw: http://not"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "pw: http://not"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "pw: http://not"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "pw: http://not"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "password: null"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "password: null"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "password: null"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "password: null"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "password: a"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "password: a"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "password: a"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "password: a"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "pw: x"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "pw: x"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "pw: x"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "pw: x"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "pd: 1234 pd: 1234"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "pd: 1234 pd: 1234"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "pd: 1234 pd: 1234"
+  },
+  "result": [
+   [
+    "1234",
+    4,
+    8
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "pd: 1234 pd: 1234"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "zip pass: zz-top"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "zip pass: zz-top"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "zip pass: zz-top"
+  },
+  "result": [
+   [
+    "zz-top",
+    10,
+    16
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "zip pass: zz-top"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "pw:「quoted」"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "pw:「quoted」"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "pw:「quoted」"
+  },
+  "result": [
+   [
+    "quoted",
+    3,
+    11
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "pw:「quoted」"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "Password: abc日本語"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "Password: abc日本語"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "Password: abc日本語"
+  },
+  "result": [
+   [
+    "abc",
+    10,
+    16
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "Password: abc日本語"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "pwd: ok:fine"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "pwd: ok:fine"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "pwd: ok:fine"
+  },
+  "result": [
+   [
+    "ok",
+    5,
+    12
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "pwd: ok:fine"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "password — dashpw"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "password — dashpw"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "password — dashpw"
+  },
+  "result": [
+   [
+    "dashpw",
+    11,
+    17
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "password — dashpw"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "pw: “curly”"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "pw: “curly”"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "pw: “curly”"
+  },
+  "result": [
+   [
+    "curly",
+    4,
+    11
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "pw: “curly”"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "pw: tail]】"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "pw: tail]】"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "pw: tail]】"
+  },
+  "result": [
+   [
+    "tail",
+    4,
+    10
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "pw: tail]】"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "encryption key: K3Y!!"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "encryption key: K3Y!!"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "encryption key: K3Y!!"
+  },
+  "result": [
+   [
+    "K3Y",
+    16,
+    21
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "encryption key: K3Y!!"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "pw: &amp;amp"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "pw: &amp;amp"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "pw: &amp;amp"
+  },
+  "result": [
+   [
+    "&amp",
+    4,
+    8
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "pw: &amp;amp"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "pass: abc　def"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "pass: abc　def"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "pass: abc　def"
+  },
+  "result": [
+   [
+    "abc",
+    6,
+    9
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "pass: abc　def"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "pw: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "pw: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "pw: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  "result": [
+   [
+    "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    4,
+    68
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "pw: xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "pw: ab；cd"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "pw: ab；cd"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "pw: ab；cd"
+  },
+  "result": [
+   [
+    "ab",
+    4,
+    9
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "pw: ab；cd"
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_text",
+  "args": {
+   "s": "パスワード abc123を入力"
+  },
+  "result": {}
+ },
+ {
+  "fn": "rescue",
+  "args": {
+   "s": "パスワード abc123を入力"
+  },
+  "result": []
+ },
+ {
+  "fn": "passwords_with_positions",
+  "args": {
+   "s": "パスワード abc123を入力"
+  },
+  "result": [
+   [
+    "abc123",
+    6,
+    15
+   ]
+  ]
+ },
+ {
+  "fn": "links_with_details",
+  "args": {
+   "s": "パスワード abc123を入力"
+  },
+  "result": []
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": ""
+  },
+  "result": ""
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " hunter2"
+  },
+  "result": "hunter2"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": "PW = abc123, more"
+  },
+  "result": "PW"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": "x"
+  },
+  "result": ""
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": "Password is s3cret."
+  },
+  "result": ""
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " zipme]"
+  },
+  "result": "zipme"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": "(password=bracket)"
+  },
+  "result": "password=bracket"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": "パスワードは「kagi123」です"
+  },
+  "result": "パスワードは「kagi123"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": "パス：lamb2024になります"
+  },
+  "result": "パス"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": "解凍パス abcdefです。"
+  },
+  "result": "解凍パス abcdef"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " 鍵abc】"
+  },
+  "result": "鍵abc"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": "解压密码为：20240901请勿外传"
+  },
+  "result": "解压密码为"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " tw_pass"
+  },
+  "result": "tw_pass"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " секрет123"
+  },
+  "result": "секрет123"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " 한국pw12"
+  },
+  "result": "한국pw12"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " motpw!"
+  },
+  "result": "motpw"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " geheim"
+  },
+  "result": "geheim"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " http://not"
+  },
+  "result": ""
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " null"
+  },
+  "result": ""
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " a"
+  },
+  "result": ""
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " x"
+  },
+  "result": ""
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " 1234 pd: 1234"
+  },
+  "result": "1234"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " zz-top"
+  },
+  "result": "zz-top"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": "「quoted」"
+  },
+  "result": "quoted"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " abc日本語"
+  },
+  "result": "abc"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " ok:fine"
+  },
+  "result": "ok"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": "password — dashpw"
+  },
+  "result": ""
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " “curly”"
+  },
+  "result": "curly"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " tail]】"
+  },
+  "result": "tail"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " K3Y!!"
+  },
+  "result": "K3Y"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " &amp;amp"
+  },
+  "result": "&amp;amp"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " abc　def"
+  },
+  "result": "abc　def"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  },
+  "result": ""
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": " ab；cd"
+  },
+  "result": "ab"
+ },
+ {
+  "fn": "clean_password_candidate",
+  "args": {
+   "s": "パスワード abc123を入力"
+  },
+  "result": "パスワード abc123"
+ },
+ {
+  "fn": "links_from_post",
+  "args": {
+   "post": {
+    "title": "Links https://mega.nz/file/t#k",
+    "content": "<a href=\"https://gofile.io/d/abc\">x</a>",
+    "captionHtml": "",
+    "embed": {
+     "url": "https://www.youtube.com/watch?v=xyz",
+     "description": "see https://dropbox.com/s/q"
+    },
+    "comments_text": "mirror https://pixeldrain.com/u/c",
+    "comments": [
+     {
+      "content": "https://catbox.moe/z.zip"
+     },
+     "https://erome.com/a/s"
+    ],
+    "attachments": [
+     {
+      "path": "https://mediafire.com/file/a/b",
+      "name": "x"
+     },
+     {
+      "path": "/ab/cd/x.zip"
+     }
+    ],
+    "file": {
+     "path": "//drive.google.com/file/d/m"
+    }
+   }
+  },
+  "result": {
+   "dropbox": [
+    "https://dropbox.com/s/q"
+   ],
+   "pixeldrain": [
+    "https://pixeldrain.com/u/c"
+   ],
+   "gdrive": [
+    "https://drive.google.com/file/d/m"
+   ],
+   "erome": [
+    "https://erome.com/a/s"
+   ],
+   "other": [
+    "https://www.youtube.com/watch?v=xyz"
+   ],
+   "mega": [
+    "https://mega.nz/file/t#k"
+   ],
+   "mediafire": [
+    "https://mediafire.com/file/a/b"
+   ],
+   "catbox": [
+    "https://catbox.moe/z.zip"
+   ],
+   "gofile": [
+    "https://gofile.io/d/abc"
+   ]
+  }
+ },
+ {
+  "fn": "embed_urls",
+  "args": {
+   "post": {
+    "title": "Links https://mega.nz/file/t#k",
+    "content": "<a href=\"https://gofile.io/d/abc\">x</a>",
+    "captionHtml": "",
+    "embed": {
+     "url": "https://www.youtube.com/watch?v=xyz",
+     "description": "see https://dropbox.com/s/q"
+    },
+    "comments_text": "mirror https://pixeldrain.com/u/c",
+    "comments": [
+     {
+      "content": "https://catbox.moe/z.zip"
+     },
+     "https://erome.com/a/s"
+    ],
+    "attachments": [
+     {
+      "path": "https://mediafire.com/file/a/b",
+      "name": "x"
+     },
+     {
+      "path": "/ab/cd/x.zip"
+     }
+    ],
+    "file": {
+     "path": "//drive.google.com/file/d/m"
+    }
+   }
+  },
+  "result": [
+   "https://www.youtube.com/watch?v=xyz"
+  ]
+ },
+ {
+  "fn": "links_from_post",
+  "args": {
+   "post": {
+    "embed": "https://vimeo.com/123456",
+    "content": "<iframe src=\"https://player.vimeo.com/video/987?h=abc\"></iframe> https://streamable.com/e/qq https://www.redgifs.com/watch/foo-bar https://x.com/u/status/1 https://paypal.me/me https://soundcloud.com/a/b https://bilibili.com/video/BV1 https://dailymotion.com/video/x7 https://youtu.be/s_h-1"
+   }
+  },
+  "result": {
+   "other": [
+    "https://bilibili.com/video/BV1",
+    "https://dailymotion.com/video/x7",
+    "https://paypal.me/me",
+    "https://player.vimeo.com/video/987?h=abc",
+    "https://soundcloud.com/a/b",
+    "https://streamable.com/e/qq",
+    "https://vimeo.com/123456",
+    "https://www.redgifs.com/watch/foo-bar",
+    "https://x.com/u/status/1",
+    "https://youtu.be/s_h-1"
+   ]
+  }
+ },
+ {
+  "fn": "embed_urls",
+  "args": {
+   "post": {
+    "embed": "https://vimeo.com/123456",
+    "content": "<iframe src=\"https://player.vimeo.com/video/987?h=abc\"></iframe> https://streamable.com/e/qq https://www.redgifs.com/watch/foo-bar https://x.com/u/status/1 https://paypal.me/me https://soundcloud.com/a/b https://bilibili.com/video/BV1 https://dailymotion.com/video/x7 https://youtu.be/s_h-1"
+   }
+  },
+  "result": [
+   "https://bilibili.com/video/BV1",
+   "https://dailymotion.com/video/x7",
+   "https://player.vimeo.com/video/987?h=abc",
+   "https://soundcloud.com/a/b",
+   "https://streamable.com/e/qq",
+   "https://www.redgifs.com/watch/foo-bar",
+   "https://x.com/u/status/1",
+   "https://youtu.be/s_h-1"
+  ]
+ },
+ {
+  "fn": "links_from_post",
+  "args": {
+   "post": {
+    "embed": {
+     "src": "https://ko-fi.com/me"
+    },
+    "caption": "https://picarto.tv/videopopout/abc"
+   }
+  },
+  "result": {
+   "other": [
+    "https://ko-fi.com/me",
+    "https://picarto.tv/videopopout/abc"
+   ]
+  }
+ },
+ {
+  "fn": "embed_urls",
+  "args": {
+   "post": {
+    "embed": {
+     "src": "https://ko-fi.com/me"
+    },
+    "caption": "https://picarto.tv/videopopout/abc"
+   }
+  },
+  "result": [
+   "https://picarto.tv/videopopout/abc"
+  ]
+ },
+ {
+  "fn": "links_from_post",
+  "args": {
+   "post": {
+    "title": 12345,
+    "content": null
+   }
+  },
+  "result": {}
+ },
+ {
+  "fn": "embed_urls",
+  "args": {
+   "post": {
+    "title": 12345,
+    "content": null
+   }
+  },
+  "result": []
+ },
+ {
+  "fn": "links_from_post",
+  "args": {
+   "post": {}
+  },
+  "result": {}
+ },
+ {
+  "fn": "embed_urls",
+  "args": {
+   "post": {}
+  },
+  "result": []
+ },
+ {
+  "fn": "order_files",
+  "args": {
+   "names": [
+    "Mya2v10.png",
+    "Mya2.png",
+    "Mya2v2.png",
+    "page 9.jpg",
+    "page_10.jpg",
+    "page-11.jpg",
+    "一枚目.png",
+    "二枚目.png",
+    "十枚目.png",
+    "Ａ２.png",
+    "a2.png",
+    "étude.png",
+    "etude.png",
+    "й.png",
+    "и.png",
+    "",
+    "  ",
+    "cover_.jpg",
+    "cover.jpg",
+    "Vol. 2",
+    ".hidden",
+    "file.",
+    "file 2.png",
+    "file.png",
+    "a 1.png",
+    "a1.png",
+    "a b.png",
+    "二〇二四.png",
+    "一万五千.png",
+    "二十.png",
+    "十一.png",
+    "٣.png",
+    "३.png",
+    "１０.png",
+    "9.png",
+    "ｶﾀｶﾅ.png",
+    "かたかな.png",
+    "カタカナ.png",
+    "เก.png",
+    "กเ.png",
+    "x/y\\z.png",
+    "ß.png",
+    "ss.png",
+    "a.verylongextension",
+    "①.png",
+    "²x.png",
+    "Ⅻ.png",
+    "𝟗.png",
+    "file~1.png",
+    "file·2.png"
+   ],
+   "order": "posted"
+  },
+  "result": [
+   "Mya2v10.png",
+   "Mya2.png",
+   "Mya2v2.png",
+   "page 9.jpg",
+   "page_10.jpg",
+   "page-11.jpg",
+   "一枚目.png",
+   "二枚目.png",
+   "十枚目.png",
+   "Ａ２.png",
+   "a2.png",
+   "étude.png",
+   "etude.png",
+   "й.png",
+   "и.png",
+   "",
+   "  ",
+   "cover_.jpg",
+   "cover.jpg",
+   "Vol. 2",
+   ".hidden",
+   "file.",
+   "file 2.png",
+   "file.png",
+   "a 1.png",
+   "a1.png",
+   "a b.png",
+   "二〇二四.png",
+   "一万五千.png",
+   "二十.png",
+   "十一.png",
+   "٣.png",
+   "३.png",
+   "１０.png",
+   "9.png",
+   "ｶﾀｶﾅ.png",
+   "かたかな.png",
+   "カタカナ.png",
+   "เก.png",
+   "กเ.png",
+   "x/y\\z.png",
+   "ß.png",
+   "ss.png",
+   "a.verylongextension",
+   "①.png",
+   "²x.png",
+   "Ⅻ.png",
+   "𝟗.png",
+   "file~1.png",
+   "file·2.png"
+  ]
+ },
+ {
+  "fn": "order_files",
+  "args": {
+   "names": [
+    "Mya2v10.png",
+    "Mya2.png",
+    "Mya2v2.png",
+    "page 9.jpg",
+    "page_10.jpg",
+    "page-11.jpg",
+    "一枚目.png",
+    "二枚目.png",
+    "十枚目.png",
+    "Ａ２.png",
+    "a2.png",
+    "étude.png",
+    "etude.png",
+    "й.png",
+    "и.png",
+    "",
+    "  ",
+    "cover_.jpg",
+    "cover.jpg",
+    "Vol. 2",
+    ".hidden",
+    "file.",
+    "file 2.png",
+    "file.png",
+    "a 1.png",
+    "a1.png",
+    "a b.png",
+    "二〇二四.png",
+    "一万五千.png",
+    "二十.png",
+    "十一.png",
+    "٣.png",
+    "३.png",
+    "１０.png",
+    "9.png",
+    "ｶﾀｶﾅ.png",
+    "かたかな.png",
+    "カタカナ.png",
+    "เก.png",
+    "กเ.png",
+    "x/y\\z.png",
+    "ß.png",
+    "ss.png",
+    "a.verylongextension",
+    "①.png",
+    "²x.png",
+    "Ⅻ.png",
+    "𝟗.png",
+    "file~1.png",
+    "file·2.png"
+   ],
+   "order": "reversed"
+  },
+  "result": [
+   "file·2.png",
+   "file~1.png",
+   "𝟗.png",
+   "Ⅻ.png",
+   "²x.png",
+   "①.png",
+   "a.verylongextension",
+   "ss.png",
+   "ß.png",
+   "x/y\\z.png",
+   "กเ.png",
+   "เก.png",
+   "カタカナ.png",
+   "かたかな.png",
+   "ｶﾀｶﾅ.png",
+   "9.png",
+   "１０.png",
+   "३.png",
+   "٣.png",
+   "十一.png",
+   "二十.png",
+   "一万五千.png",
+   "二〇二四.png",
+   "a b.png",
+   "a1.png",
+   "a 1.png",
+   "file.png",
+   "file 2.png",
+   "file.",
+   ".hidden",
+   "Vol. 2",
+   "cover.jpg",
+   "cover_.jpg",
+   "  ",
+   "",
+   "и.png",
+   "й.png",
+   "etude.png",
+   "étude.png",
+   "a2.png",
+   "Ａ２.png",
+   "十枚目.png",
+   "二枚目.png",
+   "一枚目.png",
+   "page-11.jpg",
+   "page_10.jpg",
+   "page 9.jpg",
+   "Mya2v2.png",
+   "Mya2.png",
+   "Mya2v10.png"
+  ]
+ },
+ {
+  "fn": "order_files",
+  "args": {
+   "names": [
+    "Mya2v10.png",
+    "Mya2.png",
+    "Mya2v2.png",
+    "page 9.jpg",
+    "page_10.jpg",
+    "page-11.jpg",
+    "一枚目.png",
+    "二枚目.png",
+    "十枚目.png",
+    "Ａ２.png",
+    "a2.png",
+    "étude.png",
+    "etude.png",
+    "й.png",
+    "и.png",
+    "",
+    "  ",
+    "cover_.jpg",
+    "cover.jpg",
+    "Vol. 2",
+    ".hidden",
+    "file.",
+    "file 2.png",
+    "file.png",
+    "a 1.png",
+    "a1.png",
+    "a b.png",
+    "二〇二四.png",
+    "一万五千.png",
+    "二十.png",
+    "十一.png",
+    "٣.png",
+    "३.png",
+    "１０.png",
+    "9.png",
+    "ｶﾀｶﾅ.png",
+    "かたかな.png",
+    "カタカナ.png",
+    "เก.png",
+    "กเ.png",
+    "x/y\\z.png",
+    "ß.png",
+    "ss.png",
+    "a.verylongextension",
+    "①.png",
+    "²x.png",
+    "Ⅻ.png",
+    "𝟗.png",
+    "file~1.png",
+    "file·2.png"
+   ],
+   "order": "name"
+  },
+  "result": [
+   ".hidden",
+   "①.png",
+   "一枚目.png",
+   "²x.png",
+   "二枚目.png",
+   "٣.png",
+   "३.png",
+   "9.png",
+   "𝟗.png",
+   "１０.png",
+   "十枚目.png",
+   "十一.png",
+   "二十.png",
+   "二〇二四.png",
+   "一万五千.png",
+   "a 1.png",
+   "a b.png",
+   "a.verylongextension",
+   "a1.png",
+   "Ａ２.png",
+   "a2.png",
+   "cover.jpg",
+   "cover_.jpg",
+   "etude.png",
+   "étude.png",
+   "file.",
+   "file.png",
+   "file~1.png",
+   "file 2.png",
+   "file·2.png",
+   "Mya2.png",
+   "Mya2v2.png",
+   "Mya2v10.png",
+   "page 9.jpg",
+   "page_10.jpg",
+   "page-11.jpg",
+   "ß.png",
+   "ss.png",
+   "Vol. 2",
+   "Ⅻ.png",
+   "x/y\\z.png",
+   "и.png",
+   "й.png",
+   "กเ.png",
+   "เก.png",
+   "かたかな.png",
+   "ｶﾀｶﾅ.png",
+   "カタカナ.png",
+   "",
+   "  "
+  ]
+ },
+ {
+  "fn": "order_files",
+  "args": {
+   "names": [
+    "Mya2v10.png",
+    "Mya2.png",
+    "Mya2v2.png",
+    "page 9.jpg",
+    "page_10.jpg",
+    "page-11.jpg",
+    "一枚目.png",
+    "二枚目.png",
+    "十枚目.png",
+    "Ａ２.png",
+    "a2.png",
+    "étude.png",
+    "etude.png",
+    "й.png",
+    "и.png",
+    "",
+    "  ",
+    "cover_.jpg",
+    "cover.jpg",
+    "Vol. 2",
+    ".hidden",
+    "file.",
+    "file 2.png",
+    "file.png",
+    "a 1.png",
+    "a1.png",
+    "a b.png",
+    "二〇二四.png",
+    "一万五千.png",
+    "二十.png",
+    "十一.png",
+    "٣.png",
+    "३.png",
+    "１０.png",
+    "9.png",
+    "ｶﾀｶﾅ.png",
+    "かたかな.png",
+    "カタカナ.png",
+    "เก.png",
+    "กเ.png",
+    "x/y\\z.png",
+    "ß.png",
+    "ss.png",
+    "a.verylongextension",
+    "①.png",
+    "²x.png",
+    "Ⅻ.png",
+    "𝟗.png",
+    "file~1.png",
+    "file·2.png"
+   ],
+   "order": "NAME "
+  },
+  "result": [
+   ".hidden",
+   "①.png",
+   "一枚目.png",
+   "²x.png",
+   "二枚目.png",
+   "٣.png",
+   "३.png",
+   "9.png",
+   "𝟗.png",
+   "１０.png",
+   "十枚目.png",
+   "十一.png",
+   "二十.png",
+   "二〇二四.png",
+   "一万五千.png",
+   "a 1.png",
+   "a b.png",
+   "a.verylongextension",
+   "a1.png",
+   "Ａ２.png",
+   "a2.png",
+   "cover.jpg",
+   "cover_.jpg",
+   "etude.png",
+   "étude.png",
+   "file.",
+   "file.png",
+   "file~1.png",
+   "file 2.png",
+   "file·2.png",
+   "Mya2.png",
+   "Mya2v2.png",
+   "Mya2v10.png",
+   "page 9.jpg",
+   "page_10.jpg",
+   "page-11.jpg",
+   "ß.png",
+   "ss.png",
+   "Vol. 2",
+   "Ⅻ.png",
+   "x/y\\z.png",
+   "и.png",
+   "й.png",
+   "กเ.png",
+   "เก.png",
+   "かたかな.png",
+   "ｶﾀｶﾅ.png",
+   "カタカナ.png",
+   "",
+   "  "
+  ]
+ },
+ {
+  "fn": "order_files",
+  "args": {
+   "names": [
+    "Mya2v10.png",
+    "Mya2.png",
+    "Mya2v2.png",
+    "page 9.jpg",
+    "page_10.jpg",
+    "page-11.jpg",
+    "一枚目.png",
+    "二枚目.png",
+    "十枚目.png",
+    "Ａ２.png",
+    "a2.png",
+    "étude.png",
+    "etude.png",
+    "й.png",
+    "и.png",
+    "",
+    "  ",
+    "cover_.jpg",
+    "cover.jpg",
+    "Vol. 2",
+    ".hidden",
+    "file.",
+    "file 2.png",
+    "file.png",
+    "a 1.png",
+    "a1.png",
+    "a b.png",
+    "二〇二四.png",
+    "一万五千.png",
+    "二十.png",
+    "十一.png",
+    "٣.png",
+    "३.png",
+    "１０.png",
+    "9.png",
+    "ｶﾀｶﾅ.png",
+    "かたかな.png",
+    "カタカナ.png",
+    "เก.png",
+    "กเ.png",
+    "x/y\\z.png",
+    "ß.png",
+    "ss.png",
+    "a.verylongextension",
+    "①.png",
+    "²x.png",
+    "Ⅻ.png",
+    "𝟗.png",
+    "file~1.png",
+    "file·2.png"
+   ],
+   "order": "bogus"
+  },
+  "result": [
+   "Mya2v10.png",
+   "Mya2.png",
+   "Mya2v2.png",
+   "page 9.jpg",
+   "page_10.jpg",
+   "page-11.jpg",
+   "一枚目.png",
+   "二枚目.png",
+   "十枚目.png",
+   "Ａ２.png",
+   "a2.png",
+   "étude.png",
+   "etude.png",
+   "й.png",
+   "и.png",
+   "",
+   "  ",
+   "cover_.jpg",
+   "cover.jpg",
+   "Vol. 2",
+   ".hidden",
+   "file.",
+   "file 2.png",
+   "file.png",
+   "a 1.png",
+   "a1.png",
+   "a b.png",
+   "二〇二四.png",
+   "一万五千.png",
+   "二十.png",
+   "十一.png",
+   "٣.png",
+   "३.png",
+   "１０.png",
+   "9.png",
+   "ｶﾀｶﾅ.png",
+   "かたかな.png",
+   "カタカナ.png",
+   "เก.png",
+   "กเ.png",
+   "x/y\\z.png",
+   "ß.png",
+   "ss.png",
+   "a.verylongextension",
+   "①.png",
+   "²x.png",
+   "Ⅻ.png",
+   "𝟗.png",
+   "file~1.png",
+   "file·2.png"
+  ]
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "Mya2v2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "page 9.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "page_10.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "page-11.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "a2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "étude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "etude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "cover_.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "cover.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "Vol. 2"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "file."
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "file 2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "file.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "a 1.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "a1.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "a b.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "a.verylongextension"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "file~1.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v10.png",
+   "b": "file·2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "Mya2v10.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "Mya2v2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "page 9.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "page_10.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "page-11.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "a2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "étude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "etude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "cover_.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "cover.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "Vol. 2"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "file."
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "file 2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "file.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "a 1.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "a1.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "a b.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "a.verylongextension"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "file~1.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2.png",
+   "b": "file·2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "page 9.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "page_10.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "page-11.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "a2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "étude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "etude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "cover_.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "cover.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "Vol. 2"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "file."
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "file 2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "file.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "a 1.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "a1.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "a b.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "a.verylongextension"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "file~1.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Mya2v2.png",
+   "b": "file·2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "page_10.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "page-11.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "étude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page 9.jpg",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "étude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page_10.jpg",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "page_10.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "étude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "page-11.jpg",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "一枚目.png",
+   "b": "二枚目.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "一枚目.png",
+   "b": "十枚目.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "一枚目.png",
+   "b": "Ａ２.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "一枚目.png",
+   "b": "二〇二四.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "一枚目.png",
+   "b": "二十.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "一枚目.png",
+   "b": "十一.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "一枚目.png",
+   "b": "１０.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "一枚目.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "一枚目.png",
+   "b": "𝟗.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二枚目.png",
+   "b": "十枚目.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二枚目.png",
+   "b": "Ａ２.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二枚目.png",
+   "b": "十一.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二枚目.png",
+   "b": "１０.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二枚目.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二枚目.png",
+   "b": "𝟗.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "十枚目.png",
+   "b": "Ａ２.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "十枚目.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "十枚目.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "十枚目.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Ａ２.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Ａ２.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "page 9.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "page_10.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "page-11.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "Ａ２.png"
+  },
+  "result": 0
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "étude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "etude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "cover_.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "cover.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "file."
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "file 2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "file.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "file~1.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a2.png",
+   "b": "file·2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "étude.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "page 9.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "page_10.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "page-11.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "étude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "file."
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "file 2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "file.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "file~1.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "etude.png",
+   "b": "file·2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "й.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "й.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "й.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "й.png",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "й.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "й.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "й.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "й.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "й.png",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "й.png",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "й.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "й.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "й.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "й.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "й.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "й.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "й.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "й.png",
+   "b": "Ⅻ.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "й.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "Ⅻ.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "и.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "Mya2v10.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "Mya2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "Mya2v2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "page 9.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "page_10.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "page-11.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "a2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "étude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "etude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "й.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "и.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "  "
+  },
+  "result": 0
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "cover_.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "cover.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "Vol. 2"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": ".hidden"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "file."
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "file 2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "file.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "a 1.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "a1.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "a b.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "9.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "かたかな.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "カタカナ.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "เก.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "กเ.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "x/y\\z.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "ß.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "ss.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "a.verylongextension"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "Ⅻ.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "file~1.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "",
+   "b": "file·2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "Mya2v10.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "Mya2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "Mya2v2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "page 9.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "page_10.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "page-11.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "a2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "étude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "etude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "й.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "и.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "cover_.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "cover.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "Vol. 2"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": ".hidden"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "file."
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "file 2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "file.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "a 1.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "a1.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "a b.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "9.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "かたかな.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "カタカナ.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "เก.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "กเ.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "x/y\\z.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "ß.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "ss.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "a.verylongextension"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "Ⅻ.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "file~1.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "  ",
+   "b": "file·2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "page 9.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "page_10.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "page-11.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "étude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "etude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "file."
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "file 2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "file.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "file~1.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover_.jpg",
+   "b": "file·2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "page 9.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "page_10.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "page-11.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "étude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "etude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "cover_.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "file."
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "file 2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "file.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "file~1.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "cover.jpg",
+   "b": "file·2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "page 9.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "page_10.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "page-11.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "a2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "étude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "etude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "cover_.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "cover.jpg"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "file."
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "file 2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "file.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "a 1.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "a1.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "a b.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "ß.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "ss.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "a.verylongextension"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "file~1.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Vol. 2",
+   "b": "file·2.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "Mya2v10.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "Mya2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "Mya2v2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "page 9.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "page_10.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "page-11.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "一枚目.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "二枚目.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "十枚目.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "Ａ２.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "a2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "étude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "etude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "cover_.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "cover.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "Vol. 2"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "file."
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "file 2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "file.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "a 1.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "a1.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "a b.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "二〇二四.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "一万五千.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "二十.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "十一.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "٣.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "३.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "１０.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "9.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "a.verylongextension"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "①.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "²x.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "𝟗.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "file~1.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": ".hidden",
+   "b": "file·2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "page 9.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "page_10.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "page-11.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "étude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "file.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "file~1.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.",
+   "b": "file·2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "page 9.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "page_10.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "page-11.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "étude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "file."
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "file.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "file~1.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file 2.png",
+   "b": "file·2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "page 9.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "page_10.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "page-11.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "étude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "file~1.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file.png",
+   "b": "file·2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "page 9.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "page_10.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "page-11.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "Ａ２.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "a2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "étude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "etude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "cover_.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "cover.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "file."
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "file 2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "file.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "a1.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "a b.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "a.verylongextension"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "file~1.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a 1.png",
+   "b": "file·2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "page 9.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "page_10.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "page-11.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "Ａ２.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "a2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "étude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "etude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "cover_.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "cover.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "file."
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "file 2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "file.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "file~1.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a1.png",
+   "b": "file·2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "page 9.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "page_10.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "page-11.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "Ａ２.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "a2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "étude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "etude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "cover_.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "cover.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "file."
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "file 2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "file.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "a1.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "a.verylongextension"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "file~1.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a b.png",
+   "b": "file·2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二〇二四.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二〇二四.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二〇二四.png",
+   "b": "Ａ２.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二〇二四.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二〇二四.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二〇二四.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二〇二四.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二〇二四.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "一万五千.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "一万五千.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "一万五千.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "一万五千.png",
+   "b": "Ａ２.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "一万五千.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "一万五千.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "一万五千.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "一万五千.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "一万五千.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "一万五千.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二十.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二十.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二十.png",
+   "b": "Ａ２.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二十.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二十.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二十.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "二十.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "十一.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "十一.png",
+   "b": "Ａ２.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "十一.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "十一.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "十一.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "٣.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "٣.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "٣.png",
+   "b": "十枚目.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "٣.png",
+   "b": "Ａ２.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "٣.png",
+   "b": "二〇二四.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "٣.png",
+   "b": "一万五千.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "٣.png",
+   "b": "二十.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "٣.png",
+   "b": "十一.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "٣.png",
+   "b": "३.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "٣.png",
+   "b": "１０.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "٣.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "٣.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "٣.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "٣.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "٣.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "٣.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "٣.png",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "٣.png",
+   "b": "𝟗.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "३.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "३.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "३.png",
+   "b": "十枚目.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "३.png",
+   "b": "Ａ２.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "३.png",
+   "b": "二〇二四.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "३.png",
+   "b": "一万五千.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "३.png",
+   "b": "二十.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "३.png",
+   "b": "十一.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "३.png",
+   "b": "１０.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "३.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "३.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "३.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "३.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "३.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "३.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "३.png",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "३.png",
+   "b": "𝟗.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "１０.png",
+   "b": "Ａ２.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "１０.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "１０.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "Mya2v10.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "Mya2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "Mya2v2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "page 9.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "page_10.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "page-11.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "十枚目.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "Ａ２.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "a2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "étude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "etude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "cover_.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "cover.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "Vol. 2"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "file."
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "file 2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "file.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "a 1.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "a1.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "a b.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "二〇二四.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "一万五千.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "二十.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "十一.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "１０.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "a.verylongextension"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "𝟗.png"
+  },
+  "result": 0
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "file~1.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "9.png",
+   "b": "file·2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ｶﾀｶﾅ.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "かたかな.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "かたかな.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "かたかな.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "かたかな.png",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "かたかな.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "かたかな.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "かたかな.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "かたかな.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "かたかな.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "かたかな.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "かたかな.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "かたかな.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "カタカナ.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "カタカナ.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "カタカナ.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "カタカナ.png",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "カタカナ.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "カタカナ.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "カタカナ.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "カタカナ.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "カタカナ.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "カタカナ.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": 0
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "カタカナ.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "เก.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "เก.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "เก.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "เก.png",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "เก.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "เก.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "เก.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "เก.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "เก.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "เก.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "เก.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "เก.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "เก.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "เก.png",
+   "b": "Ⅻ.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "เก.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "กเ.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "กเ.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "กเ.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "กเ.png",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "กเ.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "กเ.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "กเ.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "กเ.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "กเ.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "กเ.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "กเ.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "กเ.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "กเ.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "กเ.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "กเ.png",
+   "b": "Ⅻ.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "กเ.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "étude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "ß.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "Ⅻ.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "x/y\\z.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "étude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ß.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "étude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "ß.png"
+  },
+  "result": 0
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "ss.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "page 9.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "page_10.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "page-11.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "Ａ２.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "a2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "étude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "etude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "cover_.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "cover.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "file."
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "file 2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "file.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "a1.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "file~1.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "a.verylongextension",
+   "b": "file·2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "①.png",
+   "b": "一枚目.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "①.png",
+   "b": "二枚目.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "①.png",
+   "b": "十枚目.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "①.png",
+   "b": "Ａ２.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "①.png",
+   "b": "二〇二四.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "①.png",
+   "b": "一万五千.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "①.png",
+   "b": "二十.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "①.png",
+   "b": "十一.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "①.png",
+   "b": "１０.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "①.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "①.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "①.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "①.png",
+   "b": "𝟗.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "二枚目.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "十枚目.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "Ａ２.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "étude.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "二〇二四.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "一万五千.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "二十.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "十一.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "٣.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "३.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "１０.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "²x.png",
+   "b": "𝟗.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Ⅻ.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Ⅻ.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Ⅻ.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Ⅻ.png",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Ⅻ.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Ⅻ.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Ⅻ.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Ⅻ.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Ⅻ.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Ⅻ.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Ⅻ.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Ⅻ.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Ⅻ.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "Ⅻ.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "page 9.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "page_10.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "page-11.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "étude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file~1.png",
+   "b": "file·2.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "page 9.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "page_10.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "page-11.jpg"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "一枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "二枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "十枚目.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "Ａ２.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "étude.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "й.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "и.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "二〇二四.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "一万五千.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "二十.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "十一.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "٣.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "३.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "１０.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "ｶﾀｶﾅ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "かたかな.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "カタカナ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "เก.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "กเ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "x/y\\z.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "ß.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "ss.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "①.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "²x.png"
+  },
+  "result": 1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "Ⅻ.png"
+  },
+  "result": -1
+ },
+ {
+  "fn": "cmp",
+  "args": {
+   "a": "file·2.png",
+   "b": "𝟗.png"
+  },
+  "result": 1
+ }
+]
