@@ -59,6 +59,10 @@ impl Store {
         if let Some(dir) = Path::new(&self.path).parent() {
             let _ = std::fs::create_dir_all(dir);
         }
+        if !self.exists() {
+            st.schema_ready = false;          // (a new file: its tables are made again)
+            st.known_options.clear();
+        }
         let conn = Connection::open(&self.path).map_err(|e| e.to_string())?;
         conn.busy_timeout(Duration::from_secs(30)).map_err(|e| e.to_string())?;
         conn.pragma_update(None, "journal_mode", "WAL").map_err(|e| e.to_string())?;

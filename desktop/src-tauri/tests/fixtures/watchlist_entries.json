@@ -1,0 +1,6973 @@
+{
+ "start": [
+  {
+   "rid": 1,
+   "f": {
+    "url": "https://pawchive.pw/patreon/user/111",
+    "service": "patreon",
+    "domain": "pawchive.pw",
+    "user_id": "111",
+    "creator_name": "Alpha",
+    "last_post_id": "500",
+    "last_post_date": "2026-01-10",
+    "added_at": "2025-01-01T00:00:00",
+    "auto_check": true,
+    "new_post_count": 5,
+    "download_dir": "{BASE}\\Alpha [patreon]",
+    "download_dirs": [
+     "{BASE}\\Alpha [patreon]",
+     "{BASE}\\old\\Alpha"
+    ],
+    "options": {
+     "file_type": "images"
+    },
+    "ignored_post_ids": [],
+    "cached_new_posts": [
+     {
+      "id": "501",
+      "title": "Post 501",
+      "published": "2026-01-10T05:00:00",
+      "added": null,
+      "content": "<p>long text</p>",
+      "file": {
+       "name": "501.png",
+       "path": "/aa/501.png",
+       "extra": 1
+      },
+      "attachments": [
+       {
+        "name": "a.zip",
+        "path": "/bb/501.zip"
+       },
+       {
+        "name": "nothing"
+       }
+      ]
+     },
+     {
+      "id": "499",
+      "title": "Post 499",
+      "published": "2026-01-10",
+      "added": null,
+      "content": "<p>long text</p>",
+      "file": {
+       "name": "499.png",
+       "path": "/aa/499.png",
+       "extra": 1
+      },
+      "attachments": [
+       {
+        "name": "a.zip",
+        "path": "/bb/499.zip"
+       },
+       {
+        "name": "nothing"
+       }
+      ]
+     },
+     {
+      "id": "600",
+      "title": "Post 600",
+      "published": "2026-01-12T00:00:00",
+      "added": null,
+      "content": "<p>long text</p>",
+      "file": {
+       "name": "600.png",
+       "path": "/aa/600.png",
+       "extra": 1
+      },
+      "attachments": [
+       {
+        "name": "a.zip",
+        "path": "/bb/600.zip"
+       },
+       {
+        "name": "nothing"
+       }
+      ]
+     },
+     {
+      "id": "601",
+      "title": "Post 601",
+      "published": null,
+      "added": "2026-01-13",
+      "content": "<p>long text</p>",
+      "file": {
+       "name": "601.png",
+       "path": "/aa/601.png",
+       "extra": 1
+      },
+      "attachments": [
+       {
+        "name": "a.zip",
+        "path": "/bb/601.zip"
+       },
+       {
+        "name": "nothing"
+       }
+      ]
+     },
+     {
+      "id": 700,
+      "title": "Post 700",
+      "published": "2026-02-01",
+      "added": null,
+      "content": "<p>long text</p>",
+      "file": {
+       "name": "700.png",
+       "path": "/aa/700.png",
+       "extra": 1
+      },
+      "attachments": [
+       {
+        "name": "a.zip",
+        "path": "/bb/700.zip"
+       },
+       {
+        "name": "nothing"
+       }
+      ]
+     }
+    ],
+    "cutoff_day_ids": [
+     "500"
+    ],
+    "last_checked_at": 1794082361.9700677,
+    "custom_folder": false,
+    "is_favorite": false
+   },
+   "seq": -1
+  },
+  {
+   "rid": 2,
+   "f": {
+    "url": "https://pawchive.pw/fanbox/user/222",
+    "service": "fanbox",
+    "domain": "pawchive.pw",
+    "user_id": "222",
+    "creator_name": "222",
+    "last_post_id": "",
+    "last_post_date": "",
+    "added_at": "2025-02-01T00:00:00",
+    "auto_check": false,
+    "new_post_count": 0,
+    "download_dir": "{BASE}\\222 [fanbox]",
+    "download_dirs": [
+     "{BASE}\\222 [fanbox]"
+    ],
+    "options": {},
+    "ignored_post_ids": [],
+    "cached_new_posts": [],
+    "cutoff_day_ids": [],
+    "last_checked_at": 0.0,
+    "custom_folder": false,
+    "is_favorite": false
+   },
+   "seq": 1
+  },
+  {
+   "rid": 3,
+   "f": {
+    "url": "https://pawchive.pw/boosty/user/bee",
+    "service": "boosty",
+    "domain": "pawchive.pw",
+    "user_id": "bee",
+    "creator_name": "Bee",
+    "last_post_id": "abc-1",
+    "last_post_date": "2026-03-01T12:00:00",
+    "added_at": "2025-03-01T00:00:00",
+    "auto_check": true,
+    "new_post_count": 3,
+    "download_dir": "",
+    "download_dirs": [],
+    "options": {},
+    "ignored_post_ids": [
+     "x1"
+    ],
+    "cached_new_posts": [
+     {
+      "id": "abc-2",
+      "title": "Post abc-2",
+      "published": "2026-03-01T13:00:00",
+      "added": null,
+      "content": "<p>long text</p>",
+      "file": {
+       "name": "abc-2.png",
+       "path": "/aa/abc-2.png",
+       "extra": 1
+      },
+      "attachments": [
+       {
+        "name": "a.zip",
+        "path": "/bb/abc-2.zip"
+       },
+       {
+        "name": "nothing"
+       }
+      ]
+     },
+     {
+      "id": "abc-3",
+      "title": "Post abc-3",
+      "published": "2026-03-02",
+      "added": null,
+      "content": "<p>long text</p>",
+      "file": {
+       "name": "abc-3.png",
+       "path": "/aa/abc-3.png",
+       "extra": 1
+      },
+      "attachments": [
+       {
+        "name": "a.zip",
+        "path": "/bb/abc-3.zip"
+       },
+       {
+        "name": "nothing"
+       }
+      ]
+     },
+     {
+      "id": "abc-4",
+      "title": "Post abc-4",
+      "published": "2026-03-01",
+      "added": null,
+      "content": "<p>long text</p>",
+      "file": {
+       "name": "abc-4.png",
+       "path": "/aa/abc-4.png",
+       "extra": 1
+      },
+      "attachments": [
+       {
+        "name": "a.zip",
+        "path": "/bb/abc-4.zip"
+       },
+       {
+        "name": "nothing"
+       }
+      ]
+     }
+    ],
+    "cutoff_day_ids": [],
+    "last_checked_at": 0.0,
+    "custom_folder": true,
+    "is_favorite": true
+   },
+   "seq": 2
+  }
+ ],
+ "steps": [
+  {
+   "op": "update_last_download",
+   "args": {
+    "user_id": "111",
+    "service": "patreon",
+    "post_id": "501",
+    "post_date": "2026-01-10T05:00:00"
+   },
+   "result": null,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "501",
+      "last_post_date": "2026-01-10",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 3,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [],
+      "cached_new_posts": [
+       {
+        "id": "600",
+        "title": "Post 600",
+        "published": "2026-01-12T00:00:00",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "600.png",
+         "path": "/aa/600.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/600.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": "601",
+        "title": "Post 601",
+        "published": null,
+        "added": "2026-01-13",
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "601.png",
+         "path": "/aa/601.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/601.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": 700,
+        "title": "Post 700",
+        "published": "2026-02-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "700.png",
+         "path": "/aa/700.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/700.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [
+       "500",
+       "501"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-1",
+      "last_post_date": "2026-03-01T12:00:00",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 3,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [
+       "x1"
+      ],
+      "cached_new_posts": [
+       {
+        "id": "abc-2",
+        "title": "Post abc-2",
+        "published": "2026-03-01T13:00:00",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-2.png",
+         "path": "/aa/abc-2.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-2.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": "abc-3",
+        "title": "Post abc-3",
+        "published": "2026-03-02",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-3.png",
+         "path": "/aa/abc-3.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-3.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": "abc-4",
+        "title": "Post abc-4",
+        "published": "2026-03-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-4.png",
+         "path": "/aa/abc-4.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-4.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "update_last_download",
+   "args": {
+    "user_id": "111",
+    "service": "patreon",
+    "post_id": "600",
+    "post_date": "2026-01-12",
+    "day_ids": [
+     "600",
+     "599"
+    ]
+   },
+   "result": null,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "600",
+      "last_post_date": "2026-01-12",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 2,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [],
+      "cached_new_posts": [
+       {
+        "id": "601",
+        "title": "Post 601",
+        "published": null,
+        "added": "2026-01-13",
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "601.png",
+         "path": "/aa/601.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/601.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": 700,
+        "title": "Post 700",
+        "published": "2026-02-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "700.png",
+         "path": "/aa/700.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/700.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [
+       "599",
+       "600"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-1",
+      "last_post_date": "2026-03-01T12:00:00",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 3,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [
+       "x1"
+      ],
+      "cached_new_posts": [
+       {
+        "id": "abc-2",
+        "title": "Post abc-2",
+        "published": "2026-03-01T13:00:00",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-2.png",
+         "path": "/aa/abc-2.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-2.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": "abc-3",
+        "title": "Post abc-3",
+        "published": "2026-03-02",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-3.png",
+         "path": "/aa/abc-3.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-3.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": "abc-4",
+        "title": "Post abc-4",
+        "published": "2026-03-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-4.png",
+         "path": "/aa/abc-4.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-4.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "update_last_download",
+   "args": {
+    "user_id": "nobody",
+    "service": "patreon",
+    "post_id": "1",
+    "post_date": "2026-01-01"
+   },
+   "result": null,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "600",
+      "last_post_date": "2026-01-12",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 2,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [],
+      "cached_new_posts": [
+       {
+        "id": "601",
+        "title": "Post 601",
+        "published": null,
+        "added": "2026-01-13",
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "601.png",
+         "path": "/aa/601.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/601.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": 700,
+        "title": "Post 700",
+        "published": "2026-02-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "700.png",
+         "path": "/aa/700.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/700.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [
+       "599",
+       "600"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-1",
+      "last_post_date": "2026-03-01T12:00:00",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 3,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [
+       "x1"
+      ],
+      "cached_new_posts": [
+       {
+        "id": "abc-2",
+        "title": "Post abc-2",
+        "published": "2026-03-01T13:00:00",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-2.png",
+         "path": "/aa/abc-2.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-2.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": "abc-3",
+        "title": "Post abc-3",
+        "published": "2026-03-02",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-3.png",
+         "path": "/aa/abc-3.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-3.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": "abc-4",
+        "title": "Post abc-4",
+        "published": "2026-03-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-4.png",
+         "path": "/aa/abc-4.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-4.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "update_last_download",
+   "args": {
+    "user_id": "BEE ",
+    "service": "Boosty",
+    "post_id": "abc-2",
+    "post_date": "2026-03-01"
+   },
+   "result": null,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "600",
+      "last_post_date": "2026-01-12",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 2,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [],
+      "cached_new_posts": [
+       {
+        "id": "601",
+        "title": "Post 601",
+        "published": null,
+        "added": "2026-01-13",
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "601.png",
+         "path": "/aa/601.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/601.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": 700,
+        "title": "Post 700",
+        "published": "2026-02-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "700.png",
+         "path": "/aa/700.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/700.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [
+       "599",
+       "600"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-1",
+      "last_post_date": "2026-03-01T12:00:00",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 2,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [
+       "x1"
+      ],
+      "cached_new_posts": [
+       {
+        "id": "abc-3",
+        "title": "Post abc-3",
+        "published": "2026-03-02",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-3.png",
+         "path": "/aa/abc-3.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-3.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": "abc-4",
+        "title": "Post abc-4",
+        "published": "2026-03-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-4.png",
+         "path": "/aa/abc-4.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-4.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [
+       "abc-2"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "ignore_post",
+   "args": {
+    "user_id": "111",
+    "service": "patreon",
+    "post_id": "601"
+   },
+   "result": true,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "600",
+      "last_post_date": "2026-01-12",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 1,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "601"
+      ],
+      "cached_new_posts": [
+       {
+        "id": 700,
+        "title": "Post 700",
+        "published": "2026-02-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "700.png",
+         "path": "/aa/700.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/700.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [
+       "599",
+       "600"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-1",
+      "last_post_date": "2026-03-01T12:00:00",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 2,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [
+       "x1"
+      ],
+      "cached_new_posts": [
+       {
+        "id": "abc-3",
+        "title": "Post abc-3",
+        "published": "2026-03-02",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-3.png",
+         "path": "/aa/abc-3.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-3.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": "abc-4",
+        "title": "Post abc-4",
+        "published": "2026-03-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-4.png",
+         "path": "/aa/abc-4.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-4.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [
+       "abc-2"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "ignore_post",
+   "args": {
+    "user_id": "111",
+    "service": "patreon",
+    "post_id": "601"
+   },
+   "result": true,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "600",
+      "last_post_date": "2026-01-12",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 1,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "601"
+      ],
+      "cached_new_posts": [
+       {
+        "id": 700,
+        "title": "Post 700",
+        "published": "2026-02-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "700.png",
+         "path": "/aa/700.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/700.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [
+       "599",
+       "600"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-1",
+      "last_post_date": "2026-03-01T12:00:00",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 2,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [
+       "x1"
+      ],
+      "cached_new_posts": [
+       {
+        "id": "abc-3",
+        "title": "Post abc-3",
+        "published": "2026-03-02",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-3.png",
+         "path": "/aa/abc-3.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-3.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": "abc-4",
+        "title": "Post abc-4",
+        "published": "2026-03-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-4.png",
+         "path": "/aa/abc-4.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-4.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [
+       "abc-2"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "ignore_post",
+   "args": {
+    "user_id": "111",
+    "service": "patreon",
+    "post_id": "  "
+   },
+   "result": false,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "600",
+      "last_post_date": "2026-01-12",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 1,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "601"
+      ],
+      "cached_new_posts": [
+       {
+        "id": 700,
+        "title": "Post 700",
+        "published": "2026-02-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "700.png",
+         "path": "/aa/700.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/700.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [
+       "599",
+       "600"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-1",
+      "last_post_date": "2026-03-01T12:00:00",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 2,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [
+       "x1"
+      ],
+      "cached_new_posts": [
+       {
+        "id": "abc-3",
+        "title": "Post abc-3",
+        "published": "2026-03-02",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-3.png",
+         "path": "/aa/abc-3.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-3.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": "abc-4",
+        "title": "Post abc-4",
+        "published": "2026-03-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-4.png",
+         "path": "/aa/abc-4.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-4.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [
+       "abc-2"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "ignore_post",
+   "args": {
+    "user_id": "111",
+    "service": "patreon",
+    "post_id": "700"
+   },
+   "result": true,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "600",
+      "last_post_date": "2026-01-12",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "601",
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "599",
+       "600"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-1",
+      "last_post_date": "2026-03-01T12:00:00",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 2,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [
+       "x1"
+      ],
+      "cached_new_posts": [
+       {
+        "id": "abc-3",
+        "title": "Post abc-3",
+        "published": "2026-03-02",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-3.png",
+         "path": "/aa/abc-3.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-3.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": "abc-4",
+        "title": "Post abc-4",
+        "published": "2026-03-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-4.png",
+         "path": "/aa/abc-4.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-4.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [
+       "abc-2"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "unignore_post",
+   "args": {
+    "user_id": "111",
+    "service": "patreon",
+    "post_id": "601"
+   },
+   "result": true,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "600",
+      "last_post_date": "2026-01-12",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "599",
+       "600"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-1",
+      "last_post_date": "2026-03-01T12:00:00",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 2,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [
+       "x1"
+      ],
+      "cached_new_posts": [
+       {
+        "id": "abc-3",
+        "title": "Post abc-3",
+        "published": "2026-03-02",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-3.png",
+         "path": "/aa/abc-3.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-3.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": "abc-4",
+        "title": "Post abc-4",
+        "published": "2026-03-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-4.png",
+         "path": "/aa/abc-4.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-4.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [
+       "abc-2"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "unignore_post",
+   "args": {
+    "user_id": "111",
+    "service": "patreon",
+    "post_id": "nope"
+   },
+   "result": false,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "600",
+      "last_post_date": "2026-01-12",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "599",
+       "600"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-1",
+      "last_post_date": "2026-03-01T12:00:00",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 2,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [
+       "x1"
+      ],
+      "cached_new_posts": [
+       {
+        "id": "abc-3",
+        "title": "Post abc-3",
+        "published": "2026-03-02",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-3.png",
+         "path": "/aa/abc-3.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-3.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": "abc-4",
+        "title": "Post abc-4",
+        "published": "2026-03-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-4.png",
+         "path": "/aa/abc-4.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-4.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [
+       "abc-2"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "unignore_all",
+   "args": {
+    "user_id": "bee",
+    "service": "boosty"
+   },
+   "result": true,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "600",
+      "last_post_date": "2026-01-12",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "599",
+       "600"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-1",
+      "last_post_date": "2026-03-01T12:00:00",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 2,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [
+       {
+        "id": "abc-3",
+        "title": "Post abc-3",
+        "published": "2026-03-02",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-3.png",
+         "path": "/aa/abc-3.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-3.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": "abc-4",
+        "title": "Post abc-4",
+        "published": "2026-03-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-4.png",
+         "path": "/aa/abc-4.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-4.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [
+       "abc-2"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "unignore_all",
+   "args": {
+    "user_id": "bee",
+    "service": "boosty"
+   },
+   "result": false,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "600",
+      "last_post_date": "2026-01-12",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "599",
+       "600"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-1",
+      "last_post_date": "2026-03-01T12:00:00",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 2,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [
+       {
+        "id": "abc-3",
+        "title": "Post abc-3",
+        "published": "2026-03-02",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-3.png",
+         "path": "/aa/abc-3.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-3.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       },
+       {
+        "id": "abc-4",
+        "title": "Post abc-4",
+        "published": "2026-03-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-4.png",
+         "path": "/aa/abc-4.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-4.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [
+       "abc-2"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "resolve_posts",
+   "args": {
+    "user_id": "bee",
+    "service": "boosty",
+    "post_ids": [
+     "abc-3"
+    ]
+   },
+   "result": true,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "600",
+      "last_post_date": "2026-01-12",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "599",
+       "600"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-1",
+      "last_post_date": "2026-03-01T12:00:00",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 1,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [
+       {
+        "id": "abc-4",
+        "title": "Post abc-4",
+        "published": "2026-03-01",
+        "added": null,
+        "content": "<p>long text</p>",
+        "file": {
+         "name": "abc-4.png",
+         "path": "/aa/abc-4.png",
+         "extra": 1
+        },
+        "attachments": [
+         {
+          "name": "a.zip",
+          "path": "/bb/abc-4.zip"
+         },
+         {
+          "name": "nothing"
+         }
+        ]
+       }
+      ],
+      "cutoff_day_ids": [
+       "abc-2"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "resolve_posts",
+   "args": {
+    "user_id": "bee",
+    "service": "boosty",
+    "post_ids": [
+     "abc-4"
+    ],
+    "latest_post_id": "abc-4",
+    "latest_post_date": "2026-03-02",
+    "day_ids": [
+     "abc-4",
+     "abc-5"
+    ]
+   },
+   "result": true,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "600",
+      "last_post_date": "2026-01-12",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "599",
+       "600"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "resolve_posts",
+   "args": {
+    "user_id": "111",
+    "service": "patreon",
+    "latest_post_id": "800",
+    "latest_post_date": "2026-02-02"
+   },
+   "result": true,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "resolve_posts",
+   "args": {
+    "user_id": "zzz",
+    "service": "patreon"
+   },
+   "result": false,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "set_auto_check",
+   "args": {
+    "user_id": "111",
+    "service": "patreon",
+    "enabled": false
+   },
+   "result": null,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "set_all_auto_check",
+   "args": {
+    "enabled": true
+   },
+   "result": 2,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "set_all_auto_check",
+   "args": {
+    "enabled": true
+   },
+   "result": 0,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "set_download_dir",
+   "args": {
+    "user_id": "bee",
+    "service": "boosty",
+    "download_dir": "{BASE}/bee/../Bee"
+   },
+   "result": true,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "set_download_dir",
+   "args": {
+    "user_id": "bee",
+    "service": "boosty",
+    "download_dir": "{BASE}\\Bee"
+   },
+   "result": true,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "add_download_dir",
+   "args": {
+    "user_id": "bee",
+    "service": "boosty",
+    "new_dir": "{BASE}\\more\\Bee"
+   },
+   "result": true,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "add_download_dir",
+   "args": {
+    "user_id": "222",
+    "service": "fanbox",
+    "new_dir": ""
+   },
+   "result": false,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Alpha [patreon]",
+      "download_dirs": [
+       "{BASE}\\Alpha [patreon]",
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "remove_download_dir",
+   "args": {
+    "user_id": "111",
+    "service": "patreon",
+    "target_dir": "{BASE}\\ALPHA [patreon]"
+   },
+   "result": true,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\old\\Alpha",
+      "download_dirs": [
+       "{BASE}\\old\\Alpha"
+      ],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "remove_download_dir",
+   "args": {
+    "user_id": "111",
+    "service": "patreon",
+    "target_dir": "{BASE}\\old\\Alpha"
+   },
+   "result": true,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "set_download_dir",
+   "args": {
+    "user_id": "111",
+    "service": "patreon",
+    "download_dir": ""
+   },
+   "result": true,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "set_favorite",
+   "args": {
+    "user_id": "111",
+    "service": "patreon",
+    "is_favorite": true
+   },
+   "result": true,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "set_favorite",
+   "args": {
+    "user_id": "111",
+    "service": "patreon",
+    "is_favorite": true
+   },
+   "result": true,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "set_favorite",
+   "args": {
+    "user_id": "nope",
+    "service": "patreon",
+    "is_favorite": true
+   },
+   "result": false,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "222",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\222 [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "add_entry",
+   "args": {
+    "url": "https://pawchive.pw/fanbox/user/222",
+    "creator_name": "Bravo Two",
+    "user_id": "222",
+    "service": "fanbox",
+    "domain": "pawchive.pw",
+    "last_post_id": "10",
+    "last_post_date": "2026-05-05"
+   },
+   "result": false,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "pawchive.pw",
+      "user_id": "222",
+      "creator_name": "Bravo Two",
+      "last_post_id": "10",
+      "last_post_date": "2026-05-05",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bravo Two [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "10"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "add_or_update_favorite_creator",
+   "args": {
+    "user_id": "222",
+    "service": "fanbox",
+    "creator_name": "Bravo",
+    "domain": "cum.st"
+   },
+   "result": 2,
+   "entries": [
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "cum.st",
+      "user_id": "222",
+      "creator_name": "Bravo Two",
+      "last_post_id": "10",
+      "last_post_date": "2026-05-05",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bravo Two [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "10"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "add_or_update_favorite_creator",
+   "args": {
+    "user_id": "333",
+    "service": "onlyfans",
+    "creator_name": "Charlie",
+    "domain": "cum.st"
+   },
+   "result": 4,
+   "entries": [
+    {
+     "rid": 4,
+     "f": {
+      "url": "https://cum.st/creators/onlyfans/333",
+      "service": "onlyfans",
+      "domain": "cum.st",
+      "user_id": "333",
+      "creator_name": "Charlie",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "cum.st",
+      "user_id": "222",
+      "creator_name": "Bravo Two",
+      "last_post_id": "10",
+      "last_post_date": "2026-05-05",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bravo Two [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "10"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "add_or_update_favorite_creator",
+   "args": {
+    "user_id": "444",
+    "service": "patreon",
+    "creator_name": "",
+    "domain": "pawchive.pw"
+   },
+   "result": 5,
+   "entries": [
+    {
+     "rid": 5,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/444",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "444",
+      "creator_name": "444",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 4,
+     "f": {
+      "url": "https://cum.st/creators/onlyfans/333",
+      "service": "onlyfans",
+      "domain": "cum.st",
+      "user_id": "333",
+      "creator_name": "Charlie",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "cum.st",
+      "user_id": "222",
+      "creator_name": "Bravo Two",
+      "last_post_id": "10",
+      "last_post_date": "2026-05-05",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bravo Two [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "10"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "add_or_update_favorite_creator",
+   "args": {
+    "user_id": "444",
+    "service": "patreon",
+    "creator_name": "Delta",
+    "url": "https://x/y",
+    "is_favorite": false
+   },
+   "result": 5,
+   "entries": [
+    {
+     "rid": 5,
+     "f": {
+      "url": "https://x/y",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "444",
+      "creator_name": "Delta",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 4,
+     "f": {
+      "url": "https://cum.st/creators/onlyfans/333",
+      "service": "onlyfans",
+      "domain": "cum.st",
+      "user_id": "333",
+      "creator_name": "Charlie",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "cum.st",
+      "user_id": "222",
+      "creator_name": "Bravo Two",
+      "last_post_id": "10",
+      "last_post_date": "2026-05-05",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bravo Two [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "10"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "add_entry",
+   "args": {
+    "url": "",
+    "creator_name": "Echo",
+    "user_id": "555",
+    "service": "patreon",
+    "domain": "pawchive.pw",
+    "last_post_id": "42",
+    "last_post_date": "2026-04-04",
+    "auto_check": false,
+    "download_dir": "{BASE}\\Echo",
+    "options": {
+     "skip_zip": true
+    }
+   },
+   "result": true,
+   "entries": [
+    {
+     "rid": 6,
+     "f": {
+      "url": "",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "555",
+      "creator_name": "Echo",
+      "last_post_id": "42",
+      "last_post_date": "2026-04-04",
+      "added_at": "<now>",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Echo",
+      "download_dirs": [],
+      "options": {
+       "skip_zip": true
+      },
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "42"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 5,
+     "f": {
+      "url": "https://x/y",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "444",
+      "creator_name": "Delta",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 4,
+     "f": {
+      "url": "https://cum.st/creators/onlyfans/333",
+      "service": "onlyfans",
+      "domain": "cum.st",
+      "user_id": "333",
+      "creator_name": "Charlie",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {
+       "file_type": "images"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "cum.st",
+      "user_id": "222",
+      "creator_name": "Bravo Two",
+      "last_post_id": "10",
+      "last_post_date": "2026-05-05",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bravo Two [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "10"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "add_entry",
+   "args": {
+    "url": "https://pawchive.pw/patreon/user/111",
+    "creator_name": "111",
+    "user_id": "111",
+    "service": "patreon",
+    "domain": "pawchive.pw",
+    "last_post_id": "",
+    "last_post_date": "2026-01-01",
+    "download_dir": "{BASE}\\elsewhere",
+    "options": {
+     "file_type": "videos"
+    },
+    "is_favorite": true
+   },
+   "result": false,
+   "entries": [
+    {
+     "rid": 6,
+     "f": {
+      "url": "",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "555",
+      "creator_name": "Echo",
+      "last_post_id": "42",
+      "last_post_date": "2026-04-04",
+      "added_at": "<now>",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Echo",
+      "download_dirs": [],
+      "options": {
+       "skip_zip": true
+      },
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "42"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 5,
+     "f": {
+      "url": "https://x/y",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "444",
+      "creator_name": "Delta",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 4,
+     "f": {
+      "url": "https://cum.st/creators/onlyfans/333",
+      "service": "onlyfans",
+      "domain": "cum.st",
+      "user_id": "333",
+      "creator_name": "Charlie",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\elsewhere",
+      "download_dirs": [],
+      "options": {
+       "file_type": "videos"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "cum.st",
+      "user_id": "222",
+      "creator_name": "Bravo Two",
+      "last_post_id": "10",
+      "last_post_date": "2026-05-05",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bravo Two [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "10"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "add_entry",
+   "args": {
+    "url": "",
+    "creator_name": "Foxtrot",
+    "user_id": "666",
+    "service": "gumroad",
+    "domain": "pawchive.pw"
+   },
+   "result": true,
+   "entries": [
+    {
+     "rid": 7,
+     "f": {
+      "url": "",
+      "service": "gumroad",
+      "domain": "pawchive.pw",
+      "user_id": "666",
+      "creator_name": "Foxtrot",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 6,
+     "f": {
+      "url": "",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "555",
+      "creator_name": "Echo",
+      "last_post_id": "42",
+      "last_post_date": "2026-04-04",
+      "added_at": "<now>",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Echo",
+      "download_dirs": [],
+      "options": {
+       "skip_zip": true
+      },
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "42"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 5,
+     "f": {
+      "url": "https://x/y",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "444",
+      "creator_name": "Delta",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 4,
+     "f": {
+      "url": "https://cum.st/creators/onlyfans/333",
+      "service": "onlyfans",
+      "domain": "cum.st",
+      "user_id": "333",
+      "creator_name": "Charlie",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\elsewhere",
+      "download_dirs": [],
+      "options": {
+       "file_type": "videos"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "cum.st",
+      "user_id": "222",
+      "creator_name": "Bravo Two",
+      "last_post_id": "10",
+      "last_post_date": "2026-05-05",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bravo Two [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "10"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "add_entry",
+   "args": {
+    "url": "",
+    "creator_name": "Foxtrot Renamed",
+    "user_id": "666",
+    "service": "gumroad",
+    "domain": "pawchive.pw",
+    "download_dir": "{BASE}\\Fox"
+   },
+   "result": false,
+   "entries": [
+    {
+     "rid": 7,
+     "f": {
+      "url": "",
+      "service": "gumroad",
+      "domain": "pawchive.pw",
+      "user_id": "666",
+      "creator_name": "Foxtrot Renamed",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Fox",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 6,
+     "f": {
+      "url": "",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "555",
+      "creator_name": "Echo",
+      "last_post_id": "42",
+      "last_post_date": "2026-04-04",
+      "added_at": "<now>",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Echo",
+      "download_dirs": [],
+      "options": {
+       "skip_zip": true
+      },
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "42"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 5,
+     "f": {
+      "url": "https://x/y",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "444",
+      "creator_name": "Delta",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 4,
+     "f": {
+      "url": "https://cum.st/creators/onlyfans/333",
+      "service": "onlyfans",
+      "domain": "cum.st",
+      "user_id": "333",
+      "creator_name": "Charlie",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "800",
+      "last_post_date": "2026-02-02",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\elsewhere",
+      "download_dirs": [],
+      "options": {
+       "file_type": "videos"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "800"
+      ],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "cum.st",
+      "user_id": "222",
+      "creator_name": "Bravo Two",
+      "last_post_id": "10",
+      "last_post_date": "2026-05-05",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bravo Two [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "10"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "set_last_post_date",
+   "args": {
+    "user_id": "111",
+    "service": "patreon",
+    "raw_date_str": "2025-12-31"
+   },
+   "result": [
+    true,
+    "2025-12-31"
+   ],
+   "entries": [
+    {
+     "rid": 7,
+     "f": {
+      "url": "",
+      "service": "gumroad",
+      "domain": "pawchive.pw",
+      "user_id": "666",
+      "creator_name": "Foxtrot Renamed",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Fox",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 6,
+     "f": {
+      "url": "",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "555",
+      "creator_name": "Echo",
+      "last_post_id": "42",
+      "last_post_date": "2026-04-04",
+      "added_at": "<now>",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Echo",
+      "download_dirs": [],
+      "options": {
+       "skip_zip": true
+      },
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "42"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 5,
+     "f": {
+      "url": "https://x/y",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "444",
+      "creator_name": "Delta",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 4,
+     "f": {
+      "url": "https://cum.st/creators/onlyfans/333",
+      "service": "onlyfans",
+      "domain": "cum.st",
+      "user_id": "333",
+      "creator_name": "Charlie",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "",
+      "last_post_date": "2025-12-31",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\elsewhere",
+      "download_dirs": [],
+      "options": {
+       "file_type": "videos"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "cum.st",
+      "user_id": "222",
+      "creator_name": "Bravo Two",
+      "last_post_id": "10",
+      "last_post_date": "2026-05-05",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bravo Two [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "10"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "abc-4",
+      "last_post_date": "2026-03-02",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "abc-4",
+       "abc-5"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "set_last_post_date",
+   "args": {
+    "user_id": "bee",
+    "service": "boosty",
+    "raw_date_str": "never"
+   },
+   "result": [
+    true,
+    ""
+   ],
+   "entries": [
+    {
+     "rid": 7,
+     "f": {
+      "url": "",
+      "service": "gumroad",
+      "domain": "pawchive.pw",
+      "user_id": "666",
+      "creator_name": "Foxtrot Renamed",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Fox",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 6,
+     "f": {
+      "url": "",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "555",
+      "creator_name": "Echo",
+      "last_post_id": "42",
+      "last_post_date": "2026-04-04",
+      "added_at": "<now>",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Echo",
+      "download_dirs": [],
+      "options": {
+       "skip_zip": true
+      },
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "42"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 5,
+     "f": {
+      "url": "https://x/y",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "444",
+      "creator_name": "Delta",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 4,
+     "f": {
+      "url": "https://cum.st/creators/onlyfans/333",
+      "service": "onlyfans",
+      "domain": "cum.st",
+      "user_id": "333",
+      "creator_name": "Charlie",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "",
+      "last_post_date": "2025-12-31",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\elsewhere",
+      "download_dirs": [],
+      "options": {
+       "file_type": "videos"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "cum.st",
+      "user_id": "222",
+      "creator_name": "Bravo Two",
+      "last_post_id": "10",
+      "last_post_date": "2026-05-05",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bravo Two [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "10"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "set_last_post_date",
+   "args": {
+    "user_id": "nope",
+    "service": "boosty",
+    "raw_date_str": "2025-01-01"
+   },
+   "result": [
+    false,
+    "Artist not found in watchlist"
+   ],
+   "entries": [
+    {
+     "rid": 7,
+     "f": {
+      "url": "",
+      "service": "gumroad",
+      "domain": "pawchive.pw",
+      "user_id": "666",
+      "creator_name": "Foxtrot Renamed",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Fox",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 6,
+     "f": {
+      "url": "",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "555",
+      "creator_name": "Echo",
+      "last_post_id": "42",
+      "last_post_date": "2026-04-04",
+      "added_at": "<now>",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Echo",
+      "download_dirs": [],
+      "options": {
+       "skip_zip": true
+      },
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "42"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 5,
+     "f": {
+      "url": "https://x/y",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "444",
+      "creator_name": "Delta",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 4,
+     "f": {
+      "url": "https://cum.st/creators/onlyfans/333",
+      "service": "onlyfans",
+      "domain": "cum.st",
+      "user_id": "333",
+      "creator_name": "Charlie",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "",
+      "last_post_date": "2025-12-31",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\elsewhere",
+      "download_dirs": [],
+      "options": {
+       "file_type": "videos"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "cum.st",
+      "user_id": "222",
+      "creator_name": "Bravo Two",
+      "last_post_id": "10",
+      "last_post_date": "2026-05-05",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bravo Two [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "10"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "remove_entry",
+   "args": {
+    "user_id": "333",
+    "service": "onlyfans"
+   },
+   "result": true,
+   "entries": [
+    {
+     "rid": 7,
+     "f": {
+      "url": "",
+      "service": "gumroad",
+      "domain": "pawchive.pw",
+      "user_id": "666",
+      "creator_name": "Foxtrot Renamed",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Fox",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 6,
+     "f": {
+      "url": "",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "555",
+      "creator_name": "Echo",
+      "last_post_id": "42",
+      "last_post_date": "2026-04-04",
+      "added_at": "<now>",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Echo",
+      "download_dirs": [],
+      "options": {
+       "skip_zip": true
+      },
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "42"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 5,
+     "f": {
+      "url": "https://x/y",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "444",
+      "creator_name": "Delta",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "",
+      "last_post_date": "2025-12-31",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\elsewhere",
+      "download_dirs": [],
+      "options": {
+       "file_type": "videos"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "cum.st",
+      "user_id": "222",
+      "creator_name": "Bravo Two",
+      "last_post_id": "10",
+      "last_post_date": "2026-05-05",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bravo Two [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "10"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "remove_entry",
+   "args": {
+    "user_id": "333",
+    "service": "onlyfans"
+   },
+   "result": false,
+   "entries": [
+    {
+     "rid": 7,
+     "f": {
+      "url": "",
+      "service": "gumroad",
+      "domain": "pawchive.pw",
+      "user_id": "666",
+      "creator_name": "Foxtrot Renamed",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Fox",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 6,
+     "f": {
+      "url": "",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "555",
+      "creator_name": "Echo",
+      "last_post_id": "42",
+      "last_post_date": "2026-04-04",
+      "added_at": "<now>",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Echo",
+      "download_dirs": [],
+      "options": {
+       "skip_zip": true
+      },
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "42"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 5,
+     "f": {
+      "url": "https://x/y",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "444",
+      "creator_name": "Delta",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "",
+      "last_post_date": "2025-12-31",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\elsewhere",
+      "download_dirs": [],
+      "options": {
+       "file_type": "videos"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "cum.st",
+      "user_id": "222",
+      "creator_name": "Bravo Two",
+      "last_post_id": "10",
+      "last_post_date": "2026-05-05",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bravo Two [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "10"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "update_last_download",
+   "args": {
+    "user_id": "555",
+    "service": "patreon",
+    "post_id": "41",
+    "post_date": "2026-04-04"
+   },
+   "result": null,
+   "entries": [
+    {
+     "rid": 7,
+     "f": {
+      "url": "",
+      "service": "gumroad",
+      "domain": "pawchive.pw",
+      "user_id": "666",
+      "creator_name": "Foxtrot Renamed",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Fox",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 6,
+     "f": {
+      "url": "",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "555",
+      "creator_name": "Echo",
+      "last_post_id": "42",
+      "last_post_date": "2026-04-04",
+      "added_at": "<now>",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Echo",
+      "download_dirs": [],
+      "options": {
+       "skip_zip": true
+      },
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "41",
+       "42"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 5,
+     "f": {
+      "url": "https://x/y",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "444",
+      "creator_name": "Delta",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "",
+      "last_post_date": "2025-12-31",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\elsewhere",
+      "download_dirs": [],
+      "options": {
+       "file_type": "videos"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "cum.st",
+      "user_id": "222",
+      "creator_name": "Bravo Two",
+      "last_post_id": "10",
+      "last_post_date": "2026-05-05",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bravo Two [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "10"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "update_last_download",
+   "args": {
+    "user_id": "555",
+    "service": "patreon",
+    "post_id": "",
+    "post_date": ""
+   },
+   "result": null,
+   "entries": [
+    {
+     "rid": 7,
+     "f": {
+      "url": "",
+      "service": "gumroad",
+      "domain": "pawchive.pw",
+      "user_id": "666",
+      "creator_name": "Foxtrot Renamed",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Fox",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 6,
+     "f": {
+      "url": "",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "555",
+      "creator_name": "Echo",
+      "last_post_id": "42",
+      "last_post_date": "2026-04-04",
+      "added_at": "<now>",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Echo",
+      "download_dirs": [],
+      "options": {
+       "skip_zip": true
+      },
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "41",
+       "42"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 5,
+     "f": {
+      "url": "https://x/y",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "444",
+      "creator_name": "Delta",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "",
+      "last_post_date": "2025-12-31",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\elsewhere",
+      "download_dirs": [],
+      "options": {
+       "file_type": "videos"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "cum.st",
+      "user_id": "222",
+      "creator_name": "Bravo Two",
+      "last_post_id": "10",
+      "last_post_date": "2026-05-05",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bravo Two [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "10"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  },
+  {
+   "op": "update_last_download",
+   "args": {
+    "user_id": "666",
+    "service": "gumroad",
+    "post_id": "9",
+    "post_date": ""
+   },
+   "result": null,
+   "entries": [
+    {
+     "rid": 7,
+     "f": {
+      "url": "",
+      "service": "gumroad",
+      "domain": "pawchive.pw",
+      "user_id": "666",
+      "creator_name": "Foxtrot Renamed",
+      "last_post_id": "9",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Fox",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 6,
+     "f": {
+      "url": "",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "555",
+      "creator_name": "Echo",
+      "last_post_id": "42",
+      "last_post_date": "2026-04-04",
+      "added_at": "<now>",
+      "auto_check": false,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Echo",
+      "download_dirs": [],
+      "options": {
+       "skip_zip": true
+      },
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "41",
+       "42"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 5,
+     "f": {
+      "url": "https://x/y",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "444",
+      "creator_name": "Delta",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "<now>",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "",
+      "download_dirs": [],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": false
+     }
+    },
+    {
+     "rid": 1,
+     "f": {
+      "url": "https://pawchive.pw/patreon/user/111",
+      "service": "patreon",
+      "domain": "pawchive.pw",
+      "user_id": "111",
+      "creator_name": "Alpha",
+      "last_post_id": "",
+      "last_post_date": "2025-12-31",
+      "added_at": "2025-01-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\elsewhere",
+      "download_dirs": [],
+      "options": {
+       "file_type": "videos"
+      },
+      "ignored_post_ids": [
+       "700"
+      ],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 1794082361.9700677,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 2,
+     "f": {
+      "url": "https://pawchive.pw/fanbox/user/222",
+      "service": "fanbox",
+      "domain": "cum.st",
+      "user_id": "222",
+      "creator_name": "Bravo Two",
+      "last_post_id": "10",
+      "last_post_date": "2026-05-05",
+      "added_at": "2025-02-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bravo Two [fanbox]",
+      "download_dirs": [
+       "{BASE}\\222 [fanbox]"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [
+       "10"
+      ],
+      "last_checked_at": 0.0,
+      "custom_folder": false,
+      "is_favorite": true
+     }
+    },
+    {
+     "rid": 3,
+     "f": {
+      "url": "https://pawchive.pw/boosty/user/bee",
+      "service": "boosty",
+      "domain": "pawchive.pw",
+      "user_id": "bee",
+      "creator_name": "Bee",
+      "last_post_id": "",
+      "last_post_date": "",
+      "added_at": "2025-03-01T00:00:00",
+      "auto_check": true,
+      "new_post_count": 0,
+      "download_dir": "{BASE}\\Bee",
+      "download_dirs": [
+       "{BASE}\\Bee",
+       "{BASE}\\more\\Bee"
+      ],
+      "options": {},
+      "ignored_post_ids": [],
+      "cached_new_posts": [],
+      "cutoff_day_ids": [],
+      "last_checked_at": 0.0,
+      "custom_folder": true,
+      "is_favorite": true
+     }
+    }
+   ]
+  }
+ ],
+ "db": [
+  [
+   7,
+   -5,
+   {
+    "url": "",
+    "service": "gumroad",
+    "domain": "pawchive.pw",
+    "user_id": "666",
+    "creator_name": "Foxtrot Renamed",
+    "last_post_id": "9",
+    "last_post_date": "",
+    "added_at": "<now>",
+    "auto_check": true,
+    "download_dir": "{BASE}\\Fox",
+    "download_dirs": [
+     "{BASE}\\Fox"
+    ],
+    "ignored_post_ids": [],
+    "cutoff_day_ids": [],
+    "is_favorite": false,
+    "options": {}
+   },
+   []
+  ],
+  [
+   6,
+   -4,
+   {
+    "url": "",
+    "service": "patreon",
+    "domain": "pawchive.pw",
+    "user_id": "555",
+    "creator_name": "Echo",
+    "last_post_id": "42",
+    "last_post_date": "2026-04-04",
+    "added_at": "<now>",
+    "auto_check": false,
+    "download_dir": "{BASE}\\Echo",
+    "download_dirs": [
+     "{BASE}\\Echo"
+    ],
+    "ignored_post_ids": [],
+    "cutoff_day_ids": [
+     "41",
+     "42"
+    ],
+    "is_favorite": false,
+    "options": {
+     "skip_zip": true
+    }
+   },
+   []
+  ],
+  [
+   5,
+   -3,
+   {
+    "url": "https://x/y",
+    "service": "patreon",
+    "domain": "pawchive.pw",
+    "user_id": "444",
+    "creator_name": "Delta",
+    "last_post_id": "",
+    "last_post_date": "",
+    "added_at": "<now>",
+    "auto_check": true,
+    "download_dir": "",
+    "download_dirs": [],
+    "ignored_post_ids": [],
+    "cutoff_day_ids": [],
+    "is_favorite": false,
+    "options": {}
+   },
+   []
+  ],
+  [
+   1,
+   -1,
+   {
+    "url": "https://pawchive.pw/patreon/user/111",
+    "service": "patreon",
+    "domain": "pawchive.pw",
+    "user_id": "111",
+    "creator_name": "Alpha",
+    "last_post_id": "",
+    "last_post_date": "2025-12-31",
+    "added_at": "2025-01-01T00:00:00",
+    "auto_check": true,
+    "download_dir": "{BASE}\\elsewhere",
+    "download_dirs": [
+     "{BASE}\\elsewhere"
+    ],
+    "ignored_post_ids": [
+     "700"
+    ],
+    "cutoff_day_ids": [],
+    "is_favorite": true,
+    "last_checked_at": 1794082361.9700677,
+    "options": {
+     "file_type": "videos"
+    }
+   },
+   []
+  ],
+  [
+   2,
+   1,
+   {
+    "url": "https://pawchive.pw/fanbox/user/222",
+    "service": "fanbox",
+    "domain": "cum.st",
+    "user_id": "222",
+    "creator_name": "Bravo Two",
+    "last_post_id": "10",
+    "last_post_date": "2026-05-05",
+    "added_at": "2025-02-01T00:00:00",
+    "auto_check": true,
+    "download_dir": "{BASE}\\Bravo Two [fanbox]",
+    "download_dirs": [
+     "{BASE}\\Bravo Two [fanbox]",
+     "{BASE}\\222 [fanbox]"
+    ],
+    "ignored_post_ids": [],
+    "cutoff_day_ids": [
+     "10"
+    ],
+    "is_favorite": true,
+    "options": {}
+   },
+   []
+  ],
+  [
+   3,
+   2,
+   {
+    "url": "https://pawchive.pw/boosty/user/bee",
+    "service": "boosty",
+    "domain": "pawchive.pw",
+    "user_id": "bee",
+    "creator_name": "Bee",
+    "last_post_id": "",
+    "last_post_date": "",
+    "added_at": "2025-03-01T00:00:00",
+    "auto_check": true,
+    "download_dir": "{BASE}\\Bee",
+    "download_dirs": [
+     "{BASE}\\Bee",
+     "{BASE}\\more\\Bee"
+    ],
+    "ignored_post_ids": [],
+    "cutoff_day_ids": [],
+    "is_favorite": true,
+    "custom_folder": true,
+    "options": {}
+   },
+   []
+  ]
+ ],
+ "folders": [
+  "Bravo Two [fanbox]",
+  "config"
+ ]
+}

@@ -11,6 +11,7 @@ import datetime
 import shutil
 import threading
 import time
+import dataclasses
 from dataclasses import dataclass, field, asdict
 from typing import List, Optional, Dict, Any
 
@@ -125,6 +126,9 @@ class WatchlistEntry:
 
 
 
+_FIELDS = [f.name for f in dataclasses.fields(WatchlistEntry)]
+
+
 def post_id_is_newer(post_id: str, than_id: str) -> bool:
     """Post IDs grow over time on these sites. For IDs that aren't plain numbers the order is unknown,
     so this is False (it used to be True for any other ID, which made every post from the last
@@ -155,6 +159,22 @@ def trim_post(p: Dict[str, Any]) -> Dict[str, Any]:
     if atts:
         out["attachments"] = atts
     return out
+
+
+_NO = object()          # (the Rust engine couldn't do it: the Python code does)
+
+
+def _copy(v):
+    if isinstance(v, list):
+        return [dict(x) if isinstance(x, dict) else x for x in v]
+    if isinstance(v, dict):
+        return dict(v)
+    return v
+
+
+def _full(e: "WatchlistEntry") -> Dict[str, Any]:
+    """All of a creator's fields (copies of its lists), as the Rust engine keeps them"""
+    return {k: _copy(getattr(e, k)) for k in _FIELDS}
 
 
 def _keep_aside(path: str) -> Optional[str]:
@@ -278,6 +298,15 @@ class WatchlistManager:
         self._index_stale = True
         # Told about every change to a creator (the window's list, kept in the desktop shell)
         self.change_listeners: List = []
+        # The desktop shell's Rust engine keeps the creators too and does the operations
+        # (desktop/src-tauri/src/watchlist/entries.rs): each call brings the creators changed here
+        # since the last one, and the creators it changed are copied back
+        self._rust_ready = False              # (the engine has the whole list)
+        self._rust_dirty: set = set()
+        self._rust_deleted: set = set()
+        self._rust_order: Optional[list] = None
+        self._rust_lock = threading.Lock()
+        self._rust_saved = True
 
     @property
     def entries(self) -> List[WatchlistEntry]:
@@ -298,6 +327,7 @@ class WatchlistManager:
             rid = e.__dict__.get("_rid")
             if rid is not None:
                 self._dirty[rid] = e
+                self._rust_dirty.add(rid)
             if name in ("user_id", "service"):
                 self._index_stale = True
         for listener in self.change_listeners:
@@ -325,6 +355,7 @@ class WatchlistManager:
             object.__setattr__(e, "_rid", rid)
             object.__setattr__(e, "_seq", seq)
             self._dirty[rid] = e
+            self._rust_dirty.add(rid)
         object.__setattr__(e, "_changed", self._entry_changed)
 
     def _sync_members_locked(self, force: bool = False) -> None:
@@ -347,7 +378,16 @@ class WatchlistManager:
             index.setdefault(((e.user_id or "").strip().lower(), (e.service or "").strip().lower()), e)
         for rid in self._members.keys() - current.keys():
             self._deleted.add(rid)
+            self._rust_deleted.add(rid)
             self._dirty.pop(rid, None)
+        if self._members:
+            for rid in current.keys() - self._members.keys():
+                # (put back after being taken out: saved again)
+                self._dirty[rid] = current[rid]
+                self._rust_dirty.add(rid)
+                object.__setattr__(current[rid], "_synced", None)     # (sent whole)
+                self._deleted.discard(rid)
+                self._rust_deleted.discard(rid)
         self._members = current
         self._index = index
         self._index_src = ents
@@ -379,6 +419,8 @@ class WatchlistManager:
             self._backup_in_background()
 
     def _reset_tracking(self) -> None:
+        self._rust_ready = False
+        self._rust_dirty, self._rust_deleted, self._rust_order = set(), set(), None
         self._dirty = {}
         self._deleted = set()
         self._members = {}
@@ -510,6 +552,7 @@ class WatchlistManager:
                 rid = getattr(e, "__dict__", {}).get("_rid")
                 if rid is not None:
                     self._dirty[rid] = e
+                    self._rust_dirty.add(rid)
             if full:
                 self._write_all = True
             self._save_gen += 1
@@ -541,6 +584,8 @@ class WatchlistManager:
 
     def _write_pending(self, force: bool = False) -> bool:
         """Writes the creators changed since the last save. True when everything is saved."""
+        if self._rust_call("sync") is not _NO:
+            return self._rust_saved
         with self._write_lock:
             gen = self._save_gen
             if gen <= self._saved_gen and not force:
@@ -587,6 +632,139 @@ class WatchlistManager:
                 if self._write_failures in (1, 10, 100):
                     logger.error(f"Failed to save watchlist: {e}", category="watchlist")
                 return False
+
+    # ── The Rust engine ─────────────────────────────────────────────────────────
+
+    def _rust_link(self):
+        """The engine's link, or None: not running, turned off (PAWCHIVE_PYTHON_WATCHLIST=1), or
+        asked from where waiting for it could block (its message thread, or with the list locked)"""
+        if os.environ.get("PAWCHIVE_PYTHON_WATCHLIST", "") == "1":
+            return None
+        try:
+            from services import rust_queue
+        except ImportError:
+            return None
+        if not rust_queue.available() or threading.current_thread().name == "rust-queue-read":
+            return None
+        if getattr(self._lock, "_is_owned", lambda: False)():
+            return None
+        link = rust_queue.shared_link()
+        return link if link.connect() else None
+
+    def _rust_collect_locked(self):
+        """The changes the engine hasn't seen: (its "sync" part, what was sent)"""
+        self._sync_members_locked()
+        reset = not self._rust_ready
+        write_all = self._write_all
+        rids = list(self._members) if (reset or write_all) else [r for r in self._rust_dirty if r in self._members]
+        rows, sent = [], {}
+        for rid in rids:
+            e = self._members[rid]
+            full = _full(e)
+            snap = e.__dict__.get("_synced")
+            f = full if (reset or snap is None) else {k: v for k, v in full.items() if snap.get(k, _NO) != v}
+            w = write_all or rid in self._dirty
+            if f or w:
+                rows.append({"rid": rid, "seq": e.__dict__.get("_seq", 0), "f": f, "w": w})
+            sent[rid] = (full, w)
+        deleted = sorted(self._rust_deleted)
+        order = [e.__dict__.get("_rid") for e in self._entries]
+        sync = {"reset": reset, "rows": rows, "deleted": deleted, "replace_all": write_all,
+                "next_rid": self._next_rid, "seq_min": self._seq_min, "seq_max": self._seq_max}
+        if reset or order != self._rust_order:
+            sync["order"] = order
+        return sync, (sent, set(deleted), write_all, order, self._save_gen)
+
+    def _rust_commit_locked(self, book, saved: bool) -> None:
+        sent, deleted, write_all, order, gen = book
+        for rid, (full, w) in sent.items():
+            e = self._members.get(rid)
+            if e is None:
+                continue
+            object.__setattr__(e, "_synced", full)
+            if _full(e) == full:                  # (not changed again meanwhile)
+                self._rust_dirty.discard(rid)
+                if w:
+                    self._dirty.pop(rid, None)
+        self._rust_deleted -= deleted
+        self._deleted -= deleted
+        if write_all:
+            self._write_all = False
+        self._rust_order = order
+        self._rust_ready = True
+        if saved and not self._dirty and not self._deleted and not self._write_all:
+            self._saved_gen = max(self._saved_gen, gen)
+
+    def _rust_apply_locked(self, v: Dict[str, Any]) -> None:
+        """The creators the engine changed, copied here (a field changed here meanwhile stays)"""
+        changed = []
+        for r in v.get("rows") or []:
+            rid, f = int(r["rid"]), r.get("f") or {}
+            e = self._members.get(rid)
+            if e is None:
+                e = WatchlistEntry(**{k: _copy(f[k]) for k in _FIELDS if k in f})
+                object.__setattr__(e, "_rid", rid)
+                object.__setattr__(e, "_seq", int(r.get("seq", 0)))
+                object.__setattr__(e, "_changed", self._entry_changed)
+                object.__setattr__(e, "_synced", _full(e))
+                list.insert(self._entries, 0, e)
+                self._members[rid] = e
+                self._next_rid = max(self._next_rid, rid + 1)
+                self._seq_min = min(self._seq_min, e._seq)
+                self._index_stale = True
+            else:
+                snap = e.__dict__.get("_synced") or {}
+                for k, val in f.items():
+                    if k in _FIELDS and getattr(e, k) == snap.get(k, getattr(e, k)):
+                        object.__setattr__(e, k, _copy(val))
+                        snap[k] = _copy(val)
+                object.__setattr__(e, "_synced", snap)
+                if "user_id" in f or "service" in f:
+                    self._index_stale = True
+            changed.append(e)
+        for rid in v.get("deleted") or []:
+            e = self._members.pop(int(rid), None)
+            if e is None:
+                continue
+            for i, x in enumerate(self._entries):
+                if x is e:
+                    list.__delitem__(self._entries, i)
+                    break
+            self._dirty.pop(int(rid), None)
+            self._rust_dirty.discard(int(rid))
+            self._index_stale = True
+        self._next_rid = max(self._next_rid, int(v.get("next_rid") or 0))
+        self._rust_order = [e.__dict__.get("_rid") for e in self._entries]
+        for e in changed:
+            for listener in self.change_listeners:
+                try:
+                    listener(e)
+                except Exception:
+                    pass
+
+    def _rust_call(self, op: str, **args):
+        """An operation done by the engine (its result), or _NO when it can't be asked"""
+        link = self._rust_link()
+        if link is None:
+            return _NO
+        with self._rust_lock:
+            for attempt in (1, 2):
+                with self._lock:
+                    sync, book = self._rust_collect_locked()
+                ok, v = link.call("watchlist", dict(args, op=op, path=self.db_file, sync=sync))
+                if not ok and "not loaded" in str(v) and attempt == 1:
+                    with self._lock:
+                        self._rust_ready = False      # (the engine was restarted)
+                    continue
+                break
+            if not ok:
+                logger.debug(f"The download engine couldn't do the watchlist's {op} ({v}).", category="watchlist")
+                return _NO
+            with self._lock:
+                self._rust_saved = bool(v.get("saved", True))
+                self._rust_commit_locked(book, self._rust_saved)
+                self._rust_apply_locked(v)
+            return v.get("result")
 
     @staticmethod
     def _advance_cutoff(e: WatchlistEntry, post_id: str, post_date: str, day_ids: Optional[List[str]] = None):
@@ -640,6 +818,14 @@ class WatchlistManager:
         Add or update a watchlist entry.
         Returns True if a new entry was created, False if updated.
         """
+        from core import folder_naming
+        r = self._rust_call("add_entry", url=url or "", creator_name=creator_name or "", user_id=user_id or "",
+                            service=service or "", domain=domain or "", last_post_id=str(last_post_id or ""),
+                            last_post_date=last_post_date or "", auto_check=bool(auto_check),
+                            download_dir=download_dir or "", options=options or {}, is_favorite=bool(is_favorite),
+                            include_service=bool(folder_naming.include_service))
+        if r is not _NO:
+            return bool(r)
         with self._lock:
             return self._add_entry_locked(url, creator_name, user_id, service, domain, last_post_id,
                                           last_post_date, auto_check, download_dir, options, is_favorite)
@@ -713,6 +899,9 @@ class WatchlistManager:
 
     def set_favorite(self, user_id: str, service: str, is_favorite: bool) -> bool:
         """Sets favorite status for a creator in the watchlist. Returns True if found and updated."""
+        r = self._rust_call("set_favorite", user_id=user_id, service=service, is_favorite=bool(is_favorite))
+        if r is not _NO:
+            return bool(r)
         with self._lock:
             existing = self._find(user_id, service)
             if existing:
@@ -732,6 +921,13 @@ class WatchlistManager:
         is_favorite: bool = True,
     ) -> WatchlistEntry:
         """Ensures a favorited creator exists in Watchlist and is marked as favorite."""
+        r = self._rust_call("add_or_update_favorite", user_id=user_id, service=service, creator_name=creator_name or "",
+                            domain=domain or "", url=url or "", is_favorite=bool(is_favorite))
+        if r is not _NO:
+            with self._lock:
+                e = self._members.get(int(r))
+            if e is not None:
+                return e
         with self._lock:
             existing = self._find(user_id, service)
             if existing:
@@ -773,6 +969,9 @@ class WatchlistManager:
 
     def remove_entry(self, user_id: str, service: str) -> bool:
         """Remove entry by (user_id, service). Returns True if removed."""
+        r = self._rust_call("remove_entry", user_id=user_id, service=service)
+        if r is not _NO:
+            return bool(r)
         with self._lock:
             existing = self._find(user_id, service)
             if not existing:
@@ -785,6 +984,10 @@ class WatchlistManager:
     def update_last_download(self, user_id: str, service: str, post_id: str, post_date: str,
                              day_ids: Optional[List[str]] = None):
         """Update last-downloaded post metadata after a successful download."""
+        r = self._rust_call("update_last_download", user_id=user_id, service=service, post_id=str(post_id or ""),
+                            post_date=str(post_date or ""), day_ids=[str(i) for i in (day_ids or [])])
+        if r is not _NO:
+            return
         with self._lock:
             existing = self._find(user_id, service)
             if existing:
@@ -817,6 +1020,12 @@ class WatchlistManager:
         If post_ids is given: removes those specific posts from cached_new_posts and updates new_post_count.
         Advances last_post_date and last_post_id safely without regression.
         """
+        r = self._rust_call("resolve_posts", user_id=user_id, service=service,
+                            post_ids=[str(p) for p in post_ids] if post_ids else None,
+                            latest_post_id=str(latest_post_id or ""), latest_post_date=str(latest_post_date or ""),
+                            day_ids=[str(i) for i in (day_ids or [])])
+        if r is not _NO:
+            return bool(r)
         with self._lock:
             existing = self._find(user_id, service)
             if not existing:
@@ -846,6 +1055,9 @@ class WatchlistManager:
 
     def set_auto_check(self, user_id: str, service: str, enabled: bool):
         """Toggle the per-entry auto_check flag."""
+        r = self._rust_call("set_auto_check", user_id=user_id, service=service, enabled=bool(enabled))
+        if r is not _NO:
+            return
         existing = self._find(user_id, service)
         if existing:
             existing.auto_check = enabled
@@ -853,6 +1065,9 @@ class WatchlistManager:
 
     def set_all_auto_check(self, enabled: bool) -> int:
         """Set the auto_check flag for all entries."""
+        r = self._rust_call("set_all_auto_check", enabled=bool(enabled))
+        if r is not _NO:
+            return int(r)
         with self._lock:
             changed = []
             for entry in self.entries:
@@ -865,6 +1080,9 @@ class WatchlistManager:
 
     def set_download_dir(self, user_id: str, service: str, download_dir: str) -> bool:
         """Set or update the custom download directory for an entry."""
+        r = self._rust_call("set_download_dir", user_id=user_id, service=service, download_dir=download_dir or "")
+        if r is not _NO:
+            return bool(r)
         existing = self._find(user_id, service)
         if existing:
             norm = os.path.normpath(download_dir) if download_dir else ""
@@ -880,6 +1098,9 @@ class WatchlistManager:
 
     def add_download_dir(self, user_id: str, service: str, new_dir: str) -> bool:
         """Add a path to an artist's download_dirs list if not present."""
+        r = self._rust_call("add_download_dir", user_id=user_id, service=service, download_dir=new_dir or "")
+        if r is not _NO:
+            return bool(r)
         existing = self._find(user_id, service)
         if existing and new_dir:
             norm = os.path.normpath(new_dir)
@@ -895,6 +1116,9 @@ class WatchlistManager:
 
     def remove_download_dir(self, user_id: str, service: str, target_dir: str) -> bool:
         """Remove a path from an artist's download_dirs list (e.g. when consolidated by user)."""
+        r = self._rust_call("remove_download_dir", user_id=user_id, service=service, download_dir=target_dir or "")
+        if r is not _NO:
+            return bool(r)
         existing = self._find(user_id, service)
         if existing and target_dir:
             norm = os.path.normpath(target_dir).lower()
@@ -993,6 +1217,9 @@ class WatchlistManager:
         if normalized is None:
             return False, f"Invalid date format: '{raw_date_str}'. Please use YYYY-MM-DD (e.g. 2024-05-18), DD/MM/YYYY, or Month DD, YYYY."
 
+        r = self._rust_call("set_last_post_date", user_id=user_id, service=service, date=normalized)
+        if r is not _NO:
+            return (True, normalized) if r else (False, "Artist not found in watchlist")
         existing.last_post_date = normalized
         existing.last_post_id = ""  # Reset cutoff post id
         existing.cutoff_day_ids = []
@@ -1008,6 +1235,9 @@ class WatchlistManager:
 
     def ignore_post(self, user_id: str, service: str, post_id: str) -> bool:
         """Add post_id to ignored list for an entry."""
+        r = self._rust_call("ignore_post", user_id=user_id, service=service, post_id=str(post_id))
+        if r is not _NO:
+            return bool(r)
         pid = str(post_id).strip()
         if not pid:
             return False
@@ -1023,6 +1253,9 @@ class WatchlistManager:
 
     def unignore_post(self, user_id: str, service: str, post_id: str) -> bool:
         """Remove post_id from ignored list for an entry."""
+        r = self._rust_call("unignore_post", user_id=user_id, service=service, post_id=str(post_id))
+        if r is not _NO:
+            return bool(r)
         pid = str(post_id).strip()
         existing = self._find(user_id, service)
         if existing and pid in existing.ignored_post_ids:
@@ -1033,6 +1266,9 @@ class WatchlistManager:
 
     def unignore_all(self, user_id: str, service: str) -> bool:
         """Clear all ignored posts for an entry."""
+        r = self._rust_call("unignore_all", user_id=user_id, service=service)
+        if r is not _NO:
+            return bool(r)
         existing = self._find(user_id, service)
         if existing and existing.ignored_post_ids:
             existing.ignored_post_ids = []

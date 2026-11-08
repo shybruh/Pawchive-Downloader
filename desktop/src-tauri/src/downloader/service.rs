@@ -590,6 +590,7 @@ fn handle(msg: &Value) {
                 "plan" => plan_call(id, args),
                 "site" => site_call(id, args),
                 "watchlist_store" => crate::watchlist::store::call(args),
+                "watchlist" => crate::watchlist::entries::call(args),
                 "archive" => {
                     archive_at(link(), args["path"].as_str().unwrap_or(""));
                     crate::archive::call(args)

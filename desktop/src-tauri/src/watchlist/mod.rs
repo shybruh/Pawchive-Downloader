@@ -1,8 +1,9 @@
 //! The watchlist, being ported from core/watchlist_manager.py. First part: the check for a
 //! creator's new posts (WatchlistManager.get_posts_since), checked against the Python version by
-//! tools/golden_watchlist.py. Second part: the watchlist's database (store.rs). The entries
-//! themselves are still kept, and changed, by Python.
+//! tools/golden_watchlist.py. Second part: the watchlist's database (store.rs). Then the window's
+//! list (view.rs) and the creators and their operations (entries.rs).
 
+pub mod entries;
 pub mod store;
 pub mod view;
 
