@@ -433,6 +433,8 @@ class AppBridge(QObject):
             lambda method: self._callOnGui.emit(lambda: self._after_rust_watchlist_change(method)))
         if rust_watchlist_view.available():
             rust_queue.shared_link().handlers["watchlist_button"] = self._watchlist_button
+            # (the engine's watchlist check asks for a creator's download settings and folder)
+            rust_queue.shared_link().handlers["watch_plan_args"] = self._watch_plan_args
         self._archive_creators_model = ArchiveCreatorsModel(self)
         # Watchlist downloads: new posts that needed no files (already saved or filtered out),
         # counted as done when the download finishes
@@ -5393,6 +5395,8 @@ class AppBridge(QObject):
     # ── Watchlist Slots ────────────────────────────────────────────────────────
 
     def _after_rust_watchlist_change(self, method: str) -> None:
+        if method == "check":
+            return            # (a check's results: the window's rows follow each creator already)
         if method == "ignoreWatchlistPost":
             self._watchlist_model.update_new_counts()
         self._watchlist_model.refresh()
@@ -5452,6 +5456,27 @@ class AppBridge(QObject):
             name="WatchlistCheck",
             daemon=True
         ).start()
+
+    def _watch_plan_args(self, args: List[Any]) -> Any:
+        """For the engine's watchlist check: what planning a creator's new posts needs (their download
+        settings and folder), as _check_and_resolve_if_already_downloaded plans them"""
+        entry = self._watchlist_manager._find(str(args[0]), str(args[1]))
+        if entry is None:
+            return None
+        from core import folder_naming
+        d = self.downloader
+        am = getattr(d, "archive_manager", None)
+        return {
+            "options": self._get_effective_watchlist_options(entry).to_dict(),
+            "archive": bool(am and am.is_enabled),
+            "archive_db": d._archive_db() if hasattr(d, "_archive_db") else "",
+            **(d._known_files() if hasattr(d, "_known_files") else {}),
+            "request": {"creator_name": entry.creator_name or "", "service": entry.service or "",
+                        "domain": entry.domain or "", "base_dir": self._download_dir or "",
+                        "batch_id": f"check_{entry.service}_{entry.user_id}",
+                        "artist_dir": self.resolve_artist_download_dir(entry) or "",
+                        "user_id": str(entry.user_id or ""), "include_service": bool(folder_naming.include_service)},
+        }
 
     def _check_and_resolve_if_already_downloaded(self, entry, new_posts: list) -> list:
         """If all files in new_posts already exist on disk or in the download archive,
@@ -5519,6 +5544,14 @@ class AppBridge(QObject):
         self.watchlistArtistChecking.emit(userId, service, True)
 
         def _run():
+            # In the desktop shell's Rust engine when it's there (name, new posts, files on disk)
+            from services import rust_watchlist_check
+            from core import watchlist_manager as wm
+            r = self._watchlist_manager.check_in_rust([entry], site=rust_watchlist_check.site_args(self.api_client),
+                                                      single=True)
+            if r is not wm._NO:
+                self._watchlistArtistResultSignal.emit(userId, service, int(r.get("total_new") or 0))
+                return
             try:
                 # Auto-heal creator name if profile resolves to a different name
                 from core.parser import LinkParser
@@ -6267,12 +6300,15 @@ class AppBridge(QObject):
                         last_progress[0] = now
                         self.watchlistCheckProgress.emit(n_done, n_total)
 
-                checker = WatchlistChecker(
+                # The check runs in the desktop shell's Rust engine when it's there
+                from services import rust_watchlist_check, rust_queue as _rq
+                extra = {"api_client": self.api_client} if _rq.available() else {}
+                checker = (rust_watchlist_check.RustWatchlistChecker if extra else WatchlistChecker)(
                     self._watchlist_manager, self._check_watchlist_entry,
                     on_result=lambda e, n: self._watchlist_model.entry_changed(e),
                     on_progress=_progress,
                     listing=self.api_client.fetch_creator_updates,
-                    listing_cost=self.api_client.creator_listing_cost)
+                    listing_cost=self.api_client.creator_listing_cost, **extra)
                 checker.done_event = done
                 self._watchlist_checker = checker
         if running is not None:

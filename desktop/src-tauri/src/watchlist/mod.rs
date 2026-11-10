@@ -3,6 +3,7 @@
 //! tools/golden_watchlist.py. Second part: the watchlist's database (store.rs). Then the window's
 //! list (view.rs) and the creators and their operations (entries.rs).
 
+pub mod check;
 pub mod entries;
 pub mod store;
 pub mod view;
@@ -60,7 +61,7 @@ pub fn post_id_is_newer(post_id: &str, than: &str) -> bool {
 }
 
 /// The day ("YYYY-MM-DD") of a post's date (a timestamp counts in local time)
-fn post_day(p: &Value) -> String {
+pub(crate) fn post_day(p: &Value) -> String {
     let pub_ = p.get("published").filter(|v| truthy(v)).or_else(|| p.get("added").filter(|v| truthy(v)));
     match pub_ {
         Some(Value::Number(n)) => n

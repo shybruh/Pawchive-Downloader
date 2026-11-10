@@ -751,6 +751,32 @@ class WatchlistManager:
                 except Exception:
                     pass
 
+    def check_in_rust(self, entries: List[WatchlistEntry], site: Dict[str, str], single: bool = False,
+                      resume: bool = True, progress=None, cancelled=None):
+        """Checks the creators for new posts in the engine (services/rust_watchlist_check.py): its
+        totals, or _NO when it can't be asked. Each creator's result arrives here as it's known."""
+        from core import folder_naming
+        for attempt in (1, 2):
+            if self._rust_call("sync") is _NO:      # (the engine checks what's here now)
+                return _NO
+            link = self._rust_link()
+            if link is None:
+                return _NO
+            rids = [e.__dict__["_rid"] for e in entries if e.__dict__.get("_rid") is not None]
+            ok, v = link.call("watchlist_check", {
+                "path": self.db_file, "rids": rids, "single": bool(single), "resume": bool(resume),
+                "include_service": bool(folder_naming.include_service), "site": site,
+            }, progress=progress, cancelled=cancelled)
+            if not ok and "not loaded" in str(v) and attempt == 1:
+                with self._lock:
+                    self._rust_ready = False
+                continue
+            if not ok:
+                logger.debug(f"The download engine couldn't check the watchlist ({v}).", category="watchlist")
+                return _NO
+            return v
+        return _NO
+
     def _on_rust_changed(self, v: Dict[str, Any]) -> None:
         """The engine changed creators itself (a button in the window): copied here"""
         if not isinstance(v, dict) or v.get("path") != self.db_file:

@@ -239,6 +239,8 @@ struct PlanCtx {
     /// Known.txt and the learned franchise names ("": asked of the app)
     known_txt: String,
     franchise_cache: String,
+    /// Stopping (a watchlist check's own flag), instead of asking the app
+    stop: Option<Arc<AtomicBool>>,
 }
 
 impl Lookups for PlanCtx {
@@ -283,6 +285,9 @@ impl Lookups for PlanCtx {
         self.link.note("add_passwords", json!([passwords]));
     }
     fn cancelled(&self) -> bool {
+        if let Some(stop) = &self.stop {
+            return stop.load(Ordering::Relaxed);
+        }
         self.link.ask("plan_cancelled", json!([self.id])).as_bool().unwrap_or(true)
     }
     fn log(&self, level: &str, message: &str, to_file: bool) {
@@ -292,6 +297,22 @@ impl Lookups for PlanCtx {
 
 fn plan_call(id: u64, args: &Value) -> Result<Value, String> {
     let posts = args["posts"].as_array().ok_or("no posts")?;
+    let p = plan_build(id, args, posts, None);
+    Ok(json!({
+        "tasks": p.tasks,
+        "pending_post_infos": p.pending_post_infos,
+        "write_now": p.write_now,
+        "harvested_links": p.harvested_links,
+        "harvested_records": p.harvested_records,
+        "not_queued": p.not_queued,
+        "renamed": p.renamed,
+        "unmatched_known": p.unmatched_known,
+        "cancelled": p.cancelled,
+    }))
+}
+
+/// The planner on these posts, with the plan call's arguments (options, request, archive, Known list)
+pub fn plan_build(id: u64, args: &Value, posts: &[Value], stop: Option<Arc<AtomicBool>>) -> plan::Plan {
     let o = Options::from_dict(&args["options"]);
     let r = &args["request"];
     let s = |k: &str| r.get(k).and_then(Value::as_str).unwrap_or("");
@@ -317,19 +338,8 @@ fn plan_call(id: u64, args: &Value) -> Result<Value, String> {
     let archive = args["archive"].as_bool().unwrap_or(false);
     let db = if archive { archive_at(&l, args["archive_db"].as_str().unwrap_or("")) } else { None };
     let text = |k: &str| args.get(k).and_then(Value::as_str).unwrap_or("").to_string();
-    let ctx = PlanCtx { link: l, id, archive, db, sites, known_txt: text("known_txt"), franchise_cache: text("franchise_cache") };
-    let p = plan::build(posts, &o, &req, &ctx);
-    Ok(json!({
-        "tasks": p.tasks,
-        "pending_post_infos": p.pending_post_infos,
-        "write_now": p.write_now,
-        "harvested_links": p.harvested_links,
-        "harvested_records": p.harvested_records,
-        "not_queued": p.not_queued,
-        "renamed": p.renamed,
-        "unmatched_known": p.unmatched_known,
-        "cancelled": p.cancelled,
-    }))
+    let ctx = PlanCtx { link: l, id, archive, db, sites, known_txt: text("known_txt"), franchise_cache: text("franchise_cache"), stop };
+    plan::build(posts, &o, &req, &ctx)
 }
 
 /// Cancel flags of the calls running now ({"op": "cancel_call", "id"} sets one)
@@ -359,10 +369,10 @@ fn parsed_link(v: &Value) -> ParsedLink {
 /// The archive sites' client, for the app's scans: args {"fn", "cookie", "user_agent", "proxy", ...}.
 /// Log lines and progress ({"t": "note", "fn": "progress", "args": [id, page, count, total]})
 /// come back while it runs.
-fn site_call(id: u64, a: &Value) -> Result<Value, String> {
+/// The archive sites' client the app asked for ({"cookie", "user_agent", "proxy"}), logging to the app
+pub fn site_client(a: &Value) -> SiteClient {
     let l = link().clone();
     let s = |k: &str| a.get(k).and_then(Value::as_str).unwrap_or("").to_string();
-    let n = |k: &str, d: usize| a.get(k).and_then(Value::as_u64).map(|x| x as usize).unwrap_or(d);
     let cookies = l.clone();
     let mut c = SiteClient::with_proxy(
         &s("cookie"),
@@ -372,9 +382,26 @@ fn site_call(id: u64, a: &Value) -> Result<Value, String> {
     if !s("user_agent").trim().is_empty() {
         c.user_agent = s("user_agent").trim().to_string();
     }
-    let lg = l.clone();
-    c.set_log(Box::new(move |level: &str, category: &str, msg: &str| lg.note("log", json!([level, msg, true, category]))));
-    let cancel = call_flags().lock().unwrap().entry(id).or_default().clone();
+    c.set_log(Box::new(move |level: &str, category: &str, msg: &str| l.note("log", json!([level, msg, true, category]))));
+    c
+}
+
+/// A call's cancel flag (set by {"op": "cancel_call"})
+pub fn cancel_flag(id: u64) -> Arc<AtomicBool> {
+    call_flags().lock().unwrap().entry(id).or_default().clone()
+}
+
+/// Progress of a call: [id, a, b, c] (the app's call() hands it to the caller)
+pub fn progress_app(id: u64, a: usize, b: usize) {
+    link().note("progress", json!([id, a, b]));
+}
+
+fn site_call(id: u64, a: &Value) -> Result<Value, String> {
+    let l = link().clone();
+    let s = |k: &str| a.get(k).and_then(Value::as_str).unwrap_or("").to_string();
+    let n = |k: &str, d: usize| a.get(k).and_then(Value::as_u64).map(|x| x as usize).unwrap_or(d);
+    let c = site_client(a);
+    let cancel = cancel_flag(id);
     let progress = |page: usize, count: usize, total: Option<u64>| l.note("progress", json!([id, page, count, total]));
     let p = parsed_link(&a["link"]);
     let out = match s("fn").as_str() {
@@ -596,6 +623,7 @@ fn handle(msg: &Value) {
                 "site" => site_call(id, args),
                 "watchlist_store" => crate::watchlist::store::call(args),
                 "watchlist" => crate::watchlist::entries::call(args),
+                "watchlist_check" => crate::watchlist::check::call(id, args),
                 "archive" => {
                     archive_at(link(), args["path"].as_str().unwrap_or(""));
                     crate::archive::call(args)

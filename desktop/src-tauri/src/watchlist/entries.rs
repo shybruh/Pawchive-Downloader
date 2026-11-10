@@ -22,10 +22,10 @@ pub struct Rec {
 }
 
 impl Rec {
-    fn s(&self, k: &str) -> String {
+    pub(super) fn s(&self, k: &str) -> String {
         text(self.f.get(k).unwrap_or(&Value::Null))
     }
-    fn list(&self, k: &str) -> Vec<Value> {
+    pub(super) fn list(&self, k: &str) -> Vec<Value> {
         self.f.get(k).and_then(Value::as_array).cloned().unwrap_or_default()
     }
     fn strs(&self, k: &str) -> Vec<String> {
@@ -77,7 +77,7 @@ impl Rec {
 }
 
 /// str(x) of a field (None counts as "")
-fn text(v: &Value) -> String {
+pub(super) fn text(v: &Value) -> String {
     match v {
         Value::Null => String::new(),
         v => py::pystr(v),
@@ -615,6 +615,16 @@ impl Entries {
         true
     }
 
+    pub fn index_of(&self, rid: i64) -> Option<usize> {
+        self.list.iter().position(|e| e.rid == rid)
+    }
+
+    /// Sets fields of a creator (the check's results)
+    pub fn set_fields(&mut self, i: usize, f: Map<String, Value>) {
+        self.list[i].f.extend(f);
+        self.changed(i);
+    }
+
     /// The call's answer: what it changed
     fn changes(&mut self) -> Value {
         let rows: Vec<Value> = std::mem::take(&mut self.touched)
@@ -679,6 +689,39 @@ pub fn window_call(method: &str, args: &[Value]) -> Option<Result<Value, String>
         crate::downloader::service::note_app("watchlist_changed", out);
     }
     Some(Ok(result))
+}
+
+/// A copy of a creator of the list at `path`
+pub fn snapshot(path: &str, rid: i64) -> Option<Rec> {
+    let all = lists().lock().unwrap_or_else(|e| e.into_inner());
+    all.get(path)?.list.iter().find(|e| e.rid == rid).cloned()
+}
+
+/// Copies of all the creators of the list at `path`
+pub fn all_of(path: &str) -> Vec<Rec> {
+    let all = lists().lock().unwrap_or_else(|e| e.into_inner());
+    all.get(path).map(|w| w.list.clone()).unwrap_or_default()
+}
+
+/// Changes the list at `path` (None when it isn't loaded): saved, and the app told what changed
+pub fn change<R>(path: &str, method: &str, f: impl FnOnce(&mut Entries) -> R) -> Option<R> {
+    let mut all = lists().lock().unwrap_or_else(|e| e.into_inner());
+    let w = all.get_mut(path)?;
+    w.touched.clear();
+    w.gone.clear();
+    let r = f(w);
+    let saved = w.save();
+    let mut out = w.changes();
+    let changed = !out["rows"].as_array().unwrap().is_empty() || !out["deleted"].as_array().unwrap().is_empty();
+    out["path"] = json!(path);
+    out["saved"] = json!(saved);
+    out["next_rid"] = json!(w.next_rid);
+    out["method"] = json!(method);
+    drop(all);
+    if changed {
+        crate::downloader::service::note_app("watchlist_changed", out);
+    }
+    Some(r)
 }
 
 /// The app's own watchlist (the one the window shows)
