@@ -307,6 +307,14 @@ class WatchlistManager:
         self._rust_order: Optional[list] = None
         self._rust_lock = threading.Lock()
         self._rust_saved = True
+        # Told after the engine changed the list itself (the window's buttons answered in Rust)
+        self.list_listeners: List = []
+        try:
+            from services import rust_queue
+            if rust_queue.available():
+                rust_queue.shared_link().note_handlers["watchlist_changed"] = self._on_rust_changed
+        except ImportError:
+            pass
 
     @property
     def entries(self) -> List[WatchlistEntry]:
@@ -670,6 +678,7 @@ class WatchlistManager:
         deleted = sorted(self._rust_deleted)
         order = [e.__dict__.get("_rid") for e in self._entries]
         sync = {"reset": reset, "rows": rows, "deleted": deleted, "replace_all": write_all,
+                "main": bool(self.background_saves),          # (the app's own list: the window's buttons)
                 "next_rid": self._next_rid, "seq_min": self._seq_min, "seq_max": self._seq_max}
         if reset or order != self._rust_order:
             sync["order"] = order
@@ -741,6 +750,22 @@ class WatchlistManager:
                     listener(e)
                 except Exception:
                     pass
+
+    def _on_rust_changed(self, v: Dict[str, Any]) -> None:
+        """The engine changed creators itself (a button in the window): copied here"""
+        if not isinstance(v, dict) or v.get("path") != self.db_file:
+            return
+        with self._lock:
+            self._sync_members_locked()
+            self._rust_apply_locked(v)
+            for rid in v.get("deleted") or []:
+                self._rust_deleted.discard(int(rid))
+                self._deleted.discard(int(rid))
+        for listener in self.list_listeners:
+            try:
+                listener(v.get("method", ""))
+            except Exception:
+                pass
 
     def _rust_call(self, op: str, **args):
         """An operation done by the engine (its result), or _NO when it can't be asked"""

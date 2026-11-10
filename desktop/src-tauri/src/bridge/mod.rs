@@ -42,7 +42,18 @@ impl AppBridge {
 const METHODS: &[&str] = &[
     "listDirectory", "getLastListingTotal", "getBreadcrumbs", "getSystemDrives", "openPathInSystem", "moveItems", "renameItem",
     "scanDuplicates", "scanDuplicatesAsync", "getPathSafetyInfo", "revealFileInExplorer",
+    // (the watchlist: watchlist/entries.rs)
+    "removeFromWatchlist", "setWatchlistAutoCheck", "setAllWatchlistAutoCheck", "disableAllWatchlistAutoCheck", "ignoreWatchlistPost",
 ];
+
+/// The watchlist's buttons: answered by the Rust watchlist, else by the Python bridge (the engine
+/// hasn't been given the watchlist yet, or the Rust one is turned off)
+fn watchlist_button(method: &str, args: Vec<Value>) -> Result<Value, String> {
+    match crate::watchlist::entries::window_call(method, &args) {
+        Some(r) => r,
+        None => service::ask_app("watchlist_button", json!([method, args])),
+    }
+}
 
 fn arg_str(args: &[Value], i: usize) -> String {
     args.get(i).and_then(Value::as_str).unwrap_or("").to_string()
@@ -63,6 +74,9 @@ impl Overlay for AppBridge {
 
     fn call(&self, method: &str, args: Vec<Value>) -> Result<Value, String> {
         let g = &self.gallery;
+        if matches!(method, "removeFromWatchlist" | "setWatchlistAutoCheck" | "setAllWatchlistAutoCheck" | "disableAllWatchlistAutoCheck" | "ignoreWatchlistPost") {
+            return watchlist_button(method, args);
+        }
         Ok(match method {
             "listDirectory" => {
                 let max = args.get(1).and_then(Value::as_u64).unwrap_or(1500) as usize;

@@ -426,6 +426,11 @@ fn site_call(id: u64, a: &Value) -> Result<Value, String> {
     Ok(out)
 }
 
+/// Tells the app something (a note: no answer)
+pub fn note_app(f: &str, args: Value) {
+    link().note(f, args);
+}
+
 /// A line in the app's log (and log file), with details shown when it's expanded
 pub fn log_app(level: &str, message: &str, category: &str, details: &str) {
     link().note("log", json!([level, message, true, category, details]));

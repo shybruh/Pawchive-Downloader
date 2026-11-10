@@ -427,6 +427,12 @@ class AppBridge(QObject):
         from services import rust_watchlist_view
         self._watchlist_model = (rust_watchlist_view.RustWatchlistModel(self._watchlist_manager, self)
                                  if rust_watchlist_view.available() else WatchlistModel(self._watchlist_manager, self))
+        # The watchlist's buttons are answered in Rust (src-tauri/src/bridge/): the window's list follows
+        # its changes here, and the buttons it can't do yet (no watchlist given to it) come back here
+        self._watchlist_manager.list_listeners.append(
+            lambda method: self._callOnGui.emit(lambda: self._after_rust_watchlist_change(method)))
+        if rust_watchlist_view.available():
+            rust_queue.shared_link().handlers["watchlist_button"] = self._watchlist_button
         self._archive_creators_model = ArchiveCreatorsModel(self)
         # Watchlist downloads: new posts that needed no files (already saved or filtered out),
         # counted as done when the download finishes
@@ -5385,6 +5391,32 @@ class AppBridge(QObject):
             self.creatorNameChanged.emit()
 
     # ── Watchlist Slots ────────────────────────────────────────────────────────
+
+    def _after_rust_watchlist_change(self, method: str) -> None:
+        if method == "ignoreWatchlistPost":
+            self._watchlist_model.update_new_counts()
+        self._watchlist_model.refresh()
+        self.watchlistChanged.emit()
+
+    def _watchlist_button(self, args: List[Any]) -> Any:
+        """A watchlist button the Rust bridge passed back (run on the window thread)"""
+        method, call_args = str(args[0]), list(args[1] if len(args) > 1 else [])
+        if method not in ("removeFromWatchlist", "setWatchlistAutoCheck", "setAllWatchlistAutoCheck",
+                          "disableAllWatchlistAutoCheck", "ignoreWatchlistPost"):
+            raise AttributeError(f"appBridge has no watchlist button {method!r}")
+        done, box = threading.Event(), [None, None]
+
+        def run():
+            try:
+                box[0] = getattr(self, method)(*call_args)
+            except Exception as e:
+                box[1] = e
+            done.set()
+        self._callOnGui.emit(run)
+        done.wait(60)
+        if box[1] is not None:
+            raise box[1]
+        return box[0]
 
     @Slot(str, str)
     def removeFromWatchlist(self, userId: str, service: str):

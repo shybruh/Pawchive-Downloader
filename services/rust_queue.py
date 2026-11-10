@@ -81,6 +81,8 @@ class _Link:
         self._call_ids = itertools.count(1)
         self._unreachable_said = False
         self.handlers: Dict[str, Any] = {}        # questions from Rust answered by other parts of the app
+        # Told when the engine reports something (a "note": fn -> handler(args), on the message thread)
+        self.note_handlers: Dict[str, Any] = {}
         self.on_connect: List[Any] = []           # called after (re)connecting
 
     @property
@@ -164,6 +166,12 @@ class _Link:
             return True
         if t == "note":
             fn, args = msg.get("fn"), msg.get("args") or []
+            if fn in self.note_handlers:
+                try:
+                    self.note_handlers[fn](args)
+                except Exception as e:
+                    logger.debug(f"Engine note {fn!r} failed: {e}", category="downloader")
+                return True
             if fn == "log":            # [level, message, to_file, category, details] (the planner's: no category)
                 level, message, to_file, category, details = (list(args) + [None] * 5)[:5]
                 _log(str(level), str(message), to_file is not False, category or "file", details or "")

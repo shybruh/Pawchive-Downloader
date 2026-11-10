@@ -339,7 +339,7 @@ impl Entries {
                 true
             }
             Err(e) => {
-                log("ERROR", &format!("Failed to save watchlist: {e}"));
+                log("error", &format!("Failed to save watchlist: {e}"));
                 false
             }
         }
@@ -368,8 +368,8 @@ impl Entries {
                         let new_dir = py::join(&[&parent, &naming::creator_folder(&clean_c, service, include_service)]);
                         if std::path::Path::new(&dd).exists() && !std::path::Path::new(&new_dir).exists() {
                             match std::fs::rename(&dd, &new_dir) {
-                                Ok(_) => log("INFO", &format!("Auto-migrated folder '{base}' -> '{}'", py::basename(&new_dir))),
-                                Err(err) => log("DEBUG", &format!("Could not rename folder on disk: {err}")),
+                                Ok(_) => log("info", &format!("Auto-migrated folder '{base}' -> '{}'", py::basename(&new_dir))),
+                                Err(err) => log("debug", &format!("Could not rename folder on disk: {err}")),
                             }
                         }
                         e.set("download_dir", json!(new_dir));
@@ -395,7 +395,7 @@ impl Entries {
             let cutoff = if last_post_id.is_empty() { vec![] } else { vec![last_post_id.to_string()] };
             let opts = if options.is_object() { options.clone() } else { json!({}) };
             self.add_at_head(new_fields(url, service, domain, user_id, creator_name, last_post_id, last_post_date, auto_check, download_dir, opts, cutoff, is_favorite));
-            log("INFO", &format!("Added to watchlist: {} [{service}] (last post: {})", repr(creator_name), if last_post_date.is_empty() { "unknown" } else { last_post_date }));
+            log("info", &format!("Added to watchlist: {} [{service}] (last post: {})", repr(creator_name), if last_post_date.is_empty() { "unknown" } else { last_post_date }));
             true
         }
     }
@@ -433,7 +433,7 @@ impl Entries {
             let url = if url.is_empty() { site_url(domain, service, user_id) } else { url.to_string() };
             let name = if creator_name.is_empty() { user_id } else { creator_name };
             let i = self.add_at_head(new_fields(&url, service, domain, user_id, name, "", "", true, "", json!({}), vec![], fav));
-            log("INFO", &format!("Added favorite creator to watchlist: {} [{service}]", repr(creator_name)));
+            log("info", &format!("Added favorite creator to watchlist: {} [{service}]", repr(creator_name)));
             self.list[i].rid
         }
     }
@@ -444,7 +444,7 @@ impl Entries {
         self.unsaved.remove(&e.rid);
         self.deleted.insert(e.rid);
         self.gone.push(e.rid);
-        log("INFO", &format!("Removed from watchlist: {} [{service}]", repr(&e.s("creator_name"))));
+        log("info", &format!("Removed from watchlist: {} [{service}]", repr(&e.s("creator_name"))));
         true
     }
 
@@ -572,7 +572,7 @@ impl Entries {
         set_posts(e, vec![]);
         let name = e.s("creator_name");
         self.changed(i);
-        log("INFO", &format!("Watchlist: updated last download date for {} [{service}] to {}.", repr(&name), if date.is_empty() { "Never" } else { date }));
+        log("info", &format!("Watchlist: updated last download date for {} [{service}] to {}.", repr(&name), if date.is_empty() { "Never" } else { date }));
         true
     }
 
@@ -632,6 +632,61 @@ fn lists() -> &'static Mutex<HashMap<String, Entries>> {
     L.get_or_init(Default::default)
 }
 
+/// The window's watchlist buttons answered here (appBridge's methods; bridge/mod.rs). None when
+/// the app hasn't given this engine its watchlist yet (the app's Python bridge then answers).
+/// The app is told what changed ("watchlist_changed": its copy, the window's list).
+pub fn window_call(method: &str, args: &[Value]) -> Option<Result<Value, String>> {
+    let path = main_path().lock().unwrap_or_else(|e| e.into_inner()).clone()?;
+    let mut all = lists().lock().unwrap_or_else(|e| e.into_inner());
+    let w = all.get_mut(&path)?;
+    let s = |i: usize| args.get(i).map(text).unwrap_or_default();
+    let b = |i: usize| args.get(i).and_then(Value::as_bool).unwrap_or(false);
+    w.touched.clear();
+    w.gone.clear();
+    let result = match method {
+        "removeFromWatchlist" => {
+            w.remove_entry(&s(0), &s(1));
+            Value::Null
+        }
+        "setWatchlistAutoCheck" => {
+            w.set_auto_check(&s(0), &s(1), b(2));
+            Value::Null
+        }
+        "setAllWatchlistAutoCheck" => {
+            w.set_all_auto_check(b(0));
+            Value::Null
+        }
+        "disableAllWatchlistAutoCheck" => {
+            w.set_all_auto_check(false);
+            Value::Null
+        }
+        "ignoreWatchlistPost" => {
+            w.ignore_post(&s(0), &s(1), &s(2));
+            Value::Null
+        }
+        m => return Some(Err(format!("no watchlist button {m:?} here"))),
+    };
+    let saved = w.save();
+    let mut out = w.changes();
+    let changed = !out["rows"].as_array().unwrap().is_empty() || !out["deleted"].as_array().unwrap().is_empty();
+    out["path"] = json!(path);
+    out["saved"] = json!(saved);
+    out["next_rid"] = json!(w.next_rid);
+    out["method"] = json!(method);
+    drop(all);
+    log("debug", &format!("Watchlist button {method} done by the engine ({} changed).", out["rows"].as_array().map_or(0, Vec::len) + out["deleted"].as_array().map_or(0, Vec::len)));
+    if changed {
+        crate::downloader::service::note_app("watchlist_changed", out);
+    }
+    Some(Ok(result))
+}
+
+/// The app's own watchlist (the one the window shows)
+fn main_path() -> &'static Mutex<Option<String>> {
+    static P: OnceLock<Mutex<Option<String>>> = OnceLock::new();
+    P.get_or_init(Default::default)
+}
+
 /// The app's requests ({"op", "path", "sync", ...}: the engine service's "watchlist" call).
 /// Err "not loaded" when this engine hasn't been given the list yet (the app then sends all of it).
 pub fn call(a: &Value) -> Result<Value, String> {
@@ -643,6 +698,9 @@ pub fn call(a: &Value) -> Result<Value, String> {
             return Err("watchlist not loaded".into());
         }
         all.insert(path.to_string(), Entries::new(store::store(path)));
+    }
+    if sync["main"].as_bool().unwrap_or(false) {
+        *main_path().lock().unwrap_or_else(|e| e.into_inner()) = Some(path.to_string());
     }
     let w = all.get_mut(path).unwrap();
     w.touched.clear();
@@ -755,6 +813,44 @@ mod tests {
         assert_eq!(json!(names), fx["folders"]);
         let rows: Vec<Value> = store::store(&db).load().unwrap().into_iter().map(|mut r| { r[2] = now_out(r[2].take()); sub(&r, &b, "{BASE}") }).collect();
         assert_eq!(Value::Array(rows), fx["db"]);
+        let _ = std::fs::remove_dir_all(&base);
+    }
+
+    /// The window's buttons work on the app's own list (the one synced as "main")
+    #[test]
+    fn window_buttons() {
+        let base = std::env::current_dir().unwrap().join("target").join("watchlist_buttons_rs");
+        let _ = std::fs::remove_dir_all(&base);
+        let db = base.join("watchlist.db").to_str().unwrap().to_string();
+        let f = |uid: &str, ac: bool| {
+            let mut m = new_fields("u", "patreon", "pawchive.pw", uid, uid, "", "", ac, "", json!({}), vec![], false);
+            m.insert("cached_new_posts".into(), json!([{"id": "7", "published": "2026-01-01"}, {"id": 8}]));
+            m
+        };
+        let rows = json!([{"rid": 1, "seq": 1, "f": f("a", true), "w": true}, {"rid": 2, "seq": 2, "f": f("b", false), "w": true}]);
+        call(&json!({"op": "sync", "path": "other.db-not-main", "sync": {"reset": true, "rows": []}, "save": false})).unwrap();
+        call(&json!({"op": "sync", "path": db, "sync": {"reset": true, "rows": rows, "main": true}})).unwrap();
+        let get = |uid: &str| -> Option<Map<String, Value>> {
+            let all = lists().lock().unwrap();
+            all[&db].list().iter().find(|e| e.s("user_id") == uid).map(|e| e.f.clone())
+        };
+        window_call("setWatchlistAutoCheck", &[json!("a"), json!("patreon"), json!(false)]).unwrap().unwrap();
+        assert_eq!(get("a").unwrap()["auto_check"], json!(false));
+        window_call("setAllWatchlistAutoCheck", &[json!(true)]).unwrap().unwrap();
+        assert_eq!((get("a").unwrap()["auto_check"].clone(), get("b").unwrap()["auto_check"].clone()), (json!(true), json!(true)));
+        window_call("disableAllWatchlistAutoCheck", &[]).unwrap().unwrap();
+        assert_eq!(get("b").unwrap()["auto_check"], json!(false));
+        window_call("ignoreWatchlistPost", &[json!("b"), json!("patreon"), json!("8")]).unwrap().unwrap();
+        let b = get("b").unwrap();
+        assert_eq!((b["ignored_post_ids"].clone(), b["new_post_count"].clone()), (json!(["8"]), json!(1)));
+        window_call("removeFromWatchlist", &[json!("A"), json!("Patreon")]).unwrap().unwrap();
+        assert!(get("a").is_none());
+        assert!(window_call("checkWatchlist", &[]).unwrap().is_err());
+        // (saved)
+        let saved = store::store(&db).load().unwrap();
+        assert_eq!(saved.len(), 1);
+        assert_eq!(saved[0][2]["auto_check"], json!(false));
+        assert_eq!(saved[0][2]["ignored_post_ids"], json!(["8"]));
         let _ = std::fs::remove_dir_all(&base);
     }
 }
