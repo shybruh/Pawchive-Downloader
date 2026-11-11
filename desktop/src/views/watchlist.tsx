@@ -50,7 +50,7 @@ export function WatchlistView() {
 
   return (
     <>
-      <PageHeader title="Watchlist" description={`${total} creators followed${newPosts ? ` · ${newPosts} new posts` : ""}`}
+      <PageHeader title="Watchlist" description={`${total} ${total === 1 ? "creator" : "creators"} followed${newPosts ? ` · ${newPosts} new ${newPosts === 1 ? "post" : "posts"}` : ""}`}
         actions={<>
           <Button variant="outline" size="sm" disabled={checking || !total} onClick={() => call("appBridge", "checkWatchlist", true)}>
             {checking ? <Loader2Icon className="animate-spin" /> : <RefreshCwIcon />}{checking ? "Checking…" : "Check now"}

@@ -1,11 +1,13 @@
 # Pawchive Downloader — desktop app (Tauri + React)
 
 > Based on [Pawchive Downloader](https://github.com/whyamihere773/Pawchive-Downloader). This fork replaces
-> the Qt / QML interface with a Tauri + React one, keeps the original Python engine running in the
-> background. See the root `LICENSE`.
+> the Qt / QML interface with a Tauri + React one, and is moving the Python engine to Rust a part at a
+> time. See the root `LICENSE`.
 
-A small Rust shell (Tauri) starts the existing Python engine in the background, and the React UI
-talks to it over a local WebSocket.
+A Rust shell (Tauri) starts the Python engine in the background, and the React UI talks to both over
+a local WebSocket. The parts already in Rust (downloads, site scans, the download planner, the
+Watchlist, the download archive's lookups, Known-series sorting) are served by the shell itself; the
+Python engine calls them over a second local socket (`src-tauri/src/downloader/service.rs`).
 
 ```
 ┌──────────────── Tauri shell (Rust, src-tauri/) ────────────────┐
@@ -23,7 +25,9 @@ talks to it over a local WebSocket.
           thumbnails / images / video   (src-tauri/src/media/, Rust)
 ```
 
-The engine is being ported to Rust one object at a time through the host; see `docs/AUDIT.md`.
+The engine is being ported to Rust one object at a time through the host; see `docs/AUDIT.md`. Each
+port is checked against the Python code it replaces: `tools/golden_*.py` write the Python answers,
+and the Rust tests (`cargo test` in `src-tauri/`) compare against them.
 
 The sidecar exposes every Qt property, slot and signal of the engine's bridge objects
 (`appBridge`, `decompressorBridge`, `telegramBridge`, `updaterBridge`, the queue / log / watchlist
