@@ -110,12 +110,29 @@ impl Run {
     /// _check_watchlist_entry (with get_posts_since's name fix-up): the creator's new posts.
     /// Err when its post list couldn't be fetched (the updates found earlier are kept).
     fn check_one(&self, c: &SiteClient, rid: i64) -> Result<usize, String> {
-        let Some(e) = entries::snapshot(&self.path, rid) else { return Ok(0) };
+        let mut new = self.posts_since(c, rid, 1, 999_999, true)?;
+        let name = entries::snapshot(&self.path, rid).map(|e| e.s("creator_name")).unwrap_or_default();
+        if !new.is_empty() {
+            let _one = resolve_lock().lock().unwrap_or_else(|e| e.into_inner());
+            new = self.already_downloaded(rid, new);
+        }
+        set(&self.path, rid, json!({"new_post_count": new.len()}));
+        if !new.is_empty() {
+            let name = entries::snapshot(&self.path, rid).map(|e| e.s("creator_name")).unwrap_or(name);
+            log("info", &format!("Watchlist: {} has {} new post(s).", repr(&name), new.len()));
+        }
+        Ok(new.len())
+    }
+
+    /// get_posts_since: the creator's name put right, then its posts after the last download
+    /// (kept as its updates found). Err when a page couldn't be fetched and `raise_on_error`.
+    fn posts_since(&self, c: &SiteClient, rid: i64, page_start: usize, page_end: usize, raise_on_error: bool) -> Result<Vec<Value>, String> {
+        let Some(e) = entries::snapshot(&self.path, rid) else { return Ok(Vec::new()) };
         let url = e.s("url");
         let parsed = links::parse(&url);
         if !parsed.is_valid {
             log("warning", &format!("Watchlist: could not parse URL for {}: {url}", repr(&e.s("creator_name"))));
-            return Ok(0);
+            return Ok(Vec::new());
         }
         // The name, when it's missing, the creator's id, or another creator's of the same site
         let (name, uid, svc) = (e.s("creator_name"), e.s("user_id"), e.s("service"));
@@ -136,22 +153,12 @@ impl Run {
             let posts = c.user_posts(&parsed, page, page, 50, &|_, _, _| {}, &cancel, "", "");
             (posts, c.last_fetch_failed.get())
         };
-        let r = super::posts_since(&entry, &mut fetch, 1, 999_999, true, &|| self.cancelled(), &|level: &str, msg: &str| log(&level.to_lowercase(), msg));
+        let r = super::posts_since(&entry, &mut fetch, page_start, page_end, raise_on_error, &|| self.cancelled(), &|level: &str, msg: &str| log(&level.to_lowercase(), msg));
         if let Some(p) = r.failed_page {
             return Err(format!("page {p} of the post list couldn't be fetched"));
         }
-        let mut new = r.posts;
-        set(&self.path, rid, json!({"cached_new_posts": new, "new_post_count": new.len()}));
-        if !new.is_empty() {
-            let _one = resolve_lock().lock().unwrap_or_else(|e| e.into_inner());
-            new = self.already_downloaded(rid, new);
-        }
-        set(&self.path, rid, json!({"new_post_count": new.len()}));
-        if !new.is_empty() {
-            let name = entries::snapshot(&self.path, rid).map(|e| e.s("creator_name")).unwrap_or(name);
-            log("info", &format!("Watchlist: {} has {} new post(s).", repr(&name), new.len()));
-        }
-        Ok(new.len())
+        set(&self.path, rid, json!({"cached_new_posts": r.posts, "new_post_count": r.posts.len()}));
+        Ok(r.posts)
     }
 
     /// _check_and_resolve_if_already_downloaded: the posts with something left to download (the
@@ -416,6 +423,103 @@ fn run_single(run: &Run, rid: i64) -> Counts {
     }
     counts.done = 1;
     counts
+}
+
+/// _process_watchlist_entry_download up to queueing: the creator's new posts (those asked for),
+/// their folder and plan. {"status": "none"} when there's nothing to download, "done" when it's all
+/// downloaded already (the creator is marked up to date), else "plan" with the plan for the app to
+/// queue. The app's "watchlist_download" call: {"path", "rid", "post_ids", "page_start",
+/// "page_end", "custom_dir", "include_service", "site"}.
+pub fn download(id: u64, a: &Value) -> Result<Value, String> {
+    let path = a["path"].as_str().ok_or("no path")?.to_string();
+    if entries::change(&path, "download", |_| ()).is_none() {
+        return Err("watchlist not loaded".into());
+    }
+    let rid = a["rid"].as_i64().ok_or("no creator")?;
+    let run = Run { path: path.clone(), id, single: true, include_service: a["include_service"].as_bool().unwrap_or(true), site_args: a["site"].clone(), cancel: service::cancel_flag(id) };
+    let c = service::site_client(&run.site_args);
+    let n = |k: &str, d: usize| a[k].as_u64().map(|x| x as usize).unwrap_or(d);
+    let (page_start, page_end) = (n("page_start", 1), n("page_end", 999_999));
+    let mut posts = run.posts_since(&c, rid, page_start, page_end, false)?;
+    let Some(e) = entries::snapshot(&path, rid) else { return Ok(json!({"status": "none"})) };
+    let (name, uid, svc) = (e.s("creator_name"), e.s("user_id"), e.s("service"));
+    if posts.is_empty() {
+        log("info", &format!("No new posts found for {}.", repr(&name)));
+        return Ok(json!({"status": "none"}));
+    }
+    let id_of = |p: &Value| entries::text(p.get("id").unwrap_or(&json!("")));
+    let wanted: Option<Vec<String>> = a["post_ids"].as_array().filter(|p| !p.is_empty()).map(|p| p.iter().map(entries::text).collect());
+    if let Some(w) = &wanted {
+        let set_: HashSet<&String> = w.iter().collect();
+        posts.retain(|p| set_.contains(&id_of(p)));
+        if posts.is_empty() {
+            log("info", &format!("None of the requested posts for {} were available.", repr(&name)));
+            let w = w.clone();
+            entries::change(&path, "download", |x| x.resolve_posts(&uid, &svc, Some(&w), "", "", &[]));
+            return Ok(json!({"status": "none"}));
+        }
+    }
+    let latest = posts.last().unwrap();
+    let (latest_pid, latest_day) = (id_of(latest), super::post_day(latest));
+    // The creator's settings and folder, from the app
+    let args = service::ask_app("watch_plan_args", json!([uid, svc, {"download": true, "custom_dir": a["custom_dir"], "page_start": page_start, "page_end": page_end}]))?;
+    let artist = args["request"]["artist_dir"].as_str().unwrap_or("").to_string();
+    let custom = a["custom_dir"].as_str().is_some_and(|c| !c.is_empty());
+    let a2 = artist.clone();
+    entries::change(&path, "download", |w| {
+        if let Some(i) = w.index_of(rid) {
+            let e = &w.list()[i];
+            let mut f = Map::new();
+            if e.s("download_dir").is_empty() || custom {
+                f.insert("download_dir".into(), json!(a2));
+            }
+            let mut dirs: Vec<Value> = e.list("download_dirs");
+            if !dirs.iter().any(|d| d.as_str() == Some(a2.as_str())) {
+                dirs.insert(0, json!(a2));
+                f.insert("download_dirs".into(), Value::Array(dirs));
+            }
+            w.set_fields(i, f);
+        }
+    });
+    let plan = service::plan_build(id, &args, &posts, Some(run.cancel.clone()));
+    let post_list = Value::Array(posts.clone());
+    if plan.cancelled {
+        return Ok(json!({"status": "none", "posts": post_list}));
+    }
+    if plan.tasks.is_empty() {
+        // Everything's already downloaded or archived (or filtered out)
+        let day_ids: Vec<String> = posts.iter().filter(|p| super::post_day(p) == latest_day).map(id_of).collect();
+        let w2 = wanted.clone();
+        entries::change(&path, "download", |x| x.resolve_posts(&uid, &svc, w2.as_deref(), &latest_pid, &latest_day, &day_ids));
+        log("info", &if wanted.is_some() {
+            format!("Watchlist: selected post(s) for {} are already archived or downloaded. Review drawer updated.", repr(&name))
+        } else {
+            format!("Watchlist: all {} new post(s) for {} are already archived or downloaded. Marked as up to date.", posts.len(), repr(&name))
+        });
+        return Ok(json!({"status": "done", "posts": post_list}));
+    }
+    let no_file: Vec<Value> = {
+        let with: HashSet<&String> = plan.tasks.iter().map(|t| &t.post_id).collect();
+        posts.iter().filter(|p| !with.contains(&id_of(p))).map(|p| json!([super::post_day(p), id_of(p)])).collect()
+    };
+    Ok(json!({
+        "status": "plan",
+        "posts": post_list,
+        "artist_dir": artist,
+        "no_file_posts": no_file,
+        "options": args["options"],
+        "plan": {
+            "tasks": plan.tasks,
+            "pending_post_infos": plan.pending_post_infos,
+            "write_now": plan.write_now,
+            "harvested_links": plan.harvested_links,
+            "harvested_records": plan.harvested_records,
+            "not_queued": plan.not_queued,
+            "renamed": plan.renamed,
+            "unmatched_known": plan.unmatched_known,
+            "cancelled": plan.cancelled,
+        },
+    }))
 }
 
 pub fn call(id: u64, a: &Value) -> Result<Value, String> {

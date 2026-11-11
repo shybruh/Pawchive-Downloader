@@ -5397,7 +5397,7 @@ class AppBridge(QObject):
     def _after_rust_watchlist_change(self, method: str) -> None:
         if method == "check":
             return            # (a check's results: the window's rows follow each creator already)
-        if method == "ignoreWatchlistPost":
+        if method in ("ignoreWatchlistPost", "download"):
             self._watchlist_model.update_new_counts()
         self._watchlist_model.refresh()
         self.watchlistChanged.emit()
@@ -5466,8 +5466,29 @@ class AppBridge(QObject):
         from core import folder_naming
         d = self.downloader
         am = getattr(d, "archive_manager", None)
+        options = self._get_effective_watchlist_options(entry)
+        how = args[2] if len(args) > 2 and isinstance(args[2], dict) else {}
+        if how.get("download"):
+            # (a download: _process_watchlist_entry_download's folder, pages and batch)
+            page_start, page_end = int(how.get("page_start") or 1), int(how.get("page_end") or 999999)
+            custom_dir = how.get("custom_dir") or ""
+            if page_start > 1 or page_end < 999999:
+                options.page_start, options.page_end = page_start, page_end
+            artist = (self.resolve_artist_download_dir_for_folder(custom_dir, entry.creator_name or entry.user_id, entry.service)
+                      if custom_dir else self.resolve_artist_download_dir(entry))
+            base = os.path.dirname(artist) if os.path.isabs(artist) else (custom_dir or self._download_dir)
+            return {
+                "options": options.to_dict(),
+                "archive": bool(am and am.is_enabled),
+                "archive_db": d._archive_db() if hasattr(d, "_archive_db") else "",
+                **(d._known_files() if hasattr(d, "_known_files") else {}),
+                "request": {"creator_name": entry.creator_name or "", "service": entry.service or "",
+                            "domain": entry.domain or "", "base_dir": base or "",
+                            "batch_id": f"watchlist_{entry.service}_{entry.user_id}", "artist_dir": artist or "",
+                            "user_id": str(entry.user_id or ""), "include_service": bool(folder_naming.include_service)},
+            }
         return {
-            "options": self._get_effective_watchlist_options(entry).to_dict(),
+            "options": options.to_dict(),
             "archive": bool(am and am.is_enabled),
             "archive_db": d._archive_db() if hasattr(d, "_archive_db") else "",
             **(d._known_files() if hasattr(d, "_known_files") else {}),
@@ -5707,6 +5728,15 @@ class AppBridge(QObject):
         if is_disabled(entry.url or entry.domain):
             logger.warning(f"Watchlist: {entry.creator_name!r} is on a switched-off site; skipped.", category="watchlist")
             return
+        # Worked out in the desktop shell's Rust engine when it's there (new posts, folder, plan); queued here
+        from services import rust_watchlist_check
+        from core import watchlist_manager as wm
+        if hasattr(self.downloader, "tasks_from_plan"):
+            r = self._watchlist_manager.download_in_rust(entry, rust_watchlist_check.site_args(self.api_client), postIds,
+                                                         page_start, page_end, custom_dir)
+            if r is not wm._NO:
+                self._queue_watchlist_plan(entry, r)
+                return
         new_posts = self._watchlist_manager.get_posts_since(
             entry,
             self.api_client,
@@ -5836,6 +5866,35 @@ class AppBridge(QObject):
                     f"Watchlist: all {len(new_posts)} new post(s) for {entry.creator_name!r} are already archived or downloaded. Marked as up to date.",
                     category="watchlist"
                 )
+
+    def _queue_watchlist_plan(self, entry, r: Dict[str, Any]) -> None:
+        """The engine's watchlist download (services/rust_watchlist_check.py): its new posts' links go
+        to the Link Vault and its files to the queue"""
+        from core.filter_engine import FilterOptions
+        status, posts = r.get("status"), r.get("posts") or []
+        if status not in ("plan", "done") or not posts:
+            return
+        self.link_vault.auto_harvest_posts(posts=posts, creator_name=entry.creator_name, domain=entry.domain,
+                                           service=entry.service, user_id=entry.user_id)
+        if status != "plan":
+            return
+        options = FilterOptions.from_dict(r.get("options") or {})
+        tasks = self.downloader.tasks_from_plan(r.get("plan") or {}, options)
+        if not tasks:
+            return
+        no_file_posts = [tuple(x) for x in r.get("no_file_posts") or []]
+        if no_file_posts:
+            key = (entry.service.lower(), entry.user_id.lower())
+            self._watchlist_pending_updates.setdefault(key, []).extend(no_file_posts)
+        self._appendTasksSignal.emit(tasks)
+        self.downloader.append_tasks(tasks, options=options, cookie_str=self._cookie_string)
+        if not self._is_downloading and self.downloader._is_running:
+            self._is_downloading = True
+            self.isDownloadingChanged.emit()
+            self._status_text = f"Downloading updates for {entry.creator_name}..."
+            self.statusTextChanged.emit()
+        logger.success(f"Watchlist: queued {len(tasks)} new file(s) for {entry.creator_name!r} at {r.get('artist_dir')}.",
+                       category="watchlist")
 
     @Slot(str, str)
     @Slot(str, str, "QVariantList")

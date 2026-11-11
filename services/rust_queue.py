@@ -398,6 +398,13 @@ class RustDownloader(FileDownloader):
             logger.warning(f"The download engine couldn't plan these posts ({plan}); planning them the old way.",
                            category="downloader")
             return the_old_way()
+        return self.tasks_from_plan(plan, options)
+
+    def tasks_from_plan(self, plan: Dict[str, Any], options) -> list:
+        """The download tasks of the engine's plan (a "plan" call's answer), with what goes with them:
+        post texts to write, harvested links, the "Prepared N files" line"""
+        from collections import Counter
+        from core.downloader import DownloadTask, MediaTypes
         if plan.get("cancelled"):
             self.last_build_cancelled = True
             logger.info("Task structuring cancelled by user.", category="downloader")

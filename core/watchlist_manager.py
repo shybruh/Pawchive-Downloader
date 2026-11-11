@@ -777,6 +777,33 @@ class WatchlistManager:
             return v
         return _NO
 
+    def download_in_rust(self, entry: WatchlistEntry, site: Dict[str, str], post_ids=None, page_start: int = 1,
+                         page_end: int = 999999, custom_dir: str = ""):
+        """A creator's new posts worked out for downloading in the engine (their folder, their plan;
+        marked up to date when there's nothing left to download): its answer, or _NO"""
+        from core import folder_naming
+        for attempt in (1, 2):
+            if self._rust_call("sync") is _NO:
+                return _NO
+            link = self._rust_link()
+            rid = entry.__dict__.get("_rid")
+            if link is None or rid is None:
+                return _NO
+            ok, v = link.call("watchlist_download", {
+                "path": self.db_file, "rid": rid, "post_ids": [str(p) for p in post_ids] if post_ids else None,
+                "page_start": int(page_start), "page_end": int(page_end), "custom_dir": custom_dir or "",
+                "include_service": bool(folder_naming.include_service), "site": site,
+            })
+            if not ok and "not loaded" in str(v) and attempt == 1:
+                with self._lock:
+                    self._rust_ready = False
+                continue
+            if not ok:
+                logger.debug(f"The download engine couldn't prepare the watchlist download ({v}).", category="watchlist")
+                return _NO
+            return v
+        return _NO
+
     def _on_rust_changed(self, v: Dict[str, Any]) -> None:
         """The engine changed creators itself (a button in the window): copied here"""
         if not isinstance(v, dict) or v.get("path") != self.db_file:
