@@ -138,6 +138,11 @@ impl Hooks for Remote {
             _ => (false, "Cancelled".into()),
         }
     }
+    fn ytdlp(&self) -> Option<(String, String)> {
+        let a = self.0.ask("ytdlp", json!([]));
+        let exe = a.get(0).and_then(Value::as_str).filter(|s| !s.is_empty())?;
+        Some((exe.to_string(), a.get(1).and_then(Value::as_str).unwrap_or("").to_string()))
+    }
     fn changed(&self, c: &Cell) {
         self.0.send(task_event(c));
     }
@@ -782,6 +787,7 @@ fn handle(msg: &Value) {
                 "cloud_download" => super::cloud::call(id, args),
                 "vault" => crate::vault::call(id, args),
                 "decompress" => crate::decompress::call(id, args),
+                "ytdlp" => super::ytdlp::call(args),
                 "selection_scan" => super::selection::scan(id, args),
                 "selection_plan" => super::selection::plan(id, args),
                 "watchlist_favorites" => crate::watchlist::favorites::call(id, args),

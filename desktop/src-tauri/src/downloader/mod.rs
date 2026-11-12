@@ -21,6 +21,7 @@ pub mod service;
 pub mod scan;
 pub mod selection;
 pub mod sites;
+pub mod ytdlp;
 pub(crate) mod py;
 
 #[cfg(test)]

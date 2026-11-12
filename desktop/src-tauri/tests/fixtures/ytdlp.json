@@ -1,0 +1,463 @@
+{
+ "commands": [
+  [
+   [
+    "C:\\deps\\yt-dlp.exe",
+    "https://youtu.be/abc",
+    "C:\\out\\Post",
+    "video.mp4",
+    0,
+    "",
+    ""
+   ],
+   [
+    "C:\\deps\\yt-dlp.exe",
+    "--no-playlist",
+    "--no-warnings",
+    "--newline",
+    "-o",
+    "C:\\out\\Post\\video.%(ext)s",
+    "--progress-template",
+    "download:PROGRESS:%(progress.downloaded_bytes)s/%(progress.total_bytes,progress.total_bytes_estimate)s:%(progress.speed)s:%(progress.eta)s",
+    "https://youtu.be/abc"
+   ]
+  ],
+  [
+   [
+    "C:\\deps\\yt-dlp.exe",
+    "https://youtu.be/abc",
+    "C:\\out\\Post",
+    "",
+    0,
+    "",
+    ""
+   ],
+   [
+    "C:\\deps\\yt-dlp.exe",
+    "--no-playlist",
+    "--no-warnings",
+    "--newline",
+    "-o",
+    "C:\\out\\Post\\%(title).100s [%(id)s].%(ext)s",
+    "--progress-template",
+    "download:PROGRESS:%(progress.downloaded_bytes)s/%(progress.total_bytes,progress.total_bytes_estimate)s:%(progress.speed)s:%(progress.eta)s",
+    "https://youtu.be/abc"
+   ]
+  ],
+  [
+   [
+    "C:\\deps\\yt-dlp.exe",
+    "https://youtu.be/abc",
+    "C:\\out\\Post",
+    null,
+    0,
+    "",
+    ""
+   ],
+   [
+    "C:\\deps\\yt-dlp.exe",
+    "--no-playlist",
+    "--no-warnings",
+    "--newline",
+    "-o",
+    "C:\\out\\Post\\%(title).100s [%(id)s].%(ext)s",
+    "--progress-template",
+    "download:PROGRESS:%(progress.downloaded_bytes)s/%(progress.total_bytes,progress.total_bytes_estimate)s:%(progress.speed)s:%(progress.eta)s",
+    "https://youtu.be/abc"
+   ]
+  ],
+  [
+   [
+    "C:\\deps\\yt-dlp.exe",
+    "https://player.VIMEO.com/video/1",
+    "C:\\out",
+    "clip.name.webm",
+    10485760,
+    "https://www.patreon.com/",
+    "firefox"
+   ],
+   [
+    "C:\\deps\\yt-dlp.exe",
+    "--no-playlist",
+    "--no-warnings",
+    "--newline",
+    "-o",
+    "C:\\out\\clip.name.%(ext)s",
+    "--progress-template",
+    "download:PROGRESS:%(progress.downloaded_bytes)s/%(progress.total_bytes,progress.total_bytes_estimate)s:%(progress.speed)s:%(progress.eta)s",
+    "--limit-rate",
+    "10485760",
+    "--referer",
+    "https://www.patreon.com/",
+    "--cookies-from-browser",
+    "firefox",
+    "https://player.VIMEO.com/video/1"
+   ]
+  ],
+  [
+   [
+    "C:\\deps\\yt-dlp.exe",
+    "https://youtu.be/x",
+    "C:\\out",
+    "noext",
+    1,
+    "https://www.patreon.com/",
+    "chrome"
+   ],
+   [
+    "C:\\deps\\yt-dlp.exe",
+    "--no-playlist",
+    "--no-warnings",
+    "--newline",
+    "-o",
+    "C:\\out\\noext.%(ext)s",
+    "--progress-template",
+    "download:PROGRESS:%(progress.downloaded_bytes)s/%(progress.total_bytes,progress.total_bytes_estimate)s:%(progress.speed)s:%(progress.eta)s",
+    "--limit-rate",
+    "1",
+    "--cookies-from-browser",
+    "chrome",
+    "https://youtu.be/x"
+   ]
+  ],
+  [
+   [
+    "C:\\deps\\yt-dlp.exe",
+    "https://youtu.be/x",
+    "C:\\out",
+    ".hidden",
+    0,
+    "",
+    ""
+   ],
+   [
+    "C:\\deps\\yt-dlp.exe",
+    "--no-playlist",
+    "--no-warnings",
+    "--newline",
+    "-o",
+    "C:\\out\\.hidden.%(ext)s",
+    "--progress-template",
+    "download:PROGRESS:%(progress.downloaded_bytes)s/%(progress.total_bytes,progress.total_bytes_estimate)s:%(progress.speed)s:%(progress.eta)s",
+    "https://youtu.be/x"
+   ]
+  ]
+ ],
+ "progress": [
+  [
+   "PROGRESS:1024/2048:512.0:3",
+   [
+    1024,
+    2048,
+    "512 B/s",
+    "3s"
+   ]
+  ],
+  [
+   "PROGRESS:NA/NA:NA:NA",
+   [
+    0,
+    0,
+    "0 B/s",
+    "0s"
+   ]
+  ],
+  [
+   "PROGRESS:1500.5/NA:2048.7:61",
+   [
+    1500,
+    0,
+    "2.0 KB/s",
+    "1m 1s"
+   ]
+  ],
+  [
+   "PROGRESS:10/20:1048577:3600",
+   [
+    10,
+    20,
+    "1.00 MB/s",
+    "60m 0s"
+   ]
+  ],
+  [
+   "PROGRESS:10/20:1048576:60",
+   [
+    10,
+    20,
+    "1024.0 KB/s",
+    "60s"
+   ]
+  ],
+  [
+   "PROGRESS:10/20:1024:0",
+   [
+    10,
+    20,
+    "1024 B/s",
+    "0s"
+   ]
+  ],
+  [
+   "PROGRESS:10/20:1025:121",
+   [
+    10,
+    20,
+    "1.0 KB/s",
+    "2m 1s"
+   ]
+  ],
+  [
+   "PROGRESS:10:5:5",
+   [
+    10,
+    0,
+    "5 B/s",
+    "5s"
+   ]
+  ],
+  [
+   "PROGRESS:10/20:5",
+   null
+  ],
+  [
+   "PROGRESS:a/b:c:d",
+   null
+  ],
+  [
+   "  PROGRESS:5/10:1:1  \n",
+   [
+    5,
+    10,
+    "1 B/s",
+    "1s"
+   ]
+  ],
+  [
+   "[download] 10%",
+   null
+  ],
+  [
+   "",
+   null
+  ],
+  [
+   "PROGRESS:",
+   null
+  ],
+  [
+   "PROGRESS:5/10/15:1:1:extra",
+   [
+    5,
+    10,
+    "1 B/s",
+    "1s"
+   ]
+  ],
+  [
+   "PROGRESS:5/:1:1",
+   [
+    5,
+    0,
+    "1 B/s",
+    "1s"
+   ]
+  ],
+  [
+   "PROGRESS:/10:1:1",
+   [
+    0,
+    10,
+    "1 B/s",
+    "1s"
+   ]
+  ],
+  [
+   "PROGRESS:1e3/2e3:1e6:1e2",
+   [
+    1000,
+    2000,
+    "976.6 KB/s",
+    "1m 40s"
+   ]
+  ],
+  [
+   "PROGRESS:-5/10:-1:-5",
+   [
+    -5,
+    10,
+    "-1 B/s",
+    "-5s"
+   ]
+  ],
+  [
+   "PROGRESS:5/10:inf:1",
+   [
+    5,
+    10,
+    "inf MB/s",
+    "1s"
+   ]
+  ],
+  [
+   "PROGRESS:5/10:nan:1",
+   null
+  ]
+ ],
+ "errors": [
+  [
+   "",
+   ""
+  ],
+  [
+   "ERROR: [youtube] abc: Video unavailable",
+   "[youtube] abc: Video unavailable"
+  ],
+  [
+   "WARNING: x\nERROR: first\nERROR: second  ",
+   "second"
+  ],
+  [
+   "plain failure",
+   "plain failure"
+  ],
+  [
+   "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+  ],
+  [
+   "ERROR:yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy",
+   "yyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy"
+  ],
+  [
+   "ERROR:",
+   ""
+  ],
+  [
+   "yt-dlp exited with code 1",
+   "yt-dlp exited with code 1"
+  ]
+ ],
+ "cookies": [
+  [
+   "",
+   false
+  ],
+  [
+   "ERROR: Could not copy Chrome cookie database. See ...",
+   true
+  ],
+  [
+   "failed to decrypt with DPAPI",
+   true
+  ],
+  [
+   "Unsupported browser specified for cookies: 'x'",
+   true
+  ],
+  [
+   "ERROR: Sign in to confirm you're not a bot",
+   false
+  ],
+  [
+   "KEYRING error",
+   true
+  ],
+  [
+   "cookies database is locked",
+   true
+  ]
+ ],
+ "messages": [
+  [
+   "",
+   "",
+   false,
+   ""
+  ],
+  [
+   "Unsupported URL: https://example.com",
+   "",
+   true,
+   "Unsupported URL: https://example.com"
+  ],
+  [
+   "There's no video in this post",
+   "",
+   true,
+   "There's no video in this post"
+  ],
+  [
+   "HTTP Error 410: Gone",
+   "https://www.redgifs.com/watch/x",
+   false,
+   "RedGifs says this video was deleted (HTTP 410). If it still plays in your browser, it may only be available while logged in there: pick that browser under \"Use browser sign-in\" in Settings, then Retry"
+  ],
+  [
+   "410",
+   "https://redgifs.com/x",
+   false,
+   "RedGifs says this video was deleted (HTTP 410). If it still plays in your browser, it may only be available while logged in there: pick that browser under \"Use browser sign-in\" in Settings, then Retry"
+  ],
+  [
+   "Gone",
+   "https://v3.REDGIFS.com/x",
+   false,
+   "RedGifs says this video was deleted (HTTP 410). If it still plays in your browser, it may only be available while logged in there: pick that browser under \"Use browser sign-in\" in Settings, then Retry"
+  ],
+  [
+   "whatever",
+   "https://gfycat.com/abc",
+   false,
+   "Gfycat shut down in 2023: this video can't be downloaded any more"
+  ],
+  [
+   "gfycat.com is down",
+   "",
+   false,
+   "Gfycat shut down in 2023: this video can't be downloaded any more"
+  ],
+  [
+   "Private video",
+   "https://youtu.be/x",
+   false,
+   "Private video"
+  ],
+  [
+   "HTTP Error 404: Not Found",
+   "https://youtu.be/x",
+   false,
+   "HTTP Error 404: Not Found"
+  ],
+  [
+   "No media found",
+   "https://x",
+   true,
+   "No media found"
+  ],
+  [
+   "ERROR redgifs 404",
+   "https://redgifs.com/x",
+   false,
+   "ERROR redgifs 404"
+  ]
+ ],
+ "browsers": [
+  "firefox",
+  "chrome",
+  "edge",
+  "brave",
+  "opera",
+  "vivaldi",
+  "chromium",
+  "safari"
+ ],
+ "referers": {
+  "patreon": "https://www.patreon.com/",
+  "fanbox": "https://www.fanbox.cc/",
+  "fantia": "https://fantia.jp/",
+  "subscribestar": "https://www.subscribestar.com/",
+  "gumroad": "https://gumroad.com/",
+  "boosty": "https://boosty.to/"
+ }
+}

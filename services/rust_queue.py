@@ -810,6 +810,12 @@ class RustDownloader(FileDownloader):
             elif fn == "cookie":
                 from core.providers import cookie_for_url
                 value = cookie_for_url(args[0], self._clean_cookie) or ""
+            elif fn == "ytdlp":
+                # Embedded videos: where yt-dlp is and whose browser sign-in to use (None: the
+                # Python download, PAWCHIVE_PYTHON_YTDLP=1)
+                m = self.ytdlp_manager
+                if os.environ.get("PAWCHIVE_PYTHON_YTDLP", "") != "1":
+                    value = [m.get_executable_path(), m.cookies_browser]
             elif fn == "limit":
                 from core.bandwidth_limiter import bandwidth_limiter
                 value = float(bandwidth_limiter.get_rate_bps() or 0)

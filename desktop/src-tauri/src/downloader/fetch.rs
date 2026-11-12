@@ -105,6 +105,11 @@ pub trait Hooks: Send + Sync {
     fn cookie_for(&self, _url: &str) -> String {
         String::new()
     }
+    /// Where yt-dlp is and whose browser sign-in embedded videos use ("" = none); None: the app
+    /// downloads embedded videos itself (`special`)
+    fn ytdlp(&self) -> Option<(String, String)> {
+        None
+    }
     /// Embedded videos (yt-dlp) and Telegram files: downloaded by the app
     fn special(&self, _c: &Cell, _o: &Options, _ctl: &Ctl) -> (bool, String) {
         (false, "This kind of file can't be downloaded here".into())
@@ -396,6 +401,11 @@ pub fn download(c: &Cell, o: &Options, hooks: &dyn Hooks, ctl: &Ctl) -> (bool, S
         return (false, "Cancelled".into());
     }
 
+    if task.is_ytdlp {
+        if let Some((exe, browser)) = hooks.ytdlp() {
+            return super::ytdlp::fetch(c, o, ctl, hooks, &exe, &browser);
+        }
+    }
     if task.is_ytdlp || task.is_telegram || task.url.starts_with("tg://") || task.service == "telegram" {
         return hooks.special(c, o, ctl);
     }

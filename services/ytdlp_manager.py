@@ -28,6 +28,84 @@ def is_cookie_error(text: str) -> bool:
     return any(k in t for k in _COOKIE_ERRORS)
 
 
+def _engine():
+    """The Rust engine's link (src-tauri/src/downloader/ytdlp.rs), or None: not running, or
+    PAWCHIVE_PYTHON_YTDLP=1 (then yt-dlp is installed, updated and run from here)."""
+    if os.environ.get("PAWCHIVE_PYTHON_YTDLP", "") == "1":
+        return None
+    try:
+        from services import rust_queue
+        if not rust_queue.available():
+            return None
+        link = rust_queue.shared_link()
+        return link if link.connect() else None
+    except Exception:
+        return None
+
+
+def build_command(exe: str, url: str, target_folder: str, custom_filename: Optional[str], rate_bps: int,
+                  referer: str, browser: str) -> list:
+    """yt-dlp's command line for one video, with progress lines on stdout."""
+    if custom_filename:
+        name_stem = os.path.splitext(custom_filename)[0]
+        out_template = os.path.join(target_folder, f"{name_stem}.%(ext)s")
+    else:
+        out_template = os.path.join(target_folder, "%(title).100s [%(id)s].%(ext)s")
+    cmd = [
+        exe,
+        "--no-playlist",
+        "--no-warnings",
+        "--newline",
+        "-o", out_template,
+        "--progress-template", "download:PROGRESS:%(progress.downloaded_bytes)s/%(progress.total_bytes,progress.total_bytes_estimate)s:%(progress.speed)s:%(progress.eta)s",
+    ]
+    if rate_bps > 0:
+        cmd += ["--limit-rate", f"{rate_bps}"]
+    # Domain-locked Vimeo embeds only play when the request says it comes from the creator's site
+    if referer and "vimeo.com" in url.lower():
+        cmd += ["--referer", referer]
+    if browser:
+        cmd += ["--cookies-from-browser", browser]
+    cmd.append(url)
+    return cmd
+
+
+def parse_progress_line(line: str):
+    """(done_bytes, total_bytes, speed_str, eta_str) from one "PROGRESS:done/total:speed:eta" line, or None."""
+    line_str = line.strip()
+    if not line_str.startswith("PROGRESS:"):
+        return None
+    try:
+        parts = line_str[9:].split(":")
+        if len(parts) < 3:
+            return None
+        bytes_part = parts[0].split("/")
+        done_b = int(float(bytes_part[0])) if bytes_part[0] and bytes_part[0] != "NA" else 0
+        total_b = int(float(bytes_part[1])) if len(bytes_part) > 1 and bytes_part[1] and bytes_part[1] != "NA" else 0
+
+        speed_val = float(parts[1]) if parts[1] and parts[1] != "NA" else 0.0
+        if speed_val > 1024 * 1024:
+            speed_str = f"{speed_val / (1024*1024):.2f} MB/s"
+        elif speed_val > 1024:
+            speed_str = f"{speed_val / 1024:.1f} KB/s"
+        else:
+            speed_str = f"{int(speed_val)} B/s"
+
+        eta_val = int(float(parts[2])) if parts[2] and parts[2] != "NA" else 0
+        eta_str = f"{eta_val//60}m {eta_val%60}s" if eta_val > 60 else f"{eta_val}s"
+        return done_b, total_b, speed_str, eta_str
+    except Exception:
+        return None
+
+
+def short_error(full_err: str) -> str:
+    """yt-dlp's error text as the queue shows it."""
+    err_msg = full_err
+    if "ERROR:" in err_msg:
+        err_msg = err_msg.split("ERROR:")[-1].strip()
+    return err_msg[:120]
+
+
 class YtDlpManager:
     """
     Manages the standalone yt-dlp.exe binary in the dependencies/ folder,
@@ -224,6 +302,11 @@ class YtDlpManager:
 
         def _bg_worker():
             try:
+                link = _engine()
+                if link is not None:
+                    ok, _v = link.call("ytdlp", {"do": "update", "exe": self.get_executable_path()})
+                    if ok:
+                        return
                 if not self.is_binary_available():
                     self.download_latest_binary()
                 else:
@@ -237,7 +320,13 @@ class YtDlpManager:
         threading.Thread(target=_bg_worker, daemon=True).start()
 
     def cancel_all(self):
-        """Instantly terminates all active yt-dlp child processes."""
+        """Instantly terminates all active yt-dlp child processes (also the engine's)."""
+        link = _engine()
+        if link is not None:
+            try:
+                link.call("ytdlp", {"do": "cancel_all"})
+            except Exception:
+                pass
         with self._proc_lock:
             for proc in list(self._active_processes):
                 try:
@@ -292,31 +381,8 @@ class YtDlpManager:
         """One yt-dlp run: (success, message, yt-dlp's whole error text)."""
         os.makedirs(target_folder, exist_ok=True)
 
-        if custom_filename:
-            name_stem = os.path.splitext(custom_filename)[0]
-            out_template = os.path.join(target_folder, f"{name_stem}.%(ext)s")
-        else:
-            out_template = os.path.join(target_folder, "%(title).100s [%(id)s].%(ext)s")
-
-        # Command with custom progress formatting on stdout
-        cmd = [
-            self.get_executable_path(),
-            "--no-playlist",
-            "--no-warnings",
-            "--newline",
-            "-o", out_template,
-            "--progress-template", "download:PROGRESS:%(progress.downloaded_bytes)s/%(progress.total_bytes_estimate|progress.total_bytes)s:%(progress.speed)s:%(progress.eta)s",
-        ]
-        if bandwidth_limiter.is_enabled():
-            rate_bps = int(bandwidth_limiter.get_rate_bps())
-            if rate_bps > 0:
-                cmd += ["--limit-rate", f"{rate_bps}"]
-        # Domain-locked Vimeo embeds only play when the request says it comes from the creator's site
-        if referer and "vimeo.com" in url.lower():
-            cmd += ["--referer", referer]
-        if browser:
-            cmd += ["--cookies-from-browser", browser]
-        cmd.append(url)
+        rate_bps = int(bandwidth_limiter.get_rate_bps()) if bandwidth_limiter.is_enabled() else 0
+        cmd = build_command(self.get_executable_path(), url, target_folder, custom_filename, rate_bps, referer, browser)
 
         creationflags = 0
         if sys.platform == "win32":
@@ -356,29 +422,10 @@ class YtDlpManager:
 
                 line = proc.stdout.readline()
                 if line:
-                    line_str = line.strip()
-                    if line_str.startswith("PROGRESS:"):
+                    got = parse_progress_line(line)
+                    if got and progress_callback:
                         try:
-                            # PROGRESS:downloaded/total:speed:eta
-                            parts = line_str[9:].split(":")
-                            if len(parts) >= 3:
-                                bytes_part = parts[0].split("/")
-                                done_b = int(float(bytes_part[0])) if bytes_part[0] and bytes_part[0] != "NA" else 0
-                                total_b = int(float(bytes_part[1])) if len(bytes_part) > 1 and bytes_part[1] and bytes_part[1] != "NA" else 0
-                                
-                                speed_val = float(parts[1]) if parts[1] and parts[1] != "NA" else 0.0
-                                if speed_val > 1024 * 1024:
-                                    speed_str = f"{speed_val / (1024*1024):.2f} MB/s"
-                                elif speed_val > 1024:
-                                    speed_str = f"{speed_val / 1024:.1f} KB/s"
-                                else:
-                                    speed_str = f"{int(speed_val)} B/s"
-
-                                eta_val = int(float(parts[2])) if parts[2] and parts[2] != "NA" else 0
-                                eta_str = f"{eta_val//60}m {eta_val%60}s" if eta_val > 60 else f"{eta_val}s"
-
-                                if progress_callback:
-                                    progress_callback(done_b, total_b, speed_str, eta_str)
+                            progress_callback(*got)
                         except Exception:
                             pass
 
@@ -394,11 +441,7 @@ class YtDlpManager:
                 return True, "Completed", ""
             else:
                 full_err = (stderr_rem or stdout_rem or f"yt-dlp exited with code {proc.returncode}").strip()
-                err_msg = full_err
-                # Clean up error message for UI
-                if "ERROR:" in err_msg:
-                    err_msg = err_msg.split("ERROR:")[-1].strip()
-                return False, err_msg[:120], full_err
+                return False, short_error(full_err), full_err
 
         except Exception as e:
             if proc:
