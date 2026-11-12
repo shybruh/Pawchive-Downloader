@@ -8,7 +8,7 @@
 //! Closing the connection stops the transfer; what's on disk is kept for the next try.
 
 pub mod download;
-mod limiter;
+pub mod limiter;
 
 use download::{Job, Progress};
 use serde_json::{json, Value};

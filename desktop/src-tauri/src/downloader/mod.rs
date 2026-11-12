@@ -5,6 +5,7 @@
 #![allow(dead_code)] // used once the Rust downloader takes over from the Python one
 
 pub mod albums;
+pub mod cloud;
 pub mod extract;
 pub mod fetch;
 pub mod filters;

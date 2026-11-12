@@ -178,6 +178,12 @@ class _Link:
                 return True
             if fn == "progress":
                 cb = self._progress.get(args[0]) if args else None
+                if cb and len(args) == 2 and isinstance(args[1], dict):
+                    try:
+                        cb(args[1])                 # (a call's progress as one value: cloud downloads)
+                    except Exception as e:
+                        logger.debug(f"Progress callback failed: {e}", category="api")
+                    return True
                 if cb:
                     page, count, total = (list(args[1:]) + [None, None, None])[:3]
                     try:

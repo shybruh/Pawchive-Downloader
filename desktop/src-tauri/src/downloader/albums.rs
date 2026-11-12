@@ -93,6 +93,11 @@ fn quote_with(s: &str, safe: &str, plus: bool) -> String {
     out
 }
 
+/// urllib.parse.quote_plus
+pub fn quote_plus(s: &str) -> String {
+    quote_with(s, "", true)
+}
+
 pub fn quote(s: &str) -> String {
     quote_with(s, "/", false)
 }
@@ -116,7 +121,7 @@ pub fn unquote(s: &str) -> String {
 }
 
 /// parse_qs: the query's values by name, blank ones left out, in order of first appearance
-fn parse_qs(q: &str) -> Vec<(String, Vec<String>)> {
+pub fn parse_qs(q: &str) -> Vec<(String, Vec<String>)> {
     let mut out: Vec<(String, Vec<String>)> = Vec::new();
     for part in q.split('&').filter(|p| !p.is_empty()) {
         let Some((k, v)) = part.split_once('=') else { continue };
@@ -133,7 +138,7 @@ fn parse_qs(q: &str) -> Vec<(String, Vec<String>)> {
 }
 
 /// (scheme://host, path, query, fragment) of a link
-fn split_url(u: &str) -> (String, String, String, String) {
+pub fn split_url(u: &str) -> (String, String, String, String) {
     let (rest, frag) = u.split_once('#').map(|(a, b)| (a, b.to_string())).unwrap_or((u, String::new()));
     let (rest, query) = rest.split_once('?').map(|(a, b)| (a, b.to_string())).unwrap_or((rest, String::new()));
     let (origin, path) = match rest.find("://") {

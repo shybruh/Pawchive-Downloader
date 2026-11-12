@@ -74,12 +74,9 @@ from services.batch_loader import BatchLoader
 from services.rust_albums import fetch_bunkr_album, fetch_erome_album, fetch_nhentai_gallery
 from bridge.telegram_bridge import TelegramBridge
 from services.telegram_service import TelegramService
-from services.cloud_downloader import (
-    download_mega_link,
-    download_gdrive_link,
-    download_dropbox_link,
-    download_gofile_link
-)
+from services.cloud_downloader import download_gdrive_link
+# (MEGA, Dropbox and GoFile are downloaded by the Rust engine; the Python ones when it can't be asked)
+from services.rust_cloud import download_mega_link, download_dropbox_link, download_gofile_link
 from core.text_utils import clean_text, sanitize_filesystem_name, safe_file_name
 from core.path_utils import unique_name_in_batch
 from core.archive_manager import ArchiveManager

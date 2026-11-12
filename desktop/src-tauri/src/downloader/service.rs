@@ -379,6 +379,11 @@ pub fn progress_pages(id: u64, page: usize, count: usize, total: Option<u64>) {
     link().note("progress", json!([id, page, count, total]));
 }
 
+/// A call's progress as one value (the app's call() hands it to the caller)
+pub fn progress_value(id: u64, v: Value) {
+    link().note("progress", json!([id, v]));
+}
+
 /// Progress of a call: [id, a, b, c] (the app's call() hands it to the caller)
 pub fn progress_app(id: u64, a: usize, b: usize) {
     link().note("progress", json!([id, a, b]));
@@ -782,6 +787,8 @@ fn handle(msg: &Value) {
             q.start(Arc::new(Options::from_dict(&msg["options"])));
         }
         "pause" => q.pause(),
+        // (the cloud downloads' pause button)
+        "cloud_pause" => super::cloud::PAUSED.store(msg["paused"].as_bool().unwrap_or(false), Ordering::Relaxed),
         "resume" => q.resume(),
         "cancel" => q.cancel(),
         "reset" => q.reset(),
@@ -851,6 +858,7 @@ fn handle(msg: &Value) {
                 "watchlist_download" => crate::watchlist::check::download(id, args),
                 "link_scan" => super::scan::call(id, args),
                 "album_files" => super::albums::call(args),
+                "cloud_download" => super::cloud::call(id, args),
                 "selection_scan" => super::selection::scan(id, args),
                 "selection_plan" => super::selection::plan(id, args),
                 "watchlist_favorites" => crate::watchlist::favorites::call(id, args),

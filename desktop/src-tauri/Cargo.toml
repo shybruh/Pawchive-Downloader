@@ -48,6 +48,11 @@ html-escape = "0.2"
 chrono = "0.4"
 scraper = "0.24"
 urlencoding = "2"
+# (cloud links: MEGA's encryption, Dropbox folders come as zip files)
+aes = "0.8"
+ctr = "0.9"
+zip = { version = "9", default-features = false, features = ["deflate-flate2"] }
+flate2 = "1"
 
 
 [target.'cfg(windows)'.dependencies]

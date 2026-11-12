@@ -3120,10 +3120,13 @@ dependencies = [
 name = "pawchive"
 version = "2.0.0"
 dependencies = [
+ "aes",
  "aes-gcm",
  "base64 0.22.1",
  "chrono",
  "crc32fast",
+ "ctr",
+ "flate2",
  "futures-util",
  "getrandom 0.3.4",
  "html-escape",
@@ -3155,6 +3158,7 @@ dependencies = [
  "windows",
  "windows-core",
  "windows-sys 0.59.0",
+ "zip",
 ]
 
 [[package]]
@@ -6580,6 +6584,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3cec733c9820347a592f6375c3c0089b479ba0a0b1cbf3dd1958b02959b7c033"
 dependencies = [
  "crc32fast",
+ "flate2",
  "getrandom 0.4.3",
  "indexmap 2.14.2",
  "libc",
