@@ -541,6 +541,13 @@ class AppBridge(QObject):
         self._queue_model.batchResumeRequested.connect(self._handle_batch_resume)
         self._queue_model.taskPauseRequested.connect(self._handle_task_pause)
         self._queue_model.taskResumeRequested.connect(self._handle_task_resume)
+        # (the window's pause / resume / cancel / remove of a post or a file, done by the Rust engine)
+        try:
+            from services import rust_queue
+            if rust_queue.available():
+                rust_queue.shared_link().note_handlers["queue_action"] = self._rust_queue_action
+        except ImportError:
+            pass
         self._queue_model.cleared.connect(self._handle_queue_cleared)
         self._queued_links: set[str] = set()
 
@@ -4699,6 +4706,35 @@ class AppBridge(QObject):
     def _handle_append_tasks(self, tasks: list):
         self._queue_model.appendTasks(tasks)
         self._active_queue_model.appendTasks(tasks)
+
+    def _rust_queue_action(self, args) -> None:
+        """The Rust engine paused / resumed / cancelled / removed a post or a file of the queue (its
+        files' new states arrive on their own): the paused posts here follow, removed files leave the
+        lists, and a run starts when files are waiting and nothing runs."""
+        method, key, info = (list(args or []) + [None, None, None])[:3]
+        info = info or {}
+
+        def run():
+            qm, d = self._queue_model, self.downloader
+            if method in ("pauseBatch", "resumeBatch", "cancelBatch"):
+                paused = method == "pauseBatch"
+                for m in (qm, self._active_queue_model):
+                    (m._paused_batch_ids.add if paused else m._paused_batch_ids.discard)(key)
+                    g = m._groups_model
+                    if g is not None:
+                        (g.pause_batch if paused else g.resume_batch)(key)
+                        m.groupsChanged.emit()
+                with d._paused_batches_lock:
+                    (d._paused_batches.add if paused else d._paused_batches.discard)(key)
+            elif method == "removeBatch":
+                qm.removeBatch(key)
+            if info.get("start"):
+                if not d.tasks and qm.tasks:
+                    d.tasks = qm.getTasks()
+                self._is_downloading = True
+                self.isDownloadingChanged.emit()
+                d.start_download_queue(d.tasks, self._get_filter_options(), self._cookie_string)
+        self._queue_model._guiCall.emit(run)
 
     @Slot(str)
     def _handle_batch_cancel(self, batch_id: str):

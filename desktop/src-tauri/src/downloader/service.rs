@@ -28,7 +28,10 @@
 //!   refresh_link, special (yt-dlp / Telegram files), post_process, limit; while planning also
 //!   archived, plan_cancelled
 //!   `{"t": "note", "fn", "args"}`  the same without an answer: record_link, archive_password,
-//!   add_passwords, log
+//!   add_passwords, log, queue_action (the window paused / resumed / cancelled / removed a post or a
+//!   file of the queue here: queue_window)
+//!
+//! The queue's messages are handled in the order sent; calls each run on their own thread.
 
 use super::fetch::{Cell, Ctl, Hooks, State};
 use super::filters::Options;
@@ -437,6 +440,71 @@ fn site_call(id: u64, a: &Value) -> Result<Value, String> {
 }
 
 /// Tells the app something (a note: no answer)
+/// The window's queue actions on a post or a file (pause, resume, cancel, remove), done here on the
+/// engine's own copy of the queue; the app is told ("queue_action": [method, post or file, {"n",
+/// "start"}]) to follow (its paused posts, removing the files, starting a run when files are
+/// waiting and nothing runs). None when the engine doesn't have those files (the app does it).
+pub fn queue_window(method: &str, args: &[Value]) -> Option<Value> {
+    if link().out.lock().unwrap().is_none() {
+        return None;
+    }
+    let q = queue();
+    let id = args.first().and_then(Value::as_str).unwrap_or("").to_string();
+    let method = match method {
+        "toggleBatchPause" if q.has_batch(&id) => if q.is_batch_paused(&id) { "resumeBatch" } else { "pauseBatch" },
+        m => m,
+    };
+    let batch = matches!(method, "pauseBatch" | "resumeBatch" | "cancelBatch" | "removeBatch");
+    let file = matches!(method, "pauseTask" | "resumeTask");
+    if !(batch && q.has_batch(&id) || file && q.has_file(&id)) {
+        return None;
+    }
+    let mut start = false;
+    let n = match method {
+        "pauseBatch" => {
+            let n = q.pause_batch(&id);
+            log_app("info", &format!("Paused batch '{id}' ({n} tasks paused)."), "downloader", "");
+            n
+        }
+        "resumeBatch" => {
+            let n = q.unpause_batch(&id);
+            start = !q.is_running() && q.has_waiting(Some(&id));
+            if n > 0 {
+                log_app("info", &format!("Resumed batch '{id}' ({n} tasks restored)."), "downloader", "");
+            }
+            n
+        }
+        "cancelBatch" => q.cancel_batch(&id, true),
+        "removeBatch" => q.remove_batch(&id),
+        "pauseTask" => {
+            let ok = q.pause_task(&id);
+            if ok {
+                log_app("info", &format!("Paused {}", q.file_name(&id)), "downloader", "");
+            }
+            ok as usize
+        }
+        _ => {
+            let ok = q.unpause_task(&id);
+            start = ok && !q.is_running() && q.has_waiting(None);
+            if ok {
+                log_app("info", &format!("Resumed {}", q.file_name(&id)), "downloader", "");
+            }
+            ok as usize
+        }
+    };
+    if batch {
+        let mut v = super::queue_view::global().lock().unwrap();
+        if method == "pauseBatch" {
+            v.paused_batches.insert(id.clone());
+        } else {
+            v.paused_batches.remove(&id);
+        }
+        v.dirty = true;
+    }
+    link().note("queue_action", json!([method, id, {"n": n, "start": start}]));
+    Some(Value::Null)
+}
+
 pub fn note_app(f: &str, args: Value) {
     link().note(f, args);
 }
@@ -505,6 +573,14 @@ fn serve(stream: TcpStream, token: &str) {
     l.drop_all();
     *l.out.lock().unwrap() = Some(stream);
     l.send(json!({"t": "hello"}));
+    // The queue's messages are handled in the order sent ("sync" then "start": a start overtaking
+    // the sync of a big queue ran the old one), off the reading thread; calls each get a thread
+    let (ordered, inbox) = channel::<Value>();
+    std::thread::spawn(move || {
+        for msg in inbox {
+            handle(&msg);
+        }
+    });
     let mut buf = String::new();
     loop {
         buf.clear();
@@ -518,7 +594,11 @@ fn serve(stream: TcpStream, token: &str) {
             continue;
         }
         // Commands run off the reading thread, so answers to questions keep coming in
-        std::thread::spawn(move || handle(&msg));
+        if matches!(msg.get("op").and_then(Value::as_str), Some("call" | "cancel_call")) {
+            std::thread::spawn(move || handle(&msg));
+        } else if ordered.send(msg).is_err() {
+            break;
+        }
     }
     // The app went away: stop downloading for it
     queue().cancel();

@@ -1,6 +1,7 @@
 //! "appBridge.queueModel" and its "groupsModel": the window's download queue, from the Rust queue
-//! view (downloader/queue_view.rs). The app keeps the view's files up to date; what the window asks
-//! of the queue (pause a post, retry its failed files…) is passed to the app, which still runs it.
+//! view (downloader/queue_view.rs). The app keeps the view's files up to date. Pausing, resuming,
+//! cancelling and removing a post or a file are done by the engine's queue (downloader/service.rs
+//! queue_window), the app following; the rest (retries, clearing…) is passed to the app.
 
 use super::native::{Events, NativeObject, Prop};
 use crate::downloader::queue_view::{self, View, FILE_ROLES, GROUP_ROLES};
@@ -120,6 +121,9 @@ impl NativeObject for QueueModel {
             }
             _ => (method, args),
         };
+        if let Some(v) = crate::downloader::service::queue_window(method, &args) {
+            return Ok(v);
+        }
         ask_app("queue_call", json!([method, args]))
     }
     fn model_roles(&self) -> Option<&'static [&'static str]> {

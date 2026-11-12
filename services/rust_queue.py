@@ -277,9 +277,12 @@ class RustDownloader(FileDownloader):
         self._dirty_lock = threading.Lock()
         self._dirty_wake = threading.Event()
         self._clean_cookie = ""
+        self._resync = False                       # (Rust's copy was emptied: send the queue again)
+        self._sync_lock = threading.Lock()
         self._plans: Dict[int, Any] = {}           # call id → "was this plan cancelled?"
         dl.status_listener = self._status_changed
         threading.Thread(target=self._flush_loop, name="rust-queue-flush", daemon=True).start()
+        threading.Thread(target=self._idle_sync_loop, name="rust-queue-idle-sync", daemon=True).start()
 
     # ── Worker count (adaptive threading changes it on the Rust side) ──────────
 
@@ -319,7 +322,13 @@ class RustDownloader(FileDownloader):
             "opt": opt,
         }
 
-    def _sync(self, replace: bool) -> None:
+    def _sync(self, replace: bool, idle: bool = False) -> None:
+        with self._sync_lock:
+            if idle and self._is_running:
+                return              # (a run sends the queue itself)
+            self._sync_now(replace)
+
+    def _sync_now(self, replace: bool) -> None:
         tasks = list(self.tasks)
         keys: Dict[int, str] = {}
         table: Dict[str, Any] = {}
@@ -349,6 +358,26 @@ class RustDownloader(FileDownloader):
             for k, t in dirty.items():
                 self._link.send({"op": "state", "key": k, "status": t.status, "error_msg": t.error_msg or "",
                                  "retry_count": int(getattr(t, "retry_count", 0) or 0)})
+
+    def _idle_sync_loop(self) -> None:
+        """Between runs too, Rust has the queue as it is here (the window's pause / resume / cancel /
+        remove of a post or a file are done on Rust's copy): sent again when the list changes or the
+        engine reconnects. (During a run, _run_download_loop does this.)"""
+        last = None
+        while True:
+            time.sleep(0.5)
+            try:
+                link = self._link
+                if link is None or self._is_running or not link.up:
+                    last = None if (link is None or not link.up) else last
+                    continue
+                sig = (id(link._sock), id(self.tasks), len(self.tasks))
+                if sig != last or self._resync:
+                    self._resync = False
+                    last = sig
+                    self._sync(replace=False, idle=True)
+            except Exception as e:
+                logger.debug(f"Couldn't send the queue to the download engine: {e}", category="downloader")
 
     # ── Planning: the download tasks of scanned posts ───────────────────────────
 
@@ -692,6 +721,7 @@ class RustDownloader(FileDownloader):
     def reset_state(self):
         super().reset_state()
         self._tell({"op": "reset"})
+        self._resync = True
 
     def pause_batch(self, batch_id: str) -> int:
         n = super().pause_batch(batch_id)

@@ -494,6 +494,17 @@ impl Queue {
     }
 
     pub fn resume_task(self: &Arc<Self>, file_id: &str, options: Option<Arc<Options>>) -> bool {
+        if !self.unpause_task(file_id) {
+            return false;
+        }
+        if !self.is_running() {
+            self.start(self.run_options(options));
+        }
+        true
+    }
+
+    /// A paused file back in line (nothing is started)
+    pub fn unpause_task(&self, file_id: &str) -> bool {
         let Some(c) = self.find(file_id) else { return false };
         {
             let mut it = c.lock().unwrap();
@@ -505,13 +516,19 @@ impl Queue {
         }
         self.hooks.changed(&c);
         self.rescan();
-        if !self.is_running() {
-            self.start(self.run_options(options));
-        }
         true
     }
 
     pub fn resume_batch(self: &Arc<Self>, batch: &str, options: Option<Arc<Options>>) -> usize {
+        let n = self.unpause_batch(batch);
+        if n > 0 && !self.is_running() {
+            self.start(self.run_options(options));
+        }
+        n
+    }
+
+    /// A paused post's files back in line (nothing is started): how many
+    pub fn unpause_batch(&self, batch: &str) -> usize {
         if batch.is_empty() {
             return 0;
         }
@@ -528,10 +545,30 @@ impl Queue {
                 self.hooks.changed(&c);
             }
         }
-        if n > 0 && !self.is_running() {
-            self.start(self.run_options(options));
-        }
         n
+    }
+
+    /// Whether the queue has this post's files / this file
+    pub fn has_batch(&self, batch: &str) -> bool {
+        !batch.is_empty() && self.cells().iter().any(|c| c.lock().unwrap().task.batch_id == batch)
+    }
+    pub fn has_file(&self, file_id: &str) -> bool {
+        !file_id.is_empty() && self.find(file_id).is_some()
+    }
+    pub fn is_batch_paused(&self, batch: &str) -> bool {
+        self.ctl.paused_batches.lock().unwrap().contains(batch)
+    }
+    /// The file's name (for the log)
+    pub fn file_name(&self, file_id: &str) -> String {
+        self.find(file_id).map(|c| basename(&c.lock().unwrap().task.target_path).to_string()).unwrap_or_default()
+    }
+
+    /// Whether files are waiting to be downloaded (of one post, or any)
+    pub fn has_waiting(&self, batch: Option<&str>) -> bool {
+        self.cells().iter().any(|c| {
+            let it = c.lock().unwrap();
+            it.st.status == "pending" && batch.is_none_or(|b| it.task.batch_id == b)
+        })
     }
 
     pub fn cancel_batch(&self, batch: &str, notify: bool) -> usize {

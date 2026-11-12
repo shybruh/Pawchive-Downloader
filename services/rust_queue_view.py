@@ -5,8 +5,9 @@ port (desktop/src-tauri/src/downloader/queue_view.rs, served by src-tauri/src/ho
 RustQueueModel is the app's QueueModel with its files mirrored to Rust: the bridge still keeps
 its task list here and changes it as before, and every change (new files, removed ones, status
 and progress) goes over to Rust a moment later. The window reads "appBridge.queueModel" and its
-groupsModel from Rust; what the window asks of them (pause a post, retry its failed files…) is
-passed back here and runs on this model, so the bridge's handlers don't change.
+groupsModel from Rust. Pausing, resuming, cancelling and removing a post or a file are done by
+Rust's queue (the bridge follows: AppBridge._rust_queue_action); the rest of what the window asks
+(retries, clearing…) is passed back here and runs on this model, so the bridge's handlers don't change.
 
 Without the desktop shell, the Python model is what the window reads (as before).
 """
