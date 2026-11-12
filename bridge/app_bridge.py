@@ -353,6 +353,7 @@ class AppBridge(QObject):
         self._post_selection_progress_status = ""
         self._selection_cached_posts = []
         self._selection_parsed = None
+        self._selection_in_rust = False         # (the picked posts are the engine's: selection.rs)
         self._selection_creator_name = ""
         self._gallery_bookmarks = list(saved_settings.get("gallery_bookmarks", []) or [])
         if not self._gallery_bookmarks:
@@ -2451,6 +2452,9 @@ class AppBridge(QObject):
                 creator_name = ""
                 posts = []
 
+                if not parsed.is_external_provider and self._selection_scan_in_rust(parsed):
+                    return
+
                 if parsed.is_external_provider:
                     creator_name = parsed.domain
                     if parsed.provider == "bunkr":
@@ -2591,153 +2595,14 @@ class AppBridge(QObject):
                 self._selection_cached_posts = list(posts)
                 self._selection_parsed = parsed
                 self._selection_creator_name = creator_name
+                self._selection_in_rust = False
 
                 # Build cards list for UI
-                cards = []
-                domain = parsed.domain or "pawchive.pw"
-                for idx, p in enumerate(posts, 1):
-                    if self._scan_cancel_event.is_set():
-                        break
-                    if idx % 100 == 0 or idx == total_posts_found:
-                        self._emit_post_selection_progress(
-                            0,
-                            idx,
-                            total_posts_found,
-                            f"Preparing previews ({idx}/{total_posts_found})…"
-                        )
-                    pid = str(p.get("id", ""))
-                    title, _ = FilterEngine.extract_post_title_and_caption(p, fallback_title="Untitled Post")
-                    published = str(p.get("published") or "")[:10]
-
-                    image_exts = (".jpg", ".jpeg", ".png", ".gif", ".webp", ".bmp", ".avif")
-                    def _is_image(p_str: str) -> bool:
-                        if not p_str:
-                            return False
-                        return p_str.lower().split("?")[0].endswith(image_exts)
-
-                    thumb_url = ""
-                    f = p.get("file")
-                    if f and isinstance(f, dict):
-                        fpath = f.get("path") or ""
-                        fname = f.get("name") or ""
-                        if fpath and (_is_image(fpath) or _is_image(fname)):
-                            clean_p = fpath if fpath.startswith("/") else f"/{fpath}"
-                            if clean_p.startswith("/data/"):
-                                clean_p = clean_p[5:]
-                            thumb_url = f"https://img.{domain}/thumbnail/data{clean_p}"
-                    if not thumb_url:
-                        for att in p.get("attachments", []) or []:
-                            if isinstance(att, dict) and att.get("path"):
-                                apath = att["path"]
-                                aname = att.get("name") or ""
-                                if _is_image(apath) or _is_image(aname):
-                                    clean_p = apath if apath.startswith("/") else f"/{apath}"
-                                    if clean_p.startswith("/data/"):
-                                        clean_p = clean_p[5:]
-                                    thumb_url = f"https://img.{domain}/thumbnail/data{clean_p}"
-                                    break
-
-                    _VIDEO_EXTS = (".mp4", ".m4v", ".webm", ".mov", ".mkv")
-
-                    def _video_url(fobj, fpath, fname):
-                        """A streamable link for a video file, so the picker can show a frame of it."""
-                        if not (fname.lower().endswith(_VIDEO_EXTS) or fpath.lower().split("?")[0].endswith(_VIDEO_EXTS)
-                                or str(fobj.get("mimeType") or "").startswith("video/")):
-                            return ""
-                        if fobj.get("temp_url"):
-                            return fobj["temp_url"]
-                        if fpath.startswith("http"):
-                            return fpath
-                        if fobj.get("storageKey") and "cum" in domain:
-                            ext = os.path.splitext(fname)[1].lower() or ".mp4"
-                            return f"https://cdn.cum.st/media/{fobj['storageKey']}/original{ext}"
-                        if fpath and "pawchive" in domain:
-                            clean = fpath if fpath.startswith("/") else f"/{fpath}"
-                            if clean.startswith("/data/"):
-                                clean = clean[5:]
-                            return f"https://file.pawchive.pw/data{clean}"
-                        return ""
-
-                    post_files = []
-                    seen_selection_keys = set()
-                    # 1. Main post file
-                    if f and isinstance(f, dict) and (f.get("path") or f.get("storageKey")):
-                        mf_name = f.get("name") or os.path.basename(f.get("path", "") or "main_file")
-                        mf_path = f.get("path") or ""
-                        mf_key = FileDownloader.extract_norm_rel_key(f) or mf_path.lower()
-                        if mf_key:
-                            seen_selection_keys.add(mf_key)
-                        mf_thumb = ""
-                        if mf_path and (_is_image(mf_path) or _is_image(mf_name)):
-                            clean_p = mf_path if mf_path.startswith("/") else f"/{mf_path}"
-                            if clean_p.startswith("/data/"):
-                                clean_p = clean_p[5:]
-                            mf_thumb = f"https://img.{domain}/thumbnail/data{clean_p}"
-                        elif f.get("storageKey") and ("cum.st" in domain or "cumst" in domain) and (_is_image(mf_name) or (f.get("mimeType") or "").startswith("image/")):
-                            sk = f.get("storageKey")
-                            ext = os.path.splitext(mf_name)[1].lower() or ".jpg"
-                            mf_thumb = f"https://cdn.cum.st/media/{sk}/original{ext}"
-                        post_files.append({
-                            "name": mf_name,
-                            "path": mf_path,
-                            "thumbnail": mf_thumb,
-                            "previewUrl": mf_thumb,
-                            "videoUrl": "" if mf_thumb else _video_url(f, mf_path, mf_name),
-                            "is_main": True,
-                            "selected": True
-                        })
-
-                    # 2. Attachments
-                    for att in p.get("attachments", []) or []:
-                        if isinstance(att, dict) and (att.get("path") or att.get("storageKey")):
-                            att_key = FileDownloader.extract_norm_rel_key(att) or (att.get("path") or "").lower()
-                            if att_key and att_key in seen_selection_keys:
-                                # Identical file already listed from post.file (the API lists it twice)
-                                att_name = att.get("name") or os.path.basename(att.get("path", "") or "")
-                                if att_name and not att_name.lower().startswith("cover") and not att_name.lower().startswith("preview") and post_files:
-                                    if post_files[0].get("is_main"):
-                                        post_files[0]["name"] = att_name
-                                continue
-                            if att_key:
-                                seen_selection_keys.add(att_key)
-                            att_name = att.get("name") or os.path.basename(att.get("path", "") or "attachment")
-                            att_path = att.get("path") or ""
-                            att_thumb = ""
-                            if att_path and (_is_image(att_path) or _is_image(att_name)):
-                                clean_p = att_path if att_path.startswith("/") else f"/{att_path}"
-                                if clean_p.startswith("/data/"):
-                                    clean_p = clean_p[5:]
-                                att_thumb = f"https://img.{domain}/thumbnail/data{clean_p}"
-                            elif att.get("storageKey") and ("cum.st" in domain or "cumst" in domain) and (_is_image(att_name) or (att.get("mimeType") or "").startswith("image/")):
-                                sk = att.get("storageKey")
-                                ext = os.path.splitext(att_name)[1].lower() or ".jpg"
-                                att_thumb = f"https://cdn.cum.st/media/{sk}/original{ext}"
-                            post_files.append({
-                                "name": att_name,
-                                "path": att_path,
-                                "thumbnail": att_thumb,
-                                "previewUrl": att_thumb,
-                                "videoUrl": "" if att_thumb else _video_url(att, att_path, att_name),
-                                "is_main": False,
-                                "selected": True
-                            })
-
-                    # Clean post content / description
-                    import html
-                    raw_content = p.get("content") or p.get("captionHtml") or p.get("caption") or ""
-                    clean_content = re.sub(r'<br\s*/?>', '\n', str(raw_content), flags=re.IGNORECASE)
-                    clean_content = html.unescape(re.sub(r'<[^>]+>', '', clean_content).strip())
-
-                    cards.append({
-                        "id": pid,
-                        "title": title,
-                        "content": clean_content,
-                        "published": published,
-                        "thumbnail": thumb_url,
-                        "fileCount": len(post_files),
-                        "files": [dict(pf, postedIndex=i) for i, pf in enumerate(post_files)],
-                        "selected": True
-                    })
+                from core import post_selection
+                cards = post_selection.cards(
+                    posts, parsed.domain or "pawchive.pw", stop=self._scan_cancel_event.is_set,
+                    progress=lambda idx, total: self._emit_post_selection_progress(
+                        0, idx, total, f"Preparing previews ({idx}/{total})…"))
 
                 self._is_post_selection_loading = False
                 self.postSelectionLoadingChanged.emit()
@@ -2754,6 +2619,66 @@ class AppBridge(QObject):
                 self.postSelectionError.emit(str(ex))
 
         threading.Thread(target=_worker, daemon=True).start()
+
+    def _selection_scan_in_rust(self, parsed: URLParseResult) -> bool:
+        """The picker's scan of an archive-site link and its preview cards, in the engine
+        (src-tauri/src/downloader/selection.rs, which keeps the posts for the download). False when
+        the engine can't do it (then it's done here)."""
+        from services import rust_sites
+        d = self.downloader
+        if (not isinstance(self.api_client, rust_sites.RustApiClient) or not hasattr(d, "tasks_from_plan")
+                or os.environ.get("PAWCHIVE_PYTHON_PLANNER", "") == "1" or not d._link.connect()):
+            return False
+        self._emit_post_selection_progress(0, 0, 0, f"Connecting to {parsed.domain or 'server'}…")
+        page_end = self._page_end
+        if self._date_auto_scan_pages and (self._date_after or self._date_before):
+            page_end = 999999
+        known_total = [0]
+
+        def on_progress(page, count, total=None):
+            try:
+                if total is not None and int(total) > 0:
+                    known_total[0] = int(total)
+            except (ValueError, TypeError):
+                pass
+            tot, count = known_total[0], int(count or 0)
+            if tot > 0:
+                msg = f"Page {page} • {count} / {tot} posts ({int((count / tot) * 100)}%)"
+            elif count > 0:
+                msg = f"Page {page} • {count} posts discovered so far"
+            else:
+                msg = f"Fetching page {page}…"
+            self._emit_post_selection_progress(int(page or 0), count, tot, msg)
+
+        api = self.api_client
+        domain = (parsed.domain or "").lower()
+        ok, r = d._link.call("selection_scan", {
+            "link": rust_sites._parsed(parsed),
+            "site": {"cookie": api.cookie_string or "", "user_agent": api.user_agent or "", "proxy": api.proxy_url or ""},
+            "page_start": int(self._page_start or 1), "page_end": int(page_end or 999999),
+            "date_after": self._date_after or "", "date_before": self._date_before or "",
+            "dms": bool(self._download_dms and ("cum.st" in domain or "pawchive" in domain)),
+        }, progress=on_progress, cancelled=lambda: self._scan_cancel_event.is_set())
+        if not ok:
+            logger.debug(f"The download engine couldn't scan for the post picker ({r}); scanning the old way.", category="api")
+            return False
+        status, creator_name = r.get("status"), r.get("creator_name") or ""
+        self._is_post_selection_loading = False
+        if status == "no_posts":
+            self._emit_post_selection_progress(0, 0, 0, f"No posts found for {creator_name or 'URL'}.")
+            self.postSelectionLoadingChanged.emit()
+            self.postSelectionError.emit(f"No posts found for {creator_name or 'URL'}.")
+            return True
+        self.postSelectionLoadingChanged.emit()
+        if status != "cards":
+            return True             # (cancelled)
+        cards = r.get("cards") or []
+        self._selection_cached_posts = [{"id": c.get("id")} for c in cards]      # (the posts are the engine's)
+        self._selection_parsed = parsed
+        self._selection_creator_name = creator_name
+        self._selection_in_rust = True
+        self.postSelectionReady.emit(cards, creator_name, len(cards))
+        return True
 
     @Slot()
     def cancelPostSelection(self):
@@ -2843,6 +2768,7 @@ class AppBridge(QObject):
 
         creator_name = clean_text(channel_title) or "Telegram Channel"
         self._selection_cached_posts = list(messages)
+        self._selection_in_rust = False
         parsed_url = raw_url or (self._current_url or "")
         self._selection_parsed = LinkParser.parse(parsed_url)
         self._selection_creator_name = creator_name
@@ -2904,16 +2830,6 @@ class AppBridge(QObject):
 
         files_map = {str(k): v for k, v in selectedFilesMap.items()} if isinstance(selectedFilesMap, dict) else {}
 
-        def _norm_path(p):
-            if not p:
-                return ""
-            s = str(p).replace("\\", "/").strip()
-            if s.startswith("/data/"):
-                s = s[5:]
-            if not s.startswith("/"):
-                s = "/" + s
-            return s.lower()
-
         if hasattr(selectedPostIds, "toVariant"):
             selectedPostIds = selectedPostIds.toVariant()
         elif isinstance(selectedPostIds, str):
@@ -2924,58 +2840,44 @@ class AppBridge(QObject):
         if not isinstance(selectedPostIds, (list, set, tuple)):
             selectedPostIds = [selectedPostIds] if selectedPostIds else []
 
-        selected_id_set = {str(pid) for pid in selectedPostIds}
-        filtered_posts = []
-        for p in self._selection_cached_posts:
-            pid = str(p.get("id", ""))
-            if pid not in selected_id_set:
-                continue
+        parsed = self._selection_parsed
+        creator_name = self._selection_creator_name
+        options = self._get_filter_options()
 
-            if files_map and pid in files_map:
-                raw_allowed = files_map[pid]
-                if isinstance(raw_allowed, list):
-                    allowed_set = set(str(x) for x in raw_allowed)
-                    allowed_norm = {_norm_path(x) for x in raw_allowed}
-                    allowed_names = {os.path.basename(str(x)).lower() for x in raw_allowed if x}
+        if self._selection_in_rust:
+            # (the engine has the scanned posts: it keeps the picked ones and plans them)
+            d, am = self.downloader, getattr(self.downloader, "archive_manager", None)
+            ok, r = d._link.call("selection_plan", {
+                "ids": [str(i) for i in selectedPostIds], "files": files_map, "options": options.to_dict(),
+                "archive": bool(am and am.is_enabled), "archive_db": d._archive_db(), "base_dir": self._download_dir or "",
+                "include_service": bool(folder_naming.include_service), "cookie": self.api_client.cookie_string or "",
+            })
+            status = r.get("status") if ok and isinstance(r, dict) else None
+            if status in (None, "gone"):
+                logger.warning(f"The scanned posts are gone ({r if not ok else 'the download engine restarted'}): "
+                               f"pick them again.", category="downloader")
+                return
+            if status == "empty":
+                logger.warning("No posts were selected for download.", category="downloader")
+                return
+            if status != "plan":
+                return
+            n_posts = int(r.get("posts") or 0)
+            logger.info(f"Structuring download plan for {n_posts} posts...", category="downloader")
+            tasks = d.tasks_from_plan(r.get("plan") or {}, options)
+            self._queue_selected_tasks(tasks, n_posts, creator_name, options, autoStart)
+            return
 
-                    def _keep_f(f_dict):
-                        if not isinstance(f_dict, dict):
-                            return False
-                        fp = str(f_dict.get("path") or f_dict.get("storageKey") or "")
-                        fn = (f_dict.get("name") or os.path.basename(fp) or "").lower()
-                        if fp in allowed_set or _norm_path(fp) in allowed_norm:
-                            return True
-                        if fn and fn in allowed_names:
-                            return True
-                        return False
-
-                    p_copy = dict(p)
-                    if "attachments" in p and isinstance(p["attachments"], list):
-                        p_copy["attachments"] = [
-                            att for att in p["attachments"]
-                            if _keep_f(att)
-                        ]
-                    if "file" in p and isinstance(p["file"], dict):
-                        if not _keep_f(p["file"]):
-                            p_copy["file"] = {}
-                    filtered_posts.append(p_copy)
-                else:
-                    filtered_posts.append(p)
-            else:
-                filtered_posts.append(p)
+        from core import post_selection
+        filtered_posts = post_selection.picked(self._selection_cached_posts, selectedPostIds, files_map)
 
         if not filtered_posts:
             logger.warning("No posts were selected for download.", category="downloader")
             return
 
-        parsed = self._selection_parsed
-        creator_name = self._selection_creator_name
-
         if parsed and parsed.provider == "telegram":
             self.queueTelegramFiles(creator_name, filtered_posts, auto_start=autoStart)
             return
-
-        options = self._get_filter_options()
 
         # Build download tasks
         tasks = self.downloader.build_tasks_from_posts(
@@ -2987,7 +2889,11 @@ class AppBridge(QObject):
             options=options,
             batch_id=f"{parsed.service}_{parsed.user_id}"
         )
+        self._queue_selected_tasks(tasks, len(filtered_posts), creator_name, options, autoStart)
 
+    def _queue_selected_tasks(self, tasks: list, n_posts: int, creator_name: str, options, autoStart: bool):
+        """The picked posts' files into the queue: started (or added to a running download), or only
+        queued. Unfinished files already in the queue are kept: the picked ones are added to them."""
         if not tasks:
             logger.warning("No downloadable files found matching active filters in selected posts.", category="downloader")
             return
@@ -2996,7 +2902,14 @@ class AppBridge(QObject):
             if self._is_downloading:
                 self._handle_append_tasks(tasks)
                 self.downloader.append_tasks(tasks, options=options, cookie_str=self._cookie_string)
-                logger.info(f"Appended {len(tasks)} tasks from {len(filtered_posts)} selected posts to active queue.", category="downloader")
+                logger.info(f"Appended {len(tasks)} tasks from {n_posts} selected posts to active queue.", category="downloader")
+            elif any(t.status not in ("completed", "skipped") for t in (self.downloader.tasks or self._queue_model.tasks)):
+                # Files waiting in the queue (or left by a stopped download) stay: these join them
+                self._is_downloading = True
+                self.isDownloadingChanged.emit()
+                self._handle_append_tasks(tasks)
+                self.downloader.append_tasks(tasks, options=options, cookie_str=self._cookie_string)
+                logger.info(f"Added {len(tasks)} file(s) from {n_posts} selected posts to the queue and started it.", category="downloader")
             else:
                 self._queue_model.clear()
                 self._active_queue_model.clear()
@@ -3014,7 +2927,7 @@ class AppBridge(QObject):
                 self._status_text = f"Starting download for {len(tasks)} selected files..."
                 self.statusTextChanged.emit()
 
-                logger.info(f"Starting download for {len(tasks)} file(s) across {len(filtered_posts)} selected posts...", category="downloader")
+                logger.info(f"Starting download for {len(tasks)} file(s) across {n_posts} selected posts...", category="downloader")
                 self.downloader.start_download_queue(
                     tasks=tasks,
                     options=options,
@@ -3025,7 +2938,7 @@ class AppBridge(QObject):
             self.downloader.append_tasks(tasks)
             self._status_text = f"Queued {len(tasks)} files ({creator_name})."
             self.statusTextChanged.emit()
-            logger.success(f"Added {len(tasks)} tasks from {len(filtered_posts)} selected posts to queue.", category="queue")
+            logger.success(f"Added {len(tasks)} tasks from {n_posts} selected posts to queue.", category="queue")
 
     def _async_fetch_and_start(self, parsed: URLParseResult, auto_start: bool):
         try:

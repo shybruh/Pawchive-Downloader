@@ -108,17 +108,22 @@ pub fn call(id: u64, a: &Value) -> Result<Value, String> {
         "posts": posts,
         "batch_id": batch,
         "artist_dir": artist,
-        "plan": {
-            "tasks": plan.tasks,
-            "pending_post_infos": plan.pending_post_infos,
-            "write_now": plan.write_now,
-            "harvested_links": plan.harvested_links,
-            "harvested_records": plan.harvested_records,
-            "not_queued": plan.not_queued,
-            "renamed": plan.renamed,
-            "cancelled": plan.cancelled,
-        },
+        "plan": plan_value(&plan),
     }))
+}
+
+/// A plan as the app takes it (RustDownloader.tasks_from_plan)
+pub fn plan_value(plan: &super::plan::Plan) -> Value {
+    json!({
+        "tasks": plan.tasks,
+        "pending_post_infos": plan.pending_post_infos,
+        "write_now": plan.write_now,
+        "harvested_links": plan.harvested_links,
+        "harvested_records": plan.harvested_records,
+        "not_queued": plan.not_queued,
+        "renamed": plan.renamed,
+        "cancelled": plan.cancelled,
+    })
 }
 
 /// A post or favorite id as text (they come as numbers or strings)

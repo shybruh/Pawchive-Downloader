@@ -377,6 +377,11 @@ pub fn cancel_flag(id: u64) -> Arc<AtomicBool> {
     call_flags().lock().unwrap().entry(id).or_default().clone()
 }
 
+/// A scan's progress through the post pages (the app's call() hands it to the caller)
+pub fn progress_pages(id: u64, page: usize, count: usize, total: Option<u64>) {
+    link().note("progress", json!([id, page, count, total]));
+}
+
 /// Progress of a call: [id, a, b, c] (the app's call() hands it to the caller)
 pub fn progress_app(id: u64, a: usize, b: usize) {
     link().note("progress", json!([id, a, b]));
@@ -784,6 +789,8 @@ fn handle(msg: &Value) {
                 "watchlist_check" => crate::watchlist::check::call(id, args),
                 "watchlist_download" => crate::watchlist::check::download(id, args),
                 "link_scan" => super::scan::call(id, args),
+                "selection_scan" => super::selection::scan(id, args),
+                "selection_plan" => super::selection::plan(id, args),
                 "watchlist_favorites" => crate::watchlist::favorites::call(id, args),
                 "archive" => {
                     archive_at(link(), args["path"].as_str().unwrap_or(""));
