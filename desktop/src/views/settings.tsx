@@ -176,7 +176,24 @@ function NetworkSection() {
         <Field label="Proxy" hint="http://, https:// or socks5://"><TextSetting prop="proxyUrl" placeholder="None" mono /></Field>
         <Field label="User agent"><TextSetting prop="userAgent" placeholder="Default" mono className="w-80" /></Field>
       </Group>
+      <Group title="Embedded videos" description="YouTube, Vimeo, RedGifs and other players in posts, downloaded with yt-dlp.">
+        <Field label="Use browser sign-in" hint="For videos that only play while you're logged in. Firefox works best; Chrome, Edge and Brave have to be closed.">
+          <BrowserSignIn />
+        </Field>
+      </Group>
     </>
+  );
+}
+
+const SIGN_IN_BROWSERS = ["firefox", "chrome", "edge", "brave", "opera", "vivaldi", "chromium", "safari"];
+
+function BrowserSignIn() {
+  const [v, set] = useSetting<string>("appBridge", "embedCookiesBrowser", "");
+  return (
+    <Select value={v || "none"} onValueChange={(b) => set(b === "none" ? "" : b)} className="w-56" options={[
+      { value: "none", label: "Don't use" },
+      ...SIGN_IN_BROWSERS.map((b) => ({ value: b, label: b[0].toUpperCase() + b.slice(1) })),
+    ]} />
   );
 }
 

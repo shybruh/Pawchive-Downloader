@@ -125,6 +125,7 @@ class AppBridge(QObject):
     postSelectionProgressCountChanged = Signal()
     postSelectionProgressTotalChanged = Signal()
     proxyUrlChanged = Signal()
+    embedCookiesBrowserChanged = Signal()
     bandwidthLimitEnabledChanged = Signal()
     bandwidthLimitValueChanged = Signal()
     bandwidthLimitUnitChanged = Signal()
@@ -1123,6 +1124,23 @@ class AppBridge(QObject):
             self._proxy_url = val
             self.api_client.set_proxy(val)
             self.proxyUrlChanged.emit()
+            self.saveSettings()
+
+    @Property(str, notify=embedCookiesBrowserChanged)
+    def embedCookiesBrowser(self) -> str:
+        """The browser whose sign-in embedded videos (yt-dlp) use ("" = none)"""
+        return self._embed_cookies_browser
+
+    @embedCookiesBrowser.setter
+    def embedCookiesBrowser(self, val: str):
+        from services.ytdlp_manager import COOKIE_BROWSERS
+        val = (val or "").strip().lower()
+        val = val if val in COOKIE_BROWSERS else ""
+        if self._embed_cookies_browser != val:
+            self._embed_cookies_browser = val
+            self.downloader.ytdlp_manager.set_cookies_browser(val)
+            self.downloader.ytdlp_manager.retry_sign_in()
+            self.embedCookiesBrowserChanged.emit()
             self.saveSettings()
 
     @Property(bool, notify=bandwidthLimitEnabledChanged)

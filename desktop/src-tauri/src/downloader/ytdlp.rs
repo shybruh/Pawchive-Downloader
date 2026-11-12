@@ -623,11 +623,16 @@ fn saved_as(target: &str) -> Option<String> {
     best.map(|(_, p)| p)
 }
 
-/// The app's requests: {"do": "update", "exe"} (in the background at start-up), {"do": "cancel_all"}
+/// The app's requests: {"do": "update", "exe"} (in the background at start-up), {"do": "retry_sign_in"}, {"do": "cancel_all"}
 pub fn call(args: &Value) -> Result<Value, String> {
     match args["do"].as_str().unwrap_or("") {
         "update" => Ok(json!(update(args["exe"].as_str().unwrap_or("")))),
         "install" => Ok(json!(install(args["exe"].as_str().unwrap_or("")))),
+        // (a browser picked in Settings: its sign-in is tried again)
+        "retry_sign_in" => {
+            cookies_failed().lock().unwrap().clear();
+            Ok(Value::Null)
+        }
         "cancel_all" => {
             cancel_all();
             Ok(Value::Null)

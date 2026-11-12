@@ -143,6 +143,17 @@ class YtDlpManager:
         self.cookies_browser = browser if browser in COOKIE_BROWSERS else ""
         self._cookies_failed = ""
 
+    def retry_sign_in(self) -> None:
+        """A browser was picked in Settings: the engine tries its sign-in again too."""
+        def tell():
+            link = _engine()
+            if link is not None:
+                try:
+                    link.call("ytdlp", {"do": "retry_sign_in"})
+                except Exception:
+                    pass
+        threading.Thread(target=tell, daemon=True, name="YtDlpSignIn").start()
+
     def get_executable_path(self) -> str:
         """Returns path to yt-dlp executable, checking local dependencies or system PATH."""
         if os.path.exists(self.exe_path):
