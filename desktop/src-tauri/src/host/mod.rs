@@ -60,7 +60,12 @@ fn natives(app_version: &str, engine: &Arc<Engine>, events: &Events) -> Natives 
         objects.push((watchlist::NAME, w));
         watchlist::start_pump(events.clone());
     }
-    let app_bridge: Arc<dyn native::Overlay> = crate::bridge::AppBridge::new(events.clone());
+    let app_bridge = crate::bridge::AppBridge::new(events.clone());
+    // The Gallery's search inside subfolders, new folders and undo
+    let tools: Arc<dyn NativeObject> = Arc::new(crate::bridge::gallery_tools::Object(
+        crate::bridge::gallery_tools::GalleryTools::new(app_bridge.gallery(), Some(events.clone()))));
+    objects.push((crate::bridge::gallery_tools::NAME, tools));
+    let app_bridge: Arc<dyn native::Overlay> = app_bridge;
     Natives::new(objects, vec![("appBridge", app_bridge)])
 }
 

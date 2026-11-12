@@ -5,6 +5,7 @@
 //! is checked against the Python version before it moves.
 
 pub mod gallery;
+pub mod gallery_tools;
 
 use crate::downloader::service;
 use crate::host::native::{Events, Overlay};
@@ -36,6 +37,11 @@ pub struct AppBridge {
 impl AppBridge {
     pub fn new(events: Events) -> Arc<Self> {
         Arc::new(Self { gallery: Gallery::new(Arc::new(App { events })) })
+    }
+
+    /// The file explorer, shared with the Gallery's tools (galleryTools)
+    pub fn gallery(&self) -> Arc<Gallery> {
+        self.gallery.clone()
     }
 }
 

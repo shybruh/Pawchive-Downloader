@@ -375,11 +375,11 @@ pub fn info_dirs_for(folder: &str) -> Vec<String> {
     dirs
 }
 
-fn post_info_files(folder: &str) -> Vec<String> {
+pub fn post_info_files(folder: &str, limit: usize) -> Vec<String> {
     let Ok(rd) = std::fs::read_dir(folder) else { return Vec::new() };
     let mut names: Vec<String> = rd.flatten().map(|e| e.file_name().to_string_lossy().into_owned()).filter(|n| is_post_info_name(n)).collect();
     names.sort_by_key(|n| (n.to_lowercase() != "post_info.txt", n.to_lowercase()));
-    names.into_iter().take(500).map(|n| Path::new(folder).join(n).to_string_lossy().into_owned()).collect()
+    names.into_iter().take(limit).map(|n| Path::new(folder).join(n).to_string_lossy().into_owned()).collect()
 }
 
 fn attached_files(info: &str) -> Vec<String> {
@@ -412,7 +412,7 @@ fn post_info_for_file(folder: &str, file_name: &str) -> String {
     let (stem, ext) = splitext(file_name);
     let base = format!("{}{ext}", re!(r"(?: \[[^\]]+\])?(?: \(\d+\))?$").replace(stem, ""));
     let lists = |info: &str, f: &str| attached_files(info).iter().any(|n| n.to_lowercase() == f.trim().to_lowercase());
-    for info in post_info_files(folder) {
+    for info in post_info_files(folder, 500) {
         if lists(&info, file_name) || (base != file_name && lists(&info, &base)) {
             return info;
         }

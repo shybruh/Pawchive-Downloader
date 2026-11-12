@@ -618,7 +618,7 @@ fn sha256_file(p: &str) -> Option<String> {
 }
 
 /// shutil.move: a rename, or copy and delete across drives
-fn move_path(src: &str, dst: &str) -> std::io::Result<()> {
+pub(crate) fn move_path(src: &str, dst: &str) -> std::io::Result<()> {
     match fs::rename(src, dst) {
         Ok(()) => Ok(()),
         Err(e) if e.raw_os_error() == Some(17) => {

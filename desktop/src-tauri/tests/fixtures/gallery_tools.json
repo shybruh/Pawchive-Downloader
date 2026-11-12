@@ -1,0 +1,2131 @@
+{
+ "queries": [
+  [
+   "",
+   [
+    [],
+    [],
+    []
+   ]
+  ],
+  [
+   "  cat  dog ",
+   [
+    [
+     "cat",
+     "dog"
+    ],
+    [],
+    []
+   ]
+  ],
+  [
+   "ext:png",
+   [
+    [],
+    [
+     ".png"
+    ],
+    []
+   ]
+  ],
+  [
+   "ext:.JPG",
+   [
+    [],
+    [
+     ".jpg"
+    ],
+    []
+   ]
+  ],
+  [
+   "*.mp4 cat",
+   [
+    [
+     "cat"
+    ],
+    [
+     ".mp4"
+    ],
+    []
+   ]
+  ],
+  [
+   "*.",
+   [
+    [],
+    [],
+    []
+   ]
+  ],
+  [
+   ".gif",
+   [
+    [],
+    [
+     ".gif"
+    ],
+    []
+   ]
+  ],
+  [
+   ".",
+   [
+    [
+     "."
+    ],
+    [],
+    []
+   ]
+  ],
+  [
+   "tag:Blue",
+   [
+    [],
+    [],
+    [
+     "Blue"
+    ]
+   ]
+  ],
+  [
+   "tag:\"Long Tag\" x",
+   [
+    [
+     "x"
+    ],
+    [],
+    [
+     "Long Tag"
+    ]
+   ]
+  ],
+  [
+   "\"two words\"",
+   [
+    [
+     "two words"
+    ],
+    [],
+    []
+   ]
+  ],
+  [
+   "'single quoted'",
+   [
+    [
+     "single quoted"
+    ],
+    [],
+    []
+   ]
+  ],
+  [
+   "unbalanced \"quote",
+   [
+    [
+     "unbalanced",
+     "quote"
+    ],
+    [],
+    []
+   ]
+  ],
+  [
+   "a\\ b",
+   [
+    [
+     "a b"
+    ],
+    [],
+    []
+   ]
+  ],
+  [
+   "mix\"ed\"word",
+   [
+    [
+     "mixedword"
+    ],
+    [],
+    []
+   ]
+  ],
+  [
+   "TAG:Upper EXT:Png Word",
+   [
+    [
+     "word"
+    ],
+    [
+     ".png"
+    ],
+    [
+     "Upper"
+    ]
+   ]
+  ],
+  [
+   "tag:",
+   [
+    [],
+    [],
+    []
+   ]
+  ],
+  [
+   "ext:",
+   [
+    [],
+    [
+     "."
+    ],
+    []
+   ]
+  ],
+  [
+   "日本語 タグ",
+   [
+    [
+     "日本語",
+     "タグ"
+    ],
+    [],
+    []
+   ]
+  ],
+  [
+   "tag:\"a b\" ext:zip \"c d\" e",
+   [
+    [
+     "c d",
+     "e"
+    ],
+    [
+     ".zip"
+    ],
+    [
+     "a b"
+    ]
+   ]
+  ]
+ ],
+ "posts": [
+  [
+   "",
+   []
+  ],
+  [
+   "Title: Hello\nPost ID: 12345\nCreator: Artist [patreon]\nTags: Blue, Red ,, green\n--- Content ---\nSome body text\nmore\n--- Attached Files ---\nA.PNG\nb.jpg\n",
+   [
+    {
+     "post_id": "12345",
+     "title": "Hello",
+     "creator": "Artist",
+     "service": "patreon",
+     "tags": [
+      "Blue",
+      "Red",
+      "green"
+     ],
+     "content": "Some body text\nmore",
+     "attached": [
+      "a.png",
+      "b.jpg"
+     ],
+     "blob": "hello artist patreon blue red green some body text\nmore"
+    }
+   ]
+  ],
+  [
+   "Title: One\nPost ID: 1\n========================================\nTitle: Two\nPost ID: 2\nCreator: NoService\n--- Attached Files ---\nx.png\n",
+   [
+    {
+     "post_id": "1",
+     "title": "One",
+     "creator": "",
+     "service": "",
+     "tags": [],
+     "content": "",
+     "attached": [],
+     "blob": "one"
+    },
+    {
+     "post_id": "2",
+     "title": "Two",
+     "creator": "NoService",
+     "service": "",
+     "tags": [],
+     "content": "",
+     "attached": [
+      "x.png"
+     ],
+     "blob": "two noservice"
+    }
+   ]
+  ],
+  [
+   "Title: Win\r\nPost ID: 9\r\nCreator: Who [fanbox] x\r\n",
+   [
+    {
+     "post_id": "9",
+     "title": "Win",
+     "creator": "Who [fanbox] x",
+     "service": "",
+     "tags": [],
+     "content": "",
+     "attached": [],
+     "blob": "win who [fanbox] x"
+    }
+   ]
+  ],
+  [
+   "just text without header colon\n",
+   []
+  ],
+  [
+   "==============================\n\n==================================================",
+   []
+  ],
+  [
+   "Key: value: with colon\nTitle:   spaced   \n--- Other ---\nignored: yes\n--- Content ---\nzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz tailword\n",
+   [
+    {
+     "post_id": "",
+     "title": "spaced",
+     "creator": "",
+     "service": "",
+     "tags": [],
+     "content": "zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz tailword",
+     "attached": [],
+     "blob": "spaced zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz"
+    }
+   ]
+  ]
+ ],
+ "search": {
+  "tree": {
+   "Artist/cat_one.png": "xxxxxxxxxx",
+   "Artist/dog.jpg": "xxxxxxxxxxxxxxxxxxxx",
+   "Artist/post_info.txt": "Title: Sunset Painting\nPost ID: 111\nCreator: Artist [patreon]\nTags: Landscape, Orange Sky\n--- Content ---\nA calm evening scene\n--- Attached Files ---\ncat_one.png\n",
+   "Artist/Post A/img1.png": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "Artist/Post A/img2.gif": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "Artist/Post A/post_info.txt": "Title: Blue Hour\nPost ID: 222\nTags: Blue, Night\n--- Attached Files ---\nimg1.png\nimg2.gif\n",
+   "Artist/Shared/p1.png": "x",
+   "Artist/Shared/p2.png": "xx",
+   "Artist/Shared/p3.mp4": "xxx",
+   "Artist/Shared/post_info [1].txt": "Title: Forest walk\nPost ID: 1\nTags: Green\n--- Attached Files ---\np1.png\n",
+   "Artist/Shared/post_info [2].txt": "Title: City lights\nPost ID: 2\nTags: Night, Neon\n--- Attached Files ---\np2.png\np3.mp4\n",
+   "Artist/Grouped/Images/g1.png": "xxxxx",
+   "Artist/Grouped/Other/post_info.txt": "Title: Grouped post\nTags: Typed\n",
+   "Artist/Empty/": null,
+   "Artist/Cat Folder/": null,
+   "Artist/Cat Folder/inner.txt": "hi",
+   "Other/CAT.PNG": "xxxxxx",
+   "Other/notes.TXT": "y"
+  },
+  "runs": [
+   {
+    "query": "cat",
+    "items": [
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "CAT.PNG",
+      "path": "<B>\\Other\\CAT.PNG",
+      "rel_dir": "Other",
+      "size": 6
+     },
+     {
+      "child_count": -1,
+      "ext": "",
+      "file_count": -1,
+      "folder_count": 0,
+      "is_dir": true,
+      "mtime": null,
+      "name": "Cat Folder",
+      "path": "<B>\\Artist\\Cat Folder",
+      "rel_dir": "Artist",
+      "size": -1
+     },
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "cat_one.png",
+      "path": "<B>\\Artist\\cat_one.png",
+      "rel_dir": "Artist",
+      "size": 10
+     }
+    ],
+    "scanned": 10
+   },
+   {
+    "query": "png",
+    "items": [
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "CAT.PNG",
+      "path": "<B>\\Other\\CAT.PNG",
+      "rel_dir": "Other",
+      "size": 6
+     },
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "cat_one.png",
+      "path": "<B>\\Artist\\cat_one.png",
+      "rel_dir": "Artist",
+      "size": 10
+     },
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "p1.png",
+      "path": "<B>\\Artist\\Shared\\p1.png",
+      "rel_dir": "Artist\\Shared",
+      "size": 1
+     },
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "p2.png",
+      "path": "<B>\\Artist\\Shared\\p2.png",
+      "rel_dir": "Artist\\Shared",
+      "size": 2
+     },
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "img1.png",
+      "path": "<B>\\Artist\\Post A\\img1.png",
+      "rel_dir": "Artist\\Post A",
+      "size": 30
+     },
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "g1.png",
+      "path": "<B>\\Artist\\Grouped\\Images\\g1.png",
+      "rel_dir": "Artist\\Grouped\\Images",
+      "size": 5
+     }
+    ],
+    "scanned": 10
+   },
+   {
+    "query": "ext:png",
+    "items": [
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "CAT.PNG",
+      "path": "<B>\\Other\\CAT.PNG",
+      "rel_dir": "Other",
+      "size": 6
+     },
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "cat_one.png",
+      "path": "<B>\\Artist\\cat_one.png",
+      "rel_dir": "Artist",
+      "size": 10
+     },
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "p1.png",
+      "path": "<B>\\Artist\\Shared\\p1.png",
+      "rel_dir": "Artist\\Shared",
+      "size": 1
+     },
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "p2.png",
+      "path": "<B>\\Artist\\Shared\\p2.png",
+      "rel_dir": "Artist\\Shared",
+      "size": 2
+     },
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "img1.png",
+      "path": "<B>\\Artist\\Post A\\img1.png",
+      "rel_dir": "Artist\\Post A",
+      "size": 30
+     },
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "g1.png",
+      "path": "<B>\\Artist\\Grouped\\Images\\g1.png",
+      "rel_dir": "Artist\\Grouped\\Images",
+      "size": 5
+     }
+    ],
+    "scanned": 10
+   },
+   {
+    "query": "*.gif",
+    "items": [
+     {
+      "child_count": 0,
+      "ext": ".gif",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "img2.gif",
+      "path": "<B>\\Artist\\Post A\\img2.gif",
+      "rel_dir": "Artist\\Post A",
+      "size": 40
+     }
+    ],
+    "scanned": 10
+   },
+   {
+    "query": "sunset",
+    "items": [
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "cat_one.png",
+      "path": "<B>\\Artist\\cat_one.png",
+      "rel_dir": "Artist",
+      "size": 10
+     },
+     {
+      "child_count": 0,
+      "ext": ".jpg",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "dog.jpg",
+      "path": "<B>\\Artist\\dog.jpg",
+      "rel_dir": "Artist",
+      "size": 20
+     },
+     {
+      "child_count": 0,
+      "ext": ".txt",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "post_info.txt",
+      "path": "<B>\\Artist\\post_info.txt",
+      "rel_dir": "Artist",
+      "size": 162
+     }
+    ],
+    "scanned": 10
+   },
+   {
+    "query": "blue",
+    "items": [
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "img1.png",
+      "path": "<B>\\Artist\\Post A\\img1.png",
+      "rel_dir": "Artist\\Post A",
+      "size": 30
+     },
+     {
+      "child_count": 0,
+      "ext": ".gif",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "img2.gif",
+      "path": "<B>\\Artist\\Post A\\img2.gif",
+      "rel_dir": "Artist\\Post A",
+      "size": 40
+     },
+     {
+      "child_count": 0,
+      "ext": ".txt",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "post_info.txt",
+      "path": "<B>\\Artist\\Post A\\post_info.txt",
+      "rel_dir": "Artist\\Post A",
+      "size": 89
+     }
+    ],
+    "scanned": 10
+   },
+   {
+    "query": "tag:blue",
+    "items": [
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "img1.png",
+      "path": "<B>\\Artist\\Post A\\img1.png",
+      "rel_dir": "Artist\\Post A",
+      "size": 30
+     },
+     {
+      "child_count": 0,
+      "ext": ".gif",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "img2.gif",
+      "path": "<B>\\Artist\\Post A\\img2.gif",
+      "rel_dir": "Artist\\Post A",
+      "size": 40
+     },
+     {
+      "child_count": 0,
+      "ext": ".txt",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "post_info.txt",
+      "path": "<B>\\Artist\\Post A\\post_info.txt",
+      "rel_dir": "Artist\\Post A",
+      "size": 89
+     }
+    ],
+    "scanned": 10
+   },
+   {
+    "query": "tag:night",
+    "items": [
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "p2.png",
+      "path": "<B>\\Artist\\Shared\\p2.png",
+      "rel_dir": "Artist\\Shared",
+      "size": 2
+     },
+     {
+      "child_count": 0,
+      "ext": ".mp4",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "p3.mp4",
+      "path": "<B>\\Artist\\Shared\\p3.mp4",
+      "rel_dir": "Artist\\Shared",
+      "size": 3
+     },
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "img1.png",
+      "path": "<B>\\Artist\\Post A\\img1.png",
+      "rel_dir": "Artist\\Post A",
+      "size": 30
+     },
+     {
+      "child_count": 0,
+      "ext": ".gif",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "img2.gif",
+      "path": "<B>\\Artist\\Post A\\img2.gif",
+      "rel_dir": "Artist\\Post A",
+      "size": 40
+     },
+     {
+      "child_count": 0,
+      "ext": ".txt",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "post_info.txt",
+      "path": "<B>\\Artist\\Post A\\post_info.txt",
+      "rel_dir": "Artist\\Post A",
+      "size": 89
+     }
+    ],
+    "scanned": 10
+   },
+   {
+    "query": "night ext:mp4",
+    "items": [
+     {
+      "child_count": 0,
+      "ext": ".mp4",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "p3.mp4",
+      "path": "<B>\\Artist\\Shared\\p3.mp4",
+      "rel_dir": "Artist\\Shared",
+      "size": 3
+     }
+    ],
+    "scanned": 10
+   },
+   {
+    "query": "tag:neon *.png",
+    "items": [
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "p2.png",
+      "path": "<B>\\Artist\\Shared\\p2.png",
+      "rel_dir": "Artist\\Shared",
+      "size": 2
+     }
+    ],
+    "scanned": 10
+   },
+   {
+    "query": "calm evening",
+    "items": [
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "cat_one.png",
+      "path": "<B>\\Artist\\cat_one.png",
+      "rel_dir": "Artist",
+      "size": 10
+     },
+     {
+      "child_count": 0,
+      "ext": ".jpg",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "dog.jpg",
+      "path": "<B>\\Artist\\dog.jpg",
+      "rel_dir": "Artist",
+      "size": 20
+     },
+     {
+      "child_count": 0,
+      "ext": ".txt",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "post_info.txt",
+      "path": "<B>\\Artist\\post_info.txt",
+      "rel_dir": "Artist",
+      "size": 162
+     }
+    ],
+    "scanned": 10
+   },
+   {
+    "query": "forest",
+    "items": [
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "p1.png",
+      "path": "<B>\\Artist\\Shared\\p1.png",
+      "rel_dir": "Artist\\Shared",
+      "size": 1
+     }
+    ],
+    "scanned": 10
+   },
+   {
+    "query": "typed",
+    "items": [
+     {
+      "child_count": 0,
+      "ext": ".txt",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "post_info.txt",
+      "path": "<B>\\Artist\\Grouped\\Other\\post_info.txt",
+      "rel_dir": "Artist\\Grouped\\Other",
+      "size": 32
+     },
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "g1.png",
+      "path": "<B>\\Artist\\Grouped\\Images\\g1.png",
+      "rel_dir": "Artist\\Grouped\\Images",
+      "size": 5
+     }
+    ],
+    "scanned": 10
+   },
+   {
+    "query": "folder",
+    "items": [
+     {
+      "child_count": -1,
+      "ext": "",
+      "file_count": -1,
+      "folder_count": 0,
+      "is_dir": true,
+      "mtime": null,
+      "name": "Cat Folder",
+      "path": "<B>\\Artist\\Cat Folder",
+      "rel_dir": "Artist",
+      "size": -1
+     }
+    ],
+    "scanned": 10
+   },
+   {
+    "query": "zzz",
+    "items": [],
+    "scanned": 10
+   },
+   {
+    "query": "tag:orange",
+    "items": [
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "cat_one.png",
+      "path": "<B>\\Artist\\cat_one.png",
+      "rel_dir": "Artist",
+      "size": 10
+     },
+     {
+      "child_count": 0,
+      "ext": ".jpg",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "dog.jpg",
+      "path": "<B>\\Artist\\dog.jpg",
+      "rel_dir": "Artist",
+      "size": 20
+     },
+     {
+      "child_count": 0,
+      "ext": ".txt",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "post_info.txt",
+      "path": "<B>\\Artist\\post_info.txt",
+      "rel_dir": "Artist",
+      "size": 162
+     }
+    ],
+    "scanned": 10
+   },
+   {
+    "query": "artist",
+    "items": [
+     {
+      "child_count": -1,
+      "ext": "",
+      "file_count": -1,
+      "folder_count": 0,
+      "is_dir": true,
+      "mtime": null,
+      "name": "Artist",
+      "path": "<B>\\Artist",
+      "rel_dir": "",
+      "size": -1
+     },
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "cat_one.png",
+      "path": "<B>\\Artist\\cat_one.png",
+      "rel_dir": "Artist",
+      "size": 10
+     },
+     {
+      "child_count": 0,
+      "ext": ".jpg",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "dog.jpg",
+      "path": "<B>\\Artist\\dog.jpg",
+      "rel_dir": "Artist",
+      "size": 20
+     },
+     {
+      "child_count": 0,
+      "ext": ".txt",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "post_info.txt",
+      "path": "<B>\\Artist\\post_info.txt",
+      "rel_dir": "Artist",
+      "size": 162
+     }
+    ],
+    "scanned": 10
+   },
+   {
+    "query": "patreon",
+    "items": [
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "cat_one.png",
+      "path": "<B>\\Artist\\cat_one.png",
+      "rel_dir": "Artist",
+      "size": 10
+     },
+     {
+      "child_count": 0,
+      "ext": ".jpg",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "dog.jpg",
+      "path": "<B>\\Artist\\dog.jpg",
+      "rel_dir": "Artist",
+      "size": 20
+     },
+     {
+      "child_count": 0,
+      "ext": ".txt",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "post_info.txt",
+      "path": "<B>\\Artist\\post_info.txt",
+      "rel_dir": "Artist",
+      "size": 162
+     }
+    ],
+    "scanned": 10
+   },
+   {
+    "query": "cat ext:png",
+    "items": [
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "CAT.PNG",
+      "path": "<B>\\Other\\CAT.PNG",
+      "rel_dir": "Other",
+      "size": 6
+     },
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "cat_one.png",
+      "path": "<B>\\Artist\\cat_one.png",
+      "rel_dir": "Artist",
+      "size": 10
+     }
+    ],
+    "scanned": 10
+   },
+   {
+    "query": "post",
+    "items": [
+     {
+      "child_count": -1,
+      "ext": "",
+      "file_count": -1,
+      "folder_count": 0,
+      "is_dir": true,
+      "mtime": null,
+      "name": "Post A",
+      "path": "<B>\\Artist\\Post A",
+      "rel_dir": "Artist",
+      "size": -1
+     },
+     {
+      "child_count": 0,
+      "ext": ".txt",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "post_info.txt",
+      "path": "<B>\\Artist\\post_info.txt",
+      "rel_dir": "Artist",
+      "size": 162
+     },
+     {
+      "child_count": 0,
+      "ext": ".txt",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "post_info [1].txt",
+      "path": "<B>\\Artist\\Shared\\post_info [1].txt",
+      "rel_dir": "Artist\\Shared",
+      "size": 72
+     },
+     {
+      "child_count": 0,
+      "ext": ".txt",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "post_info [2].txt",
+      "path": "<B>\\Artist\\Shared\\post_info [2].txt",
+      "rel_dir": "Artist\\Shared",
+      "size": 85
+     },
+     {
+      "child_count": 0,
+      "ext": ".txt",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "post_info.txt",
+      "path": "<B>\\Artist\\Post A\\post_info.txt",
+      "rel_dir": "Artist\\Post A",
+      "size": 89
+     },
+     {
+      "child_count": 0,
+      "ext": ".txt",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "post_info.txt",
+      "path": "<B>\\Artist\\Grouped\\Other\\post_info.txt",
+      "rel_dir": "Artist\\Grouped\\Other",
+      "size": 32
+     },
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "g1.png",
+      "path": "<B>\\Artist\\Grouped\\Images\\g1.png",
+      "rel_dir": "Artist\\Grouped\\Images",
+      "size": 5
+     }
+    ],
+    "scanned": 10
+   },
+   {
+    "query": "png",
+    "max": 3,
+    "items": [
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "CAT.PNG",
+      "path": "<B>\\Other\\CAT.PNG",
+      "rel_dir": "Other",
+      "size": 6
+     },
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "cat_one.png",
+      "path": "<B>\\Artist\\cat_one.png",
+      "rel_dir": "Artist",
+      "size": 10
+     },
+     {
+      "child_count": 0,
+      "ext": ".png",
+      "file_count": 0,
+      "folder_count": 0,
+      "is_dir": false,
+      "mtime": null,
+      "name": "p1.png",
+      "path": "<B>\\Artist\\Shared\\p1.png",
+      "rel_dir": "Artist\\Shared",
+      "size": 1
+     }
+    ],
+    "scanned": 4
+   }
+  ]
+ },
+ "ops": {
+  "steps": [
+   {
+    "op": "createFolder",
+    "args": [
+     "Other",
+     "New"
+    ],
+    "result": {
+     "success": true,
+     "error": "",
+     "path": "<B>\\Other\\New"
+    },
+    "canUndo": true,
+    "undoLabel": "Undo new folder 'New'",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/cat_one.png",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/CAT.PNG",
+     "Other/New",
+     "Other/notes.TXT"
+    ]
+   },
+   {
+    "op": "createFolder",
+    "args": [
+     "Other",
+     "New"
+    ],
+    "result": {
+     "success": false,
+     "error": "An item named 'New' already exists here.",
+     "path": ""
+    },
+    "canUndo": true,
+    "undoLabel": "Undo new folder 'New'",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/cat_one.png",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/CAT.PNG",
+     "Other/New",
+     "Other/notes.TXT"
+    ]
+   },
+   {
+    "op": "createFolder",
+    "args": [
+     "Other",
+     "bad:name"
+    ],
+    "result": {
+     "success": false,
+     "error": "That name contains characters that aren't allowed.",
+     "path": ""
+    },
+    "canUndo": true,
+    "undoLabel": "Undo new folder 'New'",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/cat_one.png",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/CAT.PNG",
+     "Other/New",
+     "Other/notes.TXT"
+    ]
+   },
+   {
+    "op": "createFolder",
+    "args": [
+     "Other",
+     "trail."
+    ],
+    "result": {
+     "success": false,
+     "error": "That name contains characters that aren't allowed.",
+     "path": ""
+    },
+    "canUndo": true,
+    "undoLabel": "Undo new folder 'New'",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/cat_one.png",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/CAT.PNG",
+     "Other/New",
+     "Other/notes.TXT"
+    ]
+   },
+   {
+    "op": "createFolder",
+    "args": [
+     "Other",
+     " "
+    ],
+    "result": {
+     "success": false,
+     "error": "That name contains characters that aren't allowed.",
+     "path": ""
+    },
+    "canUndo": true,
+    "undoLabel": "Undo new folder 'New'",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/cat_one.png",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/CAT.PNG",
+     "Other/New",
+     "Other/notes.TXT"
+    ]
+   },
+   {
+    "op": "createFolder",
+    "args": [
+     "",
+     "x"
+    ],
+    "result": {
+     "success": false,
+     "error": "The current folder no longer exists.",
+     "path": ""
+    },
+    "canUndo": true,
+    "undoLabel": "Undo new folder 'New'",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/cat_one.png",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/CAT.PNG",
+     "Other/New",
+     "Other/notes.TXT"
+    ]
+   },
+   {
+    "op": "createFolder",
+    "args": [
+     "Missing",
+     "x"
+    ],
+    "result": {
+     "success": false,
+     "error": "The current folder no longer exists.",
+     "path": ""
+    },
+    "canUndo": true,
+    "undoLabel": "Undo new folder 'New'",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/cat_one.png",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/CAT.PNG",
+     "Other/New",
+     "Other/notes.TXT"
+    ]
+   },
+   {
+    "op": "moveItems",
+    "args": [
+     [
+      "Other/CAT.PNG",
+      "Other/notes.TXT"
+     ],
+     "Other/New"
+    ],
+    "result": {
+     "moved": 2,
+     "failed": 0,
+     "errors": [],
+     "pairs": [
+      [
+       "<B>\\Other\\CAT.PNG",
+       "<B>\\Other\\New\\CAT.PNG"
+      ],
+      [
+       "<B>\\Other\\notes.TXT",
+       "<B>\\Other\\New\\notes.TXT"
+      ]
+     ]
+    },
+    "canUndo": true,
+    "undoLabel": "Undo move of 2 items",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/cat_one.png",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/New",
+     "Other/New/CAT.PNG",
+     "Other/New/notes.TXT"
+    ]
+   },
+   {
+    "op": "renameItem",
+    "args": [
+     "Other/New/CAT.PNG",
+     "renamed.png"
+    ],
+    "result": {
+     "success": true,
+     "error": "",
+     "new_path": "<B>\\Other\\New\\renamed.png"
+    },
+    "canUndo": true,
+    "undoLabel": "Undo rename of 'CAT.PNG'",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/cat_one.png",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/New",
+     "Other/New/notes.TXT",
+     "Other/New/renamed.png"
+    ]
+   },
+   {
+    "op": "createFolder",
+    "args": [
+     "Other/New",
+     "Deep"
+    ],
+    "result": {
+     "success": true,
+     "error": "",
+     "path": "<B>\\Other\\New\\Deep"
+    },
+    "canUndo": true,
+    "undoLabel": "Undo new folder 'Deep'",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/cat_one.png",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/New",
+     "Other/New/Deep",
+     "Other/New/notes.TXT",
+     "Other/New/renamed.png"
+    ]
+   },
+   {
+    "op": "undo",
+    "args": [],
+    "result": {
+     "success": true,
+     "message": "Undid new folder 'Deep'"
+    },
+    "canUndo": true,
+    "undoLabel": "Undo rename of 'CAT.PNG'",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/cat_one.png",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/New",
+     "Other/New/notes.TXT",
+     "Other/New/renamed.png"
+    ]
+   },
+   {
+    "op": "undo",
+    "args": [],
+    "result": {
+     "success": true,
+     "message": "Undid rename of 'CAT.PNG'"
+    },
+    "canUndo": true,
+    "undoLabel": "Undo move of 2 items",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/cat_one.png",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/New",
+     "Other/New/CAT.PNG",
+     "Other/New/notes.TXT"
+    ]
+   },
+   {
+    "op": "undo",
+    "args": [],
+    "result": {
+     "success": true,
+     "message": "Undid move of 2 items"
+    },
+    "canUndo": true,
+    "undoLabel": "Undo new folder 'New'",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/cat_one.png",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/CAT.PNG",
+     "Other/New",
+     "Other/notes.TXT"
+    ]
+   },
+   {
+    "op": "createFolder",
+    "args": [
+     "Other",
+     "Holder"
+    ],
+    "result": {
+     "success": true,
+     "error": "",
+     "path": "<B>\\Other\\Holder"
+    },
+    "canUndo": true,
+    "undoLabel": "Undo new folder 'Holder'",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/cat_one.png",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/CAT.PNG",
+     "Other/Holder",
+     "Other/New",
+     "Other/notes.TXT"
+    ]
+   },
+   {
+    "op": "undo",
+    "args": [],
+    "result": {
+     "success": false,
+     "message": "Couldn't undo: 'Holder' isn't empty any more, so it was left in place"
+    },
+    "canUndo": true,
+    "undoLabel": "Undo new folder 'New'",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/cat_one.png",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/CAT.PNG",
+     "Other/Holder",
+     "Other/Holder/keep.txt",
+     "Other/New",
+     "Other/notes.TXT"
+    ]
+   },
+   {
+    "op": "undo",
+    "args": [],
+    "result": {
+     "success": true,
+     "message": "Undid new folder 'New'"
+    },
+    "canUndo": false,
+    "undoLabel": "",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/cat_one.png",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/CAT.PNG",
+     "Other/Holder",
+     "Other/Holder/keep.txt",
+     "Other/notes.TXT"
+    ]
+   },
+   {
+    "op": "undo",
+    "args": [],
+    "result": {
+     "success": false,
+     "message": "Nothing to undo."
+    },
+    "canUndo": false,
+    "undoLabel": "",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/cat_one.png",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/CAT.PNG",
+     "Other/Holder",
+     "Other/Holder/keep.txt",
+     "Other/notes.TXT"
+    ]
+   },
+   {
+    "op": "moveItems",
+    "args": [
+     [
+      "Artist/dog.jpg"
+     ],
+     "Other"
+    ],
+    "result": {
+     "moved": 1,
+     "failed": 0,
+     "errors": [],
+     "pairs": [
+      [
+       "<B>\\Artist\\dog.jpg",
+       "<B>\\Other\\dog.jpg"
+      ]
+     ]
+    },
+    "canUndo": true,
+    "undoLabel": "Undo move of 1 item",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/cat_one.png",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/CAT.PNG",
+     "Other/Holder",
+     "Other/Holder/keep.txt",
+     "Other/dog.jpg",
+     "Other/notes.TXT"
+    ]
+   },
+   {
+    "op": "undo",
+    "args": [],
+    "result": {
+     "success": false,
+     "message": "Couldn't undo: 'dog.jpg' already exists in its original place"
+    },
+    "canUndo": false,
+    "undoLabel": "",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/cat_one.png",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/CAT.PNG",
+     "Other/Holder",
+     "Other/Holder/keep.txt",
+     "Other/dog.jpg",
+     "Other/notes.TXT"
+    ]
+   },
+   {
+    "op": "moveItems",
+    "args": [
+     [
+      "Artist/cat_one.png"
+     ],
+     "Other"
+    ],
+    "result": {
+     "moved": 1,
+     "failed": 0,
+     "errors": [],
+     "pairs": [
+      [
+       "<B>\\Artist\\cat_one.png",
+       "<B>\\Other\\cat_one.png"
+      ]
+     ]
+    },
+    "canUndo": true,
+    "undoLabel": "Undo move of 1 item",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/CAT.PNG",
+     "Other/Holder",
+     "Other/Holder/keep.txt",
+     "Other/cat_one.png",
+     "Other/dog.jpg",
+     "Other/notes.TXT"
+    ]
+   },
+   {
+    "op": "undo",
+    "args": [],
+    "result": {
+     "success": false,
+     "message": "Couldn't undo: 'cat_one.png' is no longer there"
+    },
+    "canUndo": false,
+    "undoLabel": "",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/CAT.PNG",
+     "Other/Holder",
+     "Other/Holder/keep.txt",
+     "Other/dog.jpg",
+     "Other/notes.TXT"
+    ]
+   },
+   {
+    "op": "undo",
+    "args": [],
+    "result": {
+     "success": false,
+     "message": "Nothing to undo."
+    },
+    "canUndo": false,
+    "undoLabel": "",
+    "files": [
+     "Artist",
+     "Artist/Cat Folder",
+     "Artist/Cat Folder/inner.txt",
+     "Artist/Empty",
+     "Artist/Grouped",
+     "Artist/Grouped/Images",
+     "Artist/Grouped/Images/g1.png",
+     "Artist/Grouped/Other",
+     "Artist/Grouped/Other/post_info.txt",
+     "Artist/Post A",
+     "Artist/Post A/img1.png",
+     "Artist/Post A/img2.gif",
+     "Artist/Post A/post_info.txt",
+     "Artist/Shared",
+     "Artist/Shared/p1.png",
+     "Artist/Shared/p2.png",
+     "Artist/Shared/p3.mp4",
+     "Artist/Shared/post_info [1].txt",
+     "Artist/Shared/post_info [2].txt",
+     "Artist/dog.jpg",
+     "Artist/post_info.txt",
+     "Other",
+     "Other/CAT.PNG",
+     "Other/Holder",
+     "Other/Holder/keep.txt",
+     "Other/dog.jpg",
+     "Other/notes.TXT"
+    ]
+   },
+   {
+    "op": "count",
+    "args": [],
+    "result": 25,
+    "canUndo": true,
+    "undoLabel": "Undo new folder 'f26'",
+    "files": []
+   }
+  ]
+ }
+}
