@@ -656,32 +656,43 @@ fn options_table(v: &Value) -> HashMap<String, Arc<Options>> {
     v.as_object().map(|m| m.iter().map(|(k, o)| (k.clone(), Arc::new(Options::from_dict(o)))).collect()).unwrap_or_default()
 }
 
+/// The app's files ({"tasks": [...], "options": {"o1": {...}}}) with their states and settings
+fn incoming(msg: &Value) -> Vec<(Task, State, Option<Arc<Options>>)> {
+    let table = options_table(&msg["options"]);
+    let tasks = msg["tasks"].as_array().cloned().unwrap_or_default();
+    tasks
+        .into_iter()
+        .filter_map(|t| {
+            let task: Task = serde_json::from_value(t.clone()).ok()?;
+            let mut st = State::default();
+            let g = |k: &str| t.get(k).cloned().unwrap_or(Value::Null);
+            if let Some(x) = g("status").as_str() {
+                st.status = x.into();
+            }
+            st.error_msg = g("error_msg").as_str().unwrap_or("").into();
+            st.retry_count = g("retry_count").as_u64().unwrap_or(0) as u32;
+            st.downloaded_bytes = g("downloaded_bytes").as_u64().unwrap_or(0);
+            st.http_status = g("http_status").as_u64().unwrap_or(0) as u16;
+            let o = g("opt").as_str().and_then(|k| table.get(k).cloned());
+            Some((task, st, o))
+        })
+        .collect()
+}
+
+/// New files for the queue (the app's "queue_append" call: {"tasks", "options"}): added here, those
+/// already queued left out and save paths kept apart; the answer is what was added, as
+/// {"added": [[key, save path], ...]}, for the app's list to follow. Nothing is started.
+fn queue_append(args: &Value) -> Result<Value, String> {
+    let items = incoming(args).into_iter().map(|(t, st, o)| (t, Some(st), o)).collect();
+    let added = queue().add(items, None);
+    Ok(json!({"added": added}))
+}
+
 fn handle(msg: &Value) {
     let q = queue();
     let s = |k: &str| msg.get(k).and_then(Value::as_str).unwrap_or("").to_string();
     match msg.get("op").and_then(Value::as_str).unwrap_or("") {
-        "sync" => {
-            let table = options_table(&msg["options"]);
-            let tasks = msg["tasks"].as_array().cloned().unwrap_or_default();
-            let incoming: Vec<(Task, State, Option<Arc<Options>>)> = tasks
-                .into_iter()
-                .filter_map(|t| {
-                    let task: Task = serde_json::from_value(t.clone()).ok()?;
-                    let mut st = State::default();
-                    let g = |k: &str| t.get(k).cloned().unwrap_or(Value::Null);
-                    if let Some(x) = g("status").as_str() {
-                        st.status = x.into();
-                    }
-                    st.error_msg = g("error_msg").as_str().unwrap_or("").into();
-                    st.retry_count = g("retry_count").as_u64().unwrap_or(0) as u32;
-                    st.downloaded_bytes = g("downloaded_bytes").as_u64().unwrap_or(0);
-                    st.http_status = g("http_status").as_u64().unwrap_or(0) as u16;
-                    let o = g("opt").as_str().and_then(|k| table.get(k).cloned());
-                    Some((task, st, o))
-                })
-                .collect();
-            q.sync(incoming, msg["replace"].as_bool().unwrap_or(false));
-        }
+        "sync" => q.sync(incoming(msg), msg["replace"].as_bool().unwrap_or(false)),
         "start" => {
             link().archive.store(msg["archive"].as_bool().unwrap_or(false), Ordering::Relaxed);
             *link().archive_db.lock().unwrap() = msg["archive_db"].as_str().unwrap_or("").to_string();
@@ -730,6 +741,7 @@ fn handle(msg: &Value) {
             let args = &msg["args"];
             let out = match s("fn").as_str() {
                 "plan" => plan_call(id, args),
+                "queue_append" => queue_append(args),
                 "site" => site_call(id, args),
                 "watchlist_store" => crate::watchlist::store::call(args),
                 "watchlist" => crate::watchlist::entries::call(args),

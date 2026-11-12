@@ -279,6 +279,7 @@ class RustDownloader(FileDownloader):
         self._clean_cookie = ""
         self._resync = False                       # (Rust's copy was emptied: send the queue again)
         self._sync_lock = threading.Lock()
+        self._synced_on = None                     # (the connection this list last went over)
         self._plans: Dict[int, Any] = {}           # call id → "was this plan cancelled?"
         dl.status_listener = self._status_changed
         threading.Thread(target=self._flush_loop, name="rust-queue-flush", daemon=True).start()
@@ -329,6 +330,7 @@ class RustDownloader(FileDownloader):
             self._sync_now(replace)
 
     def _sync_now(self, replace: bool) -> None:
+        self._synced_on = id(self._link._sock)
         tasks = list(self.tasks)
         keys: Dict[int, str] = {}
         table: Dict[str, Any] = {}
@@ -358,6 +360,50 @@ class RustDownloader(FileDownloader):
             for k, t in dirty.items():
                 self._link.send({"op": "state", "key": k, "status": t.status, "error_msg": t.error_msg or "",
                                  "retry_count": int(getattr(t, "retry_count", 0) or 0)})
+
+    # ── Adding files: Rust's queue decides ──────────────────────────────────────
+
+    def append_tasks(self, new_tasks, options=None, cookie_str: str = "") -> int:
+        """New files go into Rust's queue, which leaves out those already queued and keeps save paths
+        apart (queue.rs add); this list takes its answer (the files it added, under the names it gave
+        them). Started here when idle, as before. Without the engine, the Python way."""
+        if not new_tasks:
+            return 0
+        if not self._link.connect():
+            return super().append_tasks(new_tasks, options, cookie_str)
+        new_tasks = list(new_tasks)
+        if options is not None:
+            for t in new_tasks:
+                if getattr(t, "options", None) is None:
+                    t.options = options
+                bid = getattr(t, "batch_id", "")
+                if bid:
+                    self.set_batch_options(bid, options)
+        with self._sync_lock:       # (an idle sync of the list without them would take them out again)
+            if self._synced_on != id(self._link._sock):
+                self._sync_now(replace=False)       # (Rust needs the queue to tell what's new)
+            keys: Dict[int, str] = {}
+            table: Dict[str, Any] = {}
+            payload = [self._payload(t, keys, table) for t in new_tasks]
+            ok, v = self._link.call("queue_append", {"tasks": payload, "options": table})
+            added = []
+            if ok:
+                by_key = {p["key"]: t for p, t in zip(payload, new_tasks)}
+                for key, path in (v or {}).get("added") or []:
+                    t = by_key.get(key)
+                    if t is None:
+                        continue
+                    if path and path != t.target_path:
+                        t.target_path = path
+                    self._by_key[key] = t
+                    added.append(t)
+                self.tasks.extend(added)
+        if not ok:
+            logger.debug(f"The download engine couldn't add the files ({v}); adding them the old way.", category="downloader")
+            return super().append_tasks(new_tasks, options, cookie_str)
+        if added and not self._is_running and options is not None:
+            self.start_download_queue(self.tasks, options, cookie_str)
+        return len(added)
 
     def _idle_sync_loop(self) -> None:
         """Between runs too, Rust has the queue as it is here (the window's pause / resume / cancel /
@@ -539,7 +585,7 @@ class RustDownloader(FileDownloader):
                      details=self._describe_run(options, cookie_str, sum(1 for t in self.tasks if t.status == "pending")))
 
         self._finished.clear()
-        self._sync(replace=True)
+        self._sync(replace=False)           # (Rust's list is the queue: its files keep their states)
         archive = bool(self.archive_manager and self.archive_manager.is_enabled)
         self._link.send({"op": "start", "options": options.to_dict(), "archive": archive, "workers": self._mw,
                          "archive_db": self._archive_db()})

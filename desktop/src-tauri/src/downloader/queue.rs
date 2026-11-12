@@ -4,7 +4,7 @@
 //! selected files), and the overall speed, ETA and progress the window shows.
 //! A port of FileDownloader's queue and run loop (core/downloader.py).
 
-use super::fetch::{self, format_speed, Cell, Ctl, Hooks, Item};
+use super::fetch::{self, format_speed, Cell, Ctl, Hooks, Item, State};
 use super::filters::Options;
 use super::plan::{write_post_info, Task};
 use super::py::{basename, dirname, splitext};
@@ -230,8 +230,23 @@ impl Queue {
     /// Adds files to the queue (without ones already in it) and starts it when idle and given
     /// settings. Returns how many were added.
     pub fn append(self: &Arc<Self>, tasks: Vec<Task>, options: Option<Arc<Options>>) -> usize {
+        let items = tasks.into_iter().map(|t| (t, None, None)).collect();
+        let n = self.add(items, options.clone()).len();
+        if n > 0 && !self.is_running() {
+            if let Some(o) = options {
+                self.start(o);
+            }
+        }
+        n
+    }
+
+    /// Adds files to the queue, nothing started: those already in it (same link and save path, or
+    /// same file id) are left out, the others' save paths kept apart from every other file's. Each
+    /// may come with its own state and settings; `options` are the settings of the ones without.
+    /// Returns what was added: (key, save path).
+    pub fn add(&self, tasks: Vec<(Task, Option<State>, Option<Arc<Options>>)>, options: Option<Arc<Options>>) -> Vec<(String, String)> {
         if tasks.is_empty() {
-            return 0;
+            return Vec::new();
         }
         let new: Vec<Cell> = {
             let items = self.items.lock().unwrap();
@@ -244,7 +259,7 @@ impl Queue {
                 }
             }
             let mut out = Vec::new();
-            for t in tasks {
+            for (t, st, o) in tasks {
                 let s1 = format!("{}\u{1}{}", t.url, t.target_path);
                 if sigs.contains(&s1) || (!t.file_id.is_empty() && sigs.contains(&t.file_id)) {
                     continue;
@@ -253,13 +268,23 @@ impl Queue {
                 if !t.file_id.is_empty() {
                     sigs.insert(t.file_id.clone());
                 }
-                out.push(fetch::cell(t));
+                let c = fetch::cell(t);
+                {
+                    let mut it = c.lock().unwrap();
+                    if let Some(st) = st {
+                        it.st = st;
+                    }
+                    if o.is_some() {
+                        it.options = o;
+                    }
+                }
+                out.push(c);
             }
             out
         };
         if new.is_empty() {
             self.hooks.log("info", "All new tasks were duplicates and already exist in the queue.");
-            return 0;
+            return Vec::new();
         }
         Self::keep_paths_apart(&new, &self.cells());
         if let Some(o) = &options {
@@ -273,15 +298,15 @@ impl Queue {
                 self.set_batch_options(&b, o.clone());
             }
         }
+        let added: Vec<(String, String)> = new.iter().map(|c| {
+            let it = c.lock().unwrap();
+            (it.task.key.clone(), it.task.target_path.clone())
+        }).collect();
         let n = new.len();
         self.items.lock().unwrap().extend(new);
         self.hooks.log("info", &format!("Appended {n} new tasks to download queue (total in queue: {}).", self.items.lock().unwrap().len()));
-        if !self.is_running() {
-            if let Some(o) = options {
-                self.start(o);
-            }
-        }
-        n
+        self.rescan();
+        added
     }
 
     /// Replaces the whole queue (a restored session)
