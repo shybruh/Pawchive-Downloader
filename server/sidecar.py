@@ -399,18 +399,15 @@ class Hub(QObject):
 
 def build_engine():
     from bridge.app_bridge import AppBridge
-    from bridge.gallery_updates import GalleryUpdates
 
     app_bridge = AppBridge()
 
-    wl = getattr(app_bridge, "_watchlist_manager", None)
     # Sub-bridges first, so they keep their short names when appBridge's properties reach them again
     objects = {
         "decompressorBridge": app_bridge.decompressorBridge,
         "telegramBridge": app_bridge.telegramBridge,
         "appBridge": app_bridge,
         "linkVault": app_bridge.link_vault,
-        "galleryUpdates": GalleryUpdates(app_bridge, wl),
     }
     return app_bridge, objects
 
