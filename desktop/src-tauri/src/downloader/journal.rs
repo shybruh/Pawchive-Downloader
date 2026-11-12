@@ -12,7 +12,10 @@
 //!
 //! Checked against the Python journal by tests/fixtures/journal.json (tools/golden_journal.py).
 
-use super::fetch::Cell;
+use super::fetch::{Cell, State};
+use super::filters::Options;
+use super::plan::Task;
+use std::sync::Arc;
 use super::py::{basename, dirname};
 use rusqlite::{params, Connection};
 use serde_json::{json, Map, Value};
@@ -104,7 +107,7 @@ pub fn platform(service: &str, url: &str) -> String {
 }
 
 /// DownloadTask.to_dict() of a queued file
-fn task_dict(c: &Cell) -> Map<String, Value> {
+pub fn task_dict(c: &Cell) -> Map<String, Value> {
     let it = c.lock().unwrap();
     let (t, st) = (&it.task, &it.st);
     let mut m = Map::new();
@@ -304,6 +307,115 @@ pub fn clear(path: &str, generation: u64) -> bool {
     had
 }
 
+// ── The failed files saved for Retry Failed (retry_spillover.json, next to the journal) ───────
+
+fn config_dir() -> &'static Mutex<String> {
+    static D: OnceLock<Mutex<String>> = OnceLock::new();
+    D.get_or_init(Default::default)
+}
+
+/// The app's settings folder, from the journal's path (the app names it in every journal call)
+pub fn remember(journal_path: &str) {
+    if !journal_path.is_empty() {
+        *config_dir().lock().unwrap() = dirname(journal_path);
+    }
+}
+
+/// A path as this system names it (the app translates other systems' paths: those are left to it)
+fn native(p: &str) -> bool {
+    if cfg!(windows) {
+        let b = p.as_bytes();
+        (b.len() >= 3 && b[0].is_ascii_alphabetic() && b[1] == b':' && (b[2] == b'\\' || b[2] == b'/')) || p.starts_with(r"\\")
+    } else {
+        p.starts_with('/')
+    }
+}
+
+/// A file of the saved list (DownloadTask.from_dict) as a queue file: None when its save path
+/// names another system's folder
+pub fn task_from_dict(d: &Value) -> Option<(Task, State, Option<Arc<Options>>)> {
+    let s = |k: &str| {
+        d.get(k)
+            .filter(|v| !v.is_null())
+            .map(|v| match v {
+                Value::String(x) => x.clone(),
+                other => other.to_string(),
+            })
+            .unwrap_or_default()
+    };
+    let n = |k: &str| {
+        d.get(k)
+            .and_then(|v| v.as_i64().or_else(|| v.as_f64().map(|f| f as i64)).or_else(|| v.as_str().and_then(|x| x.parse().ok())))
+            .unwrap_or(0)
+    };
+    let b = |k: &str| d.get(k).is_some_and(super::filters::truthy);
+    let target = s("target_path");
+    if !native(&target) {
+        return None;
+    }
+    let (service, creator, post_id) = (s("service"), s("creator_name"), s("post_id"));
+    let batch = s("batch_id");
+    let batch = if !batch.is_empty() {
+        batch
+    } else if !service.is_empty() || !creator.is_empty() || !post_id.is_empty() {
+        format!("{service}_{creator}_{post_id}").trim_matches('_').to_string()
+    } else {
+        "batch_default".into()
+    };
+    let task = Task {
+        url: s("url"),
+        target_path: target,
+        post_title: s("post_title"),
+        creator_name: creator,
+        service,
+        post_id,
+        file_id: s("file_id"),
+        file_size: n("file_size"),
+        expected_sha256: s("expected_sha256"),
+        is_ytdlp: b("is_ytdlp"),
+        batch_id: batch,
+        post_url: s("post_url"),
+        post_date: s("post_date"),
+        user_id: s("user_id"),
+        fallback_urls: d
+            .get("fallback_urls")
+            .and_then(Value::as_array)
+            .map(|a| a.iter().filter_map(|u| u.as_str().map(str::to_string)).collect())
+            .unwrap_or_default(),
+        post_info_path: String::new(),
+        is_telegram: b("is_telegram"),
+        telegram_channel_id: json!(s("telegram_channel_id")),
+        telegram_message_id: json!(n("telegram_message_id")),
+        key: String::new(),
+    };
+    let status = s("status");
+    let st = State {
+        status: if status.is_empty() { "pending".into() } else { status },
+        error_msg: s("error_msg"),
+        retry_count: n("retry_count").max(0) as u32,
+        downloaded_bytes: n("downloaded_bytes").max(0) as u64,
+        used_preview: b("used_preview"),
+        ..State::default()
+    };
+    let o = d.get("options").filter(|o| o.as_object().is_some_and(|m| !m.is_empty())).map(|o| Arc::new(Options::from_dict(o)));
+    Some((task, st, o))
+}
+
+/// The failed files saved for Retry Failed: None when they can't be read here (no settings folder
+/// known yet, an unreadable file, or files saved under another system's paths)
+pub fn saved_failed() -> Option<Vec<(Task, State, Option<Arc<Options>>)>> {
+    let dir = config_dir().lock().unwrap().clone();
+    if dir.is_empty() {
+        return None;
+    }
+    let path = std::path::Path::new(&dir).join("retry_spillover.json");
+    if !path.exists() {
+        return Some(Vec::new());
+    }
+    let list: Value = serde_json::from_str(&std::fs::read_to_string(&path).ok()?).ok()?;
+    list.as_array()?.iter().filter(|d| d.is_object()).map(task_from_dict).collect()
+}
+
 // ── Reading it back (QueueJournal.has_unfinished / summary / load) ───────────────────────────
 
 /// Files that never got their turn
@@ -488,6 +600,22 @@ mod tests {
         assert_eq!(got.len(), want.len());
         for (g, w) in got.iter().zip(want) {
             assert_eq!(g, w);
+        }
+        // A file saved for Retry Failed (its to_dict) comes back as it was
+        for c in &cells {
+            let d = Value::Object(task_dict(c));
+            match task_from_dict(&d) {
+                Some((t, st, o)) => {
+                    let back = fetch::cell(t);
+                    {
+                        let mut it = back.lock().unwrap();
+                        it.st = st;
+                        it.options = o;
+                    }
+                    assert_eq!(Value::Object(task_dict(&back)), d);
+                }
+                None => assert!(c.lock().unwrap().task.target_path.is_empty() || !cfg!(windows)),
+            }
         }
         // Read back as the Python journal reads it
         for sz in fx["sizes"].as_array().unwrap() {

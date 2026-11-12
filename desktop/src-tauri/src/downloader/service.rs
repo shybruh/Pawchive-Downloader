@@ -221,10 +221,7 @@ impl QueueHooks for Remote {
         self.0.send(json!({"t": "discard_recovery"}));
     }
     fn is_cloud_link(&self, url: &str) -> bool {
-        let u = url.to_lowercase();
-        ["mega.nz", "mega.co.nz", "mega.io", "drive.google.com", "docs.google.com", "drive.usercontent.google.com", "dropbox.com", "gofile.io"]
-            .iter()
-            .any(|h| u.contains(h))
+        cloud_link(url)
     }
     fn log(&self, level: &str, message: &str) {
         self.0.send(json!({"t": "log", "level": level, "message": message}));
@@ -470,6 +467,23 @@ pub fn queue_window(method: &str, args: &[Value]) -> Option<Value> {
             }
             return Some(retried(method, &id, n, Some(&id)));
         }
+        // A file no longer in the queue: from the failed files saved for Retry Failed
+        "retryTaskById" | "retrySingleTask" if !id.is_empty() && !q.has_key(&id) => {
+            let picked: Vec<_> = super::journal::saved_failed()?
+                .into_iter()
+                .filter(|(t, _, _)| Queue::task_key(t) == id && !cloud_link(&t.url))
+                .collect();
+            if picked.is_empty() {
+                return None;
+            }
+            let cells = q.adopt(picked);
+            let keys = [id.clone()];
+            let n = q.retry_quiet(Some(&keys), None, skip_404);
+            if n > 0 {
+                log_app("info", &format!("Retrying {n} selected task(s)..."), "downloader", "");
+            }
+            return Some(retried_restored(method, &id, n, &cells));
+        }
         "retryTaskById" | "retrySingleTask" if q.has_key(&id) && !q.is_cloud_file(&id) => {
             let keys = [id.clone()];
             let n = q.retry_quiet(Some(&keys), None, skip_404);
@@ -479,16 +493,30 @@ pub fn queue_window(method: &str, args: &[Value]) -> Option<Value> {
             return Some(retried(method, &id, n, None));
         }
         "retryFailed" => {
-            let (n, any) = q.retry_failed_cells(skip_404, q.is_running(), 5, true, true);
+            let (mut n, mut any) = q.retry_failed_cells(skip_404, q.is_running(), 5, true, true);
+            let mut cells = Vec::new();
             if !any {
-                return None;
+                // Nothing failed in the queue: the failed files saved for Retry Failed come back to it
+                // (cloud links are the app's)
+                let saved: Vec<_> = super::journal::saved_failed()?
+                    .into_iter()
+                    .filter(|(t, _, _)| !cloud_link(&t.url) && !q.has_key(&Queue::task_key(t)))
+                    .collect();
+                if saved.is_empty() {
+                    return None;
+                }
+                cells = q.adopt(saved);
+                (n, any) = q.retry_failed_cells(skip_404, q.is_running(), 5, true, true);
+                if !any {
+                    return Some(retried_restored(method, &id, 0, &cells));
+                }
             }
             log_app("info", &if n > 0 {
                 format!("Retrying {n} failed task(s)...")
             } else {
                 "Every failed file reached the retry limit (5); they stay in the Retry Failed list.".to_string()
             }, "downloader", "");
-            return Some(retried(method, &id, n, None));
+            return Some(if cells.is_empty() { retried(method, &id, n, None) } else { retried_restored(method, &id, n, &cells) });
         }
         // Clear failed (all, or the ones picked): gone from the engine's list; the app takes them
         // out of its own and of the failed files saved for Retry Failed
@@ -565,6 +593,30 @@ fn retried(method: &str, id: &str, n: usize, batch: Option<&str>) -> Value {
     let start = !q.is_running() && q.has_waiting(batch);
     link().note("queue_action", json!([method, id, {"n": n, "start": start}]));
     Value::Null
+}
+
+/// The same for files put back from the saved list: the app takes them into its own (their keys
+/// and how they are now)
+fn retried_restored(method: &str, id: &str, n: usize, cells: &[Cell]) -> Value {
+    let q = queue();
+    let restored: Vec<Value> = cells
+        .iter()
+        .map(|c| {
+            let key = c.lock().unwrap().task.key.clone();      // (released before task_dict locks it)
+            json!([key, super::journal::task_dict(c)])
+        })
+        .collect();
+    let start = !q.is_running() && q.has_waiting(None);
+    link().note("queue_action", json!([method, id, {"n": n, "start": start, "restored": restored}]));
+    Value::Null
+}
+
+/// A cloud host's link (MEGA, Drive, Dropbox, GoFile): the app downloads those
+fn cloud_link(url: &str) -> bool {
+    let u = url.to_lowercase();
+    ["mega.nz", "mega.co.nz", "mega.io", "drive.google.com", "docs.google.com", "drive.usercontent.google.com", "dropbox.com", "gofile.io"]
+        .iter()
+        .any(|h| u.contains(h))
 }
 
 pub fn note_app(f: &str, args: Value) {
@@ -767,6 +819,10 @@ fn handle(msg: &Value) {
         "call" => {
             let id = msg["id"].as_u64().unwrap_or(0);
             let args = &msg["args"];
+            if s("fn").starts_with("journal_") {
+                // (the settings folder, where the failed files for Retry Failed are saved too)
+                super::journal::remember(args["path"].as_str().unwrap_or(""));
+            }
             let out = match s("fn").as_str() {
                 "plan" => plan_call(id, args),
                 "queue_append" => queue_append(args),

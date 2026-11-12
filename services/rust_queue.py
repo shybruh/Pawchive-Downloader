@@ -235,7 +235,8 @@ class _Link:
             for line in f:
                 try:
                     msg = json.loads(line)
-                except ValueError:
+                except ValueError as e:
+                    logger.debug(f"A message from the download engine couldn't be read ({e}): {line[:200]}", category="downloader")
                     continue
                 try:
                     if not self._handled_here(msg):
@@ -377,6 +378,25 @@ class RustDownloader(FileDownloader):
         self._by_key = {_key(t): t for t in order}
         self._tasks = order
         return True
+
+    def adopt(self, restored) -> list:
+        """Files Rust put back in its list (the failed files saved for Retry Failed): [[key, file as
+        DownloadTask.to_dict], ...] taken into this copy too; their tasks"""
+        from core.downloader import DownloadTask
+        out = []
+        for key, d in restored or []:
+            if key in self._by_key:
+                continue
+            try:
+                t = DownloadTask.from_dict(d)
+            except Exception as e:
+                logger.debug(f"A file put back by the download engine couldn't be read ({e}).", category="downloader")
+                continue
+            t.__dict__["_rkey"] = key
+            self._by_key[key] = t
+            out.append(t)
+        self._tasks = list(self._tasks) + out
+        return out
 
     def forget(self, keys) -> int:
         """Files Rust took out of its list (Clear failed): taken out of this copy too"""

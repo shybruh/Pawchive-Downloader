@@ -791,6 +791,21 @@ impl Queue {
             Self::task_key(&it.task) == key && self.hooks.is_cloud_link(&it.task.url)
         })
     }
+/// Files put back in the queue as they were (the failed files saved for Retry Failed): each
+    /// gets a key of its own; nothing is started. Their cells.
+    pub fn adopt(&self, items: Vec<(Task, State, Option<Arc<Options>>)>) -> Vec<Cell> {
+        static N: std::sync::atomic::AtomicU64 = std::sync::atomic::AtomicU64::new(0);
+        let cells: Vec<Cell> = items
+            .into_iter()
+            .map(|(mut t, st, o)| {
+                t.key = format!("s{}", N.fetch_add(1, Ordering::Relaxed) + 1);
+                Arc::new(Mutex::new(Item { task: t, st, options: o }))
+            })
+            .collect();
+        self.items.lock().unwrap().extend(cells.iter().cloned());
+        cells
+    }
+
     pub fn has_key(&self, key: &str) -> bool {
         self.cells().iter().any(|c| Self::task_key(&c.lock().unwrap().task) == key)
     }

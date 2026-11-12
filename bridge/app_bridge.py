@@ -4713,7 +4713,18 @@ class AppBridge(QObject):
         info = info or {}
 
         def run():
+            try:
+                act()
+            except Exception as e:
+                logger.error(f"Couldn't follow the download engine's {method}: {e}", category="queue")
+
+        def act():
             qm, d = self._queue_model, self.downloader
+            if info.get("restored") and hasattr(d, "adopt"):
+                # (failed files saved for Retry Failed, put back in the engine's queue for the retry)
+                back = d.adopt(info["restored"])
+                if back:
+                    qm.addTasks(back)
             if method in ("pauseBatch", "resumeBatch", "cancelBatch", "retryBatch"):
                 paused = method == "pauseBatch"
                 for m in (qm, self._active_queue_model):
