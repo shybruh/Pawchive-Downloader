@@ -772,6 +772,44 @@ fn probe_all(id: u64, path: &str, creator: Option<&str>) -> Result<Value, String
     Ok(json!({"done": n, "total": total, "revision": g.revision}))
 }
 
+/// Posts read for their links and passwords (LinkExtractor.extract_post_vault_record; with
+/// "cross", the posts they point to as well) and saved: {"posts", "creator_name", "domain",
+/// "service", "user_id", "cross", "site"} → {"new", "records", "cancelled"}; progress notes
+/// {"done", "total", "links"} every 10 posts
+fn collect(id: u64, path: &str, a: &Value) -> Result<Value, String> {
+    let posts = a["posts"].as_array().cloned().unwrap_or_default();
+    let st = |k: &str| a[k].as_str().unwrap_or("").to_string();
+    let (domain, service, uid) = (st("domain"), st("service"), st("user_id"));
+    let site = a["cross"].as_bool().unwrap_or(false).then(|| service::site_client(&a["site"]));
+    let cancel = service::cancel_flag(id);
+    let logx = |level: &str, msg: &str| service::log_app(level, msg, "extractor", "");
+    let mut records = Vec::new();
+    let mut links = 0;
+    for (i, p) in posts.iter().enumerate() {
+        if cancel.load(Ordering::Relaxed) {
+            return Ok(json!({"cancelled": true, "new": 0, "records": []}));
+        }
+        let r = crate::downloader::extract::post_vault_record(
+            p, site.as_ref().map(|s| s as &dyn crate::downloader::extract::PostSource), &domain, &service, &uid, &logx);
+        let n = r.get("links").and_then(Value::as_array).map_or(0, Vec::len);
+        if n > 0 {
+            links += n;
+            records.push(r);
+        }
+        if (i + 1) % 10 == 0 || i + 1 == posts.len() {
+            service::progress_value(id, json!({"done": i + 1, "total": posts.len(), "links": links}));
+        }
+    }
+    if cancel.load(Ordering::Relaxed) {
+        return Ok(json!({"cancelled": true, "new": 0, "records": []}));
+    }
+    let v = vault(path)?;
+    let mut g = v.lock().unwrap();
+    let name = { let n = st("creator_name"); if n.is_empty() { uid.clone() } else { n } };
+    let new = if records.is_empty() { 0 } else { g.harvest(&name, &service, &uid, &records) };
+    Ok(json!({"result": {"new": new, "records": records, "cancelled": false}, "revision": g.revision}))
+}
+
 /// Call "vault": {"op", "path", …} → the op's answer, with the vault's revision (the app reloads
 /// its copy when it changed)
 pub fn call(id: u64, a: &Value) -> Result<Value, String> {
@@ -779,6 +817,10 @@ pub fn call(id: u64, a: &Value) -> Result<Value, String> {
     let op = a["op"].as_str().unwrap_or("");
     if op == "probe" {
         return probe_all(id, path, a["creator"].as_str().filter(|c| !c.is_empty()));
+    }
+    if op == "collect" {
+        let r = collect(id, path, a)?;
+        return Ok(if r.get("result").is_some() { r } else { json!({"result": r}) });
     }
     let v = vault(path)?;
     let mut g = v.lock().unwrap();

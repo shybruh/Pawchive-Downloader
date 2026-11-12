@@ -74,6 +74,38 @@ POSTS = [
     {},
 ]
 
+VAULT_POSTS = [
+    {"id": 7, "title": "  Pack  ", "published": "2026-01-02T00:00:00", "content": "<p>Get it: https://mega.nz/file/AAA#key<br>Password: hunter2</p>"
+     "<p>Mirror https://gofile.io/d/xyz pw: other1</p>", "embed": {"url": "https://www.youtube.com/watch?v=abc"}},
+    {"post_id": "9", "added": "2025-05-05", "description": "no links here, pass: lonely", "post_url": "https://x/p/9"},
+    {"edited": "2024", "caption": "https://pixeldrain.com/u/qq and https://pixeldrain.com/u/qq again", "url": "https://x/u"},
+    "not a post",
+]
+
+# Posts pointing to other posts: the one-hop look at them (the target post and its creator's comments)
+SITE = {
+    "posts": {"555": {"id": "555", "user": "42", "title": "Master post", "content": "All files: https://mega.nz/folder/F1#k2 password: master9",
+                      "description": ""},
+              "666": {"id": "666", "user": "42", "title": "Rules", "content": "nothing", "description": ""}},
+    "comments": {"555": [{"commenter": "42", "content": "backup https://dropbox.com/s/zz"}, {"commenter": "99", "content": "https://spam.example/x"}],
+                 "666": [{"user": "42", "content": "pw for all: shared7 https://catbox.moe/q.zip"}]},
+}
+
+
+class _Site:
+    def fetch_single_post(self, parsed):
+        return SITE["posts"].get(str(parsed.post_id))
+
+    def fetch_post_comments(self, domain, service, user_id, post_id):
+        return SITE["comments"].get(str(post_id), [])
+
+
+CROSS_POSTS = [
+    {"id": "100", "title": "See", "content": "Links in https://pawchive.pw/patreon/user/42/post/555 and https://pawchive.pw/patreon/user/42/post/555 "
+     "and https://pawchive.pw/patreon/user/42/post/100 own https://mega.nz/file/X#y", "user": "42"},
+    {"id": "101", "content": "https://www.patreon.com/posts/rules-666 https://pawchive.pw/patreon/user/42/post/404", "user_id": "42"},
+]
+
 NAMES = [
     "Mya2v10.png", "Mya2.png", "Mya2v2.png", "page 9.jpg", "page_10.jpg", "page-11.jpg", "一枚目.png", "二枚目.png", "十枚目.png",
     "Ａ２.png", "a2.png", "étude.png", "etude.png", "й.png", "и.png", "", "  ", "cover_.jpg", "cover.jpg", "Vol. 2", ".hidden",
@@ -102,6 +134,14 @@ def main():
     for post in POSTS:
         cases.append({"fn": "links_from_post", "args": {"post": post}, "result": LE.extract_links_from_post(post)})
         cases.append({"fn": "embed_urls", "args": {"post": post}, "result": LE.extract_embed_urls(post)})
+    # Link Vault records (with a made-up site for the posts they point to)
+    for post in POSTS + VAULT_POSTS:
+        for where in (("pawchive.pw", "patreon", "42"), ("", "", "")):
+            cases.append({"fn": "post_vault_record", "args": {"post": post, "where": list(where)},
+                          "result": LE.extract_post_vault_record(post, None, *where)})
+    for post in CROSS_POSTS:
+        cases.append({"fn": "post_vault_record", "args": {"post": post, "where": ["pawchive.pw", "patreon", "42"], "site": SITE},
+                      "result": LE.extract_post_vault_record(post, _Site(), "pawchive.pw", "patreon", "42")})
     for order in ["posted", "reversed", "name", "NAME ", "bogus"]:
         cases.append({"fn": "order_files", "args": {"names": NAMES, "order": order}, "result": order_files(NAMES, order, lambda n: n)})
     # Pairwise comparisons pin down the sort key itself

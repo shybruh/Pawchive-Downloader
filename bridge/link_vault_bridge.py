@@ -245,6 +245,38 @@ class LinkVaultBridge(QObject):
                     self.harvestFinished.emit(True, creator_name, 0, 0)
                     return
 
+                vm = _vault()
+                site = None
+                try:
+                    from services.rust_sites import RustApiClient
+                    if isinstance(api, RustApiClient):
+                        site = {"cookie": api.cookie_string or "", "user_agent": api.user_agent or "", "proxy": api.proxy_url or ""}
+                except Exception:
+                    pass
+
+                def _progress(v, *rest):
+                    if isinstance(v, dict) and "done" in v:
+                        self._harvest_status = f"Processed {v['done']}/{v.get('total', len(posts))} posts ({v.get('links', 0)} links found)"
+                        self.changed.emit()
+                ok, r = (vm._rust("collect", progress=_progress, cancelled=self._harvest_cancel.is_set, posts=posts,
+                                  creator_name=creator_name, domain=parsed.domain, service=parsed.service,
+                                  user_id=parsed.user_id, cross=True, site=site)
+                         if site is not None else (False, None))
+                if ok and isinstance(r, dict):
+                    if r.get("cancelled") or self._harvest_cancel.is_set():
+                        logger.warning(f"Link vault: stopped while reading links of {creator_name}.", category="vault")
+                        self.harvestFinished.emit(False, creator_name, 0, len(posts))
+                        return
+                    new_links = int(r.get("new") or 0)
+                    self.changed.emit()
+                    if probeHealth and new_links > 0 and not self._harvest_cancel.is_set():
+                        self._harvest_status = f"Probing links for {creator_name}..."
+                        self.changed.emit()
+                        self._probe(cancel_event=self._harvest_cancel, creator_key=creator_key)
+                    logger.success(f"Link vault: {creator_name} done ({new_links} new links from {len(posts)} posts).", category="vault")
+                    self.harvestFinished.emit(True, creator_name, new_links, len(posts))
+                    return
+
                 harvested, total_links = [], 0
                 for idx, p in enumerate(posts):
                     if self._harvest_cancel.is_set():
@@ -302,6 +334,15 @@ class LinkVaultBridge(QObject):
 
         def _worker():
             try:
+                ok, r = _vault()._rust("collect", posts=posts_copy, creator_name=creator_name or user_id, domain=domain,
+                                       service=service, user_id=user_id, cross=False)
+                if ok and isinstance(r, dict):
+                    harvested, new_links = list(r.get("records") or []), int(r.get("new") or 0)
+                    if new_links > 0:
+                        logger.success(f"Link vault: saved {new_links} new link(s) for '{creator_name or user_id}'.", category="vault")
+                        self.changed.emit()
+                    self._record_links(harvested, archive, service, user_id, creator_name)
+                    return
                 harvested = []
                 for p in posts_copy:
                     rec = LinkExtractor.extract_post_vault_record(
@@ -316,19 +357,24 @@ class LinkVaultBridge(QObject):
                     logger.success(f"Link vault: saved {new_links} new link(s) for '{creator_name or user_id}'.", category="vault")
                     self.changed.emit()
 
-                if archive and archive.is_enabled:
-                    recorded = 0
-                    for hp in harvested:
-                        p_id, p_title = str(hp.get("post_id") or ""), str(hp.get("post_title") or "")
-                        for lk in hp.get("links", []):
-                            u = lk.get("url")
-                            if u and archive.record_link(service=service, creator_id=user_id, post_id=p_id, url=u,
-                                                         creator_name=creator_name or user_id, post_title=p_title,
-                                                         link_title=lk.get("title") or u):
-                                recorded += 1
-                    if recorded:
-                        self._app.archiveUpdated.emit()
+                self._record_links(harvested, archive, service, user_id, creator_name)
             except Exception as e:
                 logger.debug(f"Link vault auto-harvest error: {e}", category="vault")
 
         threading.Thread(target=_worker, daemon=True).start()
+
+    def _record_links(self, harvested, archive, service, user_id, creator_name) -> None:
+        """The collected links into the download archive, when it's on"""
+        if not (archive and archive.is_enabled):
+            return
+        recorded = 0
+        for hp in harvested:
+            p_id, p_title = str(hp.get("post_id") or ""), str(hp.get("post_title") or "")
+            for lk in hp.get("links", []):
+                u = lk.get("url")
+                if u and archive.record_link(service=service, creator_id=user_id, post_id=p_id, url=u,
+                                             creator_name=creator_name or user_id, post_title=p_title,
+                                             link_title=lk.get("title") or u):
+                    recorded += 1
+        if recorded:
+            self._app.archiveUpdated.emit()

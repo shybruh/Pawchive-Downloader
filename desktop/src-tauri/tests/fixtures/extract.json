@@ -798,14 +798,14 @@
    "s": "raw https://gofile.io/d/AbCd, and //pixeldrain.com/u/xyz plus mega.nz/folder/qq#zz and dropbox.com/s/abc"
   },
   "result": {
+   "gofile": [
+    "https://gofile.io/d/AbCd"
+   ],
    "pixeldrain": [
     "https://pixeldrain.com/u/xyz"
    ],
    "mega": [
     "https://mega.nz/folder/qq#zz"
-   ],
-   "gofile": [
-    "https://gofile.io/d/AbCd"
    ],
    "dropbox": [
     "https://dropbox.com/s/abc"
@@ -868,11 +868,11 @@
    "s": "defanged hxxps://mega[.]nz/file/abc and h**ps://pixeldrain(dot)com/u/zz"
   },
   "result": {
-   "pixeldrain": [
-    "https://pixeldrain.com/u/zz"
-   ],
    "mega": [
     "https://mega.nz/file/abc"
+   ],
+   "pixeldrain": [
+    "https://pixeldrain.com/u/zz"
    ]
   }
  },
@@ -965,12 +965,12 @@
    "s": "<iframe src=\"https://www.youtube.com/embed/abc123\"></iframe> https://bunkr.si/a/qwe https://balbums.st/a/z"
   },
   "result": {
+   "other": [
+    "https://www.youtube.com/embed/abc123"
+   ],
    "bunkr": [
     "https://balbums.st/a/z",
     "https://bunkr.si/a/qwe"
-   ],
-   "other": [
-    "https://www.youtube.com/embed/abc123"
    ]
   }
  },
@@ -1023,32 +1023,32 @@
    "s": "https://1fichier.com/?abc https://terabox.com/s/1x https://workupload.com/file/x https://qiwi.gg/file/y https://catbox.moe/a.zip https://erome.com/a/abc https://nhentai.net/g/1/ https://saint2.su/d/x https://simpcity.su/t/x"
   },
   "result": {
-   "qiwi": [
-    "https://qiwi.gg/file/y"
-   ],
-   "saint2": [
-    "https://saint2.su/d/x"
-   ],
-   "1fichier": [
-    "https://1fichier.com/?abc"
-   ],
-   "nhentai": [
-    "https://nhentai.net/g/1/"
-   ],
-   "terabox": [
-    "https://terabox.com/s/1x"
-   ],
-   "erome": [
-    "https://erome.com/a/abc"
-   ],
    "catbox": [
     "https://catbox.moe/a.zip"
    ],
    "workupload": [
     "https://workupload.com/file/x"
    ],
+   "erome": [
+    "https://erome.com/a/abc"
+   ],
    "simpcity": [
     "https://simpcity.su/t/x"
+   ],
+   "nhentai": [
+    "https://nhentai.net/g/1/"
+   ],
+   "saint2": [
+    "https://saint2.su/d/x"
+   ],
+   "qiwi": [
+    "https://qiwi.gg/file/y"
+   ],
+   "1fichier": [
+    "https://1fichier.com/?abc"
+   ],
+   "terabox": [
+    "https://terabox.com/s/1x"
    ]
   }
  },
@@ -2847,32 +2847,32 @@
    }
   },
   "result": {
-   "dropbox": [
-    "https://dropbox.com/s/q"
-   ],
-   "pixeldrain": [
-    "https://pixeldrain.com/u/c"
-   ],
-   "gdrive": [
-    "https://drive.google.com/file/d/m"
-   ],
-   "erome": [
-    "https://erome.com/a/s"
-   ],
-   "other": [
-    "https://www.youtube.com/watch?v=xyz"
-   ],
    "mega": [
     "https://mega.nz/file/t#k"
    ],
    "mediafire": [
     "https://mediafire.com/file/a/b"
    ],
+   "other": [
+    "https://www.youtube.com/watch?v=xyz"
+   ],
+   "pixeldrain": [
+    "https://pixeldrain.com/u/c"
+   ],
    "catbox": [
     "https://catbox.moe/z.zip"
    ],
+   "erome": [
+    "https://erome.com/a/s"
+   ],
    "gofile": [
     "https://gofile.io/d/abc"
+   ],
+   "gdrive": [
+    "https://drive.google.com/file/d/m"
+   ],
+   "dropbox": [
+    "https://dropbox.com/s/q"
    ]
   }
  },
@@ -3018,6 +3018,1014 @@
    "post": {}
   },
   "result": []
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": {
+    "title": "Links https://mega.nz/file/t#k",
+    "content": "<a href=\"https://gofile.io/d/abc\">x</a>",
+    "captionHtml": "",
+    "embed": {
+     "url": "https://www.youtube.com/watch?v=xyz",
+     "description": "see https://dropbox.com/s/q"
+    },
+    "comments_text": "mirror https://pixeldrain.com/u/c",
+    "comments": [
+     {
+      "content": "https://catbox.moe/z.zip"
+     },
+     "https://erome.com/a/s"
+    ],
+    "attachments": [
+     {
+      "path": "https://mediafire.com/file/a/b",
+      "name": "x"
+     },
+     {
+      "path": "/ab/cd/x.zip"
+     }
+    ],
+    "file": {
+     "path": "//drive.google.com/file/d/m"
+    }
+   },
+   "where": [
+    "pawchive.pw",
+    "patreon",
+    "42"
+   ]
+  },
+  "result": {
+   "post_id": "",
+   "title": "Links https://mega.nz/file/t#k",
+   "published": "",
+   "full_text": "Links https://mega.nz/file/t#k\nx\nhttps://www.youtube.com/watch?v=xyz\nsee https://dropbox.com/s/q\nmirror https://pixeldrain.com/u/c\nhttps://catbox.moe/z.zip\nhttps://erome.com/a/s\nhttps://mediafire.com/file/a/b",
+   "post_url": "",
+   "passwords": [],
+   "links": [
+    {
+     "url": "https://catbox.moe/z.zip",
+     "platform": "catbox",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://dropbox.com/s/q",
+     "platform": "dropbox",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://erome.com/a/s",
+     "platform": "erome",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://gofile.io/d/abc",
+     "platform": "gofile",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://mediafire.com/file/a/b",
+     "platform": "mediafire",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://mega.nz/file/t#k",
+     "platform": "mega",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://pixeldrain.com/u/c",
+     "platform": "pixeldrain",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://www.youtube.com/watch?v=xyz",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    }
+   ]
+  }
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": {
+    "title": "Links https://mega.nz/file/t#k",
+    "content": "<a href=\"https://gofile.io/d/abc\">x</a>",
+    "captionHtml": "",
+    "embed": {
+     "url": "https://www.youtube.com/watch?v=xyz",
+     "description": "see https://dropbox.com/s/q"
+    },
+    "comments_text": "mirror https://pixeldrain.com/u/c",
+    "comments": [
+     {
+      "content": "https://catbox.moe/z.zip"
+     },
+     "https://erome.com/a/s"
+    ],
+    "attachments": [
+     {
+      "path": "https://mediafire.com/file/a/b",
+      "name": "x"
+     },
+     {
+      "path": "/ab/cd/x.zip"
+     }
+    ],
+    "file": {
+     "path": "//drive.google.com/file/d/m"
+    }
+   },
+   "where": [
+    "",
+    "",
+    ""
+   ]
+  },
+  "result": {
+   "post_id": "",
+   "title": "Links https://mega.nz/file/t#k",
+   "published": "",
+   "full_text": "Links https://mega.nz/file/t#k\nx\nhttps://www.youtube.com/watch?v=xyz\nsee https://dropbox.com/s/q\nmirror https://pixeldrain.com/u/c\nhttps://catbox.moe/z.zip\nhttps://erome.com/a/s\nhttps://mediafire.com/file/a/b",
+   "post_url": "",
+   "passwords": [],
+   "links": [
+    {
+     "url": "https://catbox.moe/z.zip",
+     "platform": "catbox",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://dropbox.com/s/q",
+     "platform": "dropbox",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://erome.com/a/s",
+     "platform": "erome",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://gofile.io/d/abc",
+     "platform": "gofile",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://mediafire.com/file/a/b",
+     "platform": "mediafire",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://mega.nz/file/t#k",
+     "platform": "mega",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://pixeldrain.com/u/c",
+     "platform": "pixeldrain",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://www.youtube.com/watch?v=xyz",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    }
+   ]
+  }
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": {
+    "embed": "https://vimeo.com/123456",
+    "content": "<iframe src=\"https://player.vimeo.com/video/987?h=abc\"></iframe> https://streamable.com/e/qq https://www.redgifs.com/watch/foo-bar https://x.com/u/status/1 https://paypal.me/me https://soundcloud.com/a/b https://bilibili.com/video/BV1 https://dailymotion.com/video/x7 https://youtu.be/s_h-1"
+   },
+   "where": [
+    "pawchive.pw",
+    "patreon",
+    "42"
+   ]
+  },
+  "result": {
+   "post_id": "",
+   "title": "Untitled Post",
+   "published": "",
+   "full_text": "https://streamable.com/e/qq https://www.redgifs.com/watch/foo-bar https://x.com/u/status/1 https://paypal.me/me https://soundcloud.com/a/b https://bilibili.com/video/BV1 https://dailymotion.com/video/x7 https://youtu.be/s_h-1\nhttps://vimeo.com/123456",
+   "post_url": "",
+   "passwords": [],
+   "links": [
+    {
+     "url": "https://bilibili.com/video/BV1",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://dailymotion.com/video/x7",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://paypal.me/me",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://player.vimeo.com/video/987?h=abc",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://soundcloud.com/a/b",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://streamable.com/e/qq",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://vimeo.com/123456",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://www.redgifs.com/watch/foo-bar",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://x.com/u/status/1",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://youtu.be/s_h-1",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    }
+   ]
+  }
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": {
+    "embed": "https://vimeo.com/123456",
+    "content": "<iframe src=\"https://player.vimeo.com/video/987?h=abc\"></iframe> https://streamable.com/e/qq https://www.redgifs.com/watch/foo-bar https://x.com/u/status/1 https://paypal.me/me https://soundcloud.com/a/b https://bilibili.com/video/BV1 https://dailymotion.com/video/x7 https://youtu.be/s_h-1"
+   },
+   "where": [
+    "",
+    "",
+    ""
+   ]
+  },
+  "result": {
+   "post_id": "",
+   "title": "Untitled Post",
+   "published": "",
+   "full_text": "https://streamable.com/e/qq https://www.redgifs.com/watch/foo-bar https://x.com/u/status/1 https://paypal.me/me https://soundcloud.com/a/b https://bilibili.com/video/BV1 https://dailymotion.com/video/x7 https://youtu.be/s_h-1\nhttps://vimeo.com/123456",
+   "post_url": "",
+   "passwords": [],
+   "links": [
+    {
+     "url": "https://bilibili.com/video/BV1",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://dailymotion.com/video/x7",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://paypal.me/me",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://player.vimeo.com/video/987?h=abc",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://soundcloud.com/a/b",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://streamable.com/e/qq",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://vimeo.com/123456",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://www.redgifs.com/watch/foo-bar",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://x.com/u/status/1",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://youtu.be/s_h-1",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    }
+   ]
+  }
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": {
+    "embed": {
+     "src": "https://ko-fi.com/me"
+    },
+    "caption": "https://picarto.tv/videopopout/abc"
+   },
+   "where": [
+    "pawchive.pw",
+    "patreon",
+    "42"
+   ]
+  },
+  "result": {
+   "post_id": "",
+   "title": "Untitled Post",
+   "published": "",
+   "full_text": "https://picarto.tv/videopopout/abc\nhttps://ko-fi.com/me",
+   "post_url": "",
+   "passwords": [],
+   "links": [
+    {
+     "url": "https://ko-fi.com/me",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://picarto.tv/videopopout/abc",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    }
+   ]
+  }
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": {
+    "embed": {
+     "src": "https://ko-fi.com/me"
+    },
+    "caption": "https://picarto.tv/videopopout/abc"
+   },
+   "where": [
+    "",
+    "",
+    ""
+   ]
+  },
+  "result": {
+   "post_id": "",
+   "title": "Untitled Post",
+   "published": "",
+   "full_text": "https://picarto.tv/videopopout/abc\nhttps://ko-fi.com/me",
+   "post_url": "",
+   "passwords": [],
+   "links": [
+    {
+     "url": "https://ko-fi.com/me",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://picarto.tv/videopopout/abc",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    }
+   ]
+  }
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": {
+    "title": 12345,
+    "content": null
+   },
+   "where": [
+    "pawchive.pw",
+    "patreon",
+    "42"
+   ]
+  },
+  "result": {
+   "post_id": "",
+   "title": "12345",
+   "published": "",
+   "full_text": "12345",
+   "post_url": "",
+   "passwords": [],
+   "links": []
+  }
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": {
+    "title": 12345,
+    "content": null
+   },
+   "where": [
+    "",
+    "",
+    ""
+   ]
+  },
+  "result": {
+   "post_id": "",
+   "title": "12345",
+   "published": "",
+   "full_text": "12345",
+   "post_url": "",
+   "passwords": [],
+   "links": []
+  }
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": {},
+   "where": [
+    "pawchive.pw",
+    "patreon",
+    "42"
+   ]
+  },
+  "result": {
+   "post_id": "",
+   "title": "Untitled Post",
+   "published": "",
+   "full_text": "",
+   "post_url": "",
+   "passwords": [],
+   "links": []
+  }
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": {},
+   "where": [
+    "",
+    "",
+    ""
+   ]
+  },
+  "result": {
+   "post_id": "",
+   "title": "Untitled Post",
+   "published": "",
+   "full_text": "",
+   "post_url": "",
+   "passwords": [],
+   "links": []
+  }
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": {
+    "id": 7,
+    "title": "  Pack  ",
+    "published": "2026-01-02T00:00:00",
+    "content": "<p>Get it: https://mega.nz/file/AAA#key<br>Password: hunter2</p><p>Mirror https://gofile.io/d/xyz pw: other1</p>",
+    "embed": {
+     "url": "https://www.youtube.com/watch?v=abc"
+    }
+   },
+   "where": [
+    "pawchive.pw",
+    "patreon",
+    "42"
+   ]
+  },
+  "result": {
+   "post_id": "7",
+   "title": "Pack",
+   "published": "2026-01-02T00:00:00",
+   "full_text": "Pack  \nGet it: https://mega.nz/file/AAA#key\nPassword: hunter2\n\nMirror https://gofile.io/d/xyz pw: other1\n\nhttps://www.youtube.com/watch?v=abc",
+   "post_url": "https://pawchive.pw/patreon/user/42/post/7",
+   "passwords": [
+    "hunter2",
+    "other1"
+   ],
+   "links": [
+    {
+     "url": "https://gofile.io/d/xyz",
+     "platform": "gofile",
+     "passwords": [
+      "other1"
+     ],
+     "all_post_passwords": [
+      "hunter2",
+      "other1"
+     ],
+     "password_source": "proximity"
+    },
+    {
+     "url": "https://mega.nz/file/AAA#key",
+     "platform": "mega",
+     "passwords": [
+      "hunter2"
+     ],
+     "all_post_passwords": [
+      "hunter2",
+      "other1"
+     ],
+     "password_source": "proximity"
+    },
+    {
+     "url": "https://www.youtube.com/watch?v=abc",
+     "platform": "other",
+     "passwords": [
+      "other1"
+     ],
+     "all_post_passwords": [
+      "hunter2",
+      "other1"
+     ],
+     "password_source": "proximity"
+    }
+   ]
+  }
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": {
+    "id": 7,
+    "title": "  Pack  ",
+    "published": "2026-01-02T00:00:00",
+    "content": "<p>Get it: https://mega.nz/file/AAA#key<br>Password: hunter2</p><p>Mirror https://gofile.io/d/xyz pw: other1</p>",
+    "embed": {
+     "url": "https://www.youtube.com/watch?v=abc"
+    }
+   },
+   "where": [
+    "",
+    "",
+    ""
+   ]
+  },
+  "result": {
+   "post_id": "7",
+   "title": "Pack",
+   "published": "2026-01-02T00:00:00",
+   "full_text": "Pack  \nGet it: https://mega.nz/file/AAA#key\nPassword: hunter2\n\nMirror https://gofile.io/d/xyz pw: other1\n\nhttps://www.youtube.com/watch?v=abc",
+   "post_url": "",
+   "passwords": [
+    "hunter2",
+    "other1"
+   ],
+   "links": [
+    {
+     "url": "https://gofile.io/d/xyz",
+     "platform": "gofile",
+     "passwords": [
+      "other1"
+     ],
+     "all_post_passwords": [
+      "hunter2",
+      "other1"
+     ],
+     "password_source": "proximity"
+    },
+    {
+     "url": "https://mega.nz/file/AAA#key",
+     "platform": "mega",
+     "passwords": [
+      "hunter2"
+     ],
+     "all_post_passwords": [
+      "hunter2",
+      "other1"
+     ],
+     "password_source": "proximity"
+    },
+    {
+     "url": "https://www.youtube.com/watch?v=abc",
+     "platform": "other",
+     "passwords": [
+      "other1"
+     ],
+     "all_post_passwords": [
+      "hunter2",
+      "other1"
+     ],
+     "password_source": "proximity"
+    }
+   ]
+  }
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": {
+    "post_id": "9",
+    "added": "2025-05-05",
+    "description": "no links here, pass: lonely",
+    "post_url": "https://x/p/9"
+   },
+   "where": [
+    "pawchive.pw",
+    "patreon",
+    "42"
+   ]
+  },
+  "result": {
+   "post_id": "9",
+   "title": "Untitled Post",
+   "published": "2025-05-05",
+   "full_text": "no links here, pass: lonely",
+   "post_url": "https://pawchive.pw/patreon/user/42/post/9",
+   "passwords": [
+    "lonely"
+   ],
+   "links": []
+  }
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": {
+    "post_id": "9",
+    "added": "2025-05-05",
+    "description": "no links here, pass: lonely",
+    "post_url": "https://x/p/9"
+   },
+   "where": [
+    "",
+    "",
+    ""
+   ]
+  },
+  "result": {
+   "post_id": "9",
+   "title": "Untitled Post",
+   "published": "2025-05-05",
+   "full_text": "no links here, pass: lonely",
+   "post_url": "https://x/p/9",
+   "passwords": [
+    "lonely"
+   ],
+   "links": []
+  }
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": {
+    "edited": "2024",
+    "caption": "https://pixeldrain.com/u/qq and https://pixeldrain.com/u/qq again",
+    "url": "https://x/u"
+   },
+   "where": [
+    "pawchive.pw",
+    "patreon",
+    "42"
+   ]
+  },
+  "result": {
+   "post_id": "",
+   "title": "Untitled Post",
+   "published": "2024",
+   "full_text": "https://pixeldrain.com/u/qq and https://pixeldrain.com/u/qq again",
+   "post_url": "https://x/u",
+   "passwords": [],
+   "links": [
+    {
+     "url": "https://pixeldrain.com/u/qq",
+     "platform": "pixeldrain",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    }
+   ]
+  }
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": {
+    "edited": "2024",
+    "caption": "https://pixeldrain.com/u/qq and https://pixeldrain.com/u/qq again",
+    "url": "https://x/u"
+   },
+   "where": [
+    "",
+    "",
+    ""
+   ]
+  },
+  "result": {
+   "post_id": "",
+   "title": "Untitled Post",
+   "published": "2024",
+   "full_text": "https://pixeldrain.com/u/qq and https://pixeldrain.com/u/qq again",
+   "post_url": "https://x/u",
+   "passwords": [],
+   "links": [
+    {
+     "url": "https://pixeldrain.com/u/qq",
+     "platform": "pixeldrain",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    }
+   ]
+  }
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": "not a post",
+   "where": [
+    "pawchive.pw",
+    "patreon",
+    "42"
+   ]
+  },
+  "result": {}
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": "not a post",
+   "where": [
+    "",
+    "",
+    ""
+   ]
+  },
+  "result": {}
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": {
+    "id": "100",
+    "title": "See",
+    "content": "Links in https://pawchive.pw/patreon/user/42/post/555 and https://pawchive.pw/patreon/user/42/post/555 and https://pawchive.pw/patreon/user/42/post/100 own https://mega.nz/file/X#y",
+    "user": "42"
+   },
+   "where": [
+    "pawchive.pw",
+    "patreon",
+    "42"
+   ],
+   "site": {
+    "posts": {
+     "555": {
+      "id": "555",
+      "user": "42",
+      "title": "Master post",
+      "content": "All files: https://mega.nz/folder/F1#k2 password: master9",
+      "description": ""
+     },
+     "666": {
+      "id": "666",
+      "user": "42",
+      "title": "Rules",
+      "content": "nothing",
+      "description": ""
+     }
+    },
+    "comments": {
+     "555": [
+      {
+       "commenter": "42",
+       "content": "backup https://dropbox.com/s/zz"
+      },
+      {
+       "commenter": "99",
+       "content": "https://spam.example/x"
+      }
+     ],
+     "666": [
+      {
+       "user": "42",
+       "content": "pw for all: shared7 https://catbox.moe/q.zip"
+      }
+     ]
+    }
+   }
+  },
+  "result": {
+   "post_id": "100",
+   "title": "See",
+   "published": "",
+   "full_text": "See\nLinks in https://pawchive.pw/patreon/user/42/post/555 and https://pawchive.pw/patreon/user/42/post/555 and https://pawchive.pw/patreon/user/42/post/100 own https://mega.nz/file/X#y",
+   "post_url": "https://pawchive.pw/patreon/user/42/post/100",
+   "passwords": [
+    "master9"
+   ],
+   "links": [
+    {
+     "url": "https://mega.nz/file/X#y",
+     "platform": "mega",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://dropbox.com/s/zz",
+     "platform": "dropbox",
+     "passwords": [
+      "master9"
+     ],
+     "all_post_passwords": [
+      "master9"
+     ],
+     "password_source": "cross_post"
+    },
+    {
+     "url": "https://mega.nz/folder/F1#k2",
+     "platform": "mega",
+     "passwords": [
+      "master9"
+     ],
+     "all_post_passwords": [
+      "master9"
+     ],
+     "password_source": "cross_post"
+    }
+   ]
+  }
+ },
+ {
+  "fn": "post_vault_record",
+  "args": {
+   "post": {
+    "id": "101",
+    "content": "https://www.patreon.com/posts/rules-666 https://pawchive.pw/patreon/user/42/post/404",
+    "user_id": "42"
+   },
+   "where": [
+    "pawchive.pw",
+    "patreon",
+    "42"
+   ],
+   "site": {
+    "posts": {
+     "555": {
+      "id": "555",
+      "user": "42",
+      "title": "Master post",
+      "content": "All files: https://mega.nz/folder/F1#k2 password: master9",
+      "description": ""
+     },
+     "666": {
+      "id": "666",
+      "user": "42",
+      "title": "Rules",
+      "content": "nothing",
+      "description": ""
+     }
+    },
+    "comments": {
+     "555": [
+      {
+       "commenter": "42",
+       "content": "backup https://dropbox.com/s/zz"
+      },
+      {
+       "commenter": "99",
+       "content": "https://spam.example/x"
+      }
+     ],
+     "666": [
+      {
+       "user": "42",
+       "content": "pw for all: shared7 https://catbox.moe/q.zip"
+      }
+     ]
+    }
+   }
+  },
+  "result": {
+   "post_id": "101",
+   "title": "Untitled Post",
+   "published": "",
+   "full_text": "https://www.patreon.com/posts/rules-666 https://pawchive.pw/patreon/user/42/post/404",
+   "post_url": "https://pawchive.pw/patreon/user/42/post/101",
+   "passwords": [],
+   "links": [
+    {
+     "url": "https://www.patreon.com/posts/rules-666",
+     "platform": "other",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "post"
+    },
+    {
+     "url": "https://catbox.moe/q.zip",
+     "platform": "catbox",
+     "passwords": [],
+     "all_post_passwords": [],
+     "password_source": "cross_post"
+    }
+   ]
+  }
  },
  {
   "fn": "order_files",

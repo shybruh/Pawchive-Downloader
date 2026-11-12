@@ -506,3 +506,190 @@ pub fn links_with_details(text: &str) -> Vec<Value> {
         })
         .collect()
 }
+
+// ── Link Vault records (LinkExtractor.extract_post_vault_record) ──────────────────────────────
+
+/// Where a post's cross-posts are read (the archive sites' client; a made-up one in tests)
+pub trait PostSource {
+    fn single_post(&self, p: &super::links::ParsedLink) -> Option<Value>;
+    fn comments(&self, domain: &str, service: &str, user_id: &str, post_id: &str) -> Vec<Value>;
+}
+
+impl PostSource for super::sites::SiteClient {
+    fn single_post(&self, p: &super::links::ParsedLink) -> Option<Value> {
+        super::sites::SiteClient::single_post(self, p)
+    }
+    fn comments(&self, domain: &str, service: &str, user_id: &str, post_id: &str) -> Vec<Value> {
+        self.post_comments(domain, service, user_id, post_id)
+    }
+}
+
+fn truthy(v: Option<&Value>) -> bool {
+    v.is_some_and(super::filters::truthy)
+}
+
+/// `o[k1] or o[k2] or …` as text
+fn first_text(o: &Value, keys: &[&str]) -> String {
+    keys.iter().find_map(|k| o.get(*k).filter(|v| super::filters::truthy(v)).map(super::py::pystr)).unwrap_or_default()
+}
+
+/// f"{o.get(k, '')}" (a null prints as "None")
+fn get_text(o: &Value, k: &str) -> String {
+    o.get(k).map(super::py::pystr).unwrap_or_default()
+}
+
+/// The links and passwords of the posts a post points to (one hop): each target post's text and
+/// its creator's comments
+pub fn cross_post_items(post: &Value, site: &dyn PostSource, log: &dyn Fn(&str, &str)) -> Vec<Value> {
+    let mut visited: HashSet<String> = HashSet::new();
+    let current = first_text(post, &["id", "post_id"]);
+    if !current.is_empty() {
+        visited.insert(current);
+    }
+    let or_empty = |k: &str| first_text(post, &[k]);
+    let scan = format!("{}\n{}\n{}", or_empty("content"), or_empty("description"), or_empty("caption"));
+    let mut out = Vec::new();
+    for m in re!(r#"(?i)https?://[^\s"'<>]+"#).find_iter(&scan) {
+        let mut p = super::links::parse(m.as_str());
+        if !p.is_valid {
+            continue;
+        }
+        let Some(target) = p.post_id.clone().filter(|t| !t.is_empty() && !visited.contains(t)) else { continue };
+        if p.user_id.is_empty() {
+            let u = first_text(post, &["user"]);
+            p.user_id = if u.is_empty() { first_text(post, &["user_id"]) } else { u };
+        }
+        visited.insert(target.clone());
+        let Some(tp) = site.single_post(&p) else { continue };
+        let mut text = format!("{}\n{}\n{}", get_text(&tp, "title"), get_text(&tp, "content"), get_text(&tp, "description"));
+        let op = {
+            let o = first_text(&tp, &["user", "user_id"]);
+            if o.is_empty() { p.user_id.clone() } else { o }
+        };
+        for c in site.comments(&p.domain, &p.service, &op, &target) {
+            if !c.is_object() {
+                continue;
+            }
+            let author = first_text(&c, &["commenter", "user"]);
+            if author == op || op.is_empty() {
+                text.push('\n');
+                text.push_str(&first_text(&c, &["content"]));
+            }
+        }
+        let found = links_with_details(&text);
+        let n = found.len();
+        for mut item in found {
+            item["password_source"] = Value::from("cross_post");
+            out.push(item);
+        }
+        log("info", &format!("Cross-post resolved: Fetched post {target} (+{n} link/pw items)."));
+    }
+    out
+}
+
+/// A post as the Link Vault keeps it: its id, title, date, text, link, passwords and its links
+/// (each with the password written nearest it), embedded players too; with `site`, also the links
+/// of the posts it points to
+pub fn post_vault_record(post: &Value, site: Option<&dyn PostSource>, domain: &str, service: &str, user_id: &str, log: &dyn Fn(&str, &str)) -> Value {
+    if !post.is_object() {
+        return Value::Object(Map::new());
+    }
+    let pid = first_text(post, &["id", "post_id"]);
+    let title = {
+        let t = first_text(post, &["title"]);
+        if t.is_empty() { "Untitled Post".to_string() } else { t }
+    }
+    .trim()
+    .to_string();
+    let published = first_text(post, &["published", "added", "edited", "date"]);
+    let mut pieces: Vec<String> = Vec::new();
+    if truthy(post.get("title")) {
+        pieces.push(super::py::pystr(&post["title"]));
+    }
+    for k in ["content", "captionHtml", "caption", "description", "body", "text"] {
+        if let Some(v) = post.get(k).and_then(Value::as_str).filter(|v| !v.is_empty()) {
+            pieces.push(v.to_string());
+        }
+    }
+    match post.get("embed") {
+        Some(Value::Object(e)) => {
+            for k in ["url", "src", "description", "title"] {
+                if let Some(v) = e.get(k).and_then(Value::as_str).filter(|v| !v.is_empty()) {
+                    pieces.push(v.to_string());
+                }
+            }
+        }
+        Some(Value::String(e)) => pieces.push(e.clone()),
+        _ => {}
+    }
+    if truthy(post.get("comments_text")) {
+        pieces.push(super::py::pystr(&post["comments_text"]));
+    }
+    for c in post.get("comments").and_then(Value::as_array).into_iter().flatten() {
+        match c {
+            Value::Object(o) => {
+                for k in ["content", "message", "text", "comment"] {
+                    if let Some(v) = o.get(k).and_then(Value::as_str).filter(|v| !v.is_empty()) {
+                        pieces.push(v.to_string());
+                    }
+                }
+            }
+            Value::String(v) => pieces.push(v.clone()),
+            _ => {}
+        }
+    }
+    for a in post.get("attachments").and_then(Value::as_array).into_iter().flatten().filter_map(Value::as_object) {
+        for k in ["path", "name"] {
+            if let Some(v) = a.get(k).and_then(Value::as_str).filter(|v| !v.is_empty() && (v.contains("://") || v.starts_with("//"))) {
+                pieces.push(v.to_string());
+            }
+        }
+    }
+    let combined = pieces.join("\n");
+    let mut items = links_with_details(&combined);
+    let mut seen: HashSet<Option<String>> =
+        items.iter().filter_map(|i| i.get("url").and_then(Value::as_str)).filter(|u| !u.is_empty()).map(clean_and_normalize_url).collect();
+    for eu in embed_urls(post) {
+        if let Some(n) = clean_and_normalize_url(&eu) {
+            if seen.insert(Some(n.clone())) {
+                let mut m = Map::new();
+                m.insert("url".into(), Value::from(n.clone()));
+                m.insert("platform".into(), Value::from(categorize_url(&n)));
+                m.insert("passwords".into(), Value::Array(vec![]));
+                m.insert("all_post_passwords".into(), Value::Array(vec![]));
+                m.insert("password_source".into(), Value::from("embed"));
+                items.push(Value::Object(m));
+            }
+        }
+    }
+    let mut passwords: Vec<String> =
+        passwords_with_positions(&combined).into_iter().map(|p| p.password).filter(|p| !p.is_empty()).collect::<BTreeSet<_>>().into_iter().collect();
+    if let Some(site) = site {
+        for ci in cross_post_items(post, site, log) {
+            let Some(u) = clean_and_normalize_url(ci.get("url").and_then(Value::as_str).unwrap_or("")) else { continue };
+            if !seen.insert(Some(u)) {
+                continue;
+            }
+            for pw in ci.get("passwords").and_then(Value::as_array).into_iter().flatten().filter_map(Value::as_str) {
+                if !pw.is_empty() && !passwords.iter().any(|x| x == pw) {
+                    passwords.push(pw.to_string());
+                }
+            }
+            items.push(ci);
+        }
+    }
+    let post_url = if !domain.is_empty() && !service.is_empty() && !user_id.is_empty() && !pid.is_empty() {
+        format!("https://{domain}/{service}/user/{user_id}/post/{pid}")
+    } else {
+        first_text(post, &["post_url", "url"])
+    };
+    let mut m = Map::new();
+    m.insert("post_id".into(), Value::from(pid));
+    m.insert("title".into(), Value::from(title));
+    m.insert("published".into(), Value::from(published));
+    m.insert("full_text".into(), Value::from(crate::vault::strip_html_tags(&combined)));
+    m.insert("post_url".into(), Value::from(post_url));
+    m.insert("passwords".into(), Value::from(passwords));
+    m.insert("links".into(), Value::Array(items));
+    Value::Object(m)
+}

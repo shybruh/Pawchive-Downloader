@@ -107,6 +107,22 @@ fn run_extract(fun: &str, a: &Value) -> Value {
         "clean_password_candidate" => json!(x::clean_password_candidate(&s("s"))),
         "links_from_post" => json!(x::links_from_post(&a["post"])),
         "embed_urls" => json!(x::embed_urls(&a["post"])),
+        "post_vault_record" => {
+            /// The made-up site of the cross-post cases: {"posts": {id: post}, "comments": {id: [...]}}
+            struct Site(Value);
+            impl x::PostSource for Site {
+                fn single_post(&self, p: &super::links::ParsedLink) -> Option<Value> {
+                    self.0["posts"].get(p.post_id.as_deref()?).cloned()
+                }
+                fn comments(&self, _: &str, _: &str, _: &str, post_id: &str) -> Vec<Value> {
+                    self.0["comments"].get(post_id).and_then(Value::as_array).cloned().unwrap_or_default()
+                }
+            }
+            let w = &a["where"];
+            let site = a.get("site").map(|s| Site(s.clone()));
+            let ws = |i: usize| w[i].as_str().unwrap_or("").to_string();
+            x::post_vault_record(&a["post"], site.as_ref().map(|s| s as &dyn x::PostSource), &ws(0), &ws(1), &ws(2), &|_, _| {})
+        }
         "order_files" => {
             let names: Vec<String> = serde_json::from_value(a["names"].clone()).unwrap();
             json!(o::order_files(names, &s("order"), |n| n.clone()))
