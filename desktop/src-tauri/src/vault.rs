@@ -720,9 +720,29 @@ pub fn view(path: &str) -> Option<(Map<String, Value>, Map<String, Value>, Vec<S
 
 static PROBING: AtomicBool = AtomicBool::new(false);
 
-/// Checks the vault's links (or a creator's), 8 at a time, saving every 50; progress notes
-/// {"done", "total", "url"}
+/// A check of the links is running
+pub fn probing() -> bool {
+    PROBING.load(Ordering::SeqCst)
+}
+
+/// (links, creators) in the vault
+pub fn counts(path: &str) -> Option<(usize, usize)> {
+    if path.is_empty() {
+        return None;
+    }
+    let v = vault(path).ok()?;
+    let g = v.lock().unwrap();
+    Some((g.links.len(), g.creators.len()))
+}
+
 fn probe_all(id: u64, path: &str, creator: Option<&str>) -> Result<Value, String> {
+    let cancel = service::cancel_flag(id);
+    probe_links(path, creator, &cancel, &|v| service::progress_value(id, v))
+}
+
+/// Checks the vault's links (or a creator's), 8 at a time, saving every 50; progress
+/// {"done", "total", "url"}
+pub fn probe_links(path: &str, creator: Option<&str>, cancel: &AtomicBool, progress: &(dyn Fn(Value) + Sync)) -> Result<Value, String> {
     if PROBING.swap(true, Ordering::SeqCst) {
         log("warning", "Health probing is already in progress.");
         return Ok(json!({"done": 0, "total": 0, "busy": true}));
@@ -738,7 +758,6 @@ fn probe_all(id: u64, path: &str, creator: Option<&str>) -> Result<Value, String
     let links = v.lock().unwrap().links_of(creator);
     let total = links.len();
     log("info", &format!("Link Vault: Starting health probe across {total} links (creator={})...", creator.unwrap_or("all")));
-    let cancel = service::cancel_flag(id);
     let next = Mutex::new(0usize);
     let done = Mutex::new(0usize);
     std::thread::scope(|sc| {
@@ -768,7 +787,7 @@ fn probe_all(id: u64, path: &str, creator: Option<&str>) -> Result<Value, String
                 let mut g = v.lock().unwrap();
                 g.set_health(&[(lid.clone(), h)], n % 50 == 0);
                 drop(g);
-                service::progress_value(id, json!({"done": n, "total": total, "url": url}));
+                progress(json!({"done": n, "total": total, "url": url}));
             });
         }
     });
@@ -787,11 +806,16 @@ fn probe_all(id: u64, path: &str, creator: Option<&str>) -> Result<Value, String
 /// "service", "user_id", "cross", "site"} → {"new", "records", "cancelled"}; progress notes
 /// {"done", "total", "links"} every 10 posts
 fn collect(id: u64, path: &str, a: &Value) -> Result<Value, String> {
+    let cancel = service::cancel_flag(id);
+    collect_posts(path, a, &cancel, &|v| service::progress_value(id, v))
+}
+
+/// collect with its own Stop and progress
+pub fn collect_posts(path: &str, a: &Value, cancel: &AtomicBool, progress: &dyn Fn(Value)) -> Result<Value, String> {
     let posts = a["posts"].as_array().cloned().unwrap_or_default();
     let st = |k: &str| a[k].as_str().unwrap_or("").to_string();
     let (domain, service, uid) = (st("domain"), st("service"), st("user_id"));
     let site = a["cross"].as_bool().unwrap_or(false).then(|| service::site_client(&a["site"]));
-    let cancel = service::cancel_flag(id);
     let logx = |level: &str, msg: &str| service::log_app(level, msg, "extractor", "");
     let mut records = Vec::new();
     let mut links = 0;
@@ -807,7 +831,7 @@ fn collect(id: u64, path: &str, a: &Value) -> Result<Value, String> {
             records.push(r);
         }
         if (i + 1) % 10 == 0 || i + 1 == posts.len() {
-            service::progress_value(id, json!({"done": i + 1, "total": posts.len(), "links": links}));
+            progress(json!({"done": i + 1, "total": posts.len(), "links": links}));
         }
     }
     if cancel.load(Ordering::Relaxed) {

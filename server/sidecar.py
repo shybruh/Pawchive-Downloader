@@ -406,7 +406,6 @@ def build_engine():
     objects = {
         "telegramBridge": app_bridge.telegramBridge,
         "appBridge": app_bridge,
-        "linkVault": app_bridge.link_vault,
     }
     return app_bridge, objects
 

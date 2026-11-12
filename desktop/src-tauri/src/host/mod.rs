@@ -73,6 +73,13 @@ fn natives(app_version: &str, engine: &Arc<Engine>, events: &Events) -> Natives 
     let dec_groups: Arc<dyn NativeObject> = Arc::new(crate::bridge::decompressor::Groups(dec));
     objects.push((crate::bridge::decompressor::NAME, dec_obj));
     objects.push((crate::bridge::decompressor::GROUPS, dec_groups));
+    // The Link Vault window
+    let vault = crate::bridge::link_vault::Vault::new(Some(events.clone()));
+    vault.start_pump();
+    let vault_obj: Arc<dyn NativeObject> = Arc::new(crate::bridge::link_vault::Object(vault.clone()));
+    let vault_creators: Arc<dyn NativeObject> = Arc::new(crate::bridge::link_vault::Creators(vault));
+    objects.push((crate::bridge::link_vault::NAME, vault_obj));
+    objects.push((crate::bridge::link_vault::CREATORS, vault_creators));
     let app_bridge: Arc<dyn native::Overlay> = app_bridge;
     Natives::new(objects, vec![("appBridge", app_bridge)])
 }

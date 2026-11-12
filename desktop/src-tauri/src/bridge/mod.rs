@@ -6,6 +6,7 @@
 
 pub mod decompressor;
 pub mod gallery;
+pub mod link_vault;
 pub mod gallery_tools;
 
 use crate::downloader::service;
