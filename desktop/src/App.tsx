@@ -17,7 +17,6 @@ import { DownloaderView } from "@/views/downloader";
 import { QueueView } from "@/views/queue";
 import { WatchlistView } from "@/views/watchlist";
 import { HistoryView } from "@/views/history";
-import { KnownView } from "@/views/known";
 import { SettingsView } from "@/views/settings";
 import { ActivityView } from "@/views/activity";
 import { GalleryView } from "@/views/gallery";
@@ -134,7 +133,6 @@ function Shell() {
       case "gallery": return <GalleryView />;
       case "history": return <HistoryView />;
       case "archive": return <ArchiveView />;
-      case "known": return <KnownView />;
       case "vault": return <VaultView />;
       case "decompressor": return <DecompressorView />;
       case "settings": return <SettingsView />;

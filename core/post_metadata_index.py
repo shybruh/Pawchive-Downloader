@@ -1,7 +1,7 @@
 """
 Scalable Metadata & Content Indexer for Gallery and Search.
 Handles high-performance parsing, caching, tag extraction, and keyword search
-across post_info.txt, metadata files, and KnownManager character hierarchies.
+across post_info.txt and metadata files.
 """
 
 import os
@@ -23,8 +23,8 @@ class PostMetaRecord:
     """Represents the parsed content and tags of a single post."""
     __slots__ = (
         "post_id", "title", "creator", "service", "tags",
-        "content", "attached_files", "known_tags", "all_tags",
-        "search_tokens", "search_blob", "_enriched"
+        "content", "attached_files", "all_tags",
+        "search_tokens", "search_blob"
     )
 
     def __init__(
@@ -44,9 +44,7 @@ class PostMetaRecord:
         self.tags = [t.strip() for t in (tags or []) if t and t.strip()]
         self.content = content.strip()
         self.attached_files = {f.strip().lower() for f in (attached_files or set()) if f and f.strip()}
-        self.known_tags: List[str] = []
         self.all_tags: List[str] = list(self.tags)
-        self._enriched = False
 
         # Build search tokens and search blob for fast keyword checking
         parts = [self.title, self.creator, self.service]
@@ -58,51 +56,6 @@ class PostMetaRecord:
         full_text = " ".join(p for p in parts if p).lower()
         self.search_blob = full_text
         self.search_tokens = set(_WORD_TOKEN_RE.findall(full_text))
-
-    def enrich_known_tags(self, km) -> List[str]:
-        """Runs KnownManager over title and content to discover character / series tags."""
-        if not km or self._enriched:
-            return self.known_tags
-
-        self._enriched = True
-        found_tags: List[str] = []
-        seen = {t.lower() for t in self.all_tags}
-
-        # 1. Match from title
-        if self.title:
-            try:
-                hit = km.find_matching_hierarchy(self.title)
-                if hit:
-                    fr, ch = hit
-                    for n in (ch, fr):
-                        if n and n.lower() != "general" and n.lower() not in seen:
-                            found_tags.append(n)
-                            seen.add(n.lower())
-            except Exception:
-                pass
-
-        # 2. Match from content/caption (first 600 chars)
-        if self.content:
-            try:
-                hit = km.find_matching_hierarchy(self.content[:600])
-                if hit:
-                    fr, ch = hit
-                    for n in (ch, fr):
-                        if n and n.lower() != "general" and n.lower() not in seen:
-                            found_tags.append(n)
-                            seen.add(n.lower())
-            except Exception:
-                pass
-
-        self.known_tags = found_tags
-        # Prepend known tags so character tags appear first in tag list
-        self.all_tags = found_tags + self.all_tags
-        for kt in found_tags:
-            self.search_tokens.add(kt.lower())
-            for tok in _WORD_TOKEN_RE.findall(kt.lower()):
-                self.search_tokens.add(tok)
-
-        return self.known_tags
 
     def matches_query(self, words: List[str], tag_filters: List[str]) -> bool:
         """Evaluates whether this post matches the specified search words and tag filters."""
@@ -335,11 +288,10 @@ class PostMetadataCache:
         self,
         file_path: str,
         title: str = "",
-        km = None,
         legacy_tags: Optional[List[str]] = None
     ) -> List[str]:
         """
-        Combines legacy KnownManager character/series tags with post metadata tags and
+        Combines the given tags with the post metadata tags and
         content-scanned keywords, deduplicating cleanly.
         """
         result = list(legacy_tags or [])
@@ -347,8 +299,6 @@ class PostMetadataCache:
 
         record = self.get_record_for_file(file_path)
         if record:
-            if km is not None:
-                record.enrich_known_tags(km)
             for t in record.all_tags:
                 if t.lower() not in seen:
                     result.append(t)

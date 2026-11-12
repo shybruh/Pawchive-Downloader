@@ -9,7 +9,7 @@ Output:
   desktop/src-tauri/target/plan_live.json    — the real posts (for: cargo test --lib -- --ignored plan)
 
 Each case runs in desktop/src-tauri/target/plan_base with the files the case lists created first.
-The Known list, download archive, archive passwords and post_info writes are
+The download archive, archive passwords and post_info writes are
 stand-ins, so nothing outside that folder is read or written. The Rust planner
 (src-tauri/src/downloader/plan.rs) must give the same tasks.
 """
@@ -33,21 +33,6 @@ FIXTURE = os.path.join(ROOT, "desktop", "src-tauri", "tests", "fixtures", "plan.
 LIVE = os.path.join(ROOT, "desktop", "src-tauri", "target", "plan_live.json")
 
 # Stand-ins, mirrored by the Rust test
-KNOWN = {"miku": ("Vocaloid", "Hatsune Miku"), "samus": ("Metroid", "Samus"), "general": ("General", "General")}
-
-
-class Known:
-    def find_candidates_in_posts(self, posts):
-        return []
-
-    def find_matching_hierarchy(self, title, tags=None, filenames=None, content=None):
-        low = (title or "").lower()
-        for k, v in KNOWN.items():
-            if k in low:
-                return v
-        return None
-
-
 class Archive:
     def __init__(self, archived):
         self.archived = set(archived)
@@ -132,7 +117,6 @@ CASES = [
     ("name order", BASIC, PAW, O(file_order="name"), [], []),
     ("reversed", BASIC, PAW, O(file_order="reversed"), [], []),
     ("numbered names", BASIC, PAW, O(filename_style="numbered"), [], []),
-    ("known folders", BASIC, PAW, O(separate_by_known=True), [], []),
     ("links only", BASIC, PAW, O(file_type="links"), [], []),
     ("no post info", BASIC, PAW, O(save_post_metadata=False), [], []),
     ("filename template", BASIC, PAW, O(filename_style="custom", filename_template="{date} {title} {index} {orig_name}"), [], []),
@@ -145,7 +129,7 @@ CASES = [
     ("no site in folder name", BASIC, dict(PAW, include_service=False), O(), [], []),
     ("existing plain folder", BASIC, PAW, O(), ["Silly Teshii/keep.txt"], []),
     ("artist folder inside base", BASIC, dict(PAW, artist_dir="{BASE}\\Chosen"), O(), [], []),
-    ("artist folder elsewhere", BASIC, dict(PAW, artist_dir="{BASE}\\..\\elsewhere\\Artist"), O(separate_by_known=True), [], []),
+    ("artist folder elsewhere", BASIC, dict(PAW, artist_dir="{BASE}\\..\\elsewhere\\Artist"), O(), [], []),
     ("batch id", BASIC, dict(PAW, batch_id="b1"), O(), [], []),
     ("cum.st", CUMST, CUM, O(), [], []),
     ("cum.st thumbnails", CUMST, CUM, O(fallback_to_thumbnails=True), [], []),
@@ -166,7 +150,7 @@ def setup(files):
 
 def run(posts, req, opts, archived):
     folder_naming.include_service = req.get("include_service", True)
-    d = dl.FileDownloader(Known(), None, archive_manager=Archive(archived))
+    d = dl.FileDownloader(None, archive_manager=Archive(archived))
     d._resolve_pawchive_deferred_attachments = lambda post, domain="": 0
     WRITES.clear()
     artist = req.get("artist_dir")
@@ -186,7 +170,6 @@ def run(posts, req, opts, archived):
         "writes": [[sub(p), i, c] for p, i, c in WRITES],
         "harvested_links": d.harvested_links,
         "harvested_records": sorted(d.harvested_links_records, key=lambda r: r["url"]),
-        "unmatched_known": d._unmatched_known_count,
     }
 
 

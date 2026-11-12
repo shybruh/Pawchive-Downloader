@@ -140,7 +140,6 @@ function FilesSection() {
       <Group title="Folders">
         <Field label="Folder per post"><SwitchSetting prop="subfolderPerPost" /></Field>
         <Field label="Site name in folder names"><SwitchSetting prop="siteInFolderName" /></Field>
-        <Field label="Sort known series into folders"><SwitchSetting prop="separateFoldersByKnown" /></Field>
       </Group>
       <Group title="Extras">
         <Field label="Save post text and metadata"><SwitchSetting prop="savePostMetadata" /></Field>

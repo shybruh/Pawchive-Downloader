@@ -60,10 +60,8 @@ from core.api_client import ApiClient
 from core.downloader import FileDownloader, DownloadTask, is_permanent_failure
 from core.cloud_links import cloud_platform, PLATFORM_NAMES
 from core.session_manager import SessionManager
-from core.known_manager import KnownManager
 from bridge.log_model import LogModel
 from bridge.queue_model import QueueModel
-from bridge.known_model import KnownModel
 from bridge.watchlist_model import WatchlistModel
 from bridge.archive_creators_model import ArchiveCreatorsModel
 from core import folder_naming
@@ -122,7 +120,6 @@ class AppBridge(QObject):
     datePrefixChanged = Signal()
     siteInFolderNameChanged = Signal()
     fileIndexPrefixChanged = Signal()
-    separateFoldersByKnownChanged = Signal()
     downloadRevisionsChanged = Signal()
     adaptiveThreadingChanged = Signal()
     autoRetryAtEndChanged = Signal()
@@ -261,7 +258,6 @@ class AppBridge(QObject):
         self._folder_stats_worker_token = 0
 
         # Core systems
-        self.known_manager = KnownManager()
         self.session_manager = SessionManager()
         saved_settings = self.session_manager.load_settings()
         self._loaded_decompressor_settings = saved_settings.get("decompressor") or {}   # (until it exists)
@@ -275,7 +271,6 @@ class AppBridge(QObject):
         from services import rust_queue
         downloader_class = rust_queue.RustDownloader if rust_queue.available() else FileDownloader
         self.downloader = downloader_class(
-            known_manager=self.known_manager,
             session_manager=self.session_manager,
             max_workers=4,
             archive_manager=self.archive_manager
@@ -295,7 +290,6 @@ class AppBridge(QObject):
         self._active_queue_model = QueueModel(self, enable_groups=False)
         self._active_queue_model.filterStatus = "downloading"
         self._active_queue_model.minFileSize = 50 * 1024 * 1024  # 50 MB threshold
-        self._known_model = KnownModel(self.known_manager, self)
 
         # Settings defaults
         self._current_url = ""
@@ -342,7 +336,6 @@ class AppBridge(QObject):
         self._date_prefix = saved_settings.get("date_prefix", True)
         folder_naming.include_service = bool(saved_settings.get("site_in_folder_name", True))
         self._file_index_prefix = bool(saved_settings.get("file_index_prefix", False))
-        self._separate_folders_by_known = saved_settings.get("separate_by_known", False)
         self._download_revisions = saved_settings.get("download_revisions", False)
         self._adaptive_threading = saved_settings.get("adaptive_threading", False)
         self._threads_locked = bool(saved_settings.get("threads_locked", False))
@@ -999,17 +992,6 @@ class AppBridge(QObject):
             self._file_index_prefix = val
             self.fileIndexPrefixChanged.emit()
             self.saveSettings()
-
-    @Property(bool, notify=separateFoldersByKnownChanged)
-    def separateFoldersByKnown(self) -> bool:
-        return self._separate_folders_by_known
-
-    @separateFoldersByKnown.setter
-    def separateFoldersByKnown(self, val: bool):
-        if self._separate_folders_by_known != val:
-            self._separate_folders_by_known = val
-            self.separateFoldersByKnownChanged.emit()
-            self._settings_save_timer.start()
 
     @Property(bool, notify=downloadRevisionsChanged)
     def downloadRevisions(self) -> bool:
@@ -1730,10 +1712,6 @@ class AppBridge(QObject):
         return self._log_model
 
     @Property(QObject, constant=True)
-    def knownModel(self) -> KnownModel:
-        return self._known_model
-
-    @Property(QObject, constant=True)
     def watchlistModel(self) -> WatchlistModel:
         return self._watchlist_model
 
@@ -1836,7 +1814,6 @@ class AppBridge(QObject):
             subfolder_per_post=self._subfolder_per_post,
             date_prefix=self._date_prefix,
             file_index_prefix=self._file_index_prefix,
-            separate_by_known=self._separate_folders_by_known,
             download_revisions=self._download_revisions,
             adaptive_threading=self._adaptive_threading,
             threads_locked=self._threads_locked,
@@ -3368,7 +3345,7 @@ class AppBridge(QObject):
                     target_download_dir = ""
                     if artist_dir:
                         target_download_dir = artist_dir
-                    elif tasks and not self._separate_folders_by_known:
+                    elif tasks:
                         target_download_dir = self.extract_artist_folder_from_path(
                             tasks[0].target_path,
                             creator_name or parsed.user_id,
@@ -4124,17 +4101,6 @@ class AppBridge(QObject):
                 return None
 
         parts = [base_dir]
-        if self._separate_folders_by_known:
-            match = self.known_manager.find_matching_hierarchy(
-                title, tags=tags, filenames=[os.path.basename(url.split("?")[0])], content=content)
-            if match:
-                franchise, char_name = match
-                if franchise and franchise.strip() and franchise not in ("Other", "General"):
-                    parts.append(FilterEngine.clean_filesystem_text(franchise, max_len=60, fallback="Franchise"))
-                if char_name and char_name.strip() and char_name.lower() != (franchise or "").lower():
-                    parts.append(FilterEngine.clean_filesystem_text(char_name, max_len=60, fallback="Character"))
-            else:
-                parts.append("Other")
         creator_clean = FilterEngine.clean_filesystem_text(creator, max_len=80, fallback="") if creator else ""
         if creator_clean:
             parts.append(os.path.basename(pick_creator_folder(os.path.join(*parts), creator_clean, service)) if service else creator_clean)
@@ -4366,25 +4332,6 @@ class AppBridge(QObject):
         else:
             subprocess.Popen(["xdg-open", self._download_dir])
 
-    @Slot()
-    def openKnownTxt(self):
-        path = self.known_manager.file_path
-        if not os.path.exists(path):
-            self.known_manager.save()
-        if os.name == "nt":
-            os.startfile(path)
-        else:
-            subprocess.Popen(["xdg-open", path])
-
-    @Slot(str)
-    def addKnownCharacter(self, name: str):
-        if self._known_model.addEntry(name):
-            logger.success(f"Added '{name}' to Known list.", category="known")
-
-    @Slot(int)
-    def removeKnownCharacter(self, index: int):
-        self._known_model.removeIndex(index)
-
     @Slot(str, result=int)
     def batchLoadUrls(self, input_text_or_path: str) -> int:
         """
@@ -4542,7 +4489,6 @@ class AppBridge(QObject):
             "date_prefix": self._date_prefix,
             "site_in_folder_name": folder_naming.include_service,
             "file_index_prefix": self._file_index_prefix,
-            "separate_by_known": self._separate_folders_by_known,
             "download_revisions": self._download_revisions,
             "adaptive_threading": self._adaptive_threading,
             "threads_locked": self._threads_locked,
@@ -4901,8 +4847,7 @@ class AppBridge(QObject):
                         "user_agent": self._user_agent,
                         "subfolder_per_post": self._subfolder_per_post,
                         "date_prefix": self._date_prefix,
-                        "file_index_prefix": self._file_index_prefix,
-                        "separate_by_known": self._separate_folders_by_known
+                        "file_index_prefix": self._file_index_prefix
                     },
                     "batches": groups,
                     "tasks": [t.to_dict() for t in all_tasks]
@@ -5534,7 +5479,6 @@ class AppBridge(QObject):
                 "options": options.to_dict(),
                 "archive": bool(am and am.is_enabled),
                 "archive_db": d._archive_db() if hasattr(d, "_archive_db") else "",
-                **(d._known_files() if hasattr(d, "_known_files") else {}),
                 "request": {"creator_name": entry.creator_name or "", "service": entry.service or "",
                             "domain": entry.domain or "", "base_dir": base or "",
                             "batch_id": f"watchlist_{entry.service}_{entry.user_id}", "artist_dir": artist or "",
@@ -5544,7 +5488,6 @@ class AppBridge(QObject):
             "options": options.to_dict(),
             "archive": bool(am and am.is_enabled),
             "archive_db": d._archive_db() if hasattr(d, "_archive_db") else "",
-            **(d._known_files() if hasattr(d, "_known_files") else {}),
             "request": {"creator_name": entry.creator_name or "", "service": entry.service or "",
                         "domain": entry.domain or "", "base_dir": self._download_dir or "",
                         "batch_id": f"check_{entry.service}_{entry.user_id}",

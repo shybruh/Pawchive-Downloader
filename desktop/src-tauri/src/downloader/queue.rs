@@ -119,7 +119,6 @@ pub struct Queue {
     batch_options: Mutex<HashMap<String, Arc<Options>>>,
     /// post_info.txt texts written once a file of their post is saved: (path, post id) → text
     post_infos: Mutex<HashMap<(String, String), String>>,
-    unmatched_known: Mutex<usize>,
 }
 
 impl Queue {
@@ -145,7 +144,6 @@ impl Queue {
             }),
             batch_options: Mutex::default(),
             post_infos: Mutex::default(),
-            unmatched_known: Mutex::new(0),
         })
     }
 
@@ -164,10 +162,6 @@ impl Queue {
     pub fn cells(&self) -> Vec<Cell> {
         self.items.lock().unwrap().clone()
     }
-    pub fn set_unmatched_known(&self, n: usize) {
-        *self.unmatched_known.lock().unwrap() = n;
-    }
-
     /// Posts' info texts from a plan, written once one of their files is saved
     pub fn add_post_infos(&self, infos: &[(String, String, String)]) {
         let mut m = self.post_infos.lock().unwrap();
@@ -978,7 +972,7 @@ impl Queue {
         if !self.current(session) && !self.ctl.cancelled() {
             return; // superseded by a newer run
         }
-        self.finish_run(&options);
+        self.finish_run();
     }
 
     /// One line in the log for a file's result, as the Python downloader wrote them
@@ -1154,7 +1148,7 @@ impl Queue {
         r.adaptive_text = text;
     }
 
-    fn finish_run(&self, options: &Options) {
+    fn finish_run(&self) {
         self.run.lock().unwrap().running = false;
         let elapsed = self.active_elapsed(now());
         let counts = self.status_counts();
@@ -1200,10 +1194,6 @@ impl Queue {
             note += &format!(" Found downloaded already: {}.", v.iter().map(|(k, n)| format!("{n} {k}")).collect::<Vec<_>>().join(", "));
         }
         self.hooks.log("success", &format!("Download completed in {elapsed:.1}s! ({completed} successful{skip_msg}, {failed} errors){note}"));
-        let unmatched = *self.unmatched_known.lock().unwrap();
-        if options.flag("separate_by_known") && unmatched > 0 {
-            self.hooks.log("info", &format!("💡 [AI Tip] {unmatched} post(s) were saved to 'Other' without a matching character in Known.txt."));
-        }
         self.hooks.finished(true, &format!("Completed: {completed} downloaded{skip_msg}, {failed} failed."));
     }
 

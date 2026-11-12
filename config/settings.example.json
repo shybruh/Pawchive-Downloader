@@ -10,7 +10,6 @@
   "subfolder_per_post": true,
   "date_prefix": false,
   "group_file_type": "none",
-  "separate_by_known": false,
   "download_revisions": false,
   "adaptive_threading": true,
   "threads_locked": false,

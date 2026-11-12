@@ -1,7 +1,7 @@
 import type { ComponentType } from "react";
 import {
   ArchiveIcon, BookmarkIcon, DownloadIcon, FileArchiveIcon, HistoryIcon, ImagesIcon,
-  LinkIcon, ListOrderedIcon, ScrollTextIcon, SettingsIcon, TagsIcon,
+  LinkIcon, ListOrderedIcon, ScrollTextIcon, SettingsIcon,
 } from "lucide-react";
 import { useProp } from "@/lib/engine";
 import { navigate, useNav, type ViewId } from "@/lib/nav";
@@ -68,7 +68,6 @@ export function AppSidebar() {
           { id: "gallery", label: "Gallery", icon: ImagesIcon },
           { id: "history", label: "History", icon: HistoryIcon },
           { id: "archive", label: "Archive", icon: ArchiveIcon },
-          { id: "known", label: "Known series", icon: TagsIcon },
           { id: "vault", label: "Link vault", icon: LinkIcon },
         ]} />
         <Group label="Tools" view={view} onNavigate={onNavigate} items={[

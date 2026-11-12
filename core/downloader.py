@@ -34,7 +34,6 @@ from core.providers import cookie_for_url, is_disabled, disabled_message, provid
 from core.atomic_io import replace_file, atomic_write_text
 from core.file_order import order_files
 from core.path_utils import post_id_tag, post_info_name
-from core.known_manager import KnownManager
 from core.session_manager import SessionManager
 from core.archive_manager import ArchiveManager
 from core.bandwidth_limiter import bandwidth_limiter
@@ -456,12 +455,10 @@ class FileDownloader:
 
     def __init__(
         self,
-        known_manager: KnownManager,
         session_manager: SessionManager,
         max_workers: int = 4,
         archive_manager: Optional[ArchiveManager] = None
     ):
-        self.known_manager = known_manager
         self.session_manager = session_manager
         self.max_workers = max_workers
         self.archive_manager = archive_manager
@@ -925,7 +922,6 @@ class FileDownloader:
         new_tasks = []
         not_queued: Counter = Counter()          # files skipped / renamed while building: counted in the
         renamed: Counter = Counter()             # log file (a line each only in the log panel)
-        self._unmatched_known_count = 0
         self.last_build_cancelled = False
         # cancel() bumps _session_id, so only a cancel issued during this build counts;
         # a stale flag left over from an earlier cancelled scan must not abort it.
@@ -937,15 +933,6 @@ class FileDownloader:
         creator_clean = FilterEngine.clean_filesystem_text(creator_name, max_len=80, fallback="creator")
 
         posts_to_process = list(posts)
-
-        # Character name discovery from post titles (reported only; nothing is added to the Known list)
-        new_chars = self.known_manager.find_candidates_in_posts(posts_to_process)
-        if new_chars:
-            logger.debug(
-                f"Spotted {len(new_chars)} possible character name(s) in post titles (not added to Known list): "
-                f"{', '.join(new_chars[:6])}{'...' if len(new_chars) > 6 else ''}",
-                category="known"
-            )
 
         logger.info(f"Structuring download plan for {len(posts_to_process)} posts...", category="downloader")
 
@@ -1032,50 +1019,9 @@ class FileDownloader:
                 creator_folder_name = os.path.basename(pick_creator_folder(base_dir or "", creator_clean, service))
             creator_folder = creator_folder_name
             if artist_dir:
-                norm_art = os.path.normpath(artist_dir)
-                norm_base = os.path.normpath(base_dir) if base_dir else ""
-                if norm_base and (norm_art == norm_base or norm_art.startswith(norm_base + os.sep)):
-                    base_root = base_dir
-                else:
-                    base_root = os.path.dirname(norm_art) or base_dir
-                creator_folder = os.path.basename(norm_art) or creator_folder
+                folder_parts = [artist_dir]
             else:
-                base_root = base_dir
-
-            if options.separate_by_known:
-                folder_parts = [base_root]
-                cand_filenames = []
-                _mf = post.get("file")
-                if isinstance(_mf, dict) and _mf.get("name"):
-                    cand_filenames.append(_mf["name"])
-                for _att in post.get("attachments") or []:
-                    if isinstance(_att, dict) and _att.get("name"):
-                        cand_filenames.append(_att["name"])
-
-                matched_hierarchy = self.known_manager.find_matching_hierarchy(
-                    post_title,
-                    tags=post.get("tags"),
-                    filenames=cand_filenames,
-                    content=post.get("content")
-                )
-                if matched_hierarchy:
-                    franchise, char_name = matched_hierarchy
-                    if franchise and franchise.strip() and franchise not in ("Other", "General"):
-                        clean_fr = FilterEngine.clean_filesystem_text(franchise, max_len=60, fallback="Franchise")
-                        folder_parts.append(clean_fr)
-                    if char_name and char_name.strip() and char_name.lower() != (franchise or "").lower():
-                        clean_ch = FilterEngine.clean_filesystem_text(char_name, max_len=60, fallback="Character")
-                        folder_parts.append(clean_ch)
-                else:
-                    self._unmatched_known_count = getattr(self, "_unmatched_known_count", 0) + 1
-                    folder_parts.append("Other")
-
-                folder_parts.append(creator_folder)
-            else:
-                if artist_dir:
-                    folder_parts = [artist_dir]
-                else:
-                    folder_parts = [base_dir, creator_folder]
+                folder_parts = [base_dir, creator_folder]
 
             creator_base_parts = list(folder_parts)
             post_subfolder_name = ""
@@ -1166,16 +1112,6 @@ class FileDownloader:
 
                     if should_prepare_info:
                         tags_list = FilterEngine.normalize_tags(post.get("tags"))
-                        if getattr(self, "known_manager", None):
-                            try:
-                                hit = self.known_manager.find_matching_hierarchy(post_title)
-                                if hit:
-                                    fr, ch = hit
-                                    for n in (ch, fr):
-                                        if n and n.lower() != "general" and n not in tags_list:
-                                            tags_list.insert(0, n)
-                            except Exception:
-                                pass
                         tags_str = ", ".join(tags_list)
 
                         # Build creator profile URL
@@ -2920,15 +2856,6 @@ class FileDownloader:
                 category="downloader",
                 details=(f"Failed files ({len(failed_tasks)}):\n{failed_list}" if failed_tasks else "")
             )
-            if getattr(options, "separate_by_known", False):
-                unmatched = getattr(self, "_unmatched_known_count", 0)
-                ai_active = self.known_manager and getattr(self.known_manager, "_ai_recognition_enabled", False)
-                if unmatched > 0 and not ai_active:
-                    logger.info(
-                        f"💡 [AI Tip] {unmatched} post(s) were saved to 'Other' without a matching character in Known.txt. "
-                        "Enable Pawchive's offline AI in Settings → AI & Recognition to deduce obscure characters automatically.",
-                        category="ai"
-                    )
             if self.on_download_finished:
                 self.on_download_finished(True, f"Completed: {completed_count} downloaded{skip_msg}, {failed_count} failed.")
 

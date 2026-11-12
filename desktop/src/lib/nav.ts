@@ -2,7 +2,7 @@ import { useSyncExternalStore } from "react";
 
 export type ViewId =
   | "downloader" | "queue" | "watchlist" | "activity"
-  | "gallery" | "history" | "archive" | "known" | "vault"
+  | "gallery" | "history" | "archive" | "vault"
   | "decompressor" | "settings";
 
 type NavState = { view: ViewId; params: Record<string, string> };

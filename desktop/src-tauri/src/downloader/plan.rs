@@ -3,14 +3,14 @@
 //! the download archive, embedded videos for yt-dlp, post_info.txt texts, passwords, and the
 //! links-only scan. A port of FileDownloader.build_tasks_from_posts (core/downloader.py).
 //!
-//! The Known list (character folders), the download archive, video length probing and Pawchive's
+//! The download archive, video length probing and Pawchive's
 //! temporary links come from the caller (`Lookups`), so the planner itself is plain logic.
 
 use super::extract;
 use super::filters::{self as f, truthy, Options, AUDIO_EXTS, IMAGE_EXTS, VIDEO_EXTS};
 use super::naming::{self as n, NameParts};
 use super::order::order_files;
-use super::py::{basename, dirname, join, normpath, pystr, splitext};
+use super::py::{basename, dirname, join, pystr, splitext};
 use md5::{Digest, Md5};
 use regex::Regex;
 use serde_json::{json, Map, Value};
@@ -30,10 +30,6 @@ const ARCHIVE_EXTENSIONS: &[&str] = &[".7z", ".zip", ".rar", ".tar", ".gz", ".bz
 
 /// What the planner asks the rest of the app
 pub trait Lookups {
-    /// (franchise, character) for a post from the Known list
-    fn known_hierarchy(&self, _title: &str, _tags: Option<&Value>, _filenames: &[String], _content: Option<&Value>) -> Option<(String, String)> {
-        None
-    }
     fn archive_enabled(&self) -> bool {
         false
     }
@@ -108,7 +104,6 @@ pub struct Plan {
     /// Why files weren't queued / were renamed: {"already on disk": 12, ...}
     pub not_queued: BTreeMap<String, usize>,
     pub renamed: BTreeMap<String, usize>,
-    pub unmatched_known: usize,
     pub cancelled: bool,
 }
 
@@ -352,56 +347,8 @@ pub fn build(posts: &[Value], o: &Options, r: &Request, ctx: &dyn Lookups) -> Pl
                 basename(&p.to_string_lossy()).to_string()
             })
             .clone();
-        let mut creator_folder = creator_folder_default;
-        let base_root = match r.artist_dir.filter(|a| !a.is_empty()) {
-            Some(artist_dir) => {
-                let norm_art = normpath(artist_dir);
-                let norm_base = if r.base_dir.is_empty() { String::new() } else { normpath(r.base_dir) };
-                let root = if !norm_base.is_empty() && (norm_art == norm_base || norm_art.starts_with(&format!("{norm_base}\\"))) {
-                    r.base_dir.to_string()
-                } else {
-                    let d = dirname(&norm_art);
-                    if d.is_empty() { r.base_dir.to_string() } else { d }
-                };
-                let b = basename(&norm_art);
-                if !b.is_empty() {
-                    creator_folder = b.to_string();
-                }
-                root
-            }
-            None => r.base_dir.to_string(),
-        };
-
-        let mut parts: Vec<String> = if o.flag("separate_by_known") {
-            let mut parts = vec![base_root.clone()];
-            let mut names = Vec::new();
-            if let Some(m) = post.get("file").filter(|m| m.is_object()) {
-                if let Some(nm) = m.get("name").filter(|v| truthy(v)) {
-                    names.push(pystr(nm));
-                }
-            }
-            for a in post.get("attachments").and_then(Value::as_array).into_iter().flatten() {
-                if let Some(nm) = a.get("name").filter(|v| truthy(v)) {
-                    names.push(pystr(nm));
-                }
-            }
-            match ctx.known_hierarchy(&post_title, post.get("tags"), &names, post.get("content")) {
-                Some((franchise, character)) => {
-                    if !franchise.trim().is_empty() && franchise != "Other" && franchise != "General" {
-                        parts.push(n::clean_filesystem_text(&franchise, 60, "Franchise"));
-                    }
-                    if !character.trim().is_empty() && character.to_lowercase() != franchise.to_lowercase() {
-                        parts.push(n::clean_filesystem_text(&character, 60, "Character"));
-                    }
-                }
-                None => {
-                    plan.unmatched_known += 1;
-                    parts.push("Other".into());
-                }
-            }
-            parts.push(creator_folder.clone());
-            parts
-        } else if let Some(a) = r.artist_dir.filter(|a| !a.is_empty()) {
+        let creator_folder = creator_folder_default;
+        let mut parts: Vec<String> = if let Some(a) = r.artist_dir.filter(|a| !a.is_empty()) {
             vec![a.to_string()]
         } else {
             vec![r.base_dir.to_string(), creator_folder.clone()]
@@ -478,7 +425,7 @@ pub fn build(posts: &[Value], o: &Options, r: &Request, ctx: &dyn Lookups) -> Pl
                 true
             };
             if prepare {
-                post_info = Some((info_path, post_info_text(post, &post_title, &post_id, &date_str, &task_post_url, &passwords, &caption_clean, r, ctx)));
+                post_info = Some((info_path, post_info_text(post, &post_title, &post_id, &date_str, &task_post_url, &passwords, &caption_clean, r)));
             }
         }
 
@@ -987,15 +934,8 @@ pub fn build(posts: &[Value], o: &Options, r: &Request, ctx: &dyn Lookups) -> Pl
 }
 
 #[allow(clippy::too_many_arguments)]
-fn post_info_text(post: &Value, title: &str, post_id: &str, date: &str, post_url: &str, passwords: &[String], caption: &str, r: &Request, ctx: &dyn Lookups) -> String {
-    let mut tags = n::normalize_tags(post.get("tags").unwrap_or(&Value::Null));
-    if let Some((fr, ch)) = ctx.known_hierarchy(title, None, &[], None) {
-        for name in [ch, fr] {
-            if !name.is_empty() && name.to_lowercase() != "general" && !tags.contains(&name) {
-                tags.insert(0, name);
-            }
-        }
-    }
+fn post_info_text(post: &Value, title: &str, post_id: &str, date: &str, post_url: &str, passwords: &[String], caption: &str, r: &Request) -> String {
+    let tags = n::normalize_tags(post.get("tags").unwrap_or(&Value::Null));
     let (domain, service) = (r.domain, r.service);
     let user = post.get("user").filter(|v| truthy(v)).map(pystr).unwrap_or_default();
     let creator_url = match (!domain.is_empty() && !service.is_empty(), user.is_empty()) {
@@ -1112,13 +1052,6 @@ mod tests {
     /// The stand-ins of tools/golden_plan.py
     struct Stub(HashSet<String>);
     impl Lookups for Stub {
-        fn known_hierarchy(&self, title: &str, _: Option<&Value>, _: &[String], _: Option<&Value>) -> Option<(String, String)> {
-            let low = title.to_lowercase();
-            [("miku", "Vocaloid", "Hatsune Miku"), ("samus", "Metroid", "Samus"), ("general", "General", "General")]
-                .iter()
-                .find(|(k, _, _)| low.contains(k))
-                .map(|(_, f, c)| (f.to_string(), c.to_string()))
-        }
         fn archive_enabled(&self) -> bool {
             !self.0.is_empty()
         }
@@ -1188,7 +1121,6 @@ mod tests {
             "writes": plan.write_now.iter().map(|(p, id, c)| json!([sub(p), id, c])).collect::<Vec<_>>(),
             "harvested_links": plan.harvested_links,
             "harvested_records": records,
-            "unmatched_known": plan.unmatched_known,
         })
     }
 

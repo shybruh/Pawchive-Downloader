@@ -6,7 +6,7 @@
 
 A Rust shell (Tauri) starts the Python engine in the background, and the React UI talks to both over
 a local WebSocket. The parts already in Rust (downloads, site scans, the download planner, the
-Watchlist, the download archive's lookups, Known-series sorting) are served by the shell itself; the
+Watchlist and the account favorites, the download archive's lookups) are served by the shell itself; the
 Python engine calls them over a second local socket (`src-tauri/src/downloader/service.rs`).
 
 ```
@@ -107,7 +107,7 @@ For a local build, run `python build_desktop.py` from the repository root (see t
 | Watchlist | search, filters, check now / on startup, download new posts, favorites, move unsupported-site creators to Pawchive |
 | Activity log | live, searchable, filter by level, export |
 | Gallery | places & drives, breadcrumbs, grid / list, thumbnails, multi-select, rename / move / delete (Recycle Bin) with undo, new folder, search inside subfolders, duplicate finder, image viewer and video player |
-| History, Known series | ✓ |
+| History | ✓ |
 | Archive | stats, search & filters, creators → posts → files, check files on disk, forget missing, import / export, rebuild from a folder |
 | Link vault | creators → posts → links with health and passwords, collect links from a creator, check links, export, send passwords to the Decompressor |
 | Decompressor | scan folders, grouped selection, extract with live progress, password prompts and bank, options |

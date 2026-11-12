@@ -26,7 +26,7 @@
 //!   `{"t": "record_file", "key", "size", "path"}`
 //!   `{"t": "ask", "id", "fn", "args"}` for what the app still knows or does: is_archived, cookie,
 //!   refresh_link, special (yt-dlp / Telegram files), post_process, limit; while planning also
-//!   known, archived, plan_cancelled
+//!   archived, plan_cancelled
 //!   `{"t": "note", "fn", "args"}`  the same without an answer: record_link, archive_password,
 //!   add_passwords, log
 
@@ -236,26 +236,11 @@ struct PlanCtx {
     /// The download archive (None: asked of the app)
     db: Option<Arc<crate::archive::Archive>>,
     sites: SiteClient,
-    /// Known.txt and the learned franchise names ("": asked of the app)
-    known_txt: String,
-    franchise_cache: String,
     /// Stopping (a watchlist check's own flag), instead of asking the app
     stop: Option<Arc<AtomicBool>>,
 }
 
 impl Lookups for PlanCtx {
-    fn known_hierarchy(&self, title: &str, tags: Option<&Value>, filenames: &[String], content: Option<&Value>) -> Option<(String, String)> {
-        if !self.known_txt.is_empty() {
-            let text = content.and_then(Value::as_str).unwrap_or("");
-            if let Some(hit) = crate::known::with_list(&self.known_txt, &self.franchise_cache, |k| k.find_matching_hierarchy(title, tags, filenames, text)) {
-                return hit;
-            }
-        }
-        let a = self.link.ask("known", json!([title, tags, filenames, content]));
-        let a = a.as_array()?;
-        let s = |i: usize| a.get(i).and_then(Value::as_str).unwrap_or("").to_string();
-        Some((s(0), s(1)))
-    }
     fn archive_enabled(&self) -> bool {
         self.archive
     }
@@ -306,12 +291,11 @@ fn plan_call(id: u64, args: &Value) -> Result<Value, String> {
         "harvested_records": p.harvested_records,
         "not_queued": p.not_queued,
         "renamed": p.renamed,
-        "unmatched_known": p.unmatched_known,
         "cancelled": p.cancelled,
     }))
 }
 
-/// The planner on these posts, with the plan call's arguments (options, request, archive, Known list)
+/// The planner on these posts, with the plan call's arguments (options, request, archive)
 pub fn plan_build(id: u64, args: &Value, posts: &[Value], stop: Option<Arc<AtomicBool>>) -> plan::Plan {
     let o = Options::from_dict(&args["options"]);
     let r = &args["request"];
@@ -337,8 +321,7 @@ pub fn plan_build(id: u64, args: &Value, posts: &[Value], stop: Option<Arc<Atomi
     sites.set_log(Box::new(move |level: &str, category: &str, msg: &str| lg.note("log", json!([level, msg, true, category]))));
     let archive = args["archive"].as_bool().unwrap_or(false);
     let db = if archive { archive_at(&l, args["archive_db"].as_str().unwrap_or("")) } else { None };
-    let text = |k: &str| args.get(k).and_then(Value::as_str).unwrap_or("").to_string();
-    let ctx = PlanCtx { link: l, id, archive, db, sites, known_txt: text("known_txt"), franchise_cache: text("franchise_cache"), stop };
+    let ctx = PlanCtx { link: l, id, archive, db, sites, stop };
     plan::build(posts, &o, &req, &ctx)
 }
 

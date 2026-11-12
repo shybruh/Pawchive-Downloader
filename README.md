@@ -28,8 +28,8 @@ rest moves over.
 - **A completely new interface** (`desktop/`): consistent shadcn-style components, Lucide icons, Geist type, a
   sidebar layout, light and dark themes, and layouts that fit any window size without overflowing.
 - **A Rust download engine** (`desktop/src-tauri/src/`): downloads, the queue, site scans, the download planner,
-  the Watchlist (its checks, its database and its list), the download archive's lookups and Known-series sorting run
-  in Rust. Each part is checked against the Python code it replaces before it switches over.
+  the Watchlist (its checks, its database and its list), the download archive's lookups and the account favorites
+  run in Rust. Each part is checked against the Python code it replaces before it switches over.
 - **The rest runs as a background process** (`server/`): what's still Python (Telegram, the cloud hosts, the
   Decompressor and more) runs out of sight; the Rust shell starts it, talks to it over a local, token-protected
   connection, and shuts the whole process tree down with the app.
@@ -50,7 +50,7 @@ rest moves over.
 | **Archive** | A record of every downloaded file so nothing is fetched twice — search it, check files on disk, import, export or rebuild it from folders |
 | **Link vault** | External links (MEGA, Google Drive, Dropbox…) collected from posts, with their passwords and link health checks |
 | **Decompressor** | Find and extract archives in bulk, with a password bank and prompts for locked files |
-| **And more** | Activity log, download history, known-series sorting, accounts (incl. Telegram), bandwidth limits, proxy |
+| **And more** | Activity log, download history, accounts (incl. Telegram), bandwidth limits, proxy |
 
 ## Screenshots
 
@@ -64,12 +64,10 @@ rest moves over.
     <td align="center"><b>Light theme</b></td>
   </tr>
   <tr>
-    <td><img src="assets/screenshots/known-series-dark.png" alt="Known series" /></td>
-    <td><img src="assets/screenshots/settings-dark.png" alt="Settings" /></td>
+    <td colspan="2" align="center"><img src="assets/screenshots/settings-dark.png" alt="Settings" width="50%" /></td>
   </tr>
   <tr>
-    <td align="center"><b>Known series</b>: sort downloads into series and character folders</td>
-    <td align="center"><b>Settings</b></td>
+    <td colspan="2" align="center"><b>Settings</b></td>
   </tr>
 </table>
 

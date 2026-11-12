@@ -24,7 +24,7 @@ fn defaults() -> Map<String, Value> {
         "characters": "", "character_scope": "title", "skip_words": "", "skip_scope": "posts", "remove_words": "",
         "file_type": "all", "skip_archives": false, "download_thumbnails_only": false, "scan_content_images": true,
         "download_dms": false, "compress_to_webp": false, "keep_duplicates": false, "favorite_mode": false,
-        "subfolder_per_post": true, "date_prefix": true, "separate_by_known": false,
+        "subfolder_per_post": true, "date_prefix": true,
         "download_revisions": false, "adaptive_threading": false, "threads_locked": false, "auto_retry_at_end": false,
         "filename_style": "post_title", "filename_template": "{title} - {orig_name}", "proxy_url": "",
         "page_start": 1, "page_end": 999999, "download_delay": 2.0, "save_post_metadata": true, "download_embeds": true,
@@ -73,7 +73,7 @@ impl Options {
         // the same conversions FilterOptions applies
         let bools = [
             "skip_archives", "download_thumbnails_only", "scan_content_images", "download_dms", "compress_to_webp",
-            "keep_duplicates", "favorite_mode", "subfolder_per_post", "date_prefix", "separate_by_known",
+            "keep_duplicates", "favorite_mode", "subfolder_per_post", "date_prefix",
             "download_revisions", "adaptive_threading", "threads_locked", "auto_retry_at_end",
             "save_post_metadata", "download_embeds", "file_index_prefix", "skip_post_covers", "download_pawchive_temporary_files",
             "write_audio_metadata", "fallback_to_thumbnails", "redownload_small_files", "skip_retry_404", "write_sidecars",

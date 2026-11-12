@@ -516,7 +516,6 @@ pub fn download(id: u64, a: &Value) -> Result<Value, String> {
             "harvested_records": plan.harvested_records,
             "not_queued": plan.not_queued,
             "renamed": plan.renamed,
-            "unmatched_known": plan.unmatched_known,
             "cancelled": plan.cancelled,
         },
     }))

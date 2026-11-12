@@ -180,7 +180,6 @@ class FilterOptions:
         favorite_mode: bool = False,
         subfolder_per_post: bool = True,
         date_prefix: bool = True,
-        separate_by_known: bool = False,
         download_revisions: bool = False,
         adaptive_threading: bool = False,
         threads_locked: bool = False,
@@ -228,7 +227,6 @@ class FilterOptions:
         self.favorite_mode = favorite_mode
         self.subfolder_per_post = subfolder_per_post
         self.date_prefix = date_prefix
-        self.separate_by_known = separate_by_known
         self.download_revisions = download_revisions
         self.adaptive_threading = adaptive_threading
         self.threads_locked = threads_locked
@@ -280,7 +278,6 @@ class FilterOptions:
             "favorite_mode": self.favorite_mode,
             "subfolder_per_post": self.subfolder_per_post,
             "date_prefix": self.date_prefix,
-            "separate_by_known": self.separate_by_known,
             "download_revisions": self.download_revisions,
             "adaptive_threading": self.adaptive_threading,
             "threads_locked": self.threads_locked,
@@ -334,7 +331,6 @@ class FilterOptions:
             favorite_mode=bool(d.get("favorite_mode", False)),
             subfolder_per_post=bool(d.get("subfolder_per_post", True)),
             date_prefix=bool(d.get("date_prefix", True)),
-            separate_by_known=bool(d.get("separate_by_known", False)),
             download_revisions=bool(d.get("download_revisions", False)),
             adaptive_threading=bool(d.get("adaptive_threading", False)),
             threads_locked=bool(d.get("threads_locked", False)),

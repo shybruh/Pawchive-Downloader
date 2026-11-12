@@ -15,7 +15,7 @@ Rust asks back for what still lives here: the download archive, login cookies, r
 Pawchive links, embedded videos (yt-dlp) and Telegram files, and post-processing.
 
 Planning (which files of the scanned posts to download, and where) runs in Rust too: the planner
-asks here for the Known list, the download archive and video lengths.
+asks here for the download archive and video lengths.
 
 Without the desktop shell (no PAWCHIVE_QUEUE_URL), the Python loop runs as before.
 """
@@ -41,8 +41,8 @@ _keys = itertools.count(1)
 _ALREADY_LOGGED = {"Download paused.", "Download resumed.", "Download cancellation requested."}
 # The planner's questions, and the questions answered on the reading thread (they wait on nothing
 # else from Rust, and planning a big creator asks thousands of them)
-_PLAN_ASKS = {"known", "archived", "plan_cancelled"}
-_QUICK_ASKS = {"known", "archived", "plan_cancelled", "is_archived", "cookie", "limit"}
+_PLAN_ASKS = {"archived", "plan_cancelled"}
+_QUICK_ASKS = {"archived", "plan_cancelled", "is_archived", "cookie", "limit"}
 
 
 def available() -> bool:
@@ -365,18 +365,8 @@ class RustDownloader(FileDownloader):
         from core import folder_naming
         from core.downloader import DownloadTask, MediaTypes
 
-        self._unmatched_known_count = 0
         self.last_build_cancelled = False
         session = self._session_id          # (only a cancel issued during this build counts)
-        try:
-            new_chars = self.known_manager.find_candidates_in_posts(posts)
-        except Exception:
-            new_chars = []
-        if new_chars:
-            logger.debug(
-                f"Spotted {len(new_chars)} possible character name(s) in post titles (not added to Known list): "
-                f"{', '.join(new_chars[:6])}{'...' if len(new_chars) > 6 else ''}",
-                category="known")
         logger.info(f"Structuring download plan for {len(posts)} posts...", category="downloader")
 
         cid = self._link.new_call_id()
@@ -387,7 +377,6 @@ class RustDownloader(FileDownloader):
                 "options": options.to_dict(),
                 "archive": bool(self.archive_manager and self.archive_manager.is_enabled),
                 "archive_db": self._archive_db(),
-                **self._known_files(),
                 "request": {"creator_name": creator_name or "", "service": service or "", "domain": domain or "",
                             "base_dir": base_dir or "", "batch_id": batch_id or "", "artist_dir": artist_dir or "",
                             "user_id": str(user_id or ""), "include_service": bool(folder_naming.include_service)},
@@ -409,7 +398,6 @@ class RustDownloader(FileDownloader):
             self.last_build_cancelled = True
             logger.info("Task structuring cancelled by user.", category="downloader")
             return []
-        self._unmatched_known_count = int(plan.get("unmatched_known") or 0)
 
         tasks = []
         for d in plan.get("tasks") or []:
@@ -457,24 +445,11 @@ class RustDownloader(FileDownloader):
         if fn == "plan_cancelled":
             check = self._plans.get(args[0])
             return bool(check()) if check else False
-        if fn == "known":
-            title, tags, filenames, content = (list(args) + [None] * 4)[:4]
-            hit = self.known_manager.find_matching_hierarchy(title, tags=tags, filenames=filenames, content=content)
-            return [hit[0] or "", hit[1] or ""] if hit else None
         if fn == "archived":
             service, post_id, file_id, sha = args
             return bool(self.archive_manager and self.archive_manager.is_archived(
                 service=service, post_id=post_id, file_id=file_id, file_hash=sha))
         return None
-
-    def _known_files(self) -> Dict[str, str]:
-        """Known.txt and the learned franchise names, for the engine (it matches posts itself)"""
-        km = self.known_manager
-        path = getattr(km, "file_path", "") if km else ""
-        if not path or not os.path.exists(path):
-            return {}                            # (then the engine asks here)
-        return {"known_txt": path,
-                "franchise_cache": getattr(getattr(km, "franchise_resolver", None), "_cache_path", "") or ""}
 
     def _archive_db(self) -> str:
         """The download archive's file, for the engine (it looks files up and records them itself);

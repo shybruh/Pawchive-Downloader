@@ -7,7 +7,7 @@ QML bridge for Gallery tools that don't belong in the main app bridge:
 - Favourites and star ratings (kept in gallery_marks.json, followed through moves/renames)
 - Copying an image / file to the clipboard
 - Watching the open folder so new files show up live
-- Tagging files with characters / series from the Known list (for the character filter)
+- Tagging files with their posts' tags (for the character filter)
 """
 
 import json
@@ -596,49 +596,14 @@ class GalleryToolsBridge(QObject):
 
     @Slot('QVariantList', result=int)
     def tagItems(self, items: list) -> int:
-        """Tag [{path, title}] with Known-list characters / series in the background (answer: tagsReady)."""
+        """Tag [{path, title}] with their posts' tags in the background (answer: tagsReady)."""
         self._tag_token += 1
         token = self._tag_token
-        km = getattr(self._app, "known_manager", None)
         work = [(str(i.get("path", "")), str(i.get("title", ""))) for i in (items or []) if isinstance(i, dict)]
-        threading.Thread(target=self._run_tags, args=(token, km, work), daemon=True, name="GalleryTags").start()
+        threading.Thread(target=self._run_tags, args=(token, work), daemon=True, name="GalleryTags").start()
         return token
 
-    @staticmethod
-    def tags_for_title(km, title: str) -> List[str]:
-        """The matcher stops at the first name it recognises ("Marvel Rivals Emma Frost" -> "Marvel Rivals"),
-        so remove each match and look again to also find the character."""
-        tags: List[str] = []
-        text = title or ""
-        custom = {e.lower() for e in getattr(km, "entries", [])}
-        for attempt in range(3):
-            try:
-                hit = km.find_matching_hierarchy(text)
-            except Exception:
-                hit = None
-            if not hit:
-                break
-            franchise, character = hit
-            found = False
-            for name in (character, franchise):
-                if not name or name.lower() == "general" or name.lower() in (t.lower() for t in tags):
-                    continue
-                # Later passes run on leftover words ("Chocolate Cake"), so only trust full names
-                # (2+ words) or names from the user's own Known list there.
-                if attempt > 0 and len(name.split()) < 2 and name.lower() not in custom:
-                    continue
-                tags.append(name)
-                found = True
-            stripped = text
-            for name in (character, franchise):
-                if name:
-                    stripped = re.sub(re.escape(name), " ", stripped, flags=re.IGNORECASE)
-            if not found or stripped.strip() == text.strip():
-                break
-            text = stripped
-        return tags
-
-    def _run_tags(self, token, km, work):
+    def _run_tags(self, token, work):
         result = {}
         total = len(work)
         self.tagsProgress.emit(token, 0, total)
@@ -647,10 +612,7 @@ class GalleryToolsBridge(QObject):
                 logger.info(f"Gallery tagging cancelled by user at item {i}/{total}.", category="gallery")
                 self.tagsCancelled.emit(token, result)
                 return
-            legacy = self.tags_for_title(km, title) if km is not None else []
-            tags = GLOBAL_POST_META_INDEX.extract_tags_for_file(
-                path, title=title, km=km, legacy_tags=legacy
-            )
+            tags = GLOBAL_POST_META_INDEX.extract_tags_for_file(path, title=title)
             if tags:
                 result[path] = tags
             if (i + 1) % 5 == 0 or (i + 1) == total:
