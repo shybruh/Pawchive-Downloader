@@ -176,7 +176,7 @@ class BulkDecompressorEngine:
             self._7za_path = get_7za_path()
         return bool(self._7za_path and os.path.exists(self._7za_path))
 
-    def scan_locations(
+    def _py_scan_locations(
         self,
         locations: List[Tuple[str, str]],
         cancel_event: Optional[threading.Event] = None
@@ -271,7 +271,7 @@ class BulkDecompressorEngine:
 
         return items
 
-    def check_disk_space(
+    def _py_check_disk_space(
         self,
         items: List[ArchiveItem],
         delete_after: bool = False
@@ -347,7 +347,7 @@ class BulkDecompressorEngine:
             "encrypted", "password"
         ])
 
-    def test_password(
+    def _py_test_password(
         self,
         archive_path: str,
         password: str,
@@ -400,7 +400,7 @@ class BulkDecompressorEngine:
             logger.debug(f"test_password error on {archive_path}: {e}", category="decompressor")
             return False
 
-    def probe_if_encrypted(self, archive_path: str) -> Tuple[bool, str]:
+    def _py_probe_if_encrypted(self, archive_path: str) -> Tuple[bool, str]:
         """Whether an archive needs a password, from its file list ('7za l', ~0.1 s): '7za t' decompressed
         the whole archive just to ask, which doubled the time of every extraction."""
         if not self.has_7za or not os.path.exists(archive_path):
@@ -435,7 +435,7 @@ class BulkDecompressorEngine:
         except Exception:
             return False, ""
 
-    def extract_single_archive(
+    def _py_extract_single_archive(
         self,
         item: ArchiveItem,
         password: Optional[str] = None,
@@ -462,7 +462,7 @@ class BulkDecompressorEngine:
         # Pre-check: if no password was provided, probe in-memory first.
         # This prevents 7-Zip from creating a target folder and 0-byte ghost files on disk.
         if not effective_pw and probe:
-            is_enc, enc_err = self.probe_if_encrypted(item.path)
+            is_enc, enc_err = self._py_probe_if_encrypted(item.path)
             if is_enc:
                 return False, f"ERROR: Can not open encrypted archive. Wrong password? ({enc_err})"
 
@@ -633,7 +633,7 @@ class BulkDecompressorEngine:
             err_msg = f"7-Zip exited with code {ret_code}: {tail_err or 'Decompression failed'}"
             return False, err_msg
 
-    def cancel_all(self):
+    def _py_cancel_all(self):
         """Terminate all actively running extraction processes."""
         with self._lock:
             for proc in list(self.active_processes.values()):
@@ -642,3 +642,100 @@ class BulkDecompressorEngine:
                 except Exception:
                     pass
             self.active_processes.clear()
+
+    # ── In the download engine (src-tauri/src/decompress/), here when it can't be reached ──
+
+    def _rust(self, args: Dict[str, Any], progress=None, cancel_event: Optional[threading.Event] = None):
+        """(True, answer) from the engine's Decompressor, or (False, None)"""
+        return rust_decompress(args, progress, cancel_event)
+
+    def scan_locations(self, locations: List[Tuple[str, str]], cancel_event: Optional[threading.Event] = None) -> List[ArchiveItem]:
+        ok, v = self._rust({"op": "scan", "locations": [[str(p or ""), str(c or "")] for p, c in locations]}, cancel_event=cancel_event)
+        if ok and isinstance(v, list):
+            return [item_from_dict(d) for d in v]
+        return self._py_scan_locations(locations, cancel_event)
+
+    def check_disk_space(self, items: List[ArchiveItem], delete_after: bool = False) -> List[DiskCheckResult]:
+        ok, v = self._rust({"op": "disk", "items": [i.to_dict() for i in items]})
+        if ok and isinstance(v, list):
+            return [DiskCheckResult(drive=d["drive"], archive_count=d["archiveCount"], total_archive_size=d["totalArchiveSize"],
+                                    estimated_required=d["estimatedRequired"], free_bytes=d["freeBytes"],
+                                    is_sufficient=d["isSufficient"]) for d in v]
+        return self._py_check_disk_space(items, delete_after)
+
+    def test_password(self, archive_path: str, password: str, cancel_event: Optional[threading.Event] = None) -> bool:
+        if self.has_7za:
+            ok, v = self._rust({"op": "test", "seven": self._7za_path, "path": archive_path, "password": password or ""},
+                               cancel_event=cancel_event)
+            if ok and isinstance(v, bool):
+                return v
+        return self._py_test_password(archive_path, password, cancel_event)
+
+    def probe_if_encrypted(self, archive_path: str) -> Tuple[bool, str]:
+        if self.has_7za:
+            ok, v = self._rust({"op": "probe", "seven": self._7za_path, "path": archive_path})
+            if ok and isinstance(v, list) and len(v) == 2:
+                return bool(v[0]), str(v[1])
+        return self._py_probe_if_encrypted(archive_path)
+
+    def extract_single_archive(self, item: ArchiveItem, password: Optional[str] = None, threads_per_archive: int = 2,
+                               delete_after: bool = False, progress_callback: Optional[Callable[[float], None]] = None,
+                               cancel_event: Optional[threading.Event] = None, overwrite: bool = True,
+                               probe: bool = True) -> Tuple[bool, str]:
+        if self.has_7za:
+            def on_progress(note):
+                if progress_callback and isinstance(note, dict) and "progress" in note:
+                    progress_callback(float(note["progress"]))
+            ok, v = self._rust({"op": "extract", "seven": self._7za_path, "item": item.to_dict(), "password": password,
+                                "threads": int(threads_per_archive), "delete_after": bool(delete_after),
+                                "overwrite": bool(overwrite), "probe": bool(probe)}, on_progress, cancel_event)
+            if ok and isinstance(v, dict) and isinstance(v.get("item"), dict):
+                apply_item_dict(item, v["item"])
+                return bool(v.get("ok")), str(v.get("error") or "")
+        return self._py_extract_single_archive(item, password, threads_per_archive, delete_after, progress_callback,
+                                               cancel_event, overwrite, probe)
+
+    def cancel_all(self):
+        self._rust({"op": "cancel_all"})
+        self._py_cancel_all()
+
+
+def rust_decompress(args: Dict[str, Any], progress=None, cancel_event: Optional[threading.Event] = None):
+    """(True, answer) from the engine's Decompressor, or (False, None) when it can't be asked"""
+    if os.environ.get("PAWCHIVE_PYTHON_DECOMPRESS", "") == "1":
+        return False, None
+    try:
+        from services import rust_queue
+        if not rust_queue.available():
+            return False, None
+        link = rust_queue.shared_link()
+        if not link.connect():
+            return False, None
+        cancelled = (lambda: cancel_event.is_set()) if cancel_event is not None else None
+        ok, v = link.call("decompress", args, progress=progress, cancelled=cancelled)
+    except Exception as e:
+        logger.debug(f"The download engine couldn't do the Decompressor's {args.get('op')} ({e}).", category="decompressor")
+        return False, None
+    if not ok:
+        logger.debug(f"The download engine couldn't do the Decompressor's {args.get('op')} ({v}); doing it here.", category="decompressor")
+        return False, None
+    return True, v
+
+
+_ITEM_FIELDS = {"id": "item_id", "path": "path", "filename": "filename", "directory": "directory", "scanRoot": "scan_root",
+                "size": "size", "creator": "creator", "selected": "selected", "status": "status", "progress": "progress",
+                "errorMessage": "error_message", "targetDir": "target_dir", "password": "password",
+                "extractedPresent": "extracted_present", "extractedDir": "extracted_dir"}
+
+
+def apply_item_dict(item: ArchiveItem, d: Dict[str, Any]) -> None:
+    for k, attr in _ITEM_FIELDS.items():
+        if k in d and k != "id":
+            setattr(item, attr, d[k])
+
+
+def item_from_dict(d: Dict[str, Any]) -> ArchiveItem:
+    item = ArchiveItem(item_id=d["id"], path=d["path"], filename=d["filename"], directory=d["directory"],
+                       size=int(d.get("size") or 0), creator=d.get("creator") or "")
+    apply_item_dict(item, d)
+    return item

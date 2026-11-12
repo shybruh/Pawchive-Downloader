@@ -10,6 +10,7 @@ mod host;
 mod bridge;
 mod watchlist;
 mod vault;
+mod decompress;
 mod media;
 mod transfer;
 mod proc_group;

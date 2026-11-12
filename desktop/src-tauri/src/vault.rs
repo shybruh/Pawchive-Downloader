@@ -708,6 +708,16 @@ fn vault(path: &str) -> Result<Arc<Mutex<Vault>>, String> {
     Ok(v)
 }
 
+/// What the Decompressor reads from a vault file: its creators, posts and every password
+pub fn view(path: &str) -> Option<(Map<String, Value>, Map<String, Value>, Vec<String>)> {
+    if path.is_empty() {
+        return None;
+    }
+    let v = vault(path).ok()?;
+    let v = v.lock().unwrap();
+    Some((v.creators.clone(), v.posts.clone(), v.all_passwords()))
+}
+
 static PROBING: AtomicBool = AtomicBool::new(false);
 
 /// Checks the vault's links (or a creator's), 8 at a time, saving every 50; progress notes

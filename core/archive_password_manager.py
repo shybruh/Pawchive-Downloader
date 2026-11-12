@@ -152,7 +152,7 @@ class ArchivePasswordManager:
         with self._lock:
             return {k: list(v) for k, v in self._creator_passwords.items() if v}
 
-    def add_password(self, password: str, creator: str = "Global") -> bool:
+    def _py_add_password(self, password: str, creator: str = "Global") -> bool:
         """Adds a password under a specific creator (or 'Global') if non-empty and unique."""
         p = str(password or "").strip()
         c = str(creator or "Global").strip() or "Global"
@@ -169,7 +169,7 @@ class ArchivePasswordManager:
                 return True
         return False
 
-    def add_passwords(self, passwords: List[str], creator: str = "Global") -> int:
+    def _py_add_passwords(self, passwords: List[str], creator: str = "Global") -> int:
         """Adds multiple passwords to a creator, deduplicating."""
         added = 0
         c = str(creator or "Global").strip() or "Global"
@@ -187,7 +187,7 @@ class ArchivePasswordManager:
                 logger.info(f"Added {added} password(s) to Decompressor Password Bank [{c}].", category="decompressor")
         return added
 
-    def remove_password(self, password: str, creator: str = "") -> bool:
+    def _py_remove_password(self, password: str, creator: str = "") -> bool:
         """Removes a password from a specific creator (or all groups if creator is blank)."""
         p = str(password or "").strip()
         c = str(creator or "").strip()
@@ -221,7 +221,7 @@ class ArchivePasswordManager:
                 return True
         return False
 
-    def clear_passwords(self) -> bool:
+    def _py_clear_passwords(self) -> bool:
         """Wipes all saved passwords and archive mappings."""
         with self._lock:
             self._passwords.clear()
@@ -232,7 +232,7 @@ class ArchivePasswordManager:
             logger.info("Cleared Decompressor Password Bank.", category="decompressor")
             return True
 
-    def record_archive_password(self, archive_path: str, password: str, creator: str = ""):
+    def _py_record_archive_password(self, archive_path: str, password: str, creator: str = ""):
         """Associates a specific archive file path with a confirmed password and creator."""
         if not archive_path or not password:
             return
@@ -252,7 +252,7 @@ class ArchivePasswordManager:
         with self._lock:
             return self._archive_map.get(norm)
 
-    def sync_from_link_vault(self) -> int:
+    def _py_sync_from_link_vault(self) -> int:
         """Imports all detected passwords from Link Vault, mapped to their respective creators."""
         try:
             from core.link_vault_manager import link_vault_manager
@@ -341,7 +341,7 @@ class ArchivePasswordManager:
 
         return found_passwords
 
-    def find_candidate_passwords(self, archive_path: str, creator: str = "") -> List[str]:
+    def _py_find_candidate_passwords(self, archive_path: str, creator: str = "") -> List[str]:
         """
         Aggregates candidate passwords for an archive in priority order:
         1. Explicitly mapped password for this exact archive file path.
@@ -423,6 +423,85 @@ class ArchivePasswordManager:
             _add(c_clean.lower())
 
         return candidates
+
+    # ── In the download engine (src-tauri/src/decompress/bank.rs), here when it can't be reached ──
+
+    def _rust(self, do: str, with_vault: bool = False, **args):
+        """(True, answer) from the engine's password bank, or (False, None). After a change this
+        copy is read again from the files the engine wrote."""
+        from services.bulk_decompressor import rust_decompress
+        if with_vault:
+            try:
+                from core.link_vault_manager import link_vault_manager as lvm
+                if getattr(lvm, "_python_wrote", False):
+                    return False, None
+                args["vault"] = lvm.store.path
+            except Exception:
+                return False, None
+        if getattr(self, "_python_wrote", False):
+            ok, _ = rust_decompress({"op": "bank", "do": "reload", "dir": self.config_dir})
+            if not ok:
+                return False, None
+            self._python_wrote = False
+        ok, v = rust_decompress(dict(args, op="bank", do=do, dir=self.config_dir))
+        if ok and do in ("add", "add_many", "remove", "clear", "record", "sync"):
+            with self._lock:
+                self._passwords, self._creator_passwords, self._archive_map = [], {}, {}
+            self._load()
+        return ok, v
+
+    def _wrote_here(self):
+        self._python_wrote = True
+
+    def add_password(self, password: str, creator: str = "Global") -> bool:
+        ok, v = self._rust("add", password=str(password or ""), creator=str(creator or ""))
+        if ok:
+            return bool(v)
+        self._wrote_here()
+        return self._py_add_password(password, creator)
+
+    def add_passwords(self, passwords: List[str], creator: str = "Global") -> int:
+        ok, v = self._rust("add_many", passwords=[None if p is None else str(p) for p in passwords or []], creator=str(creator or ""))
+        if ok:
+            return int(v or 0)
+        self._wrote_here()
+        return self._py_add_passwords(passwords, creator)
+
+    def remove_password(self, password: str, creator: str = "") -> bool:
+        ok, v = self._rust("remove", password=str(password or ""), creator=str(creator or ""))
+        if ok:
+            return bool(v)
+        self._wrote_here()
+        return self._py_remove_password(password, creator)
+
+    def clear_passwords(self) -> bool:
+        ok, v = self._rust("clear")
+        if ok:
+            return bool(v)
+        self._wrote_here()
+        return self._py_clear_passwords()
+
+    def record_archive_password(self, archive_path: str, password: str, creator: str = ""):
+        if not archive_path or not password:
+            return
+        ok, _ = self._rust("record", archive=str(archive_path), password=str(password), creator=str(creator or ""))
+        if not ok:
+            self._wrote_here()
+            self._py_record_archive_password(archive_path, password, creator)
+
+    def sync_from_link_vault(self) -> int:
+        ok, v = self._rust("sync", with_vault=True)
+        if ok:
+            return int(v or 0)
+        self._wrote_here()
+        return self._py_sync_from_link_vault()
+
+    def find_candidate_passwords(self, archive_path: str, creator: str = "") -> List[str]:
+        ok, v = self._rust("candidates", with_vault=True, archive=str(archive_path or ""), creator=str(creator or ""))
+        if ok and isinstance(v, list):
+            return [str(p) for p in v]
+        return self._py_find_candidate_passwords(archive_path, creator)
+
 
 
 # Singleton instance
