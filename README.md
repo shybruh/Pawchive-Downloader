@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>A desktop archiver for Pawchive, cum.st, Telegram and cloud hosts — with a new, clean interface.</strong><br>
-  Tauri (Rust) shell · React + shadcn-style UI · Lucide icons · a download engine moving from Python to Rust.
+  Tauri (Rust) shell · React · Lucide icons · a download engine moving from Python to Rust.
 </p>
 
 ---
@@ -117,7 +117,7 @@ This fork keeps the original project's custom source-available license: personal
 [LICENSE](LICENSE). It bundles [yt-dlp](https://github.com/yt-dlp/yt-dlp) (public domain).
 
 ## Disclaimer
-**AI use:** Pawchive was originally developed with the help of AI coding assistants (Claude).
+**AI use:** Pawchive Downloader was originally developed with the help of AI coding assistants (Claude).
 The new downloader also uses the help of AI assistants for development(Claude and Qwen).
 This tool is meant for personal archiving and backup of content you have the right to access. Respect creators'
 terms and rights.
