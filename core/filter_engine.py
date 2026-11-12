@@ -116,7 +116,6 @@ def fit_path_for_windows(path: str, max_len: int = WINDOWS_MAX_PATH) -> str:
 
 
 # "Compress to WebP" levels: Pillow quality (None = lossless)
-WEBP_QUALITY_LEVELS = {"lossless": None, "high": 95, "balanced": 85, "small": 70, "smallest": 50}
 
 
 class FilenameStyles:
@@ -175,7 +174,6 @@ class FilterOptions:
         download_thumbnails_only: bool = False,
         scan_content_images: bool = True,
         download_dms: bool = False,
-        compress_to_webp: bool = False,
         keep_duplicates: bool = False,
         favorite_mode: bool = False,
         subfolder_per_post: bool = True,
@@ -199,17 +197,12 @@ class FilterOptions:
         download_pawchive_temporary_files: bool = True,
         min_file_size: str = "",
         max_file_size: str = "",
-        write_audio_metadata: bool = False,
         fallback_to_thumbnails: bool = False,
         redownload_small_files: bool = False,
         exact_extensions: str = "",
         skip_retry_404: bool = False,
         group_file_type: str = "none",
         file_order: str = "posted",
-        webp_quality: str = "balanced",
-        write_sidecars: bool = False,
-        sidecar_format: str = "json",
-        sidecar_scope: str = "per_file",
     ):
         self.characters = characters
         self.character_scope = character_scope
@@ -222,7 +215,6 @@ class FilterOptions:
         self.download_thumbnails_only = download_thumbnails_only
         self.scan_content_images = scan_content_images
         self.download_dms = download_dms
-        self.compress_to_webp = compress_to_webp
         self.keep_duplicates = keep_duplicates
         self.favorite_mode = favorite_mode
         self.subfolder_per_post = subfolder_per_post
@@ -246,7 +238,6 @@ class FilterOptions:
         self.download_pawchive_temporary_files = download_pawchive_temporary_files
         self.min_file_size = normalize_size_str(min_file_size) if min_file_size else ""
         self.max_file_size = normalize_size_str(max_file_size) if max_file_size else ""
-        self.write_audio_metadata = bool(write_audio_metadata)
         self.fallback_to_thumbnails = bool(fallback_to_thumbnails)
         self.redownload_small_files = bool(redownload_small_files)
         self.skip_retry_404 = bool(skip_retry_404)
@@ -255,10 +246,6 @@ class FilterOptions:
         from core.file_order import normalize_file_order
         self.file_order = normalize_file_order(file_order)
         # How strongly "Compress to WebP" compresses: lossless / high / balanced / small / smallest
-        self.webp_quality = str(webp_quality).lower() if str(webp_quality).lower() in WEBP_QUALITY_LEVELS else "balanced"
-        self.write_sidecars = bool(write_sidecars)
-        self.sidecar_format = str(sidecar_format).lower() if str(sidecar_format).lower() in ("json", "txt", "both") else "json"
-        self.sidecar_scope = str(sidecar_scope).lower() if str(sidecar_scope).lower() in ("per_file", "per_post") else "per_file"
 
     def to_dict(self) -> Dict[str, Any]:
         """Serialize filter options to dictionary for persistence."""
@@ -273,7 +260,6 @@ class FilterOptions:
             "download_thumbnails_only": self.download_thumbnails_only,
             "scan_content_images": self.scan_content_images,
             "download_dms": self.download_dms,
-            "compress_to_webp": self.compress_to_webp,
             "keep_duplicates": self.keep_duplicates,
             "favorite_mode": self.favorite_mode,
             "subfolder_per_post": self.subfolder_per_post,
@@ -297,17 +283,12 @@ class FilterOptions:
             "download_pawchive_temporary_files": self.download_pawchive_temporary_files,
             "min_file_size": self.min_file_size,
             "max_file_size": self.max_file_size,
-            "write_audio_metadata": self.write_audio_metadata,
             "fallback_to_thumbnails": self.fallback_to_thumbnails,
             "redownload_small_files": self.redownload_small_files,
             "exact_extensions": self.exact_extensions,
             "skip_retry_404": self.skip_retry_404,
             "group_file_type": self.group_file_type,
             "file_order": self.file_order,
-            "webp_quality": self.webp_quality,
-            "write_sidecars": self.write_sidecars,
-            "sidecar_format": self.sidecar_format,
-            "sidecar_scope": self.sidecar_scope,
         }
 
     @classmethod
@@ -326,7 +307,6 @@ class FilterOptions:
             download_thumbnails_only=bool(d.get("download_thumbnails_only", False)),
             scan_content_images=bool(d.get("scan_content_images", True)),
             download_dms=bool(d.get("download_dms", False)),
-            compress_to_webp=bool(d.get("compress_to_webp", False)),
             keep_duplicates=bool(d.get("keep_duplicates", False)),
             favorite_mode=bool(d.get("favorite_mode", False)),
             subfolder_per_post=bool(d.get("subfolder_per_post", True)),
@@ -350,17 +330,12 @@ class FilterOptions:
             download_pawchive_temporary_files=bool(d.get("download_pawchive_temporary_files", True)),
             min_file_size=d.get("min_file_size", ""),
             max_file_size=d.get("max_file_size", ""),
-            write_audio_metadata=bool(d.get("write_audio_metadata", False)),
             fallback_to_thumbnails=bool(d.get("fallback_to_thumbnails", False)),
             redownload_small_files=bool(d.get("redownload_small_files", False)),
             exact_extensions=d.get("exact_extensions", ""),
             skip_retry_404=bool(d.get("skip_retry_404", False)),
             group_file_type=d.get("group_file_type", "none"),
             file_order=d.get("file_order", "posted"),
-            webp_quality=d.get("webp_quality", "balanced"),
-            write_sidecars=bool(d.get("write_sidecars", False)),
-            sidecar_format=d.get("sidecar_format", "json"),
-            sidecar_scope=d.get("sidecar_scope", "per_file"),
         )
 FILTER_PROFILES = {
     "wip_sketches": {

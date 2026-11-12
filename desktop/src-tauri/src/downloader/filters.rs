@@ -23,16 +23,15 @@ fn defaults() -> Map<String, Value> {
     serde_json::from_str::<Value>(r#"{
         "characters": "", "character_scope": "title", "skip_words": "", "skip_scope": "posts", "remove_words": "",
         "file_type": "all", "skip_archives": false, "download_thumbnails_only": false, "scan_content_images": true,
-        "download_dms": false, "compress_to_webp": false, "keep_duplicates": false, "favorite_mode": false,
+        "download_dms": false, "keep_duplicates": false, "favorite_mode": false,
         "subfolder_per_post": true, "date_prefix": true,
         "download_revisions": false, "adaptive_threading": false, "threads_locked": false, "auto_retry_at_end": false,
         "filename_style": "post_title", "filename_template": "{title} - {orig_name}", "proxy_url": "",
         "page_start": 1, "page_end": 999999, "download_delay": 2.0, "save_post_metadata": true, "download_embeds": true,
         "file_index_prefix": false, "skip_post_covers": false, "date_after": "", "date_before": "",
-        "download_pawchive_temporary_files": true, "min_file_size": "", "max_file_size": "", "write_audio_metadata": false,
+        "download_pawchive_temporary_files": true, "min_file_size": "", "max_file_size": "",
         "fallback_to_thumbnails": false, "redownload_small_files": false, "exact_extensions": "", "skip_retry_404": false,
-        "group_file_type": "none", "file_order": "posted", "webp_quality": "balanced", "write_sidecars": false,
-        "sidecar_format": "json", "sidecar_scope": "per_file"
+        "group_file_type": "none", "file_order": "posted"
     }"#)
         .unwrap()
         .as_object()
@@ -77,11 +76,11 @@ impl Options {
         }
         // the same conversions FilterOptions applies
         let bools = [
-            "skip_archives", "download_thumbnails_only", "scan_content_images", "download_dms", "compress_to_webp",
+            "skip_archives", "download_thumbnails_only", "scan_content_images", "download_dms",
             "keep_duplicates", "favorite_mode", "subfolder_per_post", "date_prefix",
             "download_revisions", "adaptive_threading", "threads_locked", "auto_retry_at_end",
             "save_post_metadata", "download_embeds", "file_index_prefix", "skip_post_covers", "download_pawchive_temporary_files",
-            "write_audio_metadata", "fallback_to_thumbnails", "redownload_small_files", "skip_retry_404", "write_sidecars",
+            "fallback_to_thumbnails", "redownload_small_files", "skip_retry_404",
         ];
         for k in bools {
             let b = truthy(&m[k]);
@@ -116,9 +115,6 @@ impl Options {
         m.insert("group_file_type".into(), json!(pick(&m["group_file_type"], &["none", "post", "creator"], "none")));
         let order = as_text(&m["file_order"]).trim().to_lowercase();
         m.insert("file_order".into(), json!(if ["posted", "reversed", "name"].contains(&order.as_str()) { order } else { "posted".into() }));
-        m.insert("webp_quality".into(), json!(pick(&m["webp_quality"], &["lossless", "high", "balanced", "small", "smallest"], "balanced")));
-        m.insert("sidecar_format".into(), json!(pick(&m["sidecar_format"], &["json", "txt", "both"], "json")));
-        m.insert("sidecar_scope".into(), json!(pick(&m["sidecar_scope"], &["per_file", "per_post"], "per_file")));
         Self(m)
     }
 

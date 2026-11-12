@@ -804,7 +804,7 @@ class RustDownloader(FileDownloader):
         fn, args = msg.get("fn"), msg.get("args") or []
         value: Any = None
         try:
-            task = self._by_key.get(args[0]) if args and fn in ("refresh_link", "special", "post_process") else None
+            task = self._by_key.get(args[0]) if args and fn in ("refresh_link", "special") else None
             if fn in _PLAN_ASKS:
                 value = self._plan_answer(fn, args)
             elif fn == "cookie":
@@ -817,9 +817,6 @@ class RustDownloader(FileDownloader):
                 value = None
             elif fn == "refresh_link":
                 value = self._refresh_pawchive_temp_url(task) or ""
-            elif fn == "post_process":
-                self._post_process_downloaded_file(task, self._options_of(task))
-                value = True
             elif fn == "special":
                 # Embedded videos (yt-dlp) and Telegram files: the Python download as before
                 ok, text = FileDownloader._download_single_file(self, task, None, self._options_of(task))

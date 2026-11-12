@@ -25,7 +25,7 @@
 //!   `{"t": "log", "level", "message"}`, `{"t": "checkpoint"}`, `{"t": "discard_recovery"}`
 //!   `{"t": "record_file", "key", "size", "path"}`
 //!   `{"t": "ask", "id", "fn", "args"}` for what the app still knows or does: is_archived, cookie,
-//!   refresh_link, special (yt-dlp / Telegram files), post_process, limit; while planning also
+//!   refresh_link, special (yt-dlp / Telegram files), limit; while planning also
 //!   archived, plan_cancelled
 //!   `{"t": "note", "fn", "args"}`  the same without an answer: record_link, archive_password,
 //!   add_passwords, log, queue_action (the window paused / resumed / cancelled / removed a post or a
@@ -137,9 +137,6 @@ impl Hooks for Remote {
             (Some(ok), Some(msg)) => (ok, msg.to_string()),
             _ => (false, "Cancelled".into()),
         }
-    }
-    fn post_process(&self, t: &Task, _o: &Options) {
-        self.0.ask("post_process", json!([t.key]));
     }
     fn changed(&self, c: &Cell) {
         self.0.send(task_event(c));

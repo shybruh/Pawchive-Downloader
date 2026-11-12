@@ -264,7 +264,6 @@ def _write_post_info(path: str, content: str, post_id: str = "") -> None:
 from services import transfer_client
 from services.link_extractor import LinkExtractor
 from services.ytdlp_manager import YtDlpManager
-from core.audio_tagger import AudioTagger
 from services.telegram_service import TelegramService
 
 
@@ -3668,8 +3667,6 @@ class FileDownloader:
             if os.path.abspath(found_existing_path) != os.path.abspath(task.target_path):
                 _remove_quietly(found_existing_path)
 
-        self._post_process_downloaded_file(task, options)
-
         # Thread cooldown delay to avoid CDN rate limiting (429)
         if options.download_delay > 0 and not self._cancel_event.is_set():
             time.sleep(options.download_delay)
@@ -3764,122 +3761,6 @@ class FileDownloader:
                     category="file"
                 )
         return ""
-
-    def _post_process_downloaded_file(self, task: DownloadTask, options: FilterOptions):
-        """Runs post-download processing such as WebP compression and audio metadata tagging."""
-        if not task.target_path or not os.path.exists(task.target_path):
-            return
-
-        # 1. WebP conversion (the task and queue then point at the .webp file)
-        if options.compress_to_webp:
-            converted = self._convert_to_webp(task.target_path, getattr(options, "webp_quality", "balanced"))
-            if converted:
-                task.target_path = converted
-
-        # 2. Audio metadata tagging
-        if getattr(options, "write_audio_metadata", False) and AudioTagger.is_supported(task.target_path):
-            AudioTagger.tag_audio_file(
-                file_path=task.target_path,
-                artist=task.creator_name,
-                title=task.post_title or os.path.splitext(task.filename)[0],
-                album=task.post_title or task.creator_name,
-                date=getattr(task, "post_date", "") or "",
-                comment=getattr(task, "post_url", "") or task.url
-            )
-
-        # 3. Metadata sidecars (Hydrus Network, Eagle, Booru taggers)
-        if getattr(options, "write_sidecars", False):
-            self._write_sidecar_metadata(task, options)
-
-    def _write_sidecar_metadata(self, task: DownloadTask, options: FilterOptions):
-        """Generates companion metadata sidecars (.json / .txt) for external gallery software."""
-        try:
-            if not task.target_path or not os.path.exists(task.target_path):
-                return
-            sidecar_fmt = getattr(options, "sidecar_format", "json").lower()
-            sidecar_scope = getattr(options, "sidecar_scope", "per_file").lower()
-
-            dest_dir = os.path.dirname(task.target_path)
-            base_name = os.path.splitext(task.target_path)[0]
-
-            paths_to_write = []
-            if sidecar_scope == "per_post":
-                if sidecar_fmt in ("json", "both"):
-                    paths_to_write.append((os.path.join(dest_dir, "post_metadata.json"), "json"))
-                if sidecar_fmt in ("txt", "both"):
-                    paths_to_write.append((os.path.join(dest_dir, "post_metadata.txt"), "txt"))
-            else:
-                if sidecar_fmt in ("json", "both"):
-                    paths_to_write.append((f"{base_name}.json", "json"))
-                if sidecar_fmt in ("txt", "both"):
-                    paths_to_write.append((f"{base_name}.txt", "txt"))
-
-            tags_list = []
-            raw_tags = getattr(task, "tags", None)
-            if raw_tags:
-                from core.filter_engine import FilterEngine
-                tags_list = FilterEngine.normalize_tags(raw_tags)
-
-            if task.creator_name and f"creator:{task.creator_name}" not in tags_list:
-                tags_list.insert(0, f"creator:{task.creator_name}")
-            if task.service and f"service:{task.service}" not in tags_list:
-                tags_list.insert(1, f"service:{task.service}")
-
-            for out_path, fmt in paths_to_write:
-                if fmt == "json":
-                    meta = {
-                        "title": task.post_title or "",
-                        "creator": task.creator_name or "",
-                        "service": task.service or "",
-                        "user_id": task.user_id or "",
-                        "post_id": task.post_id or "",
-                        "post_url": task.post_url or "",
-                        "file_url": task.url or "",
-                        "filename": task.filename or os.path.basename(task.target_path),
-                        "file_size": task.file_size or (os.path.getsize(task.target_path) if os.path.exists(task.target_path) else 0),
-                        "file_hash": task.expected_sha256 or "",
-                        "published_at": getattr(task, "post_date", "") or "",
-                        "tags": tags_list
-                    }
-                    atomic_write_text(out_path, json.dumps(meta, ensure_ascii=False, indent=2))
-                elif fmt == "txt":
-                    lines = [t for t in tags_list]
-                    if getattr(task, "post_url", ""):
-                        lines.append(f"source:{task.post_url}")
-                    if getattr(task, "post_date", ""):
-                        lines.append(f"date:{task.post_date}")
-                    if task.post_title:
-                        lines.append(f"title:{task.post_title}")
-                    atomic_write_text(out_path, "\n".join(lines) + "\n")
-        except Exception as ex:
-            logger.debug(f"Could not save metadata sidecar for {task.filename}: {ex}", category="file")
-
-    def _convert_to_webp(self, file_path: str, level: str = "balanced") -> Optional[str]:
-        """Converts JPG/PNG to WebP at the chosen level; returns the new path, or None when the file
-        was kept as it was (also when the WebP wouldn't be smaller, e.g. lossless on a photo)."""
-        from core.filter_engine import WEBP_QUALITY_LEVELS
-        try:
-            _, ext = os.path.splitext(file_path.lower())
-            if ext in (".jpg", ".jpeg", ".png"):
-                webp_path = os.path.splitext(file_path)[0] + ".webp"
-                tmp_path = webp_path + PART_SUFFIX
-                quality = WEBP_QUALITY_LEVELS.get(str(level or "").lower(), 85)
-                with Image.open(file_path) as img:
-                    if quality is None:
-                        img.save(tmp_path, "WEBP", lossless=True, exact=True, quality=100, method=6)
-                    else:
-                        img.save(tmp_path, "WEBP", quality=quality, method=4)
-                if os.path.getsize(tmp_path) >= os.path.getsize(file_path):
-                    _remove_quietly(tmp_path)
-                    logger.debug(f"Kept {os.path.basename(file_path)}: as WebP it wasn't smaller.", category="downloader")
-                    return None
-                replace_file(tmp_path, webp_path)
-                os.remove(file_path)
-                return webp_path
-        except Exception as e:
-            _remove_quietly(os.path.splitext(file_path)[0] + ".webp" + PART_SUFFIX)
-            logger.debug(f"WebP compression skipped for {file_path}: {e}", category="downloader")
-        return None
 
     def _get_active_elapsed(self, now: float) -> float:
         """Returns the actual active downloading elapsed time, excluding all paused periods."""

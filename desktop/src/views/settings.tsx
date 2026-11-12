@@ -142,17 +142,6 @@ function FilesSection() {
       </Group>
       <Group title="Extras">
         <Field label="Save post text and metadata"><SwitchSetting prop="savePostMetadata" /></Field>
-        <Field label="Write sidecar files"><SwitchSetting prop="writeSidecars" /></Field>
-        <Field label="Sidecar format">
-          <SelectSetting prop="sidecarFormat" options={[{ value: "json", label: "JSON" }, { value: "txt", label: "Text" }]} />
-        </Field>
-        <Field label="Tag audio files"><SwitchSetting prop="writeAudioMetadata" /></Field>
-        <Field label="WebP quality">
-          <SelectSetting prop="webpQuality" options={[
-            { value: "lossless", label: "Lossless" }, { value: "high", label: "High" }, { value: "balanced", label: "Balanced" },
-            { value: "small", label: "Small" }, { value: "smallest", label: "Smallest" },
-          ]} />
-        </Field>
       </Group>
     </>
   );

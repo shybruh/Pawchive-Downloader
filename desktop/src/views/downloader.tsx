@@ -339,7 +339,6 @@ function FiltersCard() {
             <Toggle prop="downloadThumbnailsOnly" label="Thumbnails only" />
             <Toggle prop="fallbackToThumbnails" label="Fall back to thumbnails" />
             <Toggle prop="keepDuplicates" label="Keep duplicate files" />
-            <Toggle prop="compressWebp" label="Convert images to WebP" />
             <Toggle prop="downloadEmbeds" label="Download embedded videos" />
             <Toggle prop="favoriteMode" label="Favorites mode" />
             <Toggle prop="downloadDms" label="Include DMs" />

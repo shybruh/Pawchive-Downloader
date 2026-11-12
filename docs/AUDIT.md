@@ -39,8 +39,20 @@ marks, AI tagging, storage breakdown.
 | Unsupported archive sites | their mirror, file-server and metadata fallbacks, a `Referer` header for them sent to every other host, their accounts and every mention in the interface |
 | Qt Quick / QML in the engine | the thumbnail code no longer uses QML image providers; the packaged engine leaves out Qt Quick, QML, PDF, OpenGL and other unused Qt modules (486 MB → 124 MB) |
 | Upstream repo files | `SECURITY.md`, `.github/FUNDING.yml` |
+| Download archive | the Archive tab, its database (`archive_manager`, `archive_index`, `archive_rebuilder`, `src-tauri/src/archive/`), its lookups and records in downloading and planning, rebuild / repair / import / export; downloads still skip files already on disk |
+| Post-processing (**to be replaced by something better later**, see below) | converting images to WebP (and its quality setting), tagging audio files (`audio_tagger`, mutagen), sidecar files for Hydrus / Eagle / booru taggers (format and scope settings); the Python downloader's step after each file and the Rust engine's call back to it |
 
 Kept on purpose: `ffmpeg_manager` (the Decompressor uses ffmpeg), keyword tagging in the gallery tools.
+
+**Planned: a better post-processing step.** Removed on purpose (2026-11-12) to be done again properly,
+in Rust, later. What the old one did, for reference: after each file, (1) images re-saved as WebP at a
+chosen quality (Pillow; the queue then pointed at the .webp), (2) audio files tagged with artist =
+creator, title / album = post title, date, comment = post link (mutagen), (3) a .json / .txt sidecar
+per file or per post with creator, post, date, link and tags. Things to do better: run in the Rust
+engine instead of calling back into Python; lossy WebP / AVIF with a real encoder rather than the
+lossless-only `image` crate; keep the original or not as a choice; run on files already downloaded
+too (from the Gallery), not only new ones; one sidecar format that Hydrus and Eagle both import.
+Downloads still find a .webp / .avif copy made by the old step as "already on disk".
 
 ## 3. Porting the engine to Rust
 

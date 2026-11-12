@@ -109,8 +109,6 @@ pub trait Hooks: Send + Sync {
     fn special(&self, _c: &Cell, _o: &Options, _ctl: &Ctl) -> (bool, String) {
         (false, "This kind of file can't be downloaded here".into())
     }
-    /// After a file is saved: WebP conversion, audio tags, sidecar files
-    fn post_process(&self, _t: &Task, _o: &Options) {}
     /// Something about this file changed (status, progress)
     fn changed(&self, _c: &Cell) {}
     /// Download speed limit for all files together, bytes per second (0 = none)
@@ -879,7 +877,6 @@ fn finalize(c: &Cell, o: &Options, hooks: &dyn Hooks, ctl: &Ctl, part_path: &str
     if let Some(old) = upgrade_from.filter(|p| !p.eq_ignore_ascii_case(&task.target_path)) {
         remove_quietly(old);
     }
-    hooks.post_process(&task, o);
     let delay = o.to_dict().get("download_delay").and_then(|v| v.as_f64()).unwrap_or(0.0);
     if delay > 0.0 {
         ctl.nap(delay);

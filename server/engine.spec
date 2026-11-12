@@ -27,7 +27,7 @@ hidden_imports = [
     "PySide6.QtCore", "PySide6.QtGui", "PySide6.QtWidgets", "PySide6.QtNetwork", "PySide6.QtWebSockets",
     "Crypto", "Crypto.Cipher", "Crypto.Cipher.AES", "Crypto.Util", "Crypto.Util.Padding",
     "Crypto.Util.strxor", "Crypto.Random",
-    "gdown", "requests", "urllib3", "brotli", "bs4", "psutil", "mutagen", "telethon", "qrcode",
+    "gdown", "requests", "urllib3", "brotli", "bs4", "psutil", "telethon", "qrcode",
     "PIL", "PIL.Image", "PIL.WebPImagePlugin", "PIL.AvifImagePlugin",
     "server", "server.sidecar",
 ]

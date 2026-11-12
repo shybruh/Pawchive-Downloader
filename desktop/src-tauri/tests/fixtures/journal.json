@@ -267,7 +267,6 @@
    "download_thumbnails_only": false,
    "scan_content_images": true,
    "download_dms": false,
-   "compress_to_webp": false,
    "keep_duplicates": false,
    "favorite_mode": false,
    "subfolder_per_post": true,
@@ -291,17 +290,12 @@
    "download_pawchive_temporary_files": true,
    "min_file_size": "",
    "max_file_size": "",
-   "write_audio_metadata": false,
    "fallback_to_thumbnails": false,
    "redownload_small_files": false,
    "exact_extensions": "",
    "skip_retry_404": false,
    "group_file_type": "none",
-   "file_order": "posted",
-   "webp_quality": "balanced",
-   "write_sidecars": false,
-   "sidecar_format": "json",
-   "sidecar_scope": "per_file"
+   "file_order": "posted"
   },
   "o2": {
    "characters": "",
@@ -314,7 +308,6 @@
    "download_thumbnails_only": false,
    "scan_content_images": true,
    "download_dms": false,
-   "compress_to_webp": false,
    "keep_duplicates": false,
    "favorite_mode": false,
    "subfolder_per_post": false,
@@ -338,17 +331,12 @@
    "download_pawchive_temporary_files": true,
    "min_file_size": "",
    "max_file_size": "",
-   "write_audio_metadata": false,
    "fallback_to_thumbnails": false,
    "redownload_small_files": false,
    "exact_extensions": "",
    "skip_retry_404": false,
    "group_file_type": "none",
-   "file_order": "posted",
-   "webp_quality": "balanced",
-   "write_sidecars": false,
-   "sidecar_format": "json",
-   "sidecar_scope": "per_file"
+   "file_order": "posted"
   }
  },
  "rows": [
@@ -384,7 +372,6 @@
      "download_thumbnails_only": false,
      "scan_content_images": true,
      "download_dms": false,
-     "compress_to_webp": false,
      "keep_duplicates": false,
      "favorite_mode": false,
      "subfolder_per_post": true,
@@ -408,17 +395,12 @@
      "download_pawchive_temporary_files": true,
      "min_file_size": "",
      "max_file_size": "",
-     "write_audio_metadata": false,
      "fallback_to_thumbnails": false,
      "redownload_small_files": false,
      "exact_extensions": "",
      "skip_retry_404": false,
      "group_file_type": "none",
-     "file_order": "posted",
-     "webp_quality": "balanced",
-     "write_sidecars": false,
-     "sidecar_format": "json",
-     "sidecar_scope": "per_file"
+     "file_order": "posted"
     }
    },
    "artist\u0000patreon"
@@ -457,7 +439,6 @@
      "download_thumbnails_only": false,
      "scan_content_images": true,
      "download_dms": false,
-     "compress_to_webp": false,
      "keep_duplicates": false,
      "favorite_mode": false,
      "subfolder_per_post": false,
@@ -481,17 +462,12 @@
      "download_pawchive_temporary_files": true,
      "min_file_size": "",
      "max_file_size": "",
-     "write_audio_metadata": false,
      "fallback_to_thumbnails": false,
      "redownload_small_files": false,
      "exact_extensions": "",
      "skip_retry_404": false,
      "group_file_type": "none",
-     "file_order": "posted",
-     "webp_quality": "balanced",
-     "write_sidecars": false,
-     "sidecar_format": "json",
-     "sidecar_scope": "per_file"
+     "file_order": "posted"
     }
    },
    "artist\u0000patreon"
@@ -896,7 +872,6 @@
      "download_thumbnails_only": false,
      "scan_content_images": true,
      "download_dms": false,
-     "compress_to_webp": false,
      "keep_duplicates": false,
      "favorite_mode": false,
      "subfolder_per_post": true,
@@ -920,17 +895,12 @@
      "download_pawchive_temporary_files": true,
      "min_file_size": "",
      "max_file_size": "",
-     "write_audio_metadata": false,
      "fallback_to_thumbnails": false,
      "redownload_small_files": false,
      "exact_extensions": "",
      "skip_retry_404": false,
      "group_file_type": "none",
-     "file_order": "posted",
-     "webp_quality": "balanced",
-     "write_sidecars": false,
-     "sidecar_format": "json",
-     "sidecar_scope": "per_file"
+     "file_order": "posted"
     }
    },
    {
@@ -958,7 +928,6 @@
      "download_thumbnails_only": false,
      "scan_content_images": true,
      "download_dms": false,
-     "compress_to_webp": false,
      "keep_duplicates": false,
      "favorite_mode": false,
      "subfolder_per_post": false,
@@ -982,17 +951,12 @@
      "download_pawchive_temporary_files": true,
      "min_file_size": "",
      "max_file_size": "",
-     "write_audio_metadata": false,
      "fallback_to_thumbnails": false,
      "redownload_small_files": false,
      "exact_extensions": "",
      "skip_retry_404": false,
      "group_file_type": "none",
-     "file_order": "posted",
-     "webp_quality": "balanced",
-     "write_sidecars": false,
-     "sidecar_format": "json",
-     "sidecar_scope": "per_file"
+     "file_order": "posted"
     }
    },
    {

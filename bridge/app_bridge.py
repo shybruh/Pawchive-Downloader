@@ -103,9 +103,6 @@ class AppBridge(QObject):
     skipPostCoversChanged = Signal()
     scanContentImagesChanged = Signal()
     downloadDmsChanged = Signal()
-    compressWebpChanged = Signal()
-    webpQualityChanged = Signal()
-    writeAudioMetadataChanged = Signal()
     keepDuplicatesChanged = Signal()
     favoriteModeChanged = Signal()
     subfolderPerPostChanged = Signal()
@@ -153,8 +150,6 @@ class AppBridge(QObject):
     elapsedTimeTextChanged = Signal()
     downloadDelayChanged = Signal()
     savePostMetadataChanged = Signal()
-    writeSidecarsChanged = Signal()
-    sidecarFormatChanged = Signal()
     downloadEmbedsChanged = Signal()
     openFolderOnCompleteChanged = Signal()
     playCompletionSoundChanged = Signal()
@@ -295,9 +290,6 @@ class AppBridge(QObject):
         self._scan_content_images = saved_settings.get("scan_content_images", True)
         self._download_dms = bool(saved_settings.get("download_dms", False))
         self._download_pawchive_temporary_files = saved_settings.get("download_pawchive_temporary_files", True)
-        self._compress_webp = saved_settings.get("compress_webp", False)
-        self._webp_quality = str(saved_settings.get("webp_quality", "balanced"))
-        self._write_audio_metadata = bool(saved_settings.get("write_audio_metadata", False))
         self._keep_duplicates = saved_settings.get("keep_duplicates", False)
         self._favorite_mode = False
         self._subfolder_per_post = saved_settings.get("subfolder_per_post", True)
@@ -362,9 +354,6 @@ class AppBridge(QObject):
         self._user_agent = saved_settings.get("user_agent", "")
         self._download_delay = float(saved_settings.get("download_delay", 2.0))
         self._save_post_metadata = bool(saved_settings.get("save_post_metadata", True))
-        self._write_sidecars = bool(saved_settings.get("write_sidecars", False))
-        self._sidecar_format = str(saved_settings.get("sidecar_format", "json"))
-        self._sidecar_scope = str(saved_settings.get("sidecar_scope", "per_file"))
         self._download_embeds = bool(saved_settings.get("download_embeds", True))
         # Embedded videos that need a sign-in (RedGifs, private Vimeo…) use this browser's ("" = none)
         self._embed_cookies_browser = str(saved_settings.get("embed_cookies_browser", "") or "")
@@ -832,44 +821,6 @@ class AppBridge(QObject):
             self._download_dms = val
             self.downloadDmsChanged.emit()
             self._settings_save_timer.start()
-
-    @Property(bool, notify=compressWebpChanged)
-    def compressWebp(self) -> bool:
-        return self._compress_webp
-
-    @compressWebp.setter
-    def compressWebp(self, val: bool):
-        if self._compress_webp != val:
-            self._compress_webp = val
-            self.compressWebpChanged.emit()
-            self._settings_save_timer.start()
-
-    @Property(str, notify=webpQualityChanged)
-    def webpQuality(self) -> str:
-        """How strongly "Compress to WebP" compresses: lossless / high / balanced / small / smallest."""
-        return self._webp_quality
-
-    @webpQuality.setter
-    def webpQuality(self, val: str):
-        from core.filter_engine import WEBP_QUALITY_LEVELS
-        val = str(val or "").lower()
-        if val not in WEBP_QUALITY_LEVELS:
-            val = "balanced"
-        if self._webp_quality != val:
-            self._webp_quality = val
-            self.webpQualityChanged.emit()
-            self._settings_save_timer.start()
-
-    @Property(bool, notify=writeAudioMetadataChanged)
-    def writeAudioMetadata(self) -> bool:
-        return self._write_audio_metadata
-
-    @writeAudioMetadata.setter
-    def writeAudioMetadata(self, val: bool):
-        if self._write_audio_metadata != val:
-            self._write_audio_metadata = val
-            self.writeAudioMetadataChanged.emit()
-            self.saveSettings()
 
     @Property(bool, notify=keepDuplicatesChanged)
     def keepDuplicates(self) -> bool:
@@ -1344,30 +1295,6 @@ class AppBridge(QObject):
             self.savePostMetadataChanged.emit()
             self.saveSettings()
 
-    @Property(bool, notify=writeSidecarsChanged)
-    def writeSidecars(self) -> bool:
-        return self._write_sidecars
-
-    @writeSidecars.setter
-    def writeSidecars(self, val: bool):
-        val = bool(val)
-        if self._write_sidecars != val:
-            self._write_sidecars = val
-            self.writeSidecarsChanged.emit()
-            self.saveSettings()
-
-    @Property(str, notify=sidecarFormatChanged)
-    def sidecarFormat(self) -> str:
-        return self._sidecar_format
-
-    @sidecarFormat.setter
-    def sidecarFormat(self, val: str):
-        val = str(val or "json").lower()
-        if self._sidecar_format != val:
-            self._sidecar_format = val
-            self.sidecarFormatChanged.emit()
-            self.saveSettings()
-
     @Property(bool, notify=downloadEmbedsChanged)
     def downloadEmbeds(self) -> bool:
         return self._download_embeds
@@ -1562,8 +1489,6 @@ class AppBridge(QObject):
             redownload_small_files=self._redownload_small_files,
             scan_content_images=self._scan_content_images,
             download_dms=self._download_dms,
-            compress_to_webp=self._compress_webp,
-            webp_quality=self._webp_quality,
             keep_duplicates=self._keep_duplicates,
             favorite_mode=self._favorite_mode,
             subfolder_per_post=self._subfolder_per_post,
@@ -1587,13 +1512,9 @@ class AppBridge(QObject):
             download_pawchive_temporary_files=self._download_pawchive_temporary_files,
             min_file_size=self._min_file_size,
             max_file_size=self._max_file_size,
-            write_audio_metadata=self._write_audio_metadata,
             skip_retry_404=self._skip_retry_404,
             group_file_type=self._group_file_type,
             file_order=self._file_order,
-            write_sidecars=self._write_sidecars,
-            sidecar_format=self._sidecar_format,
-            sidecar_scope=self._sidecar_scope
         )
 
     def _get_link_identity(self, parsed: URLParseResult) -> tuple[str, str, Optional[str], str]:
@@ -4236,16 +4157,11 @@ class AppBridge(QObject):
             "filename_style": self._filename_style,
             "filename_template": self._filename_template,
             "proxy_url": self._proxy_url,
-            "compress_webp": self._compress_webp,
-            "webp_quality": self._webp_quality,
             "keep_duplicates": self._keep_duplicates,
             "scan_content_images": self._scan_content_images,
             "download_dms": self._download_dms,
             "download_delay": self._download_delay,
             "save_post_metadata": self._save_post_metadata,
-            "write_sidecars": self._write_sidecars,
-            "sidecar_format": self._sidecar_format,
-            "sidecar_scope": self._sidecar_scope,
             "download_embeds": self._download_embeds,
             "embed_cookies_browser": self._embed_cookies_browser,
             "decompressor": (self._decompressor_bridge.settings_dict() if getattr(self, "_decompressor_bridge", None)
@@ -4265,7 +4181,6 @@ class AppBridge(QObject):
             "exact_extensions": self._exact_extensions,
             "saved_custom_extensions": self._saved_custom_extensions,
             "gallery_bookmarks": self._gallery_bookmarks,
-            "write_audio_metadata": self._write_audio_metadata,
             "telegram_safety_acknowledged": self._telegram_safety_acknowledged,
             "telegram_liability_acknowledged": self._telegram_liability_acknowledged,
             "skip_retry_404": self._skip_retry_404,
