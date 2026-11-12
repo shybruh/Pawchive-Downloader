@@ -70,9 +70,8 @@ from bridge.decompressor_bridge import DecompressorBridge
 from core.bandwidth_limiter import bandwidth_limiter
 from core.watchlist_manager import WatchlistManager
 from services.batch_loader import BatchLoader
-from services.bunkr_client import fetch_bunkr_album
-from services.erome_client import fetch_erome_album
-from services.nhentai_client import fetch_nhentai_gallery
+# (the album sites are read by the Rust engine, the Python clients when it can't be asked)
+from services.rust_albums import fetch_bunkr_album, fetch_erome_album, fetch_nhentai_gallery
 from bridge.telegram_bridge import TelegramBridge
 from services.telegram_service import TelegramService
 from services.cloud_downloader import (

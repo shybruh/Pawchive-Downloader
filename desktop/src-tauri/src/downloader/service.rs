@@ -794,6 +794,7 @@ fn handle(msg: &Value) {
                 "watchlist_check" => crate::watchlist::check::call(id, args),
                 "watchlist_download" => crate::watchlist::check::download(id, args),
                 "link_scan" => super::scan::call(id, args),
+                "album_files" => super::albums::call(args),
                 "selection_scan" => super::selection::scan(id, args),
                 "selection_plan" => super::selection::plan(id, args),
                 "watchlist_favorites" => crate::watchlist::favorites::call(id, args),

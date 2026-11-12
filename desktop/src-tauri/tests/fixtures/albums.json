@@ -1,0 +1,690 @@
+[
+ {
+  "kind": "bunkr",
+  "url": "https://c.scdn.st/storage/media/abc.mp4?n=My%20Video%2B1%3A.mp4&token=x&ex=1",
+  "pages": [],
+  "title": "My Video+1_.mp4",
+  "files": [
+   {
+    "url": "https://c.scdn.st/storage/media/abc.mp4?n=My%20Video%2B1%3A.mp4&token=x&ex=1",
+    "filename": "My Video+1_.mp4",
+    "size": 0,
+    "headers": {
+     "Referer": "https://bunkr.cr/"
+    }
+   }
+  ]
+ },
+ {
+  "kind": "bunkr",
+  "url": "https://c.cdn.cr/storage/media/xyz.mkv",
+  "pages": [],
+  "title": "xyz.mkv",
+  "files": [
+   {
+    "url": "https://c.cdn.cr/storage/media/xyz.mkv",
+    "filename": "xyz.mkv",
+    "size": 0,
+    "headers": {
+     "Referer": "https://bunkr.cr/"
+    }
+   }
+  ]
+ },
+ {
+  "kind": "bunkr",
+  "url": "https://dl.bunkr.cr/file/123",
+  "pages": [
+   [
+    "POST",
+    "https://dl.bunkr.cr/api/_001_v2",
+    "123",
+    200,
+    "{\"mediafiles\": \"https://mlk.cdn.cr\", \"path\": \"/storage/media/x y.mp4\", \"original\": \"x y.mp4\"}"
+   ],
+   [
+    "GET",
+    "https://glb-apisign.cdn.cr/sign?path=/storage/media/x%20y.mp4",
+    "",
+    200,
+    "{\"token\": \"TOK\", \"ex\": 1790000000}"
+   ]
+  ],
+  "title": "x y.mp4",
+  "files": [
+   {
+    "url": "https://mlk.cdn.cr/storage/media/x y.mp4?n=x%20y.mp4&token=TOK&ex=1790000000",
+    "filename": "x y.mp4",
+    "size": 0,
+    "headers": {
+     "Referer": "https://bunkr.cr/"
+    }
+   }
+  ]
+ },
+ {
+  "kind": "bunkr",
+  "url": "https://dl.bunkr.cr/file/124",
+  "pages": [
+   [
+    "POST",
+    "https://dl.bunkr.cr/api/_001_v2",
+    "124",
+    200,
+    "{}"
+   ]
+  ],
+  "title": null,
+  "files": []
+ },
+ {
+  "kind": "bunkr",
+  "url": "https://bunkr.cr/f/AbC-1",
+  "pages": [
+   [
+    "GET",
+    "https://bunkr.cr/f/AbC-1",
+    "",
+    200,
+    "<title>clip &amp; more.mp4 | Bunkr</title><script>var jsCDN = \"https:\\/\\/x.cdn.cr\\/storage\\/media\\/q.mp4\"; var signUrl = \"https://sign2.cdn.cr/s\";</script>"
+   ],
+   [
+    "GET",
+    "https://sign2.cdn.cr/s?path=/storage/media/q.mp4",
+    "",
+    200,
+    "{\"token\": \"TOK\", \"ex\": 1790000000}"
+   ]
+  ],
+  "title": "clip & more.mp4",
+  "files": [
+   {
+    "url": "https://x.cdn.cr/storage/media/q.mp4?n=clip%20%26%20more.mp4&token=TOK&ex=1790000000",
+    "filename": "clip & more.mp4",
+    "size": 0,
+    "headers": {
+     "Referer": "https://bunkr.cr/"
+    }
+   }
+  ]
+ },
+ {
+  "kind": "bunkr",
+  "url": "https://bunkr.si/v/zz9",
+  "pages": [
+   [
+    "GET",
+    "https://bunkr.si/v/zz9",
+    "",
+    200,
+    "<meta property=\"og:title\" content=\"Vid: one?.mp4\"><a id=\"download-btn\" class=\"b\" data-id=\"777\">dl</a>"
+   ],
+   [
+    "POST",
+    "https://dl.bunkr.cr/api/_001_v2",
+    "777",
+    200,
+    "{\"mediafiles\": \"https://mlk.cdn.cr\", \"path\": \"/storage/media/v1.mp4\", \"original\": \"\"}"
+   ],
+   [
+    "GET",
+    "https://glb-apisign.cdn.cr/sign?path=/storage/media/v1.mp4",
+    "",
+    200,
+    "{\"token\": \"TOK\", \"ex\": 1790000000}"
+   ]
+  ],
+  "title": "Vid_ one_.mp4",
+  "files": [
+   {
+    "url": "https://mlk.cdn.cr/storage/media/v1.mp4?n=Vid_%20one_.mp4&token=TOK&ex=1790000000",
+    "filename": "Vid_ one_.mp4",
+    "size": 0,
+    "headers": {
+     "Referer": "https://bunkr.cr/"
+    }
+   }
+  ]
+ },
+ {
+  "kind": "bunkr",
+  "url": "https://bunkr.cr/i/img1",
+  "pages": [
+   [
+    "GET",
+    "https://bunkr.cr/i/img1",
+    "",
+    200,
+    "<script>var ogname = 'photo.JPG';</script><img src=\"https://i.bunkr.ru/photo.JPG\">"
+   ]
+  ],
+  "title": "photo.JPG",
+  "files": [
+   {
+    "url": "https://i.bunkr.ru/photo.JPG",
+    "filename": "photo.JPG",
+    "size": 0,
+    "headers": {
+     "Referer": "https://bunkr.cr/i/img1"
+    }
+   }
+  ]
+ },
+ {
+  "kind": "bunkr",
+  "url": "https://bunkr.cr/d/doc",
+  "pages": [
+   [
+    "GET",
+    "https://bunkr.cr/d/doc",
+    "",
+    200,
+    "<title>nothing here</title>"
+   ]
+  ],
+  "title": "nothing here",
+  "files": []
+ },
+ {
+  "kind": "bunkr",
+  "url": "https://bunkr.cr/f/signfail",
+  "pages": [
+   [
+    "GET",
+    "https://bunkr.cr/f/signfail",
+    "",
+    200,
+    "<title>a.mp4</title><script>var jsCDN = \"https://x.cdn.cr/storage/media/a.mp4\";</script>"
+   ],
+   [
+    "GET",
+    "https://glb-apisign.cdn.cr/sign?path=/storage/media/a.mp4",
+    "",
+    429,
+    ""
+   ]
+  ],
+  "title": "a.mp4",
+  "files": []
+ },
+ {
+  "kind": "bunkr",
+  "url": "https://bunkr.cr/a/ALB1",
+  "pages": [
+   [
+    "GET",
+    "https://bunkr.cr/a/ALB1?advanced=1",
+    "",
+    200,
+    "<html><head><title>Summer &#39;24 set | Bunkr</title></head><body><script>window.albumFiles = [{id: 11, name: 'one.mp4', slug: 's1', size: 1000}, {id: 12, original: \"two.jpg\", slug: \"s2\", size: 20}, {slug: 's3'}, {id: 14, name: 'gone.mp4', size: 5}];</script></body></html>"
+   ],
+   [
+    "POST",
+    "https://dl.bunkr.cr/api/_001_v2",
+    "11",
+    200,
+    "{\"mediafiles\": \"https://mlk.cdn.cr\", \"path\": \"/storage/media/one.mp4\", \"original\": \"one.mp4\"}"
+   ],
+   [
+    "GET",
+    "https://glb-apisign.cdn.cr/sign?path=/storage/media/one.mp4",
+    "",
+    200,
+    "{\"token\": \"TOK\", \"ex\": 1790000000}"
+   ],
+   [
+    "POST",
+    "https://dl.bunkr.cr/api/_001_v2",
+    "12",
+    500,
+    ""
+   ],
+   [
+    "GET",
+    "https://bunkr.cr/f/s2",
+    "",
+    200,
+    "<title>two.jpg | Bunkr</title><a href=\"https://dl.bunkr.cr/file/912\">x</a>"
+   ],
+   [
+    "POST",
+    "https://dl.bunkr.cr/api/_001_v2",
+    "912",
+    200,
+    "{\"mediafiles\": \"https://mlk.cdn.cr\", \"path\": \"/storage/media/two.jpg\", \"original\": \"two.jpg\"}"
+   ],
+   [
+    "GET",
+    "https://glb-apisign.cdn.cr/sign?path=/storage/media/two.jpg",
+    "",
+    200,
+    "{\"token\": \"TOK\", \"ex\": 1790000000}"
+   ],
+   [
+    "GET",
+    "https://bunkr.cr/f/s3",
+    "",
+    200,
+    "<title>three.webm</title><video src=\"https://media.bunkr.ru/three.webm\"></video>"
+   ]
+  ],
+  "title": "Summer '24 set",
+  "files": [
+   {
+    "url": "https://mlk.cdn.cr/storage/media/one.mp4?n=one.mp4&token=TOK&ex=1790000000",
+    "filename": "one.mp4",
+    "size": 1000,
+    "headers": {
+     "Referer": "https://bunkr.cr/"
+    }
+   },
+   {
+    "url": "https://mlk.cdn.cr/storage/media/two.jpg?n=two.jpg&token=TOK&ex=1790000000",
+    "filename": "two.jpg",
+    "size": 20,
+    "headers": {
+     "Referer": "https://bunkr.cr/"
+    }
+   },
+   {
+    "url": "https://media.bunkr.ru/three.webm",
+    "filename": "three.webm",
+    "size": 0,
+    "headers": {
+     "Referer": "https://bunkr.cr/f/s3"
+    }
+   }
+  ]
+ },
+ {
+  "kind": "bunkr",
+  "url": "https://balbums.st/a/BAL",
+  "pages": [
+   [
+    "GET",
+    "https://bunkr.cr/a/BAL?advanced=1",
+    "",
+    200,
+    "<html><head><title>Cards | Bunkr</title></head><body><div class=\"grid-images\"><div class=\"theItem relative\"><a href=\"/f/c1\" title=\"Card one.mp4\"><p class=\"theName x\">Card One.mp4</p></div>\n</div><div class=\"theItem\"><a href=\"/f/c2\" title=\"t2.jpg\"></a></div></div></body></html>"
+   ],
+   [
+    "GET",
+    "https://bunkr.cr/f/c1",
+    "",
+    200,
+    "<title>c1.mp4</title><source src='https://m.bunkr.ru/c1.mp4'>"
+   ],
+   [
+    "GET",
+    "https://bunkr.cr/f/c2",
+    "",
+    200,
+    "<title>c2.jpg</title>"
+   ]
+  ],
+  "title": "Cards",
+  "files": [
+   {
+    "url": "https://m.bunkr.ru/c1.mp4",
+    "filename": "c1.mp4",
+    "size": 0,
+    "headers": {
+     "Referer": "https://bunkr.cr/f/c1"
+    }
+   }
+  ]
+ },
+ {
+  "kind": "bunkr",
+  "url": "https://bunkr.cr/a/LNK?x=1",
+  "pages": [
+   [
+    "GET",
+    "https://bunkr.cr/a/LNK?x=1&advanced=1",
+    "",
+    200,
+    "<html><head><title>Links | Bunkr</title></head><body><a href=\"https://bunkr.cr/f/l1\">1</a><a href=\"/v/l2/\">2</a><a href=\"/f/l1\">dup</a></body></html>"
+   ],
+   [
+    "GET",
+    "https://bunkr.cr/f/l1",
+    "",
+    200,
+    "<title>l1.zip</title><a href=\"https://f.bunkr.ru/l1.zip\">z</a>"
+   ],
+   [
+    "GET",
+    "https://bunkr.cr/f/l2",
+    "",
+    200,
+    "<title>l2.zip</title><a href=\"https://f.bunkr.ru/l2.zip\">z</a>"
+   ]
+  ],
+  "title": "Links",
+  "files": [
+   {
+    "url": "https://f.bunkr.ru/l1.zip",
+    "filename": "l1.zip",
+    "size": 0,
+    "headers": {
+     "Referer": "https://bunkr.cr/f/l1"
+    }
+   },
+   {
+    "url": "https://f.bunkr.ru/l1.zip",
+    "filename": "l1.zip",
+    "size": 0,
+    "headers": {
+     "Referer": "https://bunkr.cr/f/l1"
+    }
+   }
+  ]
+ },
+ {
+  "kind": "bunkr",
+  "url": "https://bunkr.cr/a/LEG",
+  "pages": [
+   [
+    "GET",
+    "https://bunkr.cr/a/LEG?advanced=1",
+    "",
+    200,
+    "<html><head><title>Legacy | Bunkr</title></head><body><a href=\"https://cdn9.bunkr.ru/b%20c.mp4?x=1\">v</a><a href=\"/i/pic.png\">p</a><a href=\"https://cdn9.bunkr.ru/a.zip\">z</a><a href=\"https://other.example/page\">no</a></body></html>"
+   ]
+  ],
+  "title": "Legacy",
+  "files": [
+   {
+    "url": "https://bunkr.cr/i/pic.png",
+    "filename": "pic.png",
+    "size": 0,
+    "headers": {
+     "Referer": "https://bunkr.cr/a/LEG"
+    }
+   },
+   {
+    "url": "https://cdn9.bunkr.ru/a.zip",
+    "filename": "a.zip",
+    "size": 0,
+    "headers": {
+     "Referer": "https://bunkr.cr/a/LEG"
+    }
+   },
+   {
+    "url": "https://cdn9.bunkr.ru/b%20c.mp4?x=1",
+    "filename": "b c.mp4",
+    "size": 0,
+    "headers": {
+     "Referer": "https://bunkr.cr/a/LEG"
+    }
+   }
+  ]
+ },
+ {
+  "kind": "bunkr",
+  "url": "https://bunkr.cr/a/RETRY",
+  "pages": [
+   [
+    "GET",
+    "https://bunkr.cr/a/RETRY?advanced=1",
+    "",
+    [
+     429,
+     503
+    ],
+    ""
+   ],
+   [
+    "GET",
+    "https://bunkr.cr/a/RETRY",
+    "",
+    200,
+    "<html><head><title>Fallback &amp; co | Bunkr</title></head><body></body></html>"
+   ]
+  ],
+  "title": "Fallback & co",
+  "files": []
+ },
+ {
+  "kind": "bunkr",
+  "url": "https://bunkr.cr/a/MISSING",
+  "pages": [],
+  "title": null,
+  "files": []
+ },
+ {
+  "kind": "bunkr",
+  "url": "https://bunkr.cr/a/EMPTY",
+  "pages": [
+   [
+    "GET",
+    "https://bunkr.cr/a/EMPTY?advanced=1",
+    "",
+    200,
+    "<html><body>no title</body></html>"
+   ]
+  ],
+  "title": "Bunkr Album",
+  "files": []
+ },
+ {
+  "kind": "erome",
+  "url": "https://www.erome.com/a/AbC123",
+  "pages": [
+   [
+    "GET",
+    "https://www.erome.com/a/AbC123",
+    "",
+    [
+     429,
+     200
+    ],
+    "<meta property=\"og:title\" content=\"Beach &amp; sun / day 1\"><video><source src=\"https://v12.erome.com/1/AbC123/v1_720p.mp4\" type=\"video/mp4\"></video><img data-src=\"https://s12.erome.com/1/AbC123/p1.jpg?v=2\" alt=\"\" class=\"img-front lasyload\"><img src=\"https://s12.erome.com/1/AbC123/thumbs/thumbnail.jpg\" class=\"img-front\">https://s7.erome.com/1/AbC123/P2.JPEG and https://v12.erome.com/1/AbC123/v1_720p.mp4 again<source src=\"https://v1.erome.com/noext/xyz\">"
+   ]
+  ],
+  "title": "Erome - Beach & sun _ day 1 [AbC123]",
+  "files": [
+   {
+    "url": "https://v12.erome.com/1/AbC123/v1_720p.mp4",
+    "filename": "AbC123_001.mp4",
+    "headers": {
+     "Referer": "https://www.erome.com/a/AbC123"
+    }
+   },
+   {
+    "url": "https://v1.erome.com/noext/xyz",
+    "filename": "AbC123_002.mp4",
+    "headers": {
+     "Referer": "https://www.erome.com/a/AbC123"
+    }
+   },
+   {
+    "url": "https://s12.erome.com/1/AbC123/p1.jpg?v=2",
+    "filename": "AbC123_003.jpg",
+    "headers": {
+     "Referer": "https://www.erome.com/a/AbC123"
+    }
+   },
+   {
+    "url": "https://s12.erome.com/1/AbC123/p1.jpg",
+    "filename": "AbC123_004.jpg",
+    "headers": {
+     "Referer": "https://www.erome.com/a/AbC123"
+    }
+   },
+   {
+    "url": "https://s7.erome.com/1/AbC123/P2.JPEG",
+    "filename": "AbC123_005.jpeg",
+    "headers": {
+     "Referer": "https://www.erome.com/a/AbC123"
+    }
+   }
+  ]
+ },
+ {
+  "kind": "erome",
+  "url": "https://www.erome.com/a/NoTitle",
+  "pages": [
+   [
+    "GET",
+    "https://www.erome.com/a/NoTitle",
+    "",
+    200,
+    "<source src=\"https://v1.erome.com/a.webm\">"
+   ]
+  ],
+  "title": "Erome - Album_NoTitle [NoTitle]",
+  "files": [
+   {
+    "url": "https://v1.erome.com/a.webm",
+    "filename": "NoTitle_001.webm",
+    "headers": {
+     "Referer": "https://www.erome.com/a/NoTitle"
+    }
+   }
+  ]
+ },
+ {
+  "kind": "erome",
+  "url": "https://www.erome.com/a/Gone",
+  "pages": [
+   [
+    "GET",
+    "https://www.erome.com/a/Gone",
+    "",
+    404,
+    ""
+   ]
+  ],
+  "title": null,
+  "files": []
+ },
+ {
+  "kind": "erome",
+  "url": "https://www.erome.com/user/x",
+  "pages": [],
+  "title": null,
+  "files": []
+ },
+ {
+  "kind": "nhentai",
+  "url": "https://nhentai.net/g/123456/",
+  "pages": [
+   [
+    "GET",
+    "https://nhentai.net/api/v2/galleries/123456",
+    "",
+    200,
+    "{\"title\": {\"pretty\": \"A: tale?\", \"english\": \"Long\"}, \"media_id\": \"999\", \"pages\": [{\"t\": \"j\"}, {\"t\": \"p\"}, {\"t\": \"w\"}, {\"t\": \"g\"}, {\"t\": \"x\"}, {}]}"
+   ]
+  ],
+  "title": "[123456] A_ tale_",
+  "files": [
+   {
+    "url": "https://i.nhentai.net/galleries/999/1.jpg",
+    "filename": "001.jpg",
+    "headers": {
+     "Referer": "https://nhentai.net/g/123456/"
+    }
+   },
+   {
+    "url": "https://i.nhentai.net/galleries/999/2.png",
+    "filename": "002.png",
+    "headers": {
+     "Referer": "https://nhentai.net/g/123456/"
+    }
+   },
+   {
+    "url": "https://i.nhentai.net/galleries/999/3.webp",
+    "filename": "003.webp",
+    "headers": {
+     "Referer": "https://nhentai.net/g/123456/"
+    }
+   },
+   {
+    "url": "https://i.nhentai.net/galleries/999/4.gif",
+    "filename": "004.gif",
+    "headers": {
+     "Referer": "https://nhentai.net/g/123456/"
+    }
+   },
+   {
+    "url": "https://i.nhentai.net/galleries/999/5.jpg",
+    "filename": "005.jpg",
+    "headers": {
+     "Referer": "https://nhentai.net/g/123456/"
+    }
+   },
+   {
+    "url": "https://i.nhentai.net/galleries/999/6.jpg",
+    "filename": "006.jpg",
+    "headers": {
+     "Referer": "https://nhentai.net/g/123456/"
+    }
+   }
+  ]
+ },
+ {
+  "kind": "nhentai",
+  "url": "654321",
+  "pages": [
+   [
+    "GET",
+    "https://nhentai.net/api/v2/galleries/654321",
+    "",
+    [
+     429,
+     200
+    ],
+    "{\"title\": {\"pretty\": \"\", \"english\": \"English <one>\"}, \"media_id\": 5, \"pages\": [{\"t\": \"j\"}]}"
+   ]
+  ],
+  "title": "[654321] English _one_",
+  "files": [
+   {
+    "url": "https://i.nhentai.net/galleries/5/1.jpg",
+    "filename": "001.jpg",
+    "headers": {
+     "Referer": "https://nhentai.net/g/654321/"
+    }
+   }
+  ]
+ },
+ {
+  "kind": "nhentai",
+  "url": "777",
+  "pages": [
+   [
+    "GET",
+    "https://nhentai.net/api/v2/galleries/777",
+    "",
+    200,
+    "{\"title\": {}, \"media_id\": null, \"pages\": []}"
+   ]
+  ],
+  "title": null,
+  "files": []
+ },
+ {
+  "kind": "nhentai",
+  "url": "888",
+  "pages": [
+   [
+    "GET",
+    "https://nhentai.net/api/v2/galleries/888",
+    "",
+    404,
+    ""
+   ]
+  ],
+  "title": null,
+  "files": []
+ },
+ {
+  "kind": "nhentai",
+  "url": "no id here",
+  "pages": [],
+  "title": null,
+  "files": []
+ }
+]
