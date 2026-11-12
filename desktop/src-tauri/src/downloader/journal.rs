@@ -1,7 +1,7 @@
 //! The queue's crash journal written from the engine's own list: a port of the writing half of
 //! core/queue_journal.py (QueueJournal.sync / clear) with the recovery summary's names from
-//! core/recovery_manager.py (artist_name, _detect_platform). The app still reads the file (the
-//! "unfinished download" prompt, Resume); it's the same SQLite file and format.
+//! core/recovery_manager.py (artist_name, _detect_platform), and its reading half (the "unfinished
+//! download" prompt's check and summary, the queue Resume restores); the same SQLite file and format.
 //!
 //! Every file is a row keyed by its link and save path; a save writes only the rows whose file
 //! changed (status, save path, error, retries, size, bytes downloaded) since the last save, removes
@@ -304,6 +304,129 @@ pub fn clear(path: &str, generation: u64) -> bool {
     had
 }
 
+// ── Reading it back (QueueJournal.has_unfinished / summary / load) ───────────────────────────
+
+/// Files that never got their turn
+const UNFINISHED: &str = "'pending', 'downloading', 'retrying'";
+
+/// The journal opened for reading only (None: no journal, or one that can't be read)
+fn reader(path: &str) -> Option<Connection> {
+    if path.is_empty() || !std::path::Path::new(path).exists() {
+        return None;
+    }
+    let conn = Connection::open_with_flags(path, rusqlite::OpenFlags::SQLITE_OPEN_READ_ONLY).ok()?;
+    conn.busy_timeout(Duration::from_secs(30)).ok()?;
+    // (tables of an old file without them: nothing to read)
+    conn.query_row("SELECT 1 FROM sqlite_master WHERE name = 'tasks';", [], |_| Ok(())).ok()?;
+    Some(conn)
+}
+
+fn meta(conn: &Connection) -> HashMap<String, String> {
+    let Ok(mut q) = conn.prepare("SELECT k, v FROM meta;") else { return HashMap::new() };
+    q.query_map([], |r| Ok((r.get::<_, String>(0)?, r.get::<_, Option<String>>(1)?.unwrap_or_default())))
+        .map(|rows| rows.flatten().collect())
+        .unwrap_or_default()
+}
+
+/// Whether the journal holds an unfinished download (the "resume?" prompt at start): files that
+/// never got their turn (failed ones are kept for Retry Failed instead)
+pub fn has_unfinished(path: &str) -> bool {
+    let Some(conn) = reader(path) else { return false };
+    if meta(&conn).get("status").map(String::as_str) == Some("completed") {
+        return false;
+    }
+    conn.query_row(&format!("SELECT 1 FROM tasks WHERE status IN ({UNFINISHED}) LIMIT 1;"), [], |_| Ok(())).is_ok()
+}
+
+/// RecoveryManager._format_size: "0 B", "512.00 B", "1.50 KB"…
+pub fn format_size(n: i64) -> String {
+    if n <= 0 {
+        return "0 B".into();
+    }
+    let mut x = n as f64;
+    for unit in ["B", "KB", "MB", "GB", "TB"] {
+        if x.abs() < 1024.0 {
+            return format!("{x:.2} {unit}");
+        }
+        x /= 1024.0;
+    }
+    format!("{x:.2} PB")
+}
+
+/// Python's round(x, 1)
+fn round1(x: f64) -> f64 {
+    format!("{x:.1}").parse().unwrap_or(x)
+}
+
+/// The recovery prompt's summary, counted by SQLite: totals and each creator's progress
+pub fn summary(path: &str) -> Option<Value> {
+    let conn = reader(path)?;
+    let (n, done, failed, total_bytes, downloaded): (i64, i64, i64, i64, i64) = conn
+        .query_row(
+            "SELECT COUNT(*), COALESCE(SUM(status = 'completed'), 0), COALESCE(SUM(status = 'failed'), 0),
+                    COALESCE(SUM(total_bytes), 0), COALESCE(SUM(downloaded), 0) FROM tasks;",
+            [],
+            |r| Ok((r.get(0)?, r.get(1)?, r.get(2)?, r.get(3)?, r.get(4)?)),
+        )
+        .ok()?;
+    if n == 0 {
+        return None;
+    }
+    let mut q = conn
+        .prepare(
+            "SELECT MIN(artist), MIN(service), MIN(platform), COUNT(*), SUM(status = 'completed'), SUM(total_bytes), SUM(downloaded)
+             FROM tasks GROUP BY group_key ORDER BY MIN(pos);",
+        )
+        .ok()?;
+    let artists: Vec<Value> = q
+        .query_map([], |r| {
+            let text = |i: usize| r.get::<_, Option<String>>(i).map(Option::unwrap_or_default);
+            let num = |i: usize| r.get::<_, Option<i64>>(i).map(Option::unwrap_or_default);
+            let (name, svc, platform) = (text(0)?, text(1)?, text(2)?);
+            let (a_total, a_done, a_bytes, a_down) = (num(3)?, num(4)?, num(5)?, num(6)?);
+            Ok(json!({
+                "name": if name.is_empty() { "Unknown Artist".to_string() } else { name },
+                "service": svc, "platform": platform, "completed": a_done, "total": a_total,
+                "percent": if a_total > 0 { round1(a_done as f64 / a_total as f64 * 100.0) } else { 0.0 },
+                "formatted_downloaded": format_size(a_down), "formatted_total": format_size(a_bytes),
+            }))
+        })
+        .ok()?
+        .flatten()
+        .collect();
+    let saved_at = meta(&conn).get("saved_at").cloned().unwrap_or_default().replace('T', " ");
+    Some(json!({
+        "artists": artists, "total_files": n, "completed_files": done, "pending_files": n - done - failed,
+        "failed_files": failed, "downloaded_bytes": downloaded, "total_bytes": total_bytes,
+        "percent": round1(done as f64 / n as f64 * 100.0),
+        "formatted_downloaded": format_size(downloaded), "formatted_total": format_size(total_bytes),
+        "saved_at": saved_at,
+    }))
+}
+
+/// Everything saved: {version, status, saved_at, settings, batches, tasks (in queue order)}, or
+/// None when there's nothing
+pub fn load(path: &str) -> Option<Value> {
+    let conn = reader(path)?;
+    let mut q = conn.prepare("SELECT data FROM tasks ORDER BY pos;").ok()?;
+    let tasks: Vec<Value> = q
+        .query_map([], |r| r.get::<_, String>(0))
+        .ok()?
+        .flatten()
+        .filter_map(|d| serde_json::from_str(&d).ok())
+        .collect();
+    if tasks.is_empty() {
+        return None;
+    }
+    let m = meta(&conn);
+    let j = |k: &str, default: Value| m.get(k).filter(|v| !v.is_empty()).and_then(|v| serde_json::from_str(v).ok()).unwrap_or(default);
+    Some(json!({
+        "version": 2, "status": m.get("status").cloned().unwrap_or_else(|| "interrupted".into()),
+        "saved_at": m.get("saved_at").cloned().unwrap_or_default(),
+        "settings": j("settings", json!({})), "batches": j("batches", json!([])), "tasks": tasks,
+    }))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -366,6 +489,17 @@ mod tests {
         for (g, w) in got.iter().zip(want) {
             assert_eq!(g, w);
         }
+        // Read back as the Python journal reads it
+        for sz in fx["sizes"].as_array().unwrap() {
+            assert_eq!(format_size(sz[0].as_i64().unwrap()), sz[1].as_str().unwrap(), "{sz}");
+        }
+        let mut sum = summary(&path).unwrap();
+        sum.as_object_mut().unwrap().remove("saved_at");
+        assert_eq!(sum, fx["summary"]);
+        assert_eq!(has_unfinished(&path), fx["has_unfinished"].as_bool().unwrap());
+        let mut loaded = load(&path).unwrap();
+        loaded.as_object_mut().unwrap().remove("saved_at");
+        assert_eq!(loaded, fx["loaded"]);
         // Nothing changed: nothing written; one file changed: one row; a file gone: its row removed
         assert_eq!(save(&path, &cells, &json!({}), &json!([]), "in_progress", 0).unwrap(), Some(0));
         cells[0].lock().unwrap().st.status = "completed".into();

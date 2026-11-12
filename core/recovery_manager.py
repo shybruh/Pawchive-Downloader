@@ -512,9 +512,15 @@ class RecoveryManager:
         A journal that can't be read is reported and treated as empty.
         """
         self._import_legacy_journal()
-        data = safe_journal_call(self.journal.load)
+        ok, data = self._ask_writer("load")
+        if not ok:
+            data = safe_journal_call(self.journal.load)
         if not data:
             return None
+        ok, summary = self._ask_writer("summary")
+        if ok:
+            data["summary"] = summary or self.build_summary(data["tasks"])
+            return data
         data["summary"] = safe_journal_call(lambda: self.journal.summary(self._format_size)) or self.build_summary(data["tasks"])
         return data
 
@@ -562,13 +568,31 @@ class RecoveryManager:
         every start, and Resume couldn't do anything about them, #28). Asked of the database without
         loading the queue."""
         self._import_legacy_journal()
+        ok, v = self._ask_writer("has_unfinished")
+        if ok:
+            logger.debug(f"Recovery journal checked by the download engine: {'an unfinished download' if v else 'nothing to resume'}.",
+                         category="session")
+            return bool(v)
         return bool(safe_journal_call(self.journal.has_unfinished, False))
 
     def get_recovery_summary(self) -> Optional[Dict[str, Any]]:
         """Returns the high-level summary dict for displaying in the recovery modal (counted by the
         database, without loading the queue)."""
         self._import_legacy_journal()
-        return safe_journal_call(lambda: self.journal.summary(self._format_size))
+        ok, v = self._ask_writer("summary")
+        return v if ok else safe_journal_call(lambda: self.journal.summary(self._format_size))
+
+    def _ask_writer(self, fn: str):
+        """The journal read by its writer (the Rust engine): (True, answer), or (False, None) when
+        there's none or it can't be asked (then it's read here)"""
+        w = self.writer
+        if w is None or not hasattr(w, fn):
+            return False, None
+        try:
+            return getattr(w, fn)(self.journal_file)
+        except Exception as e:
+            logger.debug(f"Couldn't ask for the recovery journal ({e}); reading it here.", category="session")
+            return False, None
 
     def discard_recovery(self) -> bool:
         """Empties the crash journal (and removes an old version's JSON journal files)."""

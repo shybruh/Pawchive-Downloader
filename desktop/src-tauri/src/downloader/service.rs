@@ -658,7 +658,7 @@ fn serve(stream: TcpStream, token: &str) {
         // Commands run off the reading thread, so answers to questions keep coming in
         // (calls on the queue's list itself go in order with the rest: a journal save or new files
         // after the sync before them; they never wait for the app)
-        let on_list = matches!(msg.get("fn").and_then(Value::as_str), Some("queue_set" | "queue_append" | "journal_save" | "journal_clear"));
+        let on_list = matches!(msg.get("fn").and_then(Value::as_str), Some("queue_set" | "queue_append" | "journal_save" | "journal_clear" | "journal_unfinished" | "journal_summary" | "journal_load"));
         if matches!(msg.get("op").and_then(Value::as_str), Some("call" | "cancel_call")) && !on_list {
             std::thread::spawn(move || handle(&msg));
         } else if ordered.send(msg).is_err() {
@@ -783,6 +783,11 @@ fn handle(msg: &Value) {
                 )
                 .map(|n| json!(n)),
                 "journal_clear" => Ok(json!(super::journal::clear(args["path"].as_str().unwrap_or(""), args["generation"].as_u64().unwrap_or(0)))),
+                // Reading it: {"path"} → whether a download was left unfinished / the recovery
+                // prompt's summary / the saved queue (null: none)
+                "journal_unfinished" => Ok(json!(super::journal::has_unfinished(args["path"].as_str().unwrap_or("")))),
+                "journal_summary" => Ok(super::journal::summary(args["path"].as_str().unwrap_or("")).unwrap_or(Value::Null)),
+                "journal_load" => Ok(super::journal::load(args["path"].as_str().unwrap_or("")).unwrap_or(Value::Null)),
                 "site" => site_call(id, args),
                 "watchlist_store" => crate::watchlist::store::call(args),
                 "watchlist" => crate::watchlist::entries::call(args),

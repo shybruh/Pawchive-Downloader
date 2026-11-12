@@ -281,6 +281,26 @@ class _JournalWriter:
         ok, v = self._call("journal_clear", {"path": path, "generation": generation})
         return bool(v) if ok else None
 
+    # Reading it (the engine's journal.rs): (True, answer), or (False, None) when it can't be asked
+    def _read(self, fn: str, path: str):
+        d = self._d
+        if d._link is None or not d._link.connect():
+            return False, None
+        ok, v = d._link.call(fn, {"path": path})
+        if not ok:
+            logger.debug(f"The download engine couldn't read the recovery journal ({v}).", category="session")
+            return False, None
+        return True, v
+
+    def has_unfinished(self, path):
+        return self._read("journal_unfinished", path)
+
+    def summary(self, path):
+        return self._read("journal_summary", path)
+
+    def load(self, path):
+        return self._read("journal_load", path)
+
 
 _shared: Optional[_Link] = None
 _shared_lock = threading.Lock()

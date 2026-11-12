@@ -4,7 +4,8 @@ core/recovery_manager.py's names) for the Rust port's test (src-tauri/src/downlo
     python tools/golden_journal.py
 
 Output: desktop/src-tauri/tests/fixtures/journal.json — the files (as the app sends them to the
-engine), the rows the Python journal writes for them, and platform / artist-name cases.
+engine), the rows the Python journal writes for them, platform / artist-name cases, and what reading
+the journal back gives (the recovery prompt's check and summary, the saved queue, sizes as text).
 """
 
 import json
@@ -97,8 +98,16 @@ def main():
         ("Artist", "", ""), ("", "", ""), ("Bunkr", "Summer", ""), ("Bunkr", "untitled", "C:\\d\\Bunkr - Set A\\x.mp4"),
         ("erome album", "", "C:\\d\\Erome - \\x.jpg"), ("nhentai", "", "C:\\d\\nHentai - 123\\x.jpg"),
         ("Unknown Artist", "Post", "C:\\d\\x\\y.jpg"), ("bunkr", "", "C:\\d\\Other\\y.jpg")]]
+    # Reading it back: the recovery prompt's check and summary, and the saved queue
+    summary = j.summary(rm._format_size)
+    summary.pop("saved_at", None)
+    loaded = j.load()
+    loaded.pop("saved_at", None)
+    sizes = [[n, RecoveryManager._format_size(n)] for n in (0, -5, 1, 512, 1023, 1024, 1536, 1100, 10 ** 6, 1288490188,
+                                                              5 * 1024 ** 4, 3 * 1024 ** 5, 1024 ** 6, 1152, 1126)]
     out = {"tasks": [payload(t, table, keys) for t in TASKS], "options": table, "rows": rows,
-           "platforms": platforms, "artists": artists}
+           "platforms": platforms, "artists": artists, "summary": summary, "has_unfinished": j.has_unfinished(),
+           "loaded": loaded, "sizes": sizes}
     with open(FIXTURE, "w", encoding="utf-8") as fh:
         json.dump(out, fh, ensure_ascii=False, indent=1)
     print(f"{len(rows)} rows, {len(platforms)} platforms, {len(artists)} artist names -> {FIXTURE}")
