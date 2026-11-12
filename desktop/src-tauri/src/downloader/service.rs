@@ -760,6 +760,8 @@ fn handle(msg: &Value) {
         "workers" => q.set_max_workers(msg["n"].as_u64().unwrap_or(1) as usize),
         "state" => q.set_state(&s("key"), &s("status"), msg.get("error_msg").and_then(Value::as_str), msg.get("retry_count").and_then(Value::as_u64).map(|n| n as u32)),
         "batch" => q.set_batch_paused(&s("batch"), msg["paused"].as_bool().unwrap_or(false)),
+        // A file changed on disk (a download finished, files moved): the Gallery's folder totals above it
+        "gallery_stale" => crate::bridge::gallery::mark_stale(&s("path")),
         "task_progress" => q.set_progress(
             &s("key"),
             msg["downloaded_bytes"].as_u64().unwrap_or(0),

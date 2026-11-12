@@ -3,10 +3,11 @@
 //! and revealing files, and the safety check that keeps all of it away from system folders.
 //!
 //! A port of the "Integrated File Explorer & Media Gallery" part of bridge/app_bridge.py,
-//! checked against it by tools/golden_gallery.py. Moving files to the Recycle Bin (deleteItems)
-//! and the bookmarks (they are settings) are still answered by the Python bridge.
+//! checked against it by tools/golden_gallery.py; also moving files to the Recycle Bin, opening a
+//! folder and the other tabs' "Show in Gallery". The bookmarks (they are settings) are still the
+//! Python bridge's.
 
-use crate::downloader::py::{abspath, basename, dirname, join, normcase, normpath, relpath, splitdrive, splitext};
+use crate::downloader::py::{abspath, basename, commonpath, dirname, join, normcase, normpath, relpath, splitdrive, splitext};
 use serde_json::{json, Map, Value};
 use sha2::{Digest, Sha256};
 use std::collections::HashMap;
@@ -41,6 +42,15 @@ fn is_dir(p: &str) -> bool {
 
 fn is_file(p: &str) -> bool {
     fs::metadata(p).map(|m| m.is_file()).unwrap_or(false)
+}
+
+/// Files that changed (a download finished, files moved): the folders above them have new totals
+static STALE: Mutex<Vec<String>> = Mutex::new(Vec::new());
+
+pub fn mark_stale(file_path: &str) {
+    if !file_path.is_empty() {
+        STALE.lock().unwrap().push(file_path.to_string());
+    }
 }
 
 #[derive(Clone, Copy)]
@@ -87,7 +97,29 @@ impl Gallery {
 
     /// The folder's entries (folders first, then by name), at most `max_entries` of them. Folder
     /// sizes not known yet are -1 and follow with folderStatsCalculated.
+    /// Forgets the totals of every folder above the files that changed (they're checked against a
+    /// folder's own date, which doesn't change when files land in its subfolders)
+    fn forget_stale(&self) {
+        let stale: Vec<String> = std::mem::take(&mut *STALE.lock().unwrap());
+        if stale.is_empty() {
+            return;
+        }
+        let mut cache = self.stats_cache.lock().unwrap();
+        for f in stale {
+            let mut folder = normpath(&dirname(&f));
+            loop {
+                cache.remove(&folder);
+                let parent = dirname(&folder);
+                if parent == folder || parent.is_empty() {
+                    break;
+                }
+                folder = parent;
+            }
+        }
+    }
+
     pub fn list_directory(self: &Arc<Self>, path: &str, max_entries: usize) -> Vec<Value> {
+        self.forget_stale();
         let path = if path.is_empty() { self.default_dir() } else { path.to_string() };
         self.last_total.store(0, Ordering::Relaxed);
         let path = abspath(&path);
@@ -154,6 +186,7 @@ impl Gallery {
 
     /// A folder's size, files and subfolders (all levels, up to 250,000 files): told to the window
     fn folder_stats(&self, folder: &str, token: u64) {
+        self.forget_stale();
         let Ok(meta) = fs::metadata(folder) else { return };
         if !meta.is_dir() {
             return;
@@ -587,6 +620,93 @@ impl Gallery {
 
     /// Whether bulk operations (move, rename, delete, sort…) may touch this path. Answers are
     /// kept 30 s (the window asks on every folder change, and the check reads the disk).
+    /// The download folder (else the home folder)
+    pub fn download_dir_or_home(&self) -> String {
+        let d = self.out.download_dir();
+        if d.is_empty() { home() } else { d }
+    }
+
+    /// Opens a folder (a file's folder) in Explorer; a missing folder is made, else the download folder
+    pub fn open_folder(&self, path: &str) {
+        let dl = self.out.download_dir();
+        let path = if path.is_empty() { dl.clone() } else { path.to_string() };
+        let mut target = if is_dir(&path) { path.clone() } else { dirname(&path) };
+        if !exists(&target) && fs::create_dir_all(&target).is_err() {
+            target = dl;
+        }
+        if exists(&target) {
+            let _ = std::process::Command::new("explorer").arg(normpath(&target)).spawn();
+        }
+    }
+
+    /// Moves files or folders to the Recycle Bin (never deleted for good: what can't go there is
+    /// reported). {"deleted", "failed", "errors"}
+    pub fn delete_items(&self, paths: &[String]) -> Value {
+        let (mut deleted, mut failed) = (0, 0);
+        let (mut errors, mut trashed) = (Vec::new(), Vec::new());
+        for p in paths.iter().filter(|p| !p.is_empty()) {
+            let norm = normpath(p);
+            let safety = self.path_safety(&norm);
+            if safety["is_blocked"].as_bool().unwrap_or(false) || safety["is_drive_root"].as_bool().unwrap_or(false) {
+                failed += 1;
+                errors.push(format!("Deletion blocked for system or root directory: {norm}"));
+                continue;
+            }
+            if !exists(&norm) {
+                failed += 1;
+                errors.push(format!("Target does not exist: {norm}"));
+                continue;
+            }
+            if crate::decompress::to_recycle_bin(&norm) {
+                deleted += 1;
+                mark_stale(&join(&[&norm, "x"]));
+                trashed.push(norm);
+            } else {
+                failed += 1;
+                errors.push(format!("Could not move {} to the Recycle Bin", basename(&norm)));
+            }
+        }
+        if deleted > 0 {
+            self.out.log("info", &format!("Moved {deleted} item(s) to the Recycle Bin."), &trashed.join("\n"));
+        }
+        if !errors.is_empty() {
+            self.out.log("warning", &format!("{failed} item(s) couldn't be moved to the Recycle Bin."), &errors.join("\n"));
+        }
+        json!({"deleted": deleted, "failed": failed, "errors": errors})
+    }
+
+    /// Asks the Gallery tab to open this folder (or the folder of this file, highlighted); a missing
+    /// file: the closest folder that's there
+    pub fn show_in_gallery(&self, path: &str) {
+        if path.is_empty() {
+            return;
+        }
+        let norm = normpath(path);
+        if is_dir(&norm) {
+            self.out.signal("galleryShowRequested", vec![json!(norm), json!(true)]);
+        } else if exists(&norm) {
+            self.out.signal("galleryShowRequested", vec![json!(norm), json!(false)]);
+        } else {
+            let mut parent = dirname(&norm);
+            while !parent.is_empty() && !is_dir(&parent) && dirname(&parent) != parent {
+                parent = dirname(&parent);
+            }
+            if !parent.is_empty() && is_dir(&parent) {
+                self.out.signal("galleryShowRequested", vec![json!(parent), json!(true)]);
+            }
+        }
+    }
+
+    /// The Gallery at the folder of the queue's files, else the download folder
+    pub fn show_downloads(&self, targets: &[String]) {
+        let dirs: Vec<String> = targets.iter().filter(|t| !t.is_empty()).map(|t| dirname(t)).collect();
+        let mut folder = if dirs.is_empty() { String::new() } else { commonpath(&dirs).unwrap_or_default() };
+        if folder.is_empty() || !is_dir(&folder) {
+            folder = self.download_dir_or_home();
+        }
+        self.show_in_gallery(&folder);
+    }
+
     pub fn path_safety(&self, path: &str) -> Value {
         if let Some((t, v)) = self.safety_cache.lock().unwrap().get(path) {
             if t.elapsed() < Duration::from_secs(30) {

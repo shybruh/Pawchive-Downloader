@@ -1,5 +1,6 @@
 """Writes the Python bridge's Gallery answers (bridge/app_bridge.py, "Integrated File Explorer")
-for the Rust port's test (src-tauri/src/bridge/gallery.rs).
+for the Rust port's test (src-tauri/src/bridge/gallery.rs). It ran against the commit before
+those methods were removed from the bridge.
 
     .venv/Scripts/python tools/golden_gallery.py
     cd desktop/src-tauri && cargo test --lib -- --ignored gallery

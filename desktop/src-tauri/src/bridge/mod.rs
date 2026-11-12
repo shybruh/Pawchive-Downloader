@@ -50,6 +50,7 @@ impl AppBridge {
 const METHODS: &[&str] = &[
     "listDirectory", "getLastListingTotal", "getBreadcrumbs", "getSystemDrives", "openPathInSystem", "moveItems", "renameItem",
     "scanDuplicates", "scanDuplicatesAsync", "getPathSafetyInfo", "revealFileInExplorer",
+    "deleteItems", "getDownloadDir", "openFolder", "showDownloadsInGallery",
     // (the watchlist: watchlist/entries.rs)
     "removeFromWatchlist", "setWatchlistAutoCheck", "setAllWatchlistAutoCheck", "disableAllWatchlistAutoCheck", "ignoreWatchlistPost",
     // (the queue's retries: downloader/service.rs queue_window)
@@ -115,6 +116,19 @@ impl Overlay for AppBridge {
             }
             "getPathSafetyInfo" => g.path_safety(&arg_str(&args, 0)),
             "revealFileInExplorer" => json!(g.reveal(&arg_str(&args, 0))),
+            "deleteItems" => g.delete_items(&arg_list(&args, 0)),
+            "getDownloadDir" => json!(g.download_dir_or_home()),
+            "openFolder" => {
+                g.open_folder(&arg_str(&args, 0));
+                Value::Null
+            }
+            "showDownloadsInGallery" => {
+                // (the queue the window shows: the engine's, or the app's with the old downloader)
+                let targets: Vec<String> = crate::downloader::queue_view::global().lock().unwrap().rows().iter()
+                    .map(|r| r.target_path.clone()).collect();
+                g.show_downloads(&targets);
+                Value::Null
+            }
             m => return Err(format!("appBridge has no Rust method {m:?}")),
         })
     }

@@ -212,7 +212,7 @@ fn is_sep(c: char) -> bool {
 }
 
 /// ntpath.splitroot: (drive, root, rest)
-fn splitroot(p: &str) -> (&str, &str, &str) {
+pub fn splitroot(p: &str) -> (&str, &str, &str) {
     let b = p.as_bytes();
     if b.len() >= 2 && is_sep(b[0] as char) && is_sep(b[1] as char) {
         // UNC: \server\share
@@ -320,6 +320,25 @@ pub fn relpath(path: &str, start: &str) -> Option<String> {
     Some(if rel.is_empty() { ".".into() } else { rel.join("\\") })
 }
 
+/// os.path.commonpath (Windows); None for paths on different drives, or absolute mixed with relative
+pub fn commonpath(paths: &[String]) -> Option<String> {
+    let first = paths.first()?;
+    let low: Vec<String> = paths.iter().map(|p| p.replace('/', "\\").to_lowercase()).collect();
+    let splits: Vec<(&str, &str, &str)> = low.iter().map(|p| splitroot(p)).collect();
+    if splits.iter().any(|s| s.1 != splits[0].1) || splits.iter().any(|s| s.0 != splits[0].0) {
+        return None;
+    }
+    let parts = |p: &str| p.split('\\').filter(|c| !c.is_empty() && *c != ".").map(str::to_string).collect::<Vec<_>>();
+    let lists: Vec<Vec<String>> = splits.iter().map(|s| parts(s.2)).collect();
+    let (s1, s2) = (lists.iter().min()?, lists.iter().max()?);
+    let own = first.replace('/', "\\");
+    let (drive, root, rest) = splitroot(&own);
+    let mut common = parts(rest);
+    let n = s1.iter().zip(s2).take_while(|(a, b)| a == b).count();
+    common.truncate(n.min(s1.len()));
+    Some(format!("{drive}{root}{}", common.join("\\")))
+}
+
 /// os.path.dirname
 pub fn dirname(p: &str) -> String {
     let (drive, root, rest) = splitroot(p);
@@ -335,5 +354,22 @@ pub fn pystr(v: &serde_json::Value) -> String {
         serde_json::Value::Null => "None".into(),
         serde_json::Value::Bool(b) => if *b { "True".into() } else { "False".into() },
         other => other.to_string(),
+    }
+}
+
+#[cfg(test)]
+mod commonpath_tests {
+    use super::commonpath;
+
+    /// ntpath.commonpath's answers (Python 3.13)
+    #[test]
+    fn matches_python() {
+        // ("|" stands for a backslash)
+        let text = r#"[[["C:|dl|A|x", "C:|dl|A|y"], "C:|dl|A"], [["C:|dl|A", "c:|DL|b"], "C:|dl"], [["C:|dl|A|x"], "C:|dl|A|x"], [["C:|dl", "D:|dl"], null], [["C:/dl/A/", "C:|dl|A|sub"], "C:|dl|A"], [["C:|dl|Ab", "C:|dl|A"], "C:|dl"], [["||srv|share|a", "||srv|share|b"], "||srv|share|"], [["C:|dl|.|A|..|B", "C:|dl|B|c"], "C:|dl"], [["C:|", "C:|x"], "C:|"], [["dl|a", "dl|b"], "dl"], [["C:|dl", "dl"], null]]"#;
+        let fx: serde_json::Value = serde_json::from_str(&text.replace('|', r"\\")).unwrap();
+        for c in fx.as_array().unwrap() {
+            let paths: Vec<String> = c[0].as_array().unwrap().iter().map(|p| p.as_str().unwrap().to_string()).collect();
+            assert_eq!(commonpath(&paths), c[1].as_str().map(str::to_string), "{paths:?}");
+        }
     }
 }
