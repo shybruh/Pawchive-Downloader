@@ -74,6 +74,11 @@ pub struct Task {
     pub post_info_path: String,
     #[serde(default)]
     pub is_telegram: bool,
+    /// A Telegram file's channel and message (kept for the crash journal)
+    #[serde(default, skip_serializing_if = "Value::is_null")]
+    pub telegram_channel_id: Value,
+    #[serde(default, skip_serializing_if = "Value::is_null")]
+    pub telegram_message_id: Value,
     /// The queue's name for this file (the app's own task object)
     #[serde(default)]
     pub key: String,
@@ -843,6 +848,8 @@ pub fn build(posts: &[Value], o: &Options, r: &Request, ctx: &dyn Lookups) -> Pl
                 fallback_urls: cands.get(1..).map(<[String]>::to_vec).unwrap_or_default(),
                 post_info_path: String::new(),
                 is_telegram: false,
+                telegram_channel_id: Value::Null,
+                telegram_message_id: Value::Null,
                 key: String::new(),
             });
         }

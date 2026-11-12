@@ -49,6 +49,11 @@ class RecoveryManager:
         self._retry_counts: Tuple[int, int] = (0, 0)  # (all, without 404s)
         self._retry_loading = threading.Event()
         self.on_retries_loaded: Optional[Callable[[], None]] = None
+        # Who writes the crash journal instead of this manager: the desktop shell's Rust engine,
+        # from its own queue (services/rust_queue.py). save(path, batches, settings, status,
+        # generation) → rows written, None when dropped, or False when it couldn't (written here
+        # then); clear(path, generation) → whether there were rows, or None when it couldn't.
+        self.writer = None
 
     @staticmethod
     def _detect_platform(service: str, domain: str = "", url: str = "") -> str:
@@ -309,8 +314,13 @@ class RecoveryManager:
                 return False
             try:
                 self._import_legacy_journal()
-                written = self.journal.sync(tasks, batches, settings, status, changed=changed,
-                                            artist_of=self.artist_name, platform_of=self._platform_of)
+                w = self.writer
+                written = w.save(self.journal_file, batches, settings, status, self._generation) if w is not None else False
+                if written is None:
+                    return False                     # (older than the last discard)
+                if written is False:
+                    written = self.journal.sync(tasks, batches, settings, status, changed=changed,
+                                                artist_of=self.artist_name, platform_of=self._platform_of)
                 logger.debug(f"Download recovery checkpoint saved ({written} changed file(s)).", category="session")
                 return True
             except Exception as e:
@@ -566,7 +576,8 @@ class RecoveryManager:
         with self._write_lock:
             self._generation += 1      # background writes queued before this are dropped
             try:
-                purged = bool(safe_journal_call(self.journal.has_rows, False))
+                had = self.writer.clear(self.journal_file, self._generation) if self.writer is not None else None
+                purged = bool(had) if had is not None else bool(safe_journal_call(self.journal.has_rows, False))
                 safe_journal_call(self.journal.clear)
             except Exception as e:
                 logger.warning(f"Could not empty the recovery journal: {e}", category="session")

@@ -251,6 +251,37 @@ class _Link:
             pass
 
 
+class _JournalWriter:
+    """The crash journal written by the Rust engine from its own queue (src/downloader/journal.rs);
+    the recovery manager writes it itself when the engine can't be asked"""
+
+    def __init__(self, downloader):
+        self._d = downloader
+
+    def _call(self, fn: str, args: Dict[str, Any]):
+        d = self._d
+        if d._link is None or not d._link.up:
+            return False, None
+        with d._sync_lock:                  # (Rust's list as this one is: sent first if it never went over)
+            if d._synced_on != id(d._link._sock):
+                d._sync_now(replace=False)
+        return d._link.call(fn, args)
+
+    def save(self, path, batches, settings, status, generation):
+        ok, v = self._call("journal_save", {
+            "path": path, "batches": json.loads(json.dumps(batches or [], default=str)),
+            "settings": json.loads(json.dumps(settings or {}, default=str)), "status": status, "generation": generation})
+        if not ok:
+            if v is not None:
+                logger.debug(f"The download engine couldn't save the recovery journal ({v}).", category="session")
+            return False
+        return v                               # rows written, or None (older than the last discard)
+
+    def clear(self, path, generation):
+        ok, v = self._call("journal_clear", {"path": path, "generation": generation})
+        return bool(v) if ok else None
+
+
 _shared: Optional[_Link] = None
 _shared_lock = threading.Lock()
 
@@ -282,6 +313,9 @@ class RustDownloader(FileDownloader):
         self._synced_on = None                     # (the connection this list last went over)
         self._plans: Dict[int, Any] = {}           # call id → "was this plan cancelled?"
         dl.status_listener = self._status_changed
+        rec = getattr(self.session_manager, "recovery_manager", None)
+        if rec is not None:
+            rec.writer = _JournalWriter(self)
         threading.Thread(target=self._flush_loop, name="rust-queue-flush", daemon=True).start()
         threading.Thread(target=self._idle_sync_loop, name="rust-queue-idle-sync", daemon=True).start()
 
@@ -314,6 +348,8 @@ class RustDownloader(FileDownloader):
             "file_id": str(t.file_id or ""), "file_size": int(t.file_size or 0),
             "expected_sha256": str(getattr(t, "expected_sha256", "") or ""), "is_ytdlp": bool(t.is_ytdlp),
             "is_telegram": bool(getattr(t, "is_telegram", False)), "batch_id": getattr(t, "batch_id", "") or "",
+            "telegram_channel_id": getattr(t, "telegram_channel_id", "") or "",
+            "telegram_message_id": getattr(t, "telegram_message_id", 0) or 0,
             "post_url": getattr(t, "post_url", "") or "", "post_date": getattr(t, "post_date", "") or "",
             "user_id": str(getattr(t, "user_id", "") or ""),
             "fallback_urls": [u for u in (getattr(t, "fallback_urls", None) or []) if isinstance(u, str)],
@@ -567,7 +603,6 @@ class RustDownloader(FileDownloader):
         if not self._link.connect():
             return super()._run_download_loop(options, cookie_str, session_id)
         self._keep_paths_apart(self.tasks, [])
-        self._save_recovery_checkpoint(options, async_write=True)
         self.current_options = options
         self.start_time = time.time()
         self.downloaded_bytes = 0
@@ -586,6 +621,7 @@ class RustDownloader(FileDownloader):
 
         self._finished.clear()
         self._sync(replace=False)           # (Rust's list is the queue: its files keep their states)
+        self._save_recovery_checkpoint(options, async_write=True)     # (from Rust's list: after it has the files)
         archive = bool(self.archive_manager and self.archive_manager.is_enabled)
         self._link.send({"op": "start", "options": options.to_dict(), "archive": archive, "workers": self._mw,
                          "archive_db": self._archive_db()})

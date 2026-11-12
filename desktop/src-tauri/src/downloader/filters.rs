@@ -61,6 +61,11 @@ fn as_text(v: &Value) -> String {
 }
 
 impl Options {
+    /// The settings as FilterOptions.to_dict() gives them
+    pub fn as_map(&self) -> &Map<String, Value> {
+        &self.0
+    }
+
     /// FilterOptions.from_dict(d): defaults for what's missing, values normalised
     pub fn from_dict(d: &Value) -> Self {
         let mut m = defaults();

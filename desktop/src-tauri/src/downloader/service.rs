@@ -641,7 +641,10 @@ fn serve(stream: TcpStream, token: &str) {
             continue;
         }
         // Commands run off the reading thread, so answers to questions keep coming in
-        if matches!(msg.get("op").and_then(Value::as_str), Some("call" | "cancel_call")) {
+        // (calls on the queue's list itself go in order with the rest: a journal save or new files
+        // after the sync before them; they never wait for the app)
+        let on_list = matches!(msg.get("fn").and_then(Value::as_str), Some("queue_append" | "journal_save" | "journal_clear"));
+        if matches!(msg.get("op").and_then(Value::as_str), Some("call" | "cancel_call")) && !on_list {
             std::thread::spawn(move || handle(&msg));
         } else if ordered.send(msg).is_err() {
             break;
@@ -742,6 +745,18 @@ fn handle(msg: &Value) {
             let out = match s("fn").as_str() {
                 "plan" => plan_call(id, args),
                 "queue_append" => queue_append(args),
+                // The crash journal, from the engine's list: {"path", "settings", "batches", "status",
+                // "generation"} → rows written (null: dropped, older than the last clear)
+                "journal_save" => super::journal::save(
+                    args["path"].as_str().unwrap_or(""),
+                    &queue().cells(),
+                    &args["settings"],
+                    &args["batches"],
+                    args["status"].as_str().unwrap_or("interrupted"),
+                    args["generation"].as_u64().unwrap_or(0),
+                )
+                .map(|n| json!(n)),
+                "journal_clear" => Ok(json!(super::journal::clear(args["path"].as_str().unwrap_or(""), args["generation"].as_u64().unwrap_or(0)))),
                 "site" => site_call(id, args),
                 "watchlist_store" => crate::watchlist::store::call(args),
                 "watchlist" => crate::watchlist::entries::call(args),

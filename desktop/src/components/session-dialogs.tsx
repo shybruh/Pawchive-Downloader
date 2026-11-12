@@ -4,7 +4,7 @@ import { call, useSignal } from "@/lib/engine";
 import { Button, Dialog, DialogContent, DialogFooter, Progress } from "@/components/ui";
 
 type Recovery = {
-  total?: number; completed_files?: number; failed_files?: number; pending_files?: number; percent?: number;
+  total?: number; total_files?: number; completed_files?: number; failed_files?: number; pending_files?: number; percent?: number;
   formatted_downloaded?: string; formatted_total?: string; saved_at?: string;
   artists?: { name?: string; service?: string; platform?: string }[];
 };
@@ -28,7 +28,7 @@ export function RecoveryDialog() {
             </div>
             <Progress value={info.percent ?? 0} />
             <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground tabular-nums">
-              <span>{info.completed_files ?? 0} of {info.total ?? 0} files done</span>
+              <span>{info.completed_files ?? 0} of {info.total_files ?? info.total ?? 0} files done</span>
               {left > 0 && <span>{left} left</span>}
               {info.formatted_total && <span>{info.formatted_downloaded ?? "0"} of {info.formatted_total}</span>}
               {info.saved_at && <span>Saved {String(info.saved_at).replace("T", " ").slice(0, 16)}</span>}

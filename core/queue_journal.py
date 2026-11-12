@@ -115,6 +115,10 @@ class QueueJournal:
         platform_of = platform_of or (lambda t: _val(t, "service", "") or "")
         with self._lock:
             with self._db() as conn:
+                # Rows changed by another writer (the Rust engine): everything is compared again
+                if self._fp and conn.execute("SELECT COUNT(*) FROM tasks;").fetchone()[0] != len(self._fp):
+                    self._fp.clear()
+                    self._saved_len = -1
                 upserts: List[tuple] = []
                 updates: List[tuple] = []
                 deletes: List[tuple] = []

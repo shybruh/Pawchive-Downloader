@@ -7,6 +7,7 @@
 pub mod extract;
 pub mod fetch;
 pub mod filters;
+pub mod journal;
 pub mod links;
 pub mod naming;
 pub mod order;
