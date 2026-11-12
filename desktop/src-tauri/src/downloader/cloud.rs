@@ -1,8 +1,7 @@
 //! Cloud links: MEGA (files and folders, decrypted on the way), Dropbox (files, and folders that
 //! come as a zip file) and GoFile (with a GoFile Premium account's API token only: GoFile's own
 //! website token is never used). A port of services/cloud_downloader.py, with the same log lines
-//! (the app shows them, and turns the "❌" ones into the queue row's error). Google Drive is still
-//! downloaded by the app.
+//! (the app shows them, and turns the "❌" ones into the queue row's error). Google Drive: gdrive.rs.
 //!
 //! Checked against the Python downloaders on made-up sites (tests/fixtures/cloud.json,
 //! tools/golden_cloud.py).
@@ -41,15 +40,22 @@ pub struct Resp {
     /// Header names in lower case
     pub headers: HashMap<String, String>,
     pub body: Box<dyn Read + Send>,
+    /// Where the answer came from (after redirects)
+    pub url: String,
 }
 
 impl Resp {
+    pub fn text(mut self) -> String {
+        let mut b = Vec::new();
+        let _ = self.body.read_to_end(&mut b);
+        String::from_utf8_lossy(&b).into_owned()
+    }
     fn json(mut self) -> Option<Value> {
         let mut s = String::new();
         self.body.read_to_string(&mut s).ok()?;
         serde_json::from_str(&s).ok()
     }
-    fn header(&self, k: &str) -> &str {
+    pub fn header(&self, k: &str) -> &str {
         self.headers.get(k).map(String::as_str).unwrap_or("")
     }
 }
@@ -57,10 +63,15 @@ impl Resp {
 pub trait Web: Sync {
     fn get(&self, url: &str, headers: &[(&str, String)]) -> Result<Resp, String>;
     fn post(&self, url: &str, body: &Value) -> Result<Resp, String>;
+    /// GET without following a redirect (to read where it goes)
+    fn get_no_follow(&self, url: &str) -> Result<Resp, String> {
+        self.get(url, &[])
+    }
 }
 
 pub struct Net {
     client: reqwest::blocking::Client,
+    no_follow: reqwest::blocking::Client,
 }
 
 impl Net {
@@ -71,12 +82,17 @@ impl Net {
             .user_agent("Mozilla/5.0 (Windows NT 10.0; Win64; x64)")
             .build()
             .unwrap_or_default();
-        Net { client }
+        let no_follow = reqwest::blocking::Client::builder()
+            .timeout(Duration::from_secs(8))
+            .redirect(reqwest::redirect::Policy::none())
+            .build()
+            .unwrap_or_default();
+        Net { client, no_follow }
     }
 
     fn resp(r: reqwest::blocking::Response) -> Resp {
         let headers = r.headers().iter().map(|(k, v)| (k.as_str().to_lowercase(), v.to_str().unwrap_or("").to_string())).collect();
-        Resp { status: r.status().as_u16(), headers, body: Box::new(r) }
+        Resp { status: r.status().as_u16(), headers, url: r.url().to_string(), body: Box::new(r) }
     }
 }
 
@@ -97,6 +113,9 @@ impl Web for Net {
     fn post(&self, url: &str, body: &Value) -> Result<Resp, String> {
         self.client.post(url).timeout(Duration::from_secs(25)).json(body).send().map(Self::resp).map_err(|e| e.to_string())
     }
+    fn get_no_follow(&self, url: &str) -> Result<Resp, String> {
+        self.no_follow.get(url).send().map(Self::resp).map_err(|e| e.to_string())
+    }
 }
 
 // ── One cloud link's download ─────────────────────────────────────────────────────────────────
@@ -113,10 +132,10 @@ pub struct Job<'a> {
 }
 
 impl Job<'_> {
-    fn cancelled(&self) -> bool {
+    pub fn cancelled(&self) -> bool {
         self.cancel.load(Ordering::Relaxed)
     }
-    fn say(&self, s: &str) {
+    pub fn say(&self, s: &str) {
         (self.log)(s)
     }
 
@@ -880,7 +899,7 @@ pub fn gofile(job: &Job, url: &str, target: &Path, token: &str) -> bool {
     }
 }
 
-/// Call "cloud_download": {"kind": "mega" | "dropbox" | "gofile", "url", "target", "workers",
+/// Call "cloud_download": {"kind": "mega" | "dropbox" | "gofile" | "gdrive", "url", "target", "workers",
 /// "skip_words", "options", "token"} → whether everything was downloaded. Log lines and progress
 /// come back as progress notes ({"log": text} / {"file", "done", "size", "index", "count"}).
 pub fn call(id: u64, a: &Value) -> Result<Value, String> {
@@ -907,6 +926,7 @@ pub fn call(id: u64, a: &Value) -> Result<Value, String> {
         "mega" => mega(&job, url, &target),
         "dropbox" => dropbox(&job, url, &target),
         "gofile" => gofile(&job, url, &target, a["token"].as_str().unwrap_or("")),
+        "gdrive" => super::gdrive::gdrive(&job, url, &target),
         other => return Err(format!("unknown cloud host {other}")),
     };
     Ok(json!(ok))
@@ -925,10 +945,10 @@ mod tests {
                 if s[0] == method && s[1] == url && (s[2].is_null() || Some(&s[2]) == payload) {
                     let body = base64::engine::general_purpose::STANDARD.decode(s[5].as_str().unwrap()).unwrap();
                     let headers = s[4].as_object().unwrap().iter().map(|(k, v)| (k.to_lowercase(), v.as_str().unwrap().to_string())).collect();
-                    return Resp { status: s[3].as_u64().unwrap() as u16, headers, body: Box::new(std::io::Cursor::new(body)) };
+                    return Resp { status: s[3].as_u64().unwrap() as u16, headers, url: url.into(), body: Box::new(std::io::Cursor::new(body)) };
                 }
             }
-            Resp { status: 404, headers: HashMap::new(), body: Box::new(std::io::empty()) }
+            Resp { status: 404, headers: HashMap::new(), url: url.into(), body: Box::new(std::io::empty()) }
         }
     }
 

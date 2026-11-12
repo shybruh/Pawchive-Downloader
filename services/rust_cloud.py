@@ -1,6 +1,7 @@
-"""MEGA, Dropbox and GoFile links downloaded by the Rust engine (src-tauri/src/downloader/cloud.rs),
-with the same arguments and log lines as services/cloud_downloader.py: that one is used when the
-engine can't be asked (or PAWCHIVE_PYTHON_CLOUD=1). Google Drive stays there."""
+"""MEGA, Dropbox, GoFile and Google Drive links downloaded by the Rust engine
+(src-tauri/src/downloader/cloud.rs, gdrive.rs), with the same arguments and log lines as
+services/cloud_downloader.py: that one is used when the engine can't be asked (or
+PAWCHIVE_PYTHON_CLOUD=1)."""
 
 import os
 import threading
@@ -75,6 +76,14 @@ def download_dropbox_link(url: str, target_folder: str, log_func: Callable[[str]
     r = _run("dropbox", url, target_folder, log_func, progress_callback, cancel_event, pause_event, 1, skip_words, options)
     return r if r is not None else _py.download_dropbox_link(url, target_folder, log_func, progress_callback, cancel_event,
                                                              pause_event, skip_words, options)
+
+
+def download_gdrive_link(url: str, target_folder: str, log_func: Callable[[str], None] = print,
+                         progress_callback=None, cancel_event=None, pause_event=None,
+                         skip_words: Optional[Union[str, List[str]]] = None, options: Optional[Any] = None) -> bool:
+    r = _run("gdrive", url, target_folder, log_func, progress_callback, cancel_event, pause_event, 1, skip_words, options)
+    return r if r is not None else _py.download_gdrive_link(url, target_folder, log_func, progress_callback, cancel_event,
+                                                            pause_event, skip_words, options)
 
 
 def download_gofile_link(url: str, target_folder: str, log_func: Callable[[str], None] = print,

@@ -6,6 +6,7 @@
 
 pub mod albums;
 pub mod cloud;
+pub mod gdrive;
 pub mod extract;
 pub mod fetch;
 pub mod filters;
