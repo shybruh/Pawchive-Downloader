@@ -3793,10 +3793,9 @@ class AppBridge(QObject):
 
     def _finish_retry(self, base: list, restored: list, selected: Optional[list], include_cancelled: bool):
         self._retry_preparing = False
-        if base is not self.downloader.tasks:
-            self.downloader.tasks = base
+        if restored or base is not self.downloader.tasks:
+            self.downloader.tasks = list(base) + list(restored or [])
         if restored:
-            self.downloader.tasks.extend(restored)
             if self._queue_model:
                 self._queue_model.addTasks(restored)
         options = self._get_filter_options()
@@ -3823,9 +3822,17 @@ class AppBridge(QObject):
         recount while the old file was still there and keep showing "Retry Failed (1)" (#28).
         Cleared files are also taken out of the crash journal, and a save of the failed files still
         waiting in the background is dropped: either brought them back after a restart."""
+        self._clear_failed(selected_ids)
+
+    def _clear_failed(self, selected_ids: Optional[list] = None, removed: Optional[set] = None):
+        """clearFailedTasks; with `removed`, the download engine has cleared its list already (those
+        are the files it took out): this copy drops the same, the models and the saved failed files
+        follow."""
         s_set = set(selected_ids) if selected_ids else None
 
         def cleared(t) -> bool:
+            if removed is not None and t.__dict__.get("_rkey") in removed:
+                return True
             if t.status not in ("failed", "cancelled"):
                 return False
             return s_set is None or t.file_id in s_set or t.url in s_set or t.filename in s_set
@@ -3857,7 +3864,10 @@ class AppBridge(QObject):
             if gone:
                 self.recovery_manager.forget_tasks(list(gone.values()))
         if self.downloader:
-            self.downloader.tasks = [t for t in self.downloader.tasks if not cleared(t)]
+            if removed is not None and hasattr(self.downloader, "forget"):
+                self.downloader.forget(removed)
+            else:
+                self.downloader.tasks = [t for t in self.downloader.tasks if not cleared(t)]
         if self._queue_model:
             self._queue_model.clearFailedTasks(selected_ids)
         if self._active_queue_model:
@@ -4730,6 +4740,9 @@ class AppBridge(QObject):
                     (d._paused_batches.add if paused else d._paused_batches.discard)(key)
             elif method == "removeBatch":
                 qm.removeBatch(key)
+            elif method == "clearFailedTasks":
+                self._clear_failed(info.get("ids") or None, set(info.get("removed") or []))
+                return
             # (cloud links: retried here, as before)
             cloud = 0
             if method == "retryBatch":
@@ -4819,7 +4832,7 @@ class AppBridge(QObject):
 
     @Slot()
     def _handle_queue_cleared(self):
-        self.downloader.tasks.clear()
+        self.downloader.tasks = []
         self._queued_links.clear()
         logger.info("Download queue cleared.", category="queue")
 
@@ -5455,7 +5468,7 @@ class AppBridge(QObject):
         """A queue button the Rust bridge passed back because the engine couldn't do it (cloud links,
         the failed files saved on disk): run here on the window thread"""
         method, call_args = str(args[0]), list(args[1] if len(args) > 1 else [])
-        if method not in ("retryFailed", "retrySingleTask"):
+        if method not in ("retryFailed", "retrySingleTask", "clearFailedTasks"):
             raise AttributeError(f"appBridge has no queue button {method!r}")
         done, box = threading.Event(), [None, None]
 

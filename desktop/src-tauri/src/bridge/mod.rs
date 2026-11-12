@@ -45,7 +45,7 @@ const METHODS: &[&str] = &[
     // (the watchlist: watchlist/entries.rs)
     "removeFromWatchlist", "setWatchlistAutoCheck", "setAllWatchlistAutoCheck", "disableAllWatchlistAutoCheck", "ignoreWatchlistPost",
     // (the queue's retries: downloader/service.rs queue_window)
-    "retryFailed", "retrySingleTask",
+    "retryFailed", "retrySingleTask", "clearFailedTasks",
 ];
 
 /// The watchlist's buttons: answered by the Rust watchlist, else by the Python bridge (the engine
@@ -79,7 +79,7 @@ impl Overlay for AppBridge {
         if matches!(method, "removeFromWatchlist" | "setWatchlistAutoCheck" | "setAllWatchlistAutoCheck" | "disableAllWatchlistAutoCheck" | "ignoreWatchlistPost") {
             return watchlist_button(method, args);
         }
-        if matches!(method, "retryFailed" | "retrySingleTask") {
+        if matches!(method, "retryFailed" | "retrySingleTask" | "clearFailedTasks") {
             // Done on the engine's queue, else by the Python bridge (cloud links, saved failed files)
             return match service::queue_window(method, &args) {
                 Some(v) => Ok(v),

@@ -1,7 +1,7 @@
 //! "appBridge.queueModel" and its "groupsModel": the window's download queue, from the Rust queue
 //! view (downloader/queue_view.rs). The app keeps the view's files up to date. Pausing, resuming,
 //! cancelling, removing and retrying a post or a file are done by the engine's queue
-//! (downloader/service.rs queue_window), the app following; the rest (clearing, the Retry list…)
+//! (downloader/service.rs queue_window), the app following; the rest (the Retry list saved on disk…)
 //! is passed to the app.
 
 use super::native::{Events, NativeObject, Prop};

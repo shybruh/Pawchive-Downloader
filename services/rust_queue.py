@@ -297,6 +297,7 @@ def shared_link() -> _Link:
 class RustDownloader(FileDownloader):
     def __init__(self, *args, **kwargs):
         self._link = None
+        self._tasks: list = []
         self._mw = 4
         super().__init__(*args, **kwargs)
         self._link = shared_link()
@@ -318,6 +319,55 @@ class RustDownloader(FileDownloader):
             rec.writer = _JournalWriter(self)
         threading.Thread(target=self._flush_loop, name="rust-queue-flush", daemon=True).start()
         threading.Thread(target=self._idle_sync_loop, name="rust-queue-idle-sync", daemon=True).start()
+
+    # ── The list: a copy of Rust's ──────────────────────────────────────────────
+
+    @property
+    def tasks(self):
+        return self._tasks
+
+    @tasks.setter
+    def tasks(self, value) -> None:
+        """Setting the list sets Rust's (queue_set: files already there keep their states, those
+        being downloaded stay), and this list becomes what Rust then holds, in its order. Without the
+        engine (or from its reading thread) the list is kept here and sent when it can be."""
+        value = list(value or [])
+        link = getattr(self, "_link", None)
+        if link is None or not link.up or threading.current_thread().name == "rust-queue-read":
+            self._tasks = value
+            if link is not None:
+                self._resync = True
+            return
+        with self._sync_lock:
+            if not self._set_on_rust(value):
+                self._tasks = value
+                self._resync = True
+
+    def _set_on_rust(self, tasks) -> bool:
+        keys: Dict[int, str] = {}
+        table: Dict[str, Any] = {}
+        payload = [self._payload(t, keys, table) for t in tasks]
+        ok, v = self._link.call("queue_set", {"tasks": payload, "options": table})
+        if not ok:
+            return False
+        self._synced_on = id(self._link._sock)
+        known = dict(self._by_key)
+        known.update((p["key"], t) for p, t in zip(payload, tasks))
+        order = [known[k] for k in (v or {}).get("keys") or [] if k in known]
+        self._by_key = {_key(t): t for t in order}
+        self._tasks = order
+        return True
+
+    def forget(self, keys) -> int:
+        """Files Rust took out of its list (Clear failed): taken out of this copy too"""
+        keys = set(keys or [])
+        if not keys:
+            return 0
+        before = len(self._tasks)
+        self._tasks = [t for t in self._tasks if t.__dict__.get("_rkey") not in keys]
+        for k in keys:
+            self._by_key.pop(k, None)
+        return before - len(self._tasks)
 
     # ── Worker count (adaptive threading changes it on the Rust side) ──────────
 
@@ -366,8 +416,10 @@ class RustDownloader(FileDownloader):
             self._sync_now(replace)
 
     def _sync_now(self, replace: bool) -> None:
+        if not replace and threading.current_thread().name != "rust-queue-read" and self._set_on_rust(list(self._tasks)):
+            return
         self._synced_on = id(self._link._sock)
-        tasks = list(self.tasks)
+        tasks = list(self._tasks)
         keys: Dict[int, str] = {}
         table: Dict[str, Any] = {}
         payload = [self._payload(t, keys, table) for t in tasks]
@@ -442,9 +494,8 @@ class RustDownloader(FileDownloader):
         return len(added)
 
     def _idle_sync_loop(self) -> None:
-        """Between runs too, Rust has the queue as it is here (the window's pause / resume / cancel /
-        remove of a post or a file are done on Rust's copy): sent again when the list changes or the
-        engine reconnects. (During a run, _run_download_loop does this.)"""
+        """The list goes to Rust when the engine (re)connects, or when it was set here while the
+        engine couldn't be asked; otherwise setting it sets Rust's (the tasks setter)."""
         last = None
         while True:
             time.sleep(0.5)
@@ -453,7 +504,7 @@ class RustDownloader(FileDownloader):
                 if link is None or self._is_running or not link.up:
                     last = None if (link is None or not link.up) else last
                     continue
-                sig = (id(link._sock), id(self.tasks), len(self.tasks))
+                sig = id(link._sock)
                 if sig != last or self._resync:
                     self._resync = False
                     last = sig
@@ -625,16 +676,14 @@ class RustDownloader(FileDownloader):
         archive = bool(self.archive_manager and self.archive_manager.is_enabled)
         self._link.send({"op": "start", "options": options.to_dict(), "archive": archive, "workers": self._mw,
                          "archive_db": self._archive_db()})
-        sig = (id(self.tasks), len(self.tasks))
         while not self._finished.wait(0.5):
             if session_id != self._session_id:
                 return          # superseded (cancelled, or a newer run started)
             if not self._link.up:
                 self._result = (False, "The download engine stopped")
                 break
-            now_sig = (id(self.tasks), len(self.tasks))
-            if now_sig != sig:  # files were added or the list was replaced while running
-                sig = now_sig
+            if self._resync:    # (the list was set while the engine couldn't be asked)
+                self._resync = False
                 self._sync(replace=False)
         if session_id != self._session_id:
             return

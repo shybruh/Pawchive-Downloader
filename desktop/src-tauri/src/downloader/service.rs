@@ -485,6 +485,16 @@ pub fn queue_window(method: &str, args: &[Value]) -> Option<Value> {
             }, "downloader", "");
             return Some(retried(method, &id, n, None));
         }
+        // Clear failed (all, or the ones picked): gone from the engine's list; the app takes them
+        // out of its own and of the failed files saved for Retry Failed
+        "clearFailedTasks" => {
+            let ids: Option<std::collections::HashSet<String>> = args.first().and_then(Value::as_array)
+                .filter(|a| !a.is_empty())
+                .map(|a| a.iter().filter_map(|v| v.as_str().map(str::to_string)).collect());
+            let removed = q.clear_failed(ids.as_ref());
+            link().note("queue_action", json!([method, Value::Null, {"removed": removed, "ids": args.first().cloned().unwrap_or(Value::Null)}]));
+            return Some(Value::Null);
+        }
         _ => {}
     }
     let batch = matches!(method, "pauseBatch" | "resumeBatch" | "cancelBatch" | "removeBatch");
@@ -643,7 +653,7 @@ fn serve(stream: TcpStream, token: &str) {
         // Commands run off the reading thread, so answers to questions keep coming in
         // (calls on the queue's list itself go in order with the rest: a journal save or new files
         // after the sync before them; they never wait for the app)
-        let on_list = matches!(msg.get("fn").and_then(Value::as_str), Some("queue_append" | "journal_save" | "journal_clear"));
+        let on_list = matches!(msg.get("fn").and_then(Value::as_str), Some("queue_set" | "queue_append" | "journal_save" | "journal_clear"));
         if matches!(msg.get("op").and_then(Value::as_str), Some("call" | "cancel_call")) && !on_list {
             std::thread::spawn(move || handle(&msg));
         } else if ordered.send(msg).is_err() {
@@ -685,6 +695,16 @@ fn incoming(msg: &Value) -> Vec<(Task, State, Option<Arc<Options>>)> {
 /// New files for the queue (the app's "queue_append" call: {"tasks", "options"}): added here, those
 /// already queued left out and save paths kept apart; the answer is what was added, as
 /// {"added": [[key, save path], ...]}, for the app's list to follow. Nothing is started.
+/// The app's list replaced (a new download, a restored session, files cleared…): files already here
+/// keep their states, those being downloaded stay. Answers the list as it is now, by key: the app's
+/// copy follows it.
+fn queue_set(args: &Value) -> Result<Value, String> {
+    let q = queue();
+    q.sync(incoming(args), false);
+    let keys: Vec<String> = q.cells().iter().map(|c| c.lock().unwrap().task.key.clone()).collect();
+    Ok(json!({"keys": keys}))
+}
+
 fn queue_append(args: &Value) -> Result<Value, String> {
     let items = incoming(args).into_iter().map(|(t, st, o)| (t, Some(st), o)).collect();
     let added = queue().add(items, None);
@@ -745,6 +765,7 @@ fn handle(msg: &Value) {
             let out = match s("fn").as_str() {
                 "plan" => plan_call(id, args),
                 "queue_append" => queue_append(args),
+                "queue_set" => queue_set(args),
                 // The crash journal, from the engine's list: {"path", "settings", "batches", "status",
                 // "generation"} → rows written (null: dropped, older than the last clear)
                 "journal_save" => super::journal::save(

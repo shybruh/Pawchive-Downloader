@@ -655,6 +655,23 @@ impl Queue {
         list.len()
     }
 
+    /// Clear failed: the failed and cancelled files leave the queue (with `ids`, only those whose
+    /// file id, link or file name is one of them). Returns their keys.
+    pub fn clear_failed(&self, ids: Option<&HashSet<String>>) -> Vec<String> {
+        let mut gone = Vec::new();
+        self.items.lock().unwrap().retain(|c| {
+            let it = c.lock().unwrap();
+            let t = &it.task;
+            let hit = matches!(it.st.status.as_str(), "failed" | "cancelled")
+                && ids.is_none_or(|s| s.contains(&t.file_id) || s.contains(&t.url) || s.contains(basename(&t.target_path)));
+            if hit {
+                gone.push(t.key.clone());
+            }
+            !hit
+        });
+        gone
+    }
+
     /// Removes a batch's files that aren't being downloaded right now
     pub fn remove_batch(&self, batch: &str) -> usize {
         self.ctl.paused_batches.lock().unwrap().remove(batch);
