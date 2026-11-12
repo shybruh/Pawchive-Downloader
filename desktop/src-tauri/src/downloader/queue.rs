@@ -651,11 +651,28 @@ impl Queue {
     pub fn retry_failed(self: &Arc<Self>, options: Arc<Options>, max_retries: u32, include_cancelled: bool) -> usize {
         let skip_404 = self.skip_404(Some(&options));
         let running = self.is_running();
+        let (n, any) = self.retry_failed_cells(skip_404, running, max_retries, include_cancelled, false);
+        if !any {
+            self.hooks.log("info", "No failed tasks to retry.");
+            return 0;
+        }
+        if n > 0 && !running {
+            self.start(options);
+        }
+        n
+    }
+
+    /// Retry Failed's work, nothing started: (how many went back in line, whether any file could be
+    /// retried at all). With `skip_cloud`, cloud links are left alone (the app retries those).
+    pub fn retry_failed_cells(&self, skip_404: bool, running: bool, max_retries: u32, include_cancelled: bool, skip_cloud: bool) -> (usize, bool) {
         let statuses: &[&str] = if include_cancelled { &["failed", "cancelled"] } else { &["failed"] };
         let (mut eligible, mut capped) = (Vec::new(), Vec::new());
         let mut any = false;
         for c in self.cells() {
             let mut it = c.lock().unwrap();
+            if skip_cloud && self.hooks.is_cloud_link(&it.task.url) {
+                continue;
+            }
             let s = it.st.status.clone();
             let candidate = statuses.contains(&s.as_str()) || (!running && s == "pending" && (!it.st.error_msg.is_empty() || it.st.retry_count > 0));
             if !candidate {
@@ -685,17 +702,55 @@ impl Queue {
         }
         self.hooks.many_changed(&capped);
         if !any {
-            self.hooks.log("info", "No failed tasks to retry.");
-            return 0;
+            return (0, false);
         }
         for c in &eligible {
             Self::reset_for_retry(&mut c.lock().unwrap());
         }
         self.hooks.many_changed(&eligible);
-        if !eligible.is_empty() && !running {
-            self.start(options);
+        (eligible.len(), true)
+    }
+
+    /// The window's retry of some files (by their Retry-list names) or of a post's failed files,
+    /// nothing started: failed / cancelled files, and waiting or paused ones when nothing runs.
+    /// 404s are left out with `skip_404`, cloud links always (the app retries those). How many.
+    pub fn retry_quiet(&self, keys: Option<&[String]>, batch: Option<&str>, skip_404: bool) -> usize {
+        if let Some(b) = batch {
+            self.ctl.paused_batches.lock().unwrap().remove(b);
         }
-        eligible.len()
+        let running = self.is_running();
+        let wanted: Option<HashSet<&String>> = keys.map(|k| k.iter().collect());
+        let mut list = Vec::new();
+        for c in self.cells() {
+            let mut it = c.lock().unwrap();
+            if batch.is_some_and(|b| it.task.batch_id != b) || wanted.as_ref().is_some_and(|w| !w.contains(&Self::task_key(&it.task))) {
+                continue;
+            }
+            let s = it.st.status.as_str();
+            let ok = ["failed", "cancelled"].contains(&s) || (!running && ["pending", "paused"].contains(&s));
+            if !ok || (skip_404 && is_404(&it)) || self.hooks.is_cloud_link(&it.task.url) {
+                continue;
+            }
+            Self::reset_for_retry(&mut it);
+            drop(it);
+            list.push(c);
+        }
+        self.hooks.many_changed(&list);
+        if !list.is_empty() {
+            self.rescan();
+        }
+        list.len()
+    }
+
+    /// Whether the file (by its Retry-list name) is a cloud link (the app retries those)
+    pub fn is_cloud_file(&self, key: &str) -> bool {
+        self.cells().iter().any(|c| {
+            let it = c.lock().unwrap();
+            Self::task_key(&it.task) == key && self.hooks.is_cloud_link(&it.task.url)
+        })
+    }
+    pub fn has_key(&self, key: &str) -> bool {
+        self.cells().iter().any(|c| Self::task_key(&c.lock().unwrap().task) == key)
     }
 
     /// How the Retry Failed list names a file (its id, else its URL, else its name)

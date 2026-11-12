@@ -454,6 +454,39 @@ pub fn queue_window(method: &str, args: &[Value]) -> Option<Value> {
         "toggleBatchPause" if q.has_batch(&id) => if q.is_batch_paused(&id) { "resumeBatch" } else { "pauseBatch" },
         m => m,
     };
+    let skip_404 = super::queue_view::global().lock().unwrap().skip_404;
+    // Retries: the engine's files; cloud links, and the failed files saved on disk when the queue
+    // has none, are the app's
+    match method {
+        "retryBatch" if q.has_batch(&id) => {
+            let n = q.retry_quiet(None, Some(&id), skip_404);
+            if n > 0 {
+                log_app("info", &format!("Retrying {n} tasks for batch '{id}'..."), "downloader", "");
+            }
+            return Some(retried(method, &id, n, Some(&id)));
+        }
+        "retryTaskById" | "retrySingleTask" if q.has_key(&id) && !q.is_cloud_file(&id) => {
+            let keys = [id.clone()];
+            let n = q.retry_quiet(Some(&keys), None, skip_404);
+            if n > 0 {
+                log_app("info", &format!("Retrying {n} selected task(s)..."), "downloader", "");
+            }
+            return Some(retried(method, &id, n, None));
+        }
+        "retryFailed" => {
+            let (n, any) = q.retry_failed_cells(skip_404, q.is_running(), 5, true, true);
+            if !any {
+                return None;
+            }
+            log_app("info", &if n > 0 {
+                format!("Retrying {n} failed task(s)...")
+            } else {
+                "Every failed file reached the retry limit (5); they stay in the Retry Failed list.".to_string()
+            }, "downloader", "");
+            return Some(retried(method, &id, n, None));
+        }
+        _ => {}
+    }
     let batch = matches!(method, "pauseBatch" | "resumeBatch" | "cancelBatch" | "removeBatch");
     let file = matches!(method, "pauseTask" | "resumeTask");
     if !(batch && q.has_batch(&id) || file && q.has_file(&id)) {
@@ -503,6 +536,20 @@ pub fn queue_window(method: &str, args: &[Value]) -> Option<Value> {
     }
     link().note("queue_action", json!([method, id, {"n": n, "start": start}]));
     Some(Value::Null)
+}
+
+/// A retry done: the window's paused post follows, the app is told (it retries the cloud links and
+/// starts a run when files are waiting and nothing runs)
+fn retried(method: &str, id: &str, n: usize, batch: Option<&str>) -> Value {
+    let q = queue();
+    if let Some(b) = batch {
+        let mut v = super::queue_view::global().lock().unwrap();
+        v.paused_batches.remove(b);
+        v.dirty = true;
+    }
+    let start = !q.is_running() && q.has_waiting(batch);
+    link().note("queue_action", json!([method, id, {"n": n, "start": start}]));
+    Value::Null
 }
 
 pub fn note_app(f: &str, args: Value) {

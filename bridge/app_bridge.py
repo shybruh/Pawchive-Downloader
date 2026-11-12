@@ -426,6 +426,7 @@ class AppBridge(QObject):
             lambda method: self._callOnGui.emit(lambda: self._after_rust_watchlist_change(method)))
         if rust_watchlist_view.available():
             rust_queue.shared_link().handlers["watchlist_button"] = self._watchlist_button
+            rust_queue.shared_link().handlers["app_button"] = self._app_button
             # (the engine's watchlist check asks for a creator's download settings and folder)
             rust_queue.shared_link().handlers["watch_plan_args"] = self._watch_plan_args
         self._archive_creators_model = ArchiveCreatorsModel(self)
@@ -4708,15 +4709,16 @@ class AppBridge(QObject):
         self._active_queue_model.appendTasks(tasks)
 
     def _rust_queue_action(self, args) -> None:
-        """The Rust engine paused / resumed / cancelled / removed a post or a file of the queue (its
-        files' new states arrive on their own): the paused posts here follow, removed files leave the
-        lists, and a run starts when files are waiting and nothing runs."""
+        """The Rust engine paused / resumed / cancelled / removed / retried a post or a file of the
+        queue (its files' new states arrive on their own): the paused posts here follow, removed files
+        leave the lists, cloud links of a retry are retried here, and a run starts when files are
+        waiting and nothing runs."""
         method, key, info = (list(args or []) + [None, None, None])[:3]
         info = info or {}
 
         def run():
             qm, d = self._queue_model, self.downloader
-            if method in ("pauseBatch", "resumeBatch", "cancelBatch"):
+            if method in ("pauseBatch", "resumeBatch", "cancelBatch", "retryBatch"):
                 paused = method == "pauseBatch"
                 for m in (qm, self._active_queue_model):
                     (m._paused_batch_ids.add if paused else m._paused_batch_ids.discard)(key)
@@ -4728,6 +4730,19 @@ class AppBridge(QObject):
                     (d._paused_batches.add if paused else d._paused_batches.discard)(key)
             elif method == "removeBatch":
                 qm.removeBatch(key)
+            # (cloud links: retried here, as before)
+            cloud = 0
+            if method == "retryBatch":
+                cloud = self._retry_cloud(batch_id=key)
+            elif method in ("retryTaskById", "retrySingleTask"):
+                cloud = self._retry_cloud([key], True)
+            elif method == "retryFailed":
+                cloud = self._retry_cloud(None, True)
+            if method.startswith("retry") and not (info.get("start") or info.get("n") or cloud or d.is_running):
+                self._is_downloading = False
+                self.isDownloadingChanged.emit()
+                self._status_text = "Progress: Idle (no failed tasks)"
+                self.statusTextChanged.emit()
             if info.get("start"):
                 if not d.tasks and qm.tasks:
                     d.tasks = qm.getTasks()
@@ -5435,6 +5450,26 @@ class AppBridge(QObject):
             self._watchlist_model.update_new_counts()
         self._watchlist_model.refresh()
         self.watchlistChanged.emit()
+
+    def _app_button(self, args: List[Any]) -> Any:
+        """A queue button the Rust bridge passed back because the engine couldn't do it (cloud links,
+        the failed files saved on disk): run here on the window thread"""
+        method, call_args = str(args[0]), list(args[1] if len(args) > 1 else [])
+        if method not in ("retryFailed", "retrySingleTask"):
+            raise AttributeError(f"appBridge has no queue button {method!r}")
+        done, box = threading.Event(), [None, None]
+
+        def run():
+            try:
+                box[0] = getattr(self, method)(*call_args)
+            except Exception as e:
+                box[1] = e
+            done.set()
+        self._callOnGui.emit(run)
+        done.wait(60)
+        if box[1] is not None:
+            raise box[1]
+        return box[0]
 
     def _watchlist_button(self, args: List[Any]) -> Any:
         """A watchlist button the Rust bridge passed back (run on the window thread)"""
