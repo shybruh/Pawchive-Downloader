@@ -13,7 +13,7 @@ from typing import Any, Dict, List
 
 from PySide6.QtCore import QObject, Property, Qt, QUrl, Signal, Slot
 
-from bridge.archive_creators_model import RecordListModel
+from bridge.record_list_model import RecordListModel
 from core.logger import logger
 from core.parser import LinkParser
 from core.text_utils import clean_text
@@ -325,23 +325,21 @@ class LinkVaultBridge(QObject):
 
     # ── Called by downloads ─────────────────────────────────────────────────
     def auto_harvest_posts(self, posts: List[Dict[str, Any]], creator_name: str, domain: str, service: str, user_id: str):
-        """Saves the cloud links (and passwords) of posts being downloaded into the vault, and into
-        the download archive when it's on. Runs in the background."""
+        """Saves the cloud links (and passwords) of posts being downloaded into the vault. Runs in
+        the background."""
         if not posts or not service or not user_id:
             return
         posts_copy = list(posts)
-        archive = getattr(self._app, "archive_manager", None)
 
         def _worker():
             try:
                 ok, r = _vault()._rust("collect", posts=posts_copy, creator_name=creator_name or user_id, domain=domain,
                                        service=service, user_id=user_id, cross=False)
                 if ok and isinstance(r, dict):
-                    harvested, new_links = list(r.get("records") or []), int(r.get("new") or 0)
+                    new_links = int(r.get("new") or 0)
                     if new_links > 0:
                         logger.success(f"Link vault: saved {new_links} new link(s) for '{creator_name or user_id}'.", category="vault")
                         self.changed.emit()
-                    self._record_links(harvested, archive, service, user_id, creator_name)
                     return
                 harvested = []
                 for p in posts_copy:
@@ -357,24 +355,7 @@ class LinkVaultBridge(QObject):
                     logger.success(f"Link vault: saved {new_links} new link(s) for '{creator_name or user_id}'.", category="vault")
                     self.changed.emit()
 
-                self._record_links(harvested, archive, service, user_id, creator_name)
             except Exception as e:
                 logger.debug(f"Link vault auto-harvest error: {e}", category="vault")
 
         threading.Thread(target=_worker, daemon=True).start()
-
-    def _record_links(self, harvested, archive, service, user_id, creator_name) -> None:
-        """The collected links into the download archive, when it's on"""
-        if not (archive and archive.is_enabled):
-            return
-        recorded = 0
-        for hp in harvested:
-            p_id, p_title = str(hp.get("post_id") or ""), str(hp.get("post_title") or "")
-            for lk in hp.get("links", []):
-                u = lk.get("url")
-                if u and archive.record_link(service=service, creator_id=user_id, post_id=p_id, url=u,
-                                             creator_name=creator_name or user_id, post_title=p_title,
-                                             link_title=lk.get("title") or u):
-                    recorded += 1
-        if recorded:
-            self._app.archiveUpdated.emit()

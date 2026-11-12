@@ -6,7 +6,7 @@
 //! Call "selection_scan": {"link", "site", "page_start", "page_end", "date_after", "date_before",
 //! "dms"} → {"status": "cancelled" | "no_posts" | "cards", "creator_name", "cards"} (progress notes
 //! for the post pages)
-//! Call "selection_plan": {"ids", "files", "options", "archive", "archive_db", "base_dir",
+//! Call "selection_plan": {"ids", "files", "options", "base_dir",
 //! "include_service", "cookie"} → {"status": "gone" | "empty" | "cancelled" | "plan", "posts", "plan"}
 
 use super::filters::truthy;
@@ -331,7 +331,7 @@ pub fn plan(id: u64, a: &Value) -> Result<Value, String> {
         return Ok(json!({"status": "empty"}));
     }
     let args = json!({
-        "options": a["options"], "archive": a["archive"], "archive_db": a["archive_db"], "cookie": a["cookie"],
+        "options": a["options"], "cookie": a["cookie"],
         "request": {"creator_name": name, "service": link.service, "domain": link.domain, "base_dir": a["base_dir"],
                     "batch_id": format!("{}_{}", link.service, link.user_id), "artist_dir": "", "user_id": "",
                     "include_service": a["include_service"].as_bool().unwrap_or(true)},

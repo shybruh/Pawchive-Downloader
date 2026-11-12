@@ -16,7 +16,7 @@
 This is a fork of [Pawchive Downloader](https://github.com/whyamihere773/Pawchive-Downloader) that throws out the
 Qt / QML interface and replaces it with a new desktop app built on **Tauri** and **React**. Underneath, the Python
 download engine is being rewritten in **Rust**, one part at a time: the downloads themselves, scanning sites, planning
-what to save, the Watchlist and the download archive already run in Rust, and every feature keeps working while the
+what to save, the Watchlist, the Link vault and the cloud hosts already run in Rust, and every feature keeps working while the
 rest moves over.
 
 <p align="center">
@@ -28,9 +28,9 @@ rest moves over.
 - **A completely new interface** (`desktop/`): consistent shadcn-style components, Lucide icons, Geist type, a
   sidebar layout, light and dark themes, and layouts that fit any window size without overflowing.
 - **A Rust download engine** (`desktop/src-tauri/src/`): downloads, the queue, site scans, the download planner,
-  the Watchlist (its checks, its database and its list), the download archive's lookups and the account favorites
-  run in Rust. Each part is checked against the Python code it replaces before it switches over.
-- **The rest runs as a background process** (`server/`): what's still Python (Telegram, the cloud hosts, the
+  the Watchlist (its checks, its database and its list), the account favorites, the Link vault, and Bunkr, Erome,
+  nHentai and the cloud hosts run in Rust. Each part is checked against the Python code it replaces before it switches over.
+- **The rest runs as a background process** (`server/`): what's still Python (Telegram, the
   Decompressor and more) runs out of sight; the Rust shell starts it, talks to it over a local, token-protected
   connection, and shuts the whole process tree down with the app.
 - **Pawchive and cum.st**, plus Telegram, Bunkr, Erome, nHentai and cloud links (GoFile, MEGA, Google Drive,
@@ -47,7 +47,6 @@ rest moves over.
 | **Queue** | Follow every file or every post, pause / resume / retry / remove a whole post, retry failures, import and export |
 | **Watchlist** | Follow creators, check for new posts on startup or on demand, download only what's new |
 | **Gallery** | Browse downloads with thumbnails, a full-screen image and video viewer, rename / move / delete (to the Recycle Bin) |
-| **Archive** | A record of every downloaded file so nothing is fetched twice — search it, check files on disk, import, export or rebuild it from folders |
 | **Link vault** | External links (MEGA, Google Drive, Dropbox…) collected from posts, with their passwords and link health checks |
 | **Decompressor** | Find and extract archives in bulk, with a password bank and prompts for locked files |
 | **And more** | Activity log, download history, accounts (incl. Telegram), bandwidth limits, proxy |

@@ -20,7 +20,6 @@ import { HistoryView } from "@/views/history";
 import { SettingsView } from "@/views/settings";
 import { ActivityView } from "@/views/activity";
 import { GalleryView } from "@/views/gallery";
-import { ArchiveView } from "@/views/archive";
 import { VaultView } from "@/views/vault";
 import { DecompressorView } from "@/views/decompressor";
 import { PostSelectionDialog } from "@/components/post-selection";
@@ -132,7 +131,6 @@ function Shell() {
       case "activity": return <ActivityView />;
       case "gallery": return <GalleryView />;
       case "history": return <HistoryView />;
-      case "archive": return <ArchiveView />;
       case "vault": return <VaultView />;
       case "decompressor": return <DecompressorView />;
       case "settings": return <SettingsView />;

@@ -6,7 +6,7 @@
 //! From the app:
 //!   `{"op": "sync", "tasks": [...], "options": {"o1": {...}}, "replace": true}`  the queue as it
 //!   is now (with "replace", the app's statuses win: sent before a run starts)
-//!   `{"op": "start", "options": {...}, "archive": true, "workers": 4}`
+//!   `{"op": "start", "options": {...}, "workers": 4}`
 //!   `{"op": "pause"}`, `resume`, `cancel`, `reset`, `{"op": "workers", "n": 4}`
 //!   `{"op": "state", "key", "status", "error_msg", "retry_count"}`  a file's status changed there
 //!   `{"op": "batch", "batch", "paused": true}`
@@ -58,9 +58,6 @@ struct Link {
     out: Mutex<Option<TcpStream>>,
     asks: Mutex<HashMap<u64, Sender<Value>>>,
     next: AtomicU64,
-    archive: AtomicBool,
-    /// The download archive's file (from the app, with "start")
-    archive_db: Mutex<String>,
 }
 
 impl Link {
@@ -113,17 +110,6 @@ impl Link {
 
 struct Remote(Arc<Link>);
 
-/// The download archive at `path` (src/archive/), telling the app about its changes and errors
-fn archive_at(l: &Arc<Link>, path: &str) -> Option<Arc<crate::archive::Archive>> {
-    if path.is_empty() {
-        return None;
-    }
-    let a = crate::archive::at(path);
-    let errs = l.clone();
-    a.set_error_sink(Arc::new(move |message: &str, error: &str| errs.note("archive_error", json!([message, error]))));
-    Some(a)
-}
-
 fn task_event(c: &Cell) -> Value {
     let it = c.lock().unwrap();
     let mut v = serde_json::to_value(&it.st).unwrap_or(json!({}));
@@ -138,42 +124,6 @@ fn task_event(c: &Cell) -> Value {
 }
 
 impl Hooks for Remote {
-    fn archive_enabled(&self) -> bool {
-        self.0.archive.load(Ordering::Relaxed)
-    }
-    fn is_archived(&self, t: &Task) -> bool {
-        let db = self.0.archive_db.lock().unwrap().clone();
-        match archive_at(&self.0, &db) {
-            Some(a) => a.is_archived(&t.service, &t.post_id, &t.file_id, &t.expected_sha256),
-            None => self.0.ask("is_archived", json!([t.key])).as_bool().unwrap_or(false),
-        }
-    }
-    fn record_file(&self, t: &Task, size: u64, path: &str) {
-        let db = self.0.archive_db.lock().unwrap().clone();
-        match archive_at(&self.0, &db) {
-            Some(a) => {
-                let ok = a.record_file(&crate::archive::Record {
-                    service: t.service.clone(),
-                    creator_id: t.user_id.clone(),
-                    post_id: t.post_id.clone(),
-                    file_id: t.file_id.clone(),
-                    file_hash: t.expected_sha256.clone(),
-                    filename: super::py::basename(&t.target_path).to_string(),
-                    creator_name: t.creator_name.clone(),
-                    post_title: t.post_title.clone(),
-                    file_size: size as i64,
-                    file_ext: String::new(),
-                    file_path: path.to_string(),
-                });
-                if ok {
-                    self.0.note("archive_changed", json!([]));
-                }
-            }
-            None => {
-                self.0.send(json!({"t": "record_file", "key": t.key, "size": size, "path": path}));
-            }
-        }
-    }
     fn refresh_temporary_link(&self, t: &Task) -> Option<String> {
         self.0.ask("refresh_link", json!([t.key])).as_str().filter(|s| !s.is_empty()).map(str::to_string)
     }
@@ -232,34 +182,12 @@ impl QueueHooks for Remote {
 struct PlanCtx {
     link: Arc<Link>,
     id: u64,
-    archive: bool,
-    /// The download archive (None: asked of the app)
-    db: Option<Arc<crate::archive::Archive>>,
     sites: SiteClient,
     /// Stopping (a watchlist check's own flag), instead of asking the app
     stop: Option<Arc<AtomicBool>>,
 }
 
 impl Lookups for PlanCtx {
-    fn archive_enabled(&self) -> bool {
-        self.archive
-    }
-    fn is_archived(&self, service: &str, post_id: &str, file_id: &str, sha256: &str) -> bool {
-        match &self.db {
-            Some(a) => a.is_archived(service, post_id, file_id, sha256),
-            None => self.link.ask("archived", json!([service, post_id, file_id, sha256])).as_bool().unwrap_or(false),
-        }
-    }
-    fn record_link(&self, service: &str, creator_id: &str, post_id: &str, url: &str, creator_name: &str, post_title: &str, link_title: &str) {
-        match &self.db {
-            Some(a) => {
-                if a.record_link(service, creator_id, post_id, url, creator_name, post_title, link_title) {
-                    self.link.note("archive_changed", json!([]));
-                }
-            }
-            None => self.link.note("record_link", json!([service, creator_id, post_id, url, creator_name, post_title, link_title])),
-        }
-    }
     fn resolve_temporary_links(&self, post: &mut Value, domain: &str) {
         self.sites.resolve_temporary_links(post, domain);
     }
@@ -295,7 +223,7 @@ fn plan_call(id: u64, args: &Value) -> Result<Value, String> {
     }))
 }
 
-/// The planner on these posts, with the plan call's arguments (options, request, archive)
+/// The planner on these posts, with the plan call's arguments (options, request)
 pub fn plan_build(id: u64, args: &Value, posts: &[Value], stop: Option<Arc<AtomicBool>>) -> plan::Plan {
     let o = Options::from_dict(&args["options"]);
     let r = &args["request"];
@@ -319,9 +247,7 @@ pub fn plan_build(id: u64, args: &Value, posts: &[Value], stop: Option<Arc<Atomi
     );
     let lg = l.clone();
     sites.set_log(Box::new(move |level: &str, category: &str, msg: &str| lg.note("log", json!([level, msg, true, category]))));
-    let archive = args["archive"].as_bool().unwrap_or(false);
-    let db = if archive { archive_at(&l, args["archive_db"].as_str().unwrap_or("")) } else { None };
-    let ctx = PlanCtx { link: l, id, archive, db, sites, stop };
+    let ctx = PlanCtx { link: l, id, sites, stop };
     plan::build(posts, &o, &req, &ctx)
 }
 
@@ -779,8 +705,6 @@ fn handle(msg: &Value) {
     match msg.get("op").and_then(Value::as_str).unwrap_or("") {
         "sync" => q.sync(incoming(msg), msg["replace"].as_bool().unwrap_or(false)),
         "start" => {
-            link().archive.store(msg["archive"].as_bool().unwrap_or(false), Ordering::Relaxed);
-            *link().archive_db.lock().unwrap() = msg["archive_db"].as_str().unwrap_or("").to_string();
             if let Some(n) = msg["workers"].as_u64() {
                 q.set_max_workers(n as usize);
             }
@@ -863,10 +787,6 @@ fn handle(msg: &Value) {
                 "selection_scan" => super::selection::scan(id, args),
                 "selection_plan" => super::selection::plan(id, args),
                 "watchlist_favorites" => crate::watchlist::favorites::call(id, args),
-                "archive" => {
-                    archive_at(link(), args["path"].as_str().unwrap_or(""));
-                    crate::archive::call(args)
-                }
                 other => Err(format!("unknown call {other}")),
             };
             call_flags().lock().unwrap().remove(&id);

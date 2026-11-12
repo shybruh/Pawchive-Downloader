@@ -24,7 +24,7 @@ from services.bulk_decompressor import (
     get_7za_path
 )
 from core.archive_password_manager import archive_password_manager
-from bridge.archive_creators_model import RecordListModel
+from bridge.record_list_model import RecordListModel
 from core.logger import logger
 from core.path_translation import localize_path
 from services.ffmpeg_manager import FfmpegDownloader, find_ffmpeg

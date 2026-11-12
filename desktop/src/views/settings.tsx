@@ -103,7 +103,6 @@ function DownloadsSection() {
         <Field label="Don't retry files that are gone (404)"><SwitchSetting prop="skipRetry404" /></Field>
         <Field label="Delete failed downloads' leftovers" hint="Removes the unfinished part of failed or cancelled files when the queue ends."><SwitchSetting prop="autoDeleteFailed" /></Field>
         <Field label="Re-download files that look too small"><SwitchSetting prop="redownloadSmallFiles" /></Field>
-        <Field label="Keep a download archive" hint="Skips files you already have, even after moving them."><SwitchSetting prop="enableDownloadArchive" /></Field>
         <Field label="When the queue finishes">
           <SelectSetting prop="postDownloadAction" options={[
             { value: "none", label: "Do nothing" }, { value: "close_app", label: "Close the app" }, { value: "sleep", label: "Sleep" },

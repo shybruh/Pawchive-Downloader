@@ -30,14 +30,6 @@ const ARCHIVE_EXTENSIONS: &[&str] = &[".7z", ".zip", ".rar", ".tar", ".gz", ".bz
 
 /// What the planner asks the rest of the app
 pub trait Lookups {
-    fn archive_enabled(&self) -> bool {
-        false
-    }
-    fn is_archived(&self, _service: &str, _post_id: &str, _file_id: &str, _sha256: &str) -> bool {
-        false
-    }
-    #[allow(clippy::too_many_arguments)]
-    fn record_link(&self, _service: &str, _creator_id: &str, _post_id: &str, _url: &str, _creator_name: &str, _post_title: &str, _link_title: &str) {}
     /// Fill in the signed links of a Pawchive post's oversized files
     fn resolve_temporary_links(&self, _post: &mut Value, _domain: &str) {}
     fn record_archive_password(&self, _archive_path: &str, _password: &str) {}
@@ -434,19 +426,6 @@ pub fn build(posts: &[Value], o: &Options, r: &Request, ctx: &dyn Lookups) -> Pl
             }
         }
 
-        // External links and embeds go into the download archive
-        if ctx.archive_enabled() {
-            let creator_id = if r.user_id.is_empty() { post_user.as_str() } else { r.user_id };
-            for (plat, urls) in extract::links_from_post(post) {
-                for u in urls {
-                    ctx.record_link(service, creator_id, &post_id, &u, r.creator_name, &post_title, &format!("[{}] {u}", plat.to_uppercase()));
-                }
-            }
-            for e in extract::embed_urls(post) {
-                ctx.record_link(service, creator_id, &post_id, &e, r.creator_name, &post_title, &e);
-            }
-        }
-
         // The post's files: the main file and attachments, without duplicates
         if o.flag("download_pawchive_temporary_files") {
             let any_pawchive = domain.contains("pawchive") || ["origin", "domain", "service"].iter().any(|k| post.get(*k).map(pystr).unwrap_or_default().contains("pawchive"));
@@ -791,7 +770,7 @@ pub fn build(posts: &[Value], o: &Options, r: &Request, ctx: &dyn Lookups) -> Pl
             batch_paths.insert(target_path.clone(), (post_id.clone(), clean_rel.clone()));
             batch_rel_paths.entry(target_dir.clone()).or_default().insert(norm_key);
 
-            // Already downloaded: on disk under any of its names, or in the download archive
+            // Already downloaded: on disk under any of its names
             let raw_dir = dest_folder(&raw_name);
             let mut disk: Vec<String> = Vec::new();
             for base in [target_path.clone(), join(&[&raw_dir, &raw_name]), join(&[&raw_dir, &format!("{seq_idx:03}_{raw_name}")])] {
@@ -805,14 +784,6 @@ pub fn build(posts: &[Value], o: &Options, r: &Request, ctx: &dyn Lookups) -> Pl
             let server_size = file_bytes.unwrap_or(0);
             let on_disk = || disk.iter().find_map(|c| nonempty_file(c).map(|s| (c.clone(), s)));
             let shown = basename(&target_path).to_string();
-            if ctx.archive_enabled() && ctx.is_archived(service, &post_id, &file_id, &expected_sha) {
-                let upgrade = on_disk().is_some_and(|(p, s)| needs_full_size_upgrade(s, server_size, &target_path, o, &p));
-                if !upgrade {
-                    ctx.log("info", &format!("📦 Skipping archived file: '{shown}' (present in download archive)"), false);
-                    bump(&mut plan.not_queued, "in the download archive");
-                    continue;
-                }
-            }
             if !o.flag("keep_duplicates") {
                 if let Some((p, s)) = on_disk() {
                     if !needs_full_size_upgrade(s, server_size, &target_path, o, &p) {
@@ -870,11 +841,6 @@ pub fn build(posts: &[Value], o: &Options, r: &Request, ctx: &dyn Lookups) -> Pl
                 let e_name = format!("embed_{i}_{host}.mp4");
                 let e_path = n::fit_path_for_windows(&join(&[&dest_folder(&e_name), &e_name]), n::WINDOWS_MAX_PATH);
                 let e_id = format!("embed_{post_id}_{i}");
-                if ctx.archive_enabled() && ctx.is_archived(service, &post_id, &e_id, "") {
-                    ctx.log("info", &format!("📦 Skipping archived embedded media: '{e_name}' (present in download archive)"), false);
-                    bump(&mut plan.not_queued, "in the download archive");
-                    continue;
-                }
                 if !o.flag("keep_duplicates") && nonempty_file(&e_path).is_some() {
                     continue;
                 }
@@ -930,12 +896,6 @@ pub fn build(posts: &[Value], o: &Options, r: &Request, ctx: &dyn Lookups) -> Pl
             .collect();
         let mut seen = HashSet::new();
         plan.harvested_records = extracted_records.into_iter().filter(|r| seen.insert(r["url"].as_str().unwrap_or("").to_string())).collect();
-        if ctx.archive_enabled() {
-            for rec in &plan.harvested_records {
-                let s = |k: &str| rec.get(k).and_then(Value::as_str).unwrap_or("").to_string();
-                ctx.record_link(&s("service"), r.user_id, &s("post_id"), &s("url"), &s("creator"), &s("title"), &s("title"));
-            }
-        }
     }
     plan
 }
@@ -1057,15 +1017,8 @@ mod tests {
     const BASE: &str = concat!(env!("CARGO_MANIFEST_DIR"), "\\target\\plan_base");
 
     /// The stand-ins of tools/golden_plan.py
-    struct Stub(HashSet<String>);
-    impl Lookups for Stub {
-        fn archive_enabled(&self) -> bool {
-            !self.0.is_empty()
-        }
-        fn is_archived(&self, _: &str, _: &str, file_id: &str, _: &str) -> bool {
-            self.0.contains(file_id)
-        }
-    }
+    struct Stub;
+    impl Lookups for Stub {}
 
     fn setup(files: &Value) {
         let _ = std::fs::remove_dir_all(BASE);
@@ -1096,7 +1049,7 @@ mod tests {
             include_service: req["include_service"].as_bool().unwrap_or(true),
         };
         let o = Options::from_dict(&case["options"]);
-        let stub = Stub(case["archived"].as_array().unwrap().iter().map(|v| v.as_str().unwrap().to_string()).collect());
+        let stub = Stub;
         let posts: Vec<Value> = case["posts"].as_array().unwrap().clone();
         let plan = build(&posts, &o, &r, &stub);
         let sub = |x: &str| x.replace(BASE, "{BASE}");

@@ -237,23 +237,6 @@ class GalleryUpdates(QObject):
         except OSError:
             pass
 
-        # 4. Download archive database (only when the user turned it on)
-        am = getattr(self._app, "archive_manager", None)
-        if am is not None and getattr(am, "is_enabled", False) and getattr(am, "_conn", None) is not None:
-            try:
-                like = os.path.normpath(folder).rstrip("\\/") + os.sep + "%"
-                with am._lock:
-                    row = am._conn.execute(
-                        "SELECT service, creator_id, creator_name FROM downloaded_files "
-                        "WHERE file_path LIKE ? AND creator_id IS NOT NULL AND creator_id != '' LIMIT 1",
-                        (like,),
-                    ).fetchone()
-                if row:
-                    service, creator_id, creator_name = row[0], row[1], row[2] or ""
-                    domain = "cum.st" if (service or "").lower() in _CUMST_SERVICES else "pawchive.pw"
-                    return self._from_url(f"https://{domain}/{service}/user/{creator_id}", folder, "archive", creator_name)
-            except Exception as e:
-                logger.debug(f"Archive lookup for {folder} failed: {e}", category="gallery")
         return None
 
     @staticmethod
@@ -331,17 +314,6 @@ class GalleryUpdates(QObject):
                         known.add(pid)
             if seen > _MAX_WALK_FILES or self._cancel.is_set():
                 break
-        am = getattr(self._app, "archive_manager", None)
-        if am is not None and getattr(am, "is_enabled", False) and getattr(am, "_conn", None) is not None:
-            try:
-                with am._lock:
-                    rows = am._conn.execute(
-                        "SELECT DISTINCT post_id FROM downloaded_files WHERE service = ? AND creator_id = ?",
-                        (service, user_id),
-                    ).fetchall()
-                known.update(str(r[0]) for r in rows if r and r[0])
-            except Exception:
-                pass
         return known
 
     # ── Check ───────────────────────────────────────────────────────────────

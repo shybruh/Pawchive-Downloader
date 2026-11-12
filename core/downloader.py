@@ -35,7 +35,6 @@ from core.atomic_io import replace_file, atomic_write_text
 from core.file_order import order_files
 from core.path_utils import post_id_tag, post_info_name
 from core.session_manager import SessionManager
-from core.archive_manager import ArchiveManager
 from core.bandwidth_limiter import bandwidth_limiter
 
 # Services hosted on cum.st rather than Pawchive
@@ -457,11 +456,9 @@ class FileDownloader:
         self,
         session_manager: SessionManager,
         max_workers: int = 4,
-        archive_manager: Optional[ArchiveManager] = None
     ):
         self.session_manager = session_manager
         self.max_workers = max_workers
-        self.archive_manager = archive_manager
         self.ytdlp_manager = YtDlpManager()
 
         self.tasks: List[DownloadTask] = []
@@ -1197,35 +1194,6 @@ class FileDownloader:
                 except Exception as ex:
                     logger.debug(f"Could not prepare post_info.txt for {post_id}: {ex}", category="file")
 
-            # Automatically record external cloud links & embeds in download archive database
-            if self.archive_manager and self.archive_manager.is_enabled:
-                try:
-                    ext_links = LinkExtractor.extract_links_from_post(post)
-                    for _plat, _urls in ext_links.items():
-                        for _u in _urls:
-                            self.archive_manager.record_link(
-                                service=service,
-                                creator_id=user_id or post_user,
-                                post_id=post_id,
-                                url=_u,
-                                creator_name=creator_name,
-                                post_title=post_title,
-                                link_title=f"[{_plat.upper()}] {_u}"
-                            )
-                    embed_links = LinkExtractor.extract_embed_urls(post)
-                    for _eu in embed_links:
-                        self.archive_manager.record_link(
-                            service=service,
-                            creator_id=user_id or post_user,
-                            post_id=post_id,
-                            url=_eu,
-                            creator_name=creator_name,
-                            post_title=post_title,
-                            link_title=_eu
-                        )
-                except Exception as _ar_l_err:
-                    logger.debug(f"Could not archive links for post {post_id}: {_ar_l_err}", category="archive")
-
             # Collect files: post.file and post.attachments with deduplication
             files_to_process = []
             seen_post_file_keys: Dict[str, int] = {}
@@ -1679,18 +1647,6 @@ class FileDownloader:
 
                 expected_sha = str(fobj.get("sha256") or fobj.get("hash") or "")
 
-                # Skip if already recorded in download archive database (gallery-dl style) — unless the
-                # copy still on disk is a small / preview one that should be upgraded to full size
-                if self.archive_manager and self.archive_manager.is_enabled:
-                    if self.archive_manager.is_archived(service=service, post_id=post_id, file_id=file_id, file_hash=expected_sha):
-                        on_disk = next((cp for cp in disk_candidates
-                                        if os.path.exists(cp) and os.path.getsize(cp) > 0), None)
-                        if not (on_disk and needs_full_size_upgrade(os.path.getsize(on_disk), int(file_bytes or 0), target_path, options, on_disk)):
-                            logger.info(f"📦 Skipping archived file: '{os.path.basename(target_path)}' (present in download archive)",
-                                        category="file", to_file=False)
-                            not_queued["in the download archive"] += 1
-                            continue
-
                 # Skip if already exists on disk at target_path, webp path, or raw name path
                 if not options.keep_duplicates:
                     existing_disk_path = next((cp for cp in disk_candidates
@@ -1758,13 +1714,6 @@ class FileDownloader:
                     e_target_path = fit_path_for_windows(os.path.join(e_dest_dir, e_name))
                     e_file_id = f"embed_{post_id}_{embed_idx}"
 
-                    if self.archive_manager and self.archive_manager.is_enabled:
-                        if self.archive_manager.is_archived(service=service, post_id=post_id, file_id=e_file_id):
-                            logger.info(f"📦 Skipping archived embedded media: '{e_name}' (present in download archive)",
-                                        category="file", to_file=False)
-                            not_queued["in the download archive"] += 1
-                            continue
-
                     if not options.keep_duplicates and os.path.exists(e_target_path) and os.path.getsize(e_target_path) > 0:
                         continue
 
@@ -1823,21 +1772,6 @@ class FileDownloader:
                     seen_urls.add(r["url"])
                     deduped_records.append(r)
             self.harvested_links_records = deduped_records
-
-            if self.archive_manager and self.archive_manager.is_enabled:
-                for r in deduped_records:
-                    try:
-                        self.archive_manager.record_link(
-                            service=r.get("service", ""),
-                            creator_id=r.get("creator_id", "") or user_id,
-                            post_id=r.get("post_id", ""),
-                            url=r.get("url", ""),
-                            creator_name=r.get("creator_name", "") or r.get("creator", ""),
-                            post_title=r.get("post_title", "") or r.get("title", ""),
-                            link_title=r.get("title", "")
-                        )
-                    except Exception as _ar_rec_err:
-                        pass
 
             total = sum(len(v) for v in self.harvested_links.values())
             if total:
@@ -2534,19 +2468,6 @@ class FileDownloader:
                                 self._stable_clean_count += 1
                                 self.session_manager.record_downloaded_file(task.file_id)
                                 self._write_pending_post_info(task)
-                                if self.archive_manager and self.archive_manager.is_enabled and not getattr(task, "used_preview", False):
-                                    self.archive_manager.record_file(
-                                        service=task.service,
-                                        creator_id=task.user_id,
-                                        post_id=task.post_id,
-                                        file_id=task.file_id,
-                                        file_hash=task.expected_sha256,
-                                        filename=task.filename,
-                                        creator_name=task.creator_name,
-                                        post_title=task.post_title,
-                                        file_size=task.file_size,
-                                        file_path=task.target_path
-                                    )
                                 if self.on_task_status_changed:
                                     self.on_task_status_changed(task)
 
@@ -2923,24 +2844,7 @@ class FileDownloader:
         if self.on_task_status_changed:
             self.on_task_status_changed(task)
 
-        # Check if file is already recorded in download archive database — unless the copy on disk is a
-        # small / preview one that should be replaced by the full-size file (planning allowed that,
-        # but this second check used to mark those files "already archived" anyway)
         _disk_cands = _get_media_candidate_paths(task.target_path)
-        if self.archive_manager and self.archive_manager.is_enabled:
-            _on_disk = next((p for p in _disk_cands if os.path.exists(p) and os.path.getsize(p) > 0), None)
-            _upgrade = bool(_on_disk) and needs_full_size_upgrade(os.path.getsize(_on_disk), task.file_size, task.target_path, options, _on_disk)
-            if not _upgrade and self.archive_manager.is_archived(service=task.service, post_id=task.post_id, file_id=task.file_id, file_hash=task.expected_sha256):
-                task.status = "completed"
-                task.progress_pct = 100
-                task.eta_str = "Done"
-                if self.on_task_status_changed:
-                    self.on_task_status_changed(task)
-                logger.info(f"📦 Skipping archived file: '{task.filename}' (present in download archive)", category="file",
-                            to_file=False)
-                with self._lock:
-                    self._already_there["in the download archive"] += 1
-                return True, "Already archived"
 
         # Check if file already exists completely on disk (including webp/avif and transcoded video versions)
         found_existing_path = None
@@ -2976,19 +2880,6 @@ class FileDownloader:
                 task.file_size = task.downloaded_bytes
                 task.progress_pct = 100
                 task.eta_str = "Done"
-                if self.archive_manager and self.archive_manager.is_enabled:
-                    self.archive_manager.record_file(
-                        service=task.service,
-                        creator_id=task.user_id,
-                        post_id=task.post_id,
-                        file_id=task.file_id,
-                        file_hash=task.expected_sha256,
-                        filename=task.filename,
-                        creator_name=task.creator_name,
-                        post_title=task.post_title,
-                        file_size=task.downloaded_bytes,
-                        file_path=found_existing_path
-                    )
                 if self.on_task_status_changed:
                     self.on_task_status_changed(task)
                 logger.info(f"⏳ Skipping existing file: '{task.filename}' (already present on disk)", category="file",
@@ -3078,19 +2969,6 @@ class FileDownloader:
                 task.status = "completed"
                 task.progress_pct = 100
                 task.eta_str = "Done"
-                if self.archive_manager and self.archive_manager.is_enabled:
-                    self.archive_manager.record_file(
-                        service=task.service,
-                        creator_id=task.user_id,
-                        post_id=task.post_id,
-                        file_id=task.file_id,
-                        file_hash=task.expected_sha256,
-                        filename=task.filename,
-                        creator_name=task.creator_name,
-                        post_title=task.post_title,
-                        file_size=task.downloaded_bytes,
-                        file_path=task.target_path
-                    )
                 if self.on_task_status_changed:
                     self.on_task_status_changed(task)
                 logger.success(f"✔ [yt-dlp] {task.filename} successfully downloaded", category="ytdlp")
@@ -3162,19 +3040,6 @@ class FileDownloader:
                 task.status = "completed"
                 task.progress_pct = 100
                 task.eta_str = "Done"
-                if self.archive_manager and self.archive_manager.is_enabled:
-                    self.archive_manager.record_file(
-                        service=task.service,
-                        creator_id=task.user_id,
-                        post_id=task.post_id,
-                        file_id=task.file_id,
-                        file_hash=task.expected_sha256,
-                        filename=task.filename,
-                        creator_name=task.creator_name,
-                        post_title=task.post_title,
-                        file_size=task.downloaded_bytes,
-                        file_path=task.target_path
-                    )
                 if self.on_task_status_changed:
                     self.on_task_status_changed(task)
                 logger.success(f"✔ [Telegram] {task.filename} successfully downloaded", category="telegram")
@@ -3905,7 +3770,7 @@ class FileDownloader:
         if not task.target_path or not os.path.exists(task.target_path):
             return
 
-        # 1. WebP conversion (the task, archive and queue then point at the .webp file)
+        # 1. WebP conversion (the task and queue then point at the .webp file)
         if options.compress_to_webp:
             converted = self._convert_to_webp(task.target_path, getattr(options, "webp_quality", "balanced"))
             if converted:

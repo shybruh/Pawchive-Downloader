@@ -9,7 +9,7 @@ Output:
   desktop/src-tauri/target/plan_live.json    — the real posts (for: cargo test --lib -- --ignored plan)
 
 Each case runs in desktop/src-tauri/target/plan_base with the files the case lists created first.
-The download archive, archive passwords and post_info writes are
+Archive passwords and post_info writes are
 stand-ins, so nothing outside that folder is read or written. The Rust planner
 (src-tauri/src/downloader/plan.rs) must give the same tasks.
 """
@@ -33,18 +33,6 @@ FIXTURE = os.path.join(ROOT, "desktop", "src-tauri", "tests", "fixtures", "plan.
 LIVE = os.path.join(ROOT, "desktop", "src-tauri", "target", "plan_live.json")
 
 # Stand-ins, mirrored by the Rust test
-class Archive:
-    def __init__(self, archived):
-        self.archived = set(archived)
-        self.is_enabled = bool(archived)
-
-    def is_archived(self, service, post_id, file_id, file_hash=""):
-        return file_id in self.archived
-
-    def record_link(self, **kw):
-        pass
-
-
 apm.archive_password_manager.record_archive_password = lambda *a, **k: None
 apm.archive_password_manager.add_passwords = lambda *a, **k: None
 WRITES = []
@@ -125,7 +113,6 @@ CASES = [
                                     "Silly Teshii [patreon]/[2024-03-05] First post/post_info.txt:Post ID: 1"], []),
     ("on disk, small copy", BASIC, PAW, O(), ["Silly Teshii [patreon]/[2024-03-05] First post/pic.png"], []),
     ("shared post info", BASIC, PAW, O(subfolder_per_post=False), ["Silly Teshii [patreon]/post_info.txt:Post ID: 3"], []),
-    ("archive", BASIC, PAW, O(), [], ["1_" + h(2) + ".png", "embed_5_1"]),
     ("no site in folder name", BASIC, dict(PAW, include_service=False), O(), [], []),
     ("existing plain folder", BASIC, PAW, O(), ["Silly Teshii/keep.txt"], []),
     ("artist folder inside base", BASIC, dict(PAW, artist_dir="{BASE}\\Chosen"), O(), [], []),
@@ -150,7 +137,7 @@ def setup(files):
 
 def run(posts, req, opts, archived):
     folder_naming.include_service = req.get("include_service", True)
-    d = dl.FileDownloader(None, archive_manager=Archive(archived))
+    d = dl.FileDownloader(None)
     d._resolve_pawchive_deferred_attachments = lambda post, domain="": 0
     WRITES.clear()
     artist = req.get("artist_dir")

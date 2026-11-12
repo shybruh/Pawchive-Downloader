@@ -1,6 +1,6 @@
 import type { ComponentType } from "react";
 import {
-  ArchiveIcon, BookmarkIcon, DownloadIcon, FileArchiveIcon, HistoryIcon, ImagesIcon,
+  BookmarkIcon, DownloadIcon, FileArchiveIcon, HistoryIcon, ImagesIcon,
   LinkIcon, ListOrderedIcon, ScrollTextIcon, SettingsIcon,
 } from "lucide-react";
 import { useProp } from "@/lib/engine";
@@ -67,7 +67,6 @@ export function AppSidebar() {
         <Group label="Library" view={view} onNavigate={onNavigate} items={[
           { id: "gallery", label: "Gallery", icon: ImagesIcon },
           { id: "history", label: "History", icon: HistoryIcon },
-          { id: "archive", label: "Archive", icon: ArchiveIcon },
           { id: "vault", label: "Link vault", icon: LinkIcon },
         ]} />
         <Group label="Tools" view={view} onNavigate={onNavigate} items={[

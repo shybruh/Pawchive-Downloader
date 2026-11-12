@@ -5,7 +5,7 @@
 //! name is known (it may be the watchlist's). The files go in the queue on the app's side.
 //!
 //! Call "link_scan": {"link", "site": {"cookie", "user_agent", "proxy"}, "page_start", "page_end",
-//! "date_after", "date_before", "dms", "favorites", "comments", "options", "archive", "archive_db",
+//! "date_after", "date_before", "dms", "favorites", "comments", "options",
 //! "base_dir", "include_service"} →
 //! {"status": "cancelled" | "no_posts" | "plan", "creator_name", "posts", "batch_id", "artist_dir", "plan"}
 
@@ -93,7 +93,7 @@ pub fn call(id: u64, a: &Value) -> Result<Value, String> {
     };
     service::log_app("info", &format!("Structuring download plan for {} posts...", posts.len()), "downloader", "");
     let args = json!({
-        "options": a["options"], "archive": a["archive"], "archive_db": a["archive_db"], "cookie": a["site"]["cookie"],
+        "options": a["options"], "cookie": a["site"]["cookie"],
         "request": {"creator_name": name, "service": p.service, "domain": p.domain, "base_dir": a["base_dir"],
                     "batch_id": batch, "artist_dir": artist, "user_id": p.user_id,
                     "include_service": a["include_service"].as_bool().unwrap_or(true)},

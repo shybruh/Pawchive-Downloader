@@ -403,7 +403,6 @@ def build_engine():
     from bridge.gallery_updates import GalleryUpdates
 
     app_bridge = AppBridge()
-    app_bridge.archive_manager.start_maintenance()
 
     wl = getattr(app_bridge, "_watchlist_manager", None)
     tools = GalleryToolsBridge(app_bridge, wl)

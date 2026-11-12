@@ -63,7 +63,6 @@ from core.session_manager import SessionManager
 from bridge.log_model import LogModel
 from bridge.queue_model import QueueModel
 from bridge.watchlist_model import WatchlistModel
-from bridge.archive_creators_model import ArchiveCreatorsModel
 from core import folder_naming
 from core.folder_naming import pick_creator_folder, is_creator_folder
 from bridge.decompressor_bridge import DecompressorBridge
@@ -78,8 +77,6 @@ from services.telegram_service import TelegramService
 from services.rust_cloud import download_mega_link, download_gdrive_link, download_dropbox_link, download_gofile_link
 from core.text_utils import clean_text, sanitize_filesystem_name, safe_file_name
 from core.path_utils import unique_name_in_batch
-from core.archive_manager import ArchiveManager
-from core.archive_rebuilder import ArchiveRebuilder, ArchiveRebuildOptions
 
 
 
@@ -172,17 +169,6 @@ class AppBridge(QObject):
     hasRecoverySessionChanged = Signal()
     recoverySessionDetected   = Signal('QVariant')
 
-    enableDownloadArchiveChanged = Signal()
-    archiveRecordCountChanged    = Signal()
-    archiveUpdated               = Signal()
-    archiveCreatorVerificationStarted  = Signal(str, str)
-    archiveCreatorVerificationProgress = Signal(str, str, int, int)
-    archiveCreatorVerificationFinished = Signal(str, str, 'QVariant')
-    # A damaged archive database was repaired (or couldn't be): {ok, method, kept, lost, backup, error}
-    archiveRepairFinished = Signal('QVariant')
-    archiveRebuildProgress             = Signal('QVariant')
-    archiveRebuildFinished            = Signal('QVariant')
-    archiveRebuildStatusChanged        = Signal()
 
     fileOrderChanged          = Signal()
     watchlistChanged          = Signal()
@@ -205,7 +191,6 @@ class AppBridge(QObject):
     telegramSafetyAcknowledgedChanged = Signal()
     telegramLiabilityAcknowledgedChanged = Signal()
 
-
     # Storage Pool signals
 
     # Privacy Mode & Shield signals
@@ -217,7 +202,6 @@ class AppBridge(QObject):
     favoriteArtistsReady      = Signal(list)
     favoriteArtistsLoadingChanged = Signal()
     favoriteArtistsError      = Signal(str)
-
 
     # File Explorer & Media Gallery signals
     folderStatsCalculated     = Signal(str, 'qint64', 'qint64', 'qint64')  # (path, total_size, file_count, folder_count)
@@ -256,19 +240,12 @@ class AppBridge(QObject):
         self.session_manager = SessionManager()
         saved_settings = self.session_manager.load_settings()
         self._loaded_decompressor_settings = saved_settings.get("decompressor") or {}   # (until it exists)
-        self._enable_download_archive = bool(saved_settings.get("enable_download_archive", False))
-        self.archive_manager = ArchiveManager(
-            config_dir=self.session_manager.config_dir,
-            enabled=self._enable_download_archive
-        )
-        self.archive_manager.on_repair_finished = self._on_archive_repaired
         # Downloads run in the desktop shell's Rust engine when it's there (services/rust_queue.py)
         from services import rust_queue
         downloader_class = rust_queue.RustDownloader if rust_queue.available() else FileDownloader
         self.downloader = downloader_class(
             session_manager=self.session_manager,
             max_workers=4,
-            archive_manager=self.archive_manager
         )
         # ...and so do the site requests of scans (services/rust_sites.py)
         from services import rust_sites
@@ -322,10 +299,6 @@ class AppBridge(QObject):
         self._webp_quality = str(saved_settings.get("webp_quality", "balanced"))
         self._write_audio_metadata = bool(saved_settings.get("write_audio_metadata", False))
         self._keep_duplicates = saved_settings.get("keep_duplicates", False)
-        self._last_archive_emit_time: float = 0.0
-        self._archive_rebuilder: Optional[ArchiveRebuilder] = None
-        self._is_archive_rebuilding: bool = False
-        self._is_archive_rebuild_paused: bool = False
         self._favorite_mode = False
         self._subfolder_per_post = saved_settings.get("subfolder_per_post", True)
         self._date_prefix = saved_settings.get("date_prefix", True)
@@ -428,7 +401,6 @@ class AppBridge(QObject):
         if rust_queue.available():
             # (the engine's link scan asks for a creator's folder: src-tauri/src/downloader/scan.rs)
             rust_queue.shared_link().handlers["link_artist_dir"] = self._link_artist_dir_ask
-        self._archive_creators_model = ArchiveCreatorsModel(self)
         # Watchlist downloads: new posts that needed no files (already saved or filtered out),
         # counted as done when the download finishes
         self._watchlist_pending_updates: Dict[Tuple[str, str], List[Tuple[str, str]]] = {}
@@ -1430,168 +1402,10 @@ class AppBridge(QObject):
             self.saveSettings()
 
     # ── Download Archive Database (gallery-dl style) ─────────────────────────
-    @Property(bool, notify=enableDownloadArchiveChanged)
-    def enableDownloadArchive(self) -> bool:
-        return self._enable_download_archive
-
-    @enableDownloadArchive.setter
-    def enableDownloadArchive(self, val: bool):
-        val = bool(val)
-        if self._enable_download_archive != val:
-            self._enable_download_archive = val
-            self.archive_manager.set_enabled(val)
-            self.enableDownloadArchiveChanged.emit()
-            self.archiveRecordCountChanged.emit()
-            self.saveSettings()
 
     # ── Privacy Mode & Shield Protection ────────────────────────────────────
 
-    @Slot(str, str, str, str, str)
-    def getArchiveDataAsync(self, request_id: str, query: str = "", service: str = "all",
-                            fileType: str = "all", sortBy: str = "creator_az"):
-        """The Archive view's creators and statistics, read in the background. Only one entry per
-        creator: a creator's posts and files are read when it's opened (getArchiveCreatorPostsAsync).
-        Sending every file of a big archive to the window on each refresh froze it (#28)."""
-        # The creators go into archiveCreatorsModel (the view applies them with applyPending());
-        # sending them all to the window as one list took seconds with tens of thousands of creators.
-        # A newer request stops an older one that's still reading.
-        gen = self.__dict__.get("_archive_data_gen", 0) + 1
-        self._archive_data_gen = gen
-        stale = lambda: self._archive_data_gen != gen  # noqa: E731
-
-        def _job():
-            try:
-                creators = self.archive_manager.get_creator_summaries(
-                    query=query, service=service, file_type=fileType, sort_by=sortBy, should_stop=stale)
-                if creators is None or stale():
-                    return                              # replaced by a newer request
-                stats = self.archive_manager.get_statistics()
-            except Exception as e:
-                logger.error(f"Background task failed: {e}", category="system")
-                creators, stats = [], {}
-
-            def _deliver():
-                if stale():
-                    return
-                self._archive_creators_model.set_pending(creators)
-                self.asyncResultReady.emit(request_id, {"count": len(creators), "statistics": stats})
-            try:
-                self._callOnGui.emit(_deliver)
-            except RuntimeError:
-                pass      # the app is closing
-        threading.Thread(target=_job, daemon=True, name=f"async:{request_id[:24]}").start()
-
-    @Slot(str, str, str, str, str)
-    def getArchiveCreatorPostsAsync(self, request_id: str, creatorKey: str, query: str = "",
-                                    service: str = "all", fileType: str = "all"):
-        """The posts and files of one creator in the Archive view (its "key" from getArchiveDataAsync)."""
-        self._run_async(request_id, self.archive_manager.get_creator_posts, creatorKey, query, service, fileType)
-
-    @Slot(str, str, str)
-    def exportArchiveFileAsync(self, request_id: str, filepath: str, exportFormat: str = "txt"):
-        """Exports the archive in the background: the result is the number of records, -1 if it failed."""
-        clean_path = filepath.replace("file:///", "").replace("file://", "")
-        self._run_async(request_id, self.archive_manager.export_archive, clean_path, exportFormat)
-
-    @Slot(result=str)
-    def archiveLastError(self) -> str:
-        """Why the last archive change failed (shown to the user)."""
-        return self.archive_manager.last_error or ""
-
-    def _on_archive_repaired(self, result: dict):
-        """From the repair's thread: the window refreshes and says what happened."""
-        try:
-            self.archiveRepairFinished.emit(result)
-            if result.get("ok"):
-                self.archiveRecordCountChanged.emit()
-                self.archiveUpdated.emit()
-        except RuntimeError:
-            pass      # the app is closing
-
-    @Slot(str, str, str)
-    def verifyCreatorArchiveIntegrity(self, service: str, creatorId: str, creatorName: str = "") -> None:
-        """Runs verify_creator_integrity in a background daemon thread."""
-        def _worker():
-            self.archiveCreatorVerificationStarted.emit(service, creatorId)
-            candidates = []
-            if self._download_dir:
-                candidates.append(self._download_dir)
-            artist_dirs = []
-            try:
-                # The creator's Watchlist folders are scanned as they are, whatever their name
-                for item in list(self._watchlist_manager.entries if self._watchlist_manager else []):
-                    if str(item.user_id) == str(creatorId) and str(item.service).lower() == str(service).lower():
-                        artist_dirs.extend(d for d in [item.download_dir, *(item.download_dirs or [])] if d)
-            except Exception:
-                pass
-
-            last_prog_emit = [0.0]
-            def _prog(cur, tot):
-                now = time.time()
-                if cur < tot and (now - last_prog_emit[0] < 0.1):
-                    return
-                last_prog_emit[0] = now
-                self.archiveCreatorVerificationProgress.emit(service, creatorId, cur, tot)
-
-            res = self.archive_manager.verify_creator_integrity(
-                service=service,
-                creator_id=creatorId,
-                creator_name=creatorName,
-                candidate_dirs=candidates,
-                progress_callback=_prog,
-                known_artist_dirs=artist_dirs
-            )
-            self.archiveCreatorVerificationFinished.emit(service, creatorId, res)
-            self.archiveUpdated.emit()
-
-        threading.Thread(target=_worker, daemon=True).start()
-
     # ── Archive changes in the background ───────────────────────────────────
-    # On a big archive a delete updates every index and "clear" rewrites the whole file: seconds on
-    # the window thread. Each answers with asyncResultReady(request_id, result) like the sync version.
-    def _archive_change_async(self, request_id: str, fn, *args) -> None:
-        def _job():
-            result = fn(*args)
-            changed = (result is True) or (isinstance(result, int) and not isinstance(result, bool) and result > 0)
-            if changed:
-                self.archiveRecordCountChanged.emit()
-                self.archiveUpdated.emit()
-            return result
-        self._run_async(request_id, _job)
-
-    @Slot(str, int)
-    def deleteArchiveRecordAsync(self, request_id: str, recordId: int):
-        self._archive_change_async(request_id, self.archive_manager.delete_record, recordId)
-
-    @Slot(str, str, str)
-    def deleteArchivePostAsync(self, request_id: str, service: str, postId: str):
-        self._archive_change_async(request_id, self.archive_manager.delete_by_post, service, postId)
-
-    @Slot(str, str, str)
-    def deleteArchiveCreatorAsync(self, request_id: str, creatorId: str, service: str = ""):
-        self._archive_change_async(request_id, self.archive_manager.delete_by_creator, creatorId, service)
-
-    @Slot(str, str, str)
-    def removeMissingArchiveRecordsForCreatorAsync(self, request_id: str, service: str, creatorId: str):
-        self._archive_change_async(request_id, self.archive_manager.remove_missing_for_creator, service, creatorId)
-
-    @Slot(str)
-    def clearDownloadArchiveAsync(self, request_id: str):
-        def _clear():
-            ok = self.archive_manager.clear_archive()
-            self.archiveRecordCountChanged.emit()
-            self.archiveUpdated.emit()
-            return ok
-        self._run_async(request_id, _clear)
-
-    @Slot(str, str)
-    def importArchiveFileAsync(self, request_id: str, filepath: str):
-        clean_path = filepath.replace("file:///", "").replace("file://", "")
-        self._archive_change_async(request_id, self.archive_manager.import_archive, clean_path)
-
-    @Property(bool, notify=archiveRebuildStatusChanged)
-    def isArchiveRebuilding(self) -> bool:
-        return self._is_archive_rebuilding
 
     @Slot(str, str, result=str)
     @Slot(str, result=str)
@@ -1601,67 +1415,6 @@ class AppBridge(QObject):
         start_dir = initialDir if (initialDir and os.path.isdir(initialDir)) else (self._download_dir or os.path.expanduser("~"))
         folder = QFileDialog.getExistingDirectory(None, title or "Select Directory", start_dir)
         return os.path.normpath(folder) if folder else ""
-
-    @Slot("QVariantList", str, bool, bool, result=bool)
-    @Slot(list, str, bool, bool, result=bool)
-    @Slot("QVariantList", result=bool)
-    @Slot(list, result=bool)
-    def startArchiveRebuild(
-        self,
-        directories: list,
-        hashMode: str = "full",
-        detectPostInfo: bool = True,
-        skipExisting: bool = True
-    ) -> bool:
-        """
-        Asynchronously scans and rebuilds the archive database from multiple directories.
-        Completely non-blocking to the Qt main thread with live telemetry streaming.
-        """
-        if self._is_archive_rebuilding:
-            return False
-
-        valid_dirs = [os.path.normpath(d) for d in directories if d and os.path.isdir(d)]
-        if not valid_dirs:
-            return False
-
-        opts = ArchiveRebuildOptions(
-            hash_mode=hashMode,
-            detect_post_info=detectPostInfo,
-            skip_existing=skipExisting
-        )
-
-        def _on_progress(data: dict):
-            self._is_archive_rebuild_paused = data.get("is_paused", False)
-            self.archiveRebuildProgress.emit(data)
-
-        def _on_finished(stats: dict):
-            self._is_archive_rebuilding = False
-            self._is_archive_rebuild_paused = False
-            self._archive_rebuilder = None
-            self.archiveRecordCountChanged.emit()
-            self.archiveUpdated.emit()
-            self.archiveRebuildStatusChanged.emit()
-            self.archiveRebuildFinished.emit(stats)
-
-        self._archive_rebuilder = ArchiveRebuilder(
-            archive_manager=self.archive_manager,
-            directories=valid_dirs,
-            options=opts,
-            on_progress=_on_progress,
-            on_finished=_on_finished
-        )
-
-        started = self._archive_rebuilder.start()
-        if started:
-            self._is_archive_rebuilding = True
-            self._is_archive_rebuild_paused = False
-            self.archiveRebuildStatusChanged.emit()
-        return started
-
-    @Slot()
-    def cancelArchiveRebuild(self) -> None:
-        if self._archive_rebuilder and self._archive_rebuilder.is_running:
-            self._archive_rebuilder.cancel()
 
     @Slot(str, result=bool)
     def revealFileInExplorer(self, filePath: str) -> bool:
@@ -1691,7 +1444,7 @@ class AppBridge(QObject):
                     subprocess.Popen(["xdg-open", os.path.dirname(clean_path) if os.path.isfile(clean_path) else clean_path])
                 return True
         except Exception as e:
-            logger.error(f"Failed to reveal file {filePath}: {e}", category="archive")
+            logger.error(f"Failed to reveal file {filePath}: {e}", category="system")
             return False
 
     @Property(str, notify=postDownloadActionChanged)
@@ -1721,11 +1474,6 @@ class AppBridge(QObject):
     @Property(QObject, constant=True)
     def watchlistModel(self) -> WatchlistModel:
         return self._watchlist_model
-
-    @Property(QObject, constant=True)
-    def archiveCreatorsModel(self) -> ArchiveCreatorsModel:
-        """The Archive tab's creators (filled by getArchiveDataAsync)."""
-        return self._archive_creators_model
 
     @Property(bool, notify=watchlistCheckOnStartupChanged)
     def watchlistCheckOnStartup(self) -> bool:
@@ -2841,10 +2589,10 @@ class AppBridge(QObject):
 
         if self._selection_in_rust:
             # (the engine has the scanned posts: it keeps the picked ones and plans them)
-            d, am = self.downloader, getattr(self.downloader, "archive_manager", None)
+            d = self.downloader
             ok, r = d._link.call("selection_plan", {
                 "ids": [str(i) for i in selectedPostIds], "files": files_map, "options": options.to_dict(),
-                "archive": bool(am and am.is_enabled), "archive_db": d._archive_db(), "base_dir": self._download_dir or "",
+                "base_dir": self._download_dir or "",
                 "include_service": bool(folder_naming.include_service), "cookie": self.api_client.cookie_string or "",
             })
             status = r.get("status") if ok and isinstance(r, dict) else None
@@ -3362,7 +3110,6 @@ class AppBridge(QObject):
                 pname = PROVIDER_NAMES.get(prov_id, prov_id.capitalize())
                 logger.warning(f"⭐ Favorite Mode active but not logged into {pname}. Showing auth prompt.", category="auth")
                 self.favoriteAuthRequired.emit(pname)
-        am = getattr(d, "archive_manager", None)
         api = self.api_client
         d.last_build_cancelled = False
         ok, r = d._link.call("link_scan", {
@@ -3373,8 +3120,7 @@ class AppBridge(QObject):
             "dms": bool((getattr(options, "download_dms", False) or self._download_dms) and ("cum.st" in domain or "pawchive" in domain)),
             "favorites": favorites,
             "comments": options.character_scope in ("comments", "all"),
-            "options": options.to_dict(), "archive": bool(am and am.is_enabled), "archive_db": d._archive_db(),
-            "base_dir": self._download_dir or "", "include_service": bool(folder_naming.include_service),
+            "options": options.to_dict(), "base_dir": self._download_dir or "", "include_service": bool(folder_naming.include_service),
         }, cancelled=lambda: self._scan_cancel_event.is_set())
         if not ok:
             logger.debug(f"The download engine couldn't scan this link ({r}); scanning it the old way.", category="downloader")
@@ -3647,7 +3393,7 @@ class AppBridge(QObject):
             checker.cancel()        # continues where it stopped at the next check
         move_cancel = getattr(self, "_folder_move_cancel", None)
         if move_cancel is not None:
-            move_cancel.set()      # stops after the file it's moving; the archive keeps what moved
+            move_cancel.set()      # stops after the file it's moving
             mover = getattr(self, "_folder_move_thread", None)
             if mover is not None:
                 mover.join(timeout=10)
@@ -3655,10 +3401,6 @@ class AppBridge(QObject):
         def _persist():
             try:
                 self.session_manager.flush_history()
-            except Exception:
-                pass
-            try:
-                self.archive_manager.checkpoint()
             except Exception:
                 pass
             try:
@@ -4268,8 +4010,6 @@ class AppBridge(QObject):
             self._cloud_cancel_event.set()
             logger.warning("Cloud downloads cancellation requested.", category="downloader")
 
-
-
     @Slot()
     def exportLogs(self):
         """Save a copy of this session's full log file (not just what the console panel still shows)."""
@@ -4519,7 +4259,6 @@ class AppBridge(QObject):
             "fallback_to_thumbnails": self._fallback_to_thumbnails,
             "redownload_small_files": self._redownload_small_files,
             "date_auto_scan_pages": self._date_auto_scan_pages,
-            "enable_download_archive": self._enable_download_archive,
             "download_pawchive_temporary_files": self._download_pawchive_temporary_files,
             "min_file_size": self._min_file_size,
             "max_file_size": self._max_file_size,
@@ -4619,11 +4358,6 @@ class AppBridge(QObject):
             if self.recovery_manager and self.recovery_manager.retry_counts_cached()[0] > 0:
                 if self.recovery_manager.remove_completed_tasks([task], async_write=True):
                     self._queue_model.failedCountChanged.emit()
-        if task.status == "completed" and self._enable_download_archive:
-            now = time.time()
-            if now - self._last_archive_emit_time >= 2.0:
-                self._last_archive_emit_time = now
-                self.archiveRecordCountChanged.emit()
 
     TASK_UPDATES_PER_TURN = 300
 
@@ -5247,10 +4981,6 @@ class AppBridge(QObject):
         if self._queue_model:
             self._queue_model.failedCountChanged.emit()
 
-        if self._enable_download_archive:
-            self.archiveRecordCountChanged.emit()
-            self.archiveUpdated.emit()
-
         self.isDownloadingChanged.emit()
         self.isPausedChanged.emit()
         self.overallProgressChanged.emit()
@@ -5411,7 +5141,6 @@ class AppBridge(QObject):
                 self._watchlist_pending_updates.clear()
                 logger.debug(f"Watchlist update error on finish: {e}", category="watchlist")
 
-
     def _async_resolve_creator_name(self, parsed: URLParseResult, for_url: str = ""):
         try:
             if parsed.is_external_provider:
@@ -5540,7 +5269,6 @@ class AppBridge(QObject):
             return None
         from core import folder_naming
         d = self.downloader
-        am = getattr(d, "archive_manager", None)
         options = self._get_effective_watchlist_options(entry)
         how = args[2] if len(args) > 2 and isinstance(args[2], dict) else {}
         if how.get("download"):
@@ -5554,8 +5282,6 @@ class AppBridge(QObject):
             base = os.path.dirname(artist) if os.path.isabs(artist) else (custom_dir or self._download_dir)
             return {
                 "options": options.to_dict(),
-                "archive": bool(am and am.is_enabled),
-                "archive_db": d._archive_db() if hasattr(d, "_archive_db") else "",
                 "request": {"creator_name": entry.creator_name or "", "service": entry.service or "",
                             "domain": entry.domain or "", "base_dir": base or "",
                             "batch_id": f"watchlist_{entry.service}_{entry.user_id}", "artist_dir": artist or "",
@@ -5563,8 +5289,6 @@ class AppBridge(QObject):
             }
         return {
             "options": options.to_dict(),
-            "archive": bool(am and am.is_enabled),
-            "archive_db": d._archive_db() if hasattr(d, "_archive_db") else "",
             "request": {"creator_name": entry.creator_name or "", "service": entry.service or "",
                         "domain": entry.domain or "", "base_dir": self._download_dir or "",
                         "batch_id": f"check_{entry.service}_{entry.user_id}",
@@ -5573,7 +5297,7 @@ class AppBridge(QObject):
         }
 
     def _check_and_resolve_if_already_downloaded(self, entry, new_posts: list) -> list:
-        """If all files in new_posts already exist on disk or in the download archive,
+        """If all files in new_posts already exist on disk,
         auto-advance the cutoff to the latest post and return an empty list so no false
         update badge is displayed."""
         if not new_posts:
@@ -5593,7 +5317,7 @@ class AppBridge(QObject):
                 user_id=entry.user_id
             )
             if not tasks:
-                # All files across new_posts were already archived, on disk, or filtered
+                # All files across new_posts were already on disk, or filtered
                 latest_p = new_posts[-1]
                 latest_pid = str(latest_p.get("id", ""))
                 latest_pdate = self._post_day(latest_p)
@@ -5916,7 +5640,7 @@ class AppBridge(QObject):
                 category="watchlist"
             )
         else:
-            # All files across new_posts were already archived, already exist on disk, or were filtered out.
+            # All files across new_posts already exist on disk, or were filtered out.
             req_pids = [str(pid) for pid in postIds] if postIds else None
             self._watchlist_manager.resolve_posts(
                 entry.user_id,
@@ -5931,12 +5655,12 @@ class AppBridge(QObject):
             self.watchlistChanged.emit()
             if req_pids:
                 logger.info(
-                    f"Watchlist: selected post(s) for {entry.creator_name!r} are already archived or downloaded. Review drawer updated.",
+                    f"Watchlist: selected post(s) for {entry.creator_name!r} are already downloaded. Review drawer updated.",
                     category="watchlist"
                 )
             else:
                 logger.info(
-                    f"Watchlist: all {len(new_posts)} new post(s) for {entry.creator_name!r} are already archived or downloaded. Marked as up to date.",
+                    f"Watchlist: all {len(new_posts)} new post(s) for {entry.creator_name!r} are already downloaded. Marked as up to date.",
                     category="watchlist"
                 )
 
@@ -6239,7 +5963,7 @@ class AppBridge(QObject):
     @Slot(str, str, str, bool)
     def applyWatchlistFolderChange(self, userId: str, service: str, new_dir: str, move_files: bool):
         """Makes new_dir the artist's download folder. move_files: their files move there too (in the
-        background) and the archive's records follow them; otherwise the old folders are kept as
+        background); otherwise the old folders are kept as
         extra locations, so files already downloaded are still recognised."""
         entry = self._watchlist_manager._find(userId, service)
         if not entry or not new_dir:
@@ -6274,25 +5998,10 @@ class AppBridge(QObject):
         def _move():
             from core.folder_mover import move_folder_contents, count_files
             total = sum(count_files(d)[0] for d in olds)
-            # The archive's records are found once, then follow their files a batch at a time: a move
-            # that's stopped (or the app closed) leaves every moved file's record right
-            record_ids = self.archive_manager.records_under(olds) if self._enable_download_archive else {}
-            key = self.archive_manager._path_key
-            pending: List[Tuple[int, str]] = []
-            state = {"done": 0, "relocated": 0, "last": 0.0}
-
-            def _flush():
-                if pending:
-                    state["relocated"] += self.archive_manager.set_file_paths(list(pending))
-                    pending.clear()
+            state = {"done": 0, "last": 0.0}
 
             def _on_file(old, new):
                 state["done"] += 1
-                rid = record_ids.get(key(old))
-                if rid is not None:
-                    pending.append((rid, new))
-                    if len(pending) >= 200:
-                        _flush()
                 now = time.monotonic()
                 if now - state["last"] > 0.2:
                     state["last"] = now
@@ -6300,17 +6009,13 @@ class AppBridge(QObject):
 
             moved = dup = renamed = 0
             errors = []
-            try:
-                for d in olds:
-                    r = move_folder_contents(d, new_dir, cancel=cancel, on_file=_on_file)
-                    moved, dup, renamed = moved + r.moved, dup + r.duplicates, renamed + r.renamed
-                    errors += r.errors
-                    if cancel.is_set():
-                        break
-            finally:
-                _flush()
+            for d in olds:
+                r = move_folder_contents(d, new_dir, cancel=cancel, on_file=_on_file)
+                moved, dup, renamed = moved + r.moved, dup + r.duplicates, renamed + r.renamed
+                errors += r.errors
+                if cancel.is_set():
+                    break
             stopped = cancel.is_set()
-            relocated = state["relocated"]
 
             def _done():
                 self._folder_move_cancel = None
@@ -6324,8 +6029,6 @@ class AppBridge(QObject):
                     msg += f", {dup} already there"
                 if renamed:
                     msg += f", {renamed} renamed to keep both"
-                if relocated:
-                    msg += f"; {relocated} archive record(s) updated"
                 if stopped:
                     msg += ". Stopped before the end: the rest stays in the old folder"
                 (logger.warning if errors or stopped else logger.success)(
@@ -6403,7 +6106,7 @@ class AppBridge(QObject):
         checker = getattr(self, "_watchlist_checker", None)
         cancel = getattr(checker, "cancel_event", None) if checker else None
         new = self._watchlist_manager.get_posts_since(entry, self.api_client, raise_on_error=True, cancel_event=cancel)
-        # Looking for the files on disk / in the archive uses the downloader: one artist at a time
+        # Looking for the files on disk uses the downloader: one artist at a time
         with self._watchlist_resolve_lock:
             new = self._check_and_resolve_if_already_downloaded(entry, new)
         entry.new_post_count = len(new)

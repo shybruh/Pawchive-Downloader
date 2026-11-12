@@ -1,5 +1,5 @@
 """
-Long lists of records (dicts) for QML, as list models: the Archive tab's creators and the Link Vault's.
+Long lists of records (dicts) for the window, as list models: the Link Vault's creators, the decompressor's groups.
 
 They used to be JavaScript arrays of every creator, converted on the window thread at each refresh
 (a few hundred ms at 20,000 creators, seconds at 100,000; the Link Vault's came as one big JSON text,
@@ -110,7 +110,3 @@ class RecordListModel(QAbstractListModel):
         if not self._creators or not names or len(names) < len(self._creators):
             return False
         return all(names.get(c.get("creator_name", "")) for c in self._creators)
-
-
-class ArchiveCreatorsModel(RecordListModel):
-    """The Archive tab's creators (records keyed by "key")."""

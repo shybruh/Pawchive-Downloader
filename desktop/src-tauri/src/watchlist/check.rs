@@ -82,7 +82,7 @@ pub(super) struct Run {
     pub(super) cancel: Arc<AtomicBool>,
 }
 
-/// Looking for a creator's files on disk / in the archive: one creator at a time (as in the app)
+/// Looking for a creator's files on disk: one creator at a time (as in the app)
 fn resolve_lock() -> &'static Mutex<()> {
     static L: OnceLock<Mutex<()>> = OnceLock::new();
     L.get_or_init(Default::default)
@@ -487,14 +487,14 @@ pub fn download(id: u64, a: &Value) -> Result<Value, String> {
         return Ok(json!({"status": "none", "posts": post_list}));
     }
     if plan.tasks.is_empty() {
-        // Everything's already downloaded or archived (or filtered out)
+        // Everything's already downloaded (or filtered out)
         let day_ids: Vec<String> = posts.iter().filter(|p| super::post_day(p) == latest_day).map(id_of).collect();
         let w2 = wanted.clone();
         entries::change(&path, "download", |x| x.resolve_posts(&uid, &svc, w2.as_deref(), &latest_pid, &latest_day, &day_ids));
         log("info", &if wanted.is_some() {
-            format!("Watchlist: selected post(s) for {} are already archived or downloaded. Review drawer updated.", repr(&name))
+            format!("Watchlist: selected post(s) for {} are already downloaded. Review drawer updated.", repr(&name))
         } else {
-            format!("Watchlist: all {} new post(s) for {} are already archived or downloaded. Marked as up to date.", posts.len(), repr(&name))
+            format!("Watchlist: all {} new post(s) for {} are already downloaded. Marked as up to date.", posts.len(), repr(&name))
         });
         return Ok(json!({"status": "done", "posts": post_list}));
     }

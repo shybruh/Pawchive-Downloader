@@ -97,14 +97,6 @@ pub fn cell(task: Task) -> Cell {
 
 /// What the downloader asks the rest of the app
 pub trait Hooks: Send + Sync {
-    fn archive_enabled(&self) -> bool {
-        false
-    }
-    fn is_archived(&self, _t: &Task) -> bool {
-        false
-    }
-    /// A file was saved (or found saved): into the download archive
-    fn record_file(&self, _t: &Task, _size: u64, _path: &str) {}
     /// A fresh signed link for a Pawchive temporary file whose link ran out
     fn refresh_temporary_link(&self, _t: &Task) -> Option<String> {
         None
@@ -366,22 +358,9 @@ pub fn download(c: &Cell, o: &Options, hooks: &dyn Hooks, ctl: &Ctl) -> (bool, S
         hooks.changed(c);
     };
 
-    // Already in the download archive, unless the copy on disk is a small one to replace
     let disk_cands = media_candidate_paths(&task.target_path);
     let on_disk = || disk_cands.iter().find_map(|p| file_size(p).filter(|s| *s > 0).map(|s| (p.clone(), s)));
     let server_size = task.file_size.max(0);
-    if hooks.archive_enabled() {
-        let upgrade = on_disk().is_some_and(|(p, s)| needs_full_size_upgrade(s as i64, server_size, &task.target_path, o, &p));
-        if !upgrade && hooks.is_archived(&task) {
-            set(&|it| {
-                it.st.status = "completed".into();
-                it.st.progress_pct = 100;
-                it.st.eta_str = "Done".into();
-            });
-            ctl.count_already("in the download archive");
-            return (true, "Already archived".into());
-        }
-    }
 
     // Already on disk (also as .webp/.avif or another video container)
     let found = if o.flag("keep_duplicates") { None } else { on_disk() };
@@ -407,11 +386,6 @@ pub fn download(c: &Cell, o: &Options, hooks: &dyn Hooks, ctl: &Ctl) -> (bool, S
                 it.st.progress_pct = 100;
                 it.st.eta_str = "Done".into();
             });
-            if hooks.archive_enabled() {
-                let mut t = task.clone();
-                t.file_size = size as i64;
-                hooks.record_file(&t, size, &path);
-            }
             ctl.count_already("already on disk");
             return (true, "Already downloaded".into());
         }

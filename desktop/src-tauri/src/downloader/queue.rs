@@ -1138,8 +1138,6 @@ impl Queue {
                 self.hooks.log("success", &format!("✔ {name}  ({mb:.2} MB saved{check})"));
             } else if msg == "Already downloaded" {
                 self.hooks.log("info", &format!("⏳ Skipping existing file: '{name}' (already present on disk)"));
-            } else if msg == "Already archived" {
-                self.hooks.log("info", &format!("📦 Skipping archived file: '{name}' (present in download archive)"));
             } else if let Some(why) = msg.strip_prefix("Skipped:") {
                 self.hooks.log("info", &format!("⏭️ Skipping {name}: {}", why.trim()));
             }
@@ -1178,13 +1176,6 @@ impl Queue {
                 *successes += 1;
                 self.run.lock().unwrap().stable_clean += 1;
                 self.hooks.file_completed(&task);
-                let (used_preview, size) = {
-                    let it = c.lock().unwrap();
-                    (it.st.used_preview, it.task.file_size.max(0) as u64)
-                };
-                if self.hooks.archive_enabled() && !used_preview {
-                    self.hooks.record_file(&task, size, &task.target_path);
-                }
             }
             self.hooks.changed(c);
             return;

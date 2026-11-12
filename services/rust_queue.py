@@ -41,8 +41,8 @@ _keys = itertools.count(1)
 _ALREADY_LOGGED = {"Download paused.", "Download resumed.", "Download cancellation requested."}
 # The planner's questions, and the questions answered on the reading thread (they wait on nothing
 # else from Rust, and planning a big creator asks thousands of them)
-_PLAN_ASKS = {"archived", "plan_cancelled"}
-_QUICK_ASKS = {"archived", "plan_cancelled", "is_archived", "cookie", "limit"}
+_PLAN_ASKS = {"plan_cancelled"}
+_QUICK_ASKS = {"plan_cancelled", "cookie", "limit"}
 
 
 def available() -> bool:
@@ -583,8 +583,6 @@ class RustDownloader(FileDownloader):
             ok, plan = self._link.call("plan", {
                 "posts": posts,
                 "options": options.to_dict(),
-                "archive": bool(self.archive_manager and self.archive_manager.is_enabled),
-                "archive_db": self._archive_db(),
                 "request": {"creator_name": creator_name or "", "service": service or "", "domain": domain or "",
                             "base_dir": base_dir or "", "batch_id": batch_id or "", "artist_dir": artist_dir or "",
                             "user_id": str(user_id or ""), "include_service": bool(folder_naming.include_service)},
@@ -653,39 +651,11 @@ class RustDownloader(FileDownloader):
         if fn == "plan_cancelled":
             check = self._plans.get(args[0])
             return bool(check()) if check else False
-        if fn == "archived":
-            service, post_id, file_id, sha = args
-            return bool(self.archive_manager and self.archive_manager.is_archived(
-                service=service, post_id=post_id, file_id=file_id, file_hash=sha))
         return None
-
-    def _archive_db(self) -> str:
-        """The download archive's file, for the engine (it looks files up and records them itself);
-        "" when the archive is off or not open"""
-        am = self.archive_manager
-        if not (am and am.is_enabled) or not getattr(am, "db_path", "") or not hasattr(am, "_init_db"):
-            return ""                            # (then the engine asks here)
-        if getattr(am, "_conn", None) is None:
-            am._init_db()                        # (the engine needs the tables to exist)
-        return am.db_path if getattr(am, "_conn", None) is not None else ""
 
     def _note(self, fn: str, args: List[Any]) -> None:
         try:
-            if fn == "archive_changed":
-                if self.archive_manager:
-                    self.archive_manager._stats_cache = None
-            elif fn == "archive_error":
-                message, error = (list(args) + ["", ""])[:2]
-                logger.warning(str(message), category="archive")
-                if self.archive_manager:
-                    self.archive_manager._note_error(Exception(str(error)))
-            elif fn == "record_link":
-                if self.archive_manager and self.archive_manager.is_enabled:
-                    service, creator_id, post_id, url, creator_name, post_title, link_title = args
-                    self.archive_manager.record_link(
-                        service=service, creator_id=creator_id, post_id=post_id, url=url,
-                        creator_name=creator_name, post_title=post_title, link_title=link_title)
-            elif fn in ("archive_password", "add_passwords"):
+            if fn in ("archive_password", "add_passwords"):
                 from core.archive_password_manager import archive_password_manager
                 if fn == "archive_password":
                     archive_password_manager.record_archive_password(args[0], args[1])
@@ -719,9 +689,7 @@ class RustDownloader(FileDownloader):
         self._finished.clear()
         self._sync(replace=False)           # (Rust's list is the queue: its files keep their states)
         self._save_recovery_checkpoint(options, async_write=True)     # (from Rust's list: after it has the files)
-        archive = bool(self.archive_manager and self.archive_manager.is_enabled)
-        self._link.send({"op": "start", "options": options.to_dict(), "archive": archive, "workers": self._mw,
-                         "archive_db": self._archive_db()})
+        self._link.send({"op": "start", "options": options.to_dict(), "workers": self._mw})
         while not self._finished.wait(0.5):
             if session_id != self._session_id:
                 return          # superseded (cancelled, or a newer run started)
@@ -785,13 +753,6 @@ class RustDownloader(FileDownloader):
             rec = getattr(self.session_manager, "recovery_manager", None)
             if rec:
                 rec.discard_recovery()
-        elif t == "record_file":
-            task = self._by_key.get(msg.get("key"))
-            if task is not None and self.archive_manager and self.archive_manager.is_enabled:
-                self.archive_manager.record_file(
-                    service=task.service, creator_id=task.user_id, post_id=task.post_id, file_id=task.file_id,
-                    file_hash=task.expected_sha256, filename=task.filename, creator_name=task.creator_name,
-                    post_title=task.post_title, file_size=int(msg.get("size") or 0), file_path=msg.get("path") or task.target_path)
         elif t == "ask":
             if msg.get("fn") in _QUICK_ASKS:
                 self._answer(msg)
@@ -843,7 +804,7 @@ class RustDownloader(FileDownloader):
         fn, args = msg.get("fn"), msg.get("args") or []
         value: Any = None
         try:
-            task = self._by_key.get(args[0]) if args and fn in ("is_archived", "refresh_link", "special", "post_process") else None
+            task = self._by_key.get(args[0]) if args and fn in ("refresh_link", "special", "post_process") else None
             if fn in _PLAN_ASKS:
                 value = self._plan_answer(fn, args)
             elif fn == "cookie":
@@ -854,9 +815,6 @@ class RustDownloader(FileDownloader):
                 value = float(bandwidth_limiter.get_rate_bps() or 0)
             elif task is None:
                 value = None
-            elif fn == "is_archived":
-                value = bool(self.archive_manager and self.archive_manager.is_archived(
-                    service=task.service, post_id=task.post_id, file_id=task.file_id, file_hash=task.expected_sha256))
             elif fn == "refresh_link":
                 value = self._refresh_pawchive_temp_url(task) or ""
             elif fn == "post_process":
