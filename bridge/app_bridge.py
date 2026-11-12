@@ -255,9 +255,6 @@ class AppBridge(QObject):
         if rust_queue_view.available():
             # The Rust part of the bridge (src-tauri/src/bridge/) asks for the download folder
             rust_queue.shared_link().handlers["download_dir"] = lambda args: self._download_dir or ""
-        self._active_queue_model = QueueModel(self, enable_groups=False)
-        self._active_queue_model.filterStatus = "downloading"
-        self._active_queue_model.minFileSize = 50 * 1024 * 1024  # 50 MB threshold
 
         # Settings defaults
         self._current_url = ""
@@ -1730,13 +1727,11 @@ class AppBridge(QObject):
         current = self.downloader.tasks or self._queue_model.tasks
         if current and all(t.status in ("completed", "skipped") for t in current):
             self._queue_model.clear()
-            self._active_queue_model.clear()
             self.downloader.reset_state()
         if self._has_recovery_session and not self.downloader.tasks and self._queue_model.rowCount() == 0:
             recovered = self._load_recovery_tasks()
             if recovered:
                 self._queue_model.setTasks(recovered)
-                self._active_queue_model.setTasks(recovered)
                 self.downloader.tasks = list(recovered)
                 left = sum(1 for t in recovered if t.status not in ("completed", "skipped"))
                 logger.info(f"Kept {left} unfinished file(s) from the interrupted session in the queue.", category="session")
@@ -2425,6 +2420,7 @@ class AppBridge(QObject):
             tasks.append(t)
 
         self._queue_model.add_tasks(tasks)
+        self.downloader.append_tasks(tasks)
         logger.info(f"Queued {len(tasks)} Telegram file(s) for '{creator_name}'.", category="telegram")
 
         # Under ANY circumstance, lock Telegram downloads to max 2 threads
@@ -2594,7 +2590,6 @@ class AppBridge(QObject):
                 logger.info(f"Added {len(tasks)} file(s) from {n_posts} selected posts to the queue and started it.", category="downloader")
             else:
                 self._queue_model.clear()
-                self._active_queue_model.clear()
                 self._queued_links.clear()
                 self.downloader.reset_state()
                 self.downloader.tasks = list(tasks)
@@ -3248,7 +3243,6 @@ class AppBridge(QObject):
 
         # Populate models
         self._queue_model.setTasks(loaded_tasks)
-        self._active_queue_model.setTasks(loaded_tasks)
         self.downloader.tasks = list(loaded_tasks)
 
         batches = checkpoint.get("batches", [])
@@ -3533,8 +3527,6 @@ class AppBridge(QObject):
                 self.downloader.tasks = [t for t in self.downloader.tasks if not cleared(t)]
         if self._queue_model:
             self._queue_model.clearFailedTasks(selected_ids)
-        if self._active_queue_model:
-            self._active_queue_model.clearFailedTasks(selected_ids)
         logger.info("Cleared failed tasks from queue.", category="queue")
 
     @Slot()
@@ -3568,9 +3560,6 @@ class AppBridge(QObject):
                 t.speed_bps = 0
                 t.speed_str = "0 KB/s"
                 t.eta_str = "--"
-
-        if self._active_queue_model:
-            self._active_queue_model.clear()
 
         # Update downloader internal state without dropping tasks.
         # DO NOT call self.downloader._cancel_event.clear() here: the worker thread in
@@ -4285,7 +4274,6 @@ class AppBridge(QObject):
             self.isDownloadingChanged.emit()
 
         self._queue_model.updateTask(task)
-        self._active_queue_model.updateTask(task)
         if task.status == "completed":
             self._invalidate_folder_stats(getattr(task, "target_path", ""))
             if self.recovery_manager and self.recovery_manager.retry_counts_cached()[0] > 0:
@@ -4360,12 +4348,10 @@ class AppBridge(QObject):
     @Slot(list)
     def _handle_set_tasks(self, tasks: list):
         self._queue_model.setTasks(tasks)
-        self._active_queue_model.setTasks(tasks)
 
     @Slot(list)
     def _handle_append_tasks(self, tasks: list):
         self._queue_model.appendTasks(tasks)
-        self._active_queue_model.appendTasks(tasks)
 
     def _rust_queue_action(self, args) -> None:
         """The Rust engine paused / resumed / cancelled / removed / retried a post or a file of the
@@ -4390,12 +4376,11 @@ class AppBridge(QObject):
                     qm.addTasks(back)
             if method in ("pauseBatch", "resumeBatch", "cancelBatch", "retryBatch"):
                 paused = method == "pauseBatch"
-                for m in (qm, self._active_queue_model):
-                    (m._paused_batch_ids.add if paused else m._paused_batch_ids.discard)(key)
-                    g = m._groups_model
-                    if g is not None:
-                        (g.pause_batch if paused else g.resume_batch)(key)
-                        m.groupsChanged.emit()
+                (qm._paused_batch_ids.add if paused else qm._paused_batch_ids.discard)(key)
+                g = qm._groups_model
+                if g is not None:
+                    (g.pause_batch if paused else g.resume_batch)(key)
+                    qm.groupsChanged.emit()
                 with d._paused_batches_lock:
                     (d._paused_batches.add if paused else d._paused_batches.discard)(key)
             elif method == "removeBatch":
@@ -4660,7 +4645,6 @@ class AppBridge(QObject):
         def _apply(loaded_tasks):
             if merge_mode == "replace":
                 self._queue_model.setTasks(loaded_tasks)
-                self._active_queue_model.setTasks(loaded_tasks)
                 self.downloader.tasks = list(loaded_tasks)
             else:
                 # Only files not already queued: the list and the downloader must agree (files the
@@ -4682,7 +4666,6 @@ class AppBridge(QObject):
                     fresh.append(t)
                 loaded_tasks = fresh
                 self._queue_model.appendTasks(loaded_tasks)
-                self._active_queue_model.appendTasks(loaded_tasks)
                 self.downloader.append_tasks(loaded_tasks)
 
             creators = set(t.creator_name for t in loaded_tasks if t.creator_name)
@@ -4878,7 +4861,6 @@ class AppBridge(QObject):
             logger.debug(f"Ignoring _handle_finished ('{message}') because downloader is actively running a new session.", category="downloader")
             return
         self._is_downloading = False
-        self._active_queue_model.clear()
         if self._auto_delete_failed:
             try:
                 self.deleteFailedLeftovers()

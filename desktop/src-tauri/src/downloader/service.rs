@@ -144,6 +144,7 @@ impl Hooks for Remote {
         Some((exe.to_string(), a.get(1).and_then(Value::as_str).unwrap_or("").to_string()))
     }
     fn changed(&self, c: &Cell) {
+        view_changed();
         self.0.send(task_event(c));
     }
     fn limit_bps(&self) -> f64 {
@@ -380,6 +381,7 @@ fn site_call(id: u64, a: &Value) -> Result<Value, String> {
 /// "start"}]) to follow (its paused posts, removing the files, starting a run when files are
 /// waiting and nothing runs). None when the engine doesn't have those files (the app does it).
 pub fn queue_window(method: &str, args: &[Value]) -> Option<Value> {
+    let _touch = Touch;
     if link().out.lock().unwrap().is_none() {
         return None;
     }
@@ -600,6 +602,7 @@ pub fn start() -> Result<ServiceInfo, String> {
             }
         })
         .map_err(|e| e.to_string())?;
+    std::thread::Builder::new().name("queue-view".into()).spawn(follow_queue).map_err(|e| e.to_string())?;
     Ok(ServiceInfo { url: format!("tcp://127.0.0.1:{port}"), token })
 }
 
@@ -701,7 +704,42 @@ fn queue_append(args: &Value) -> Result<Value, String> {
     Ok(json!({"added": added}))
 }
 
+/// The window's view follows the engine's queue: marked when it may have changed, and read a
+/// moment later (at most four times a second, and every two seconds anyway)
+static VIEW_TOUCHED: AtomicBool = AtomicBool::new(true);
+
+pub fn view_changed() {
+    VIEW_TOUCHED.store(true, Ordering::Relaxed);
+}
+
+fn follow_queue() {
+    let mut quiet = 0;
+    loop {
+        std::thread::sleep(std::time::Duration::from_millis(250));
+        quiet += 1;
+        if !VIEW_TOUCHED.swap(false, Ordering::Relaxed) && quiet < 8 {
+            continue;
+        }
+        quiet = 0;
+        if super::queue_view::global().lock().unwrap().from_app {
+            continue;
+        }
+        let rows: Vec<_> = queue().cells().iter().map(|c| super::queue_view::row_of(&c.lock().unwrap())).collect();
+        super::queue_view::global().lock().unwrap().follow(rows);
+    }
+}
+
+/// (marks the view as changed when dropped: after the message or request was handled)
+struct Touch;
+
+impl Drop for Touch {
+    fn drop(&mut self) {
+        view_changed();
+    }
+}
+
 fn handle(msg: &Value) {
+    let _touch = Touch;
     let q = queue();
     let s = |k: &str| msg.get(k).and_then(Value::as_str).unwrap_or("").to_string();
     match msg.get("op").and_then(Value::as_str).unwrap_or("") {
@@ -721,6 +759,14 @@ fn handle(msg: &Value) {
         "workers" => q.set_max_workers(msg["n"].as_u64().unwrap_or(1) as usize),
         "state" => q.set_state(&s("key"), &s("status"), msg.get("error_msg").and_then(Value::as_str), msg.get("retry_count").and_then(Value::as_u64).map(|n| n as u32)),
         "batch" => q.set_batch_paused(&s("batch"), msg["paused"].as_bool().unwrap_or(false)),
+        "task_progress" => q.set_progress(
+            &s("key"),
+            msg["downloaded_bytes"].as_u64().unwrap_or(0),
+            msg["file_size"].as_i64().unwrap_or(0),
+            msg["progress_pct"].as_u64().unwrap_or(0).min(100) as u32,
+            &s("speed_str"),
+            &s("eta_str"),
+        ),
         "view" => {
             let rows: Vec<super::queue_view::Row> = msg["rows"].as_array().into_iter().flatten().filter_map(|r| serde_json::from_value(r.clone()).ok()).collect();
             let order = msg["order"].as_array().map(|o| o.iter().filter_map(|k| k.as_str().map(str::to_string)).collect());

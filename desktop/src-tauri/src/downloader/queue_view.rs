@@ -3,8 +3,10 @@
 //! QueueModel and QueueGroupsModel, checked against them by tests/fixtures/queue_view.json
 //! (python tools/golden_queue_view.py).
 //!
-//! The rows come from the app (`apply`): the files in queue order and every change to them.
-//! The window reads it through the host's native objects (host/queue.rs).
+//! The rows are the engine's queue (`follow`, downloader/service.rs keeps them up to date); the
+//! app sends its own settings that the view uses (paused posts, "don't retry 404s", the failed files
+//! saved for Retry Failed). `apply` takes rows from the app instead (tests, and an app that still
+//! sends its list). The window reads it through the host's native objects (host/queue.rs).
 
 use serde_json::{json, Map, Value};
 use std::collections::{HashMap, HashSet};
@@ -105,6 +107,8 @@ pub struct View {
     pub saved_failed: (i64, i64),
     /// Something changed since the window was last told
     pub dirty: bool,
+    /// The rows came from the app (`apply`): the engine's queue isn't followed
+    pub from_app: bool,
 }
 
 pub const FILE_ROLES: &[&str] = &[
@@ -126,6 +130,10 @@ impl View {
     /// The app's changes: `order` (when given) is the whole queue's keys in order; `rows` are
     /// new or changed files (a new file not in `order` goes at the end)
     pub fn apply(&mut self, order: Option<Vec<String>>, rows: Vec<Row>) {
+        if order.is_none() && rows.is_empty() {
+            return;
+        }
+        self.from_app = true;
         for r in rows {
             match self.at.get(&r.key) {
                 Some(&i) => self.rows[i] = r,
@@ -141,6 +149,30 @@ impl View {
             self.at = self.rows.iter().enumerate().map(|(i, r)| (r.key.clone(), i)).collect();
         }
         self.dirty = true;
+    }
+
+    /// The engine's queue as it is now (its files in order); true when something changed
+    pub fn follow(&mut self, rows: Vec<Row>) -> bool {
+        if self.from_app {
+            return false;
+        }
+        let same_order = rows.len() == self.rows.len() && rows.iter().zip(&self.rows).all(|(a, b)| a.key == b.key);
+        let changed = if same_order {
+            let mut changed = false;
+            for (i, r) in rows.into_iter().enumerate() {
+                if self.rows[i] != r {
+                    self.rows[i] = r;
+                    changed = true;
+                }
+            }
+            changed
+        } else {
+            self.at = rows.iter().enumerate().map(|(i, r)| (r.key.clone(), i)).collect();
+            self.rows = rows;
+            true
+        };
+        self.dirty |= changed;
+        changed
     }
 
     pub fn len(&self) -> usize {
@@ -360,6 +392,31 @@ impl View {
     }
 }
 
+/// A file of the engine's queue as the view shows it
+pub fn row_of(it: &super::fetch::Item) -> Row {
+    let (t, s) = (&it.task, &it.st);
+    Row {
+        key: t.key.clone(),
+        url: t.url.clone(),
+        target_path: t.target_path.clone(),
+        post_title: t.post_title.clone(),
+        creator_name: t.creator_name.clone(),
+        service: t.service.clone(),
+        post_id: t.post_id.clone(),
+        file_id: t.file_id.clone(),
+        batch_id: t.batch_id.clone(),
+        status: s.status.clone(),
+        file_size: t.file_size,
+        downloaded_bytes: s.downloaded_bytes as i64,
+        error_msg: s.error_msg.clone(),
+        speed_str: s.speed_str.clone(),
+        eta_str: s.eta_str.clone(),
+        progress_pct: json!(s.progress_pct),
+        retry_count: s.retry_count as i64,
+        http_status: s.http_status as i64,
+    }
+}
+
 /// The app's one queue view
 pub fn global() -> &'static Mutex<View> {
     static V: OnceLock<Mutex<View>> = OnceLock::new();
@@ -409,6 +466,31 @@ mod tests {
             }
         }
         assert!(wrong.is_empty(), "{} differ:\n{}", wrong.len(), wrong.join("\n"));
+    }
+
+    #[test]
+    fn follows_the_queue() {
+        use crate::downloader::fetch::cell;
+        use crate::downloader::plan::Task;
+        let c = |k: &str, b: &str| cell(Task { key: k.into(), batch_id: b.into(), file_id: k.into(), url: format!("https://x/{k}"), ..Default::default() });
+        let cells = vec![c("a", "p1"), c("b", "p1"), c("c", "p2")];
+        let rows = |cells: &[crate::downloader::fetch::Cell]| cells.iter().map(|x| row_of(&x.lock().unwrap())).collect::<Vec<_>>();
+        let mut v = View::new();
+        assert!(v.follow(rows(&cells)));
+        v.dirty = false;
+        assert!(!v.follow(rows(&cells)) && !v.dirty);
+        cells[1].lock().unwrap().st.status = "completed".into();
+        assert!(v.follow(rows(&cells)) && v.dirty);
+        assert_eq!(v.counts().completed, 1);
+        assert_eq!(v.groups().len(), 2);
+        assert!(v.follow(rows(&cells[1..])));
+        assert_eq!(v.rows().iter().map(|r| r.key.as_str()).collect::<Vec<_>>(), ["b", "c"]);
+        // Rows from the app: the queue isn't followed any more
+        v.apply(None, vec![]);
+        assert!(!v.from_app);
+        v.apply(Some(vec!["z".into()]), vec![Row { key: "z".into(), ..Default::default() }]);
+        assert!(!v.follow(rows(&cells)));
+        assert_eq!(v.len(), 1);
     }
 
     #[test]

@@ -2,10 +2,10 @@
 The window's queue view (file list, counts, per-post groups) answered by the desktop shell's Rust
 port (desktop/src-tauri/src/downloader/queue_view.rs, served by src-tauri/src/host/queue.rs).
 
-RustQueueModel is the app's QueueModel with its files mirrored to Rust: the bridge still keeps
-its task list here and changes it as before, and every change (new files, removed ones, status
-and progress) goes over to Rust a moment later. The window reads "appBridge.queueModel" and its
-groupsModel from Rust. Pausing, resuming, cancelling and removing a post or a file are done by
+RustQueueModel is the app's QueueModel; the bridge still keeps its task list here. The window reads
+"appBridge.queueModel" and its groupsModel from Rust, whose rows are the engine's own queue
+(queue_view.rs follow); what goes over from here is what the view needs from the app: the paused
+posts, "don't retry 404s" and the failed files saved for Retry Failed. Pausing, resuming, cancelling and removing a post or a file are done by
 Rust's queue (the bridge follows: AppBridge._rust_queue_action); the rest of what the window asks
 (retries, clearing…) is passed back here and runs on this model, so the bridge's handlers don't change.
 
@@ -41,13 +41,8 @@ def row_of(t) -> Dict[str, Any]:
 class RustQueueModel(QueueModel):
     def __init__(self, parent=None, enable_groups: bool = True):
         super().__init__(parent, enable_groups)
-        self._sent: Dict[str, Dict[str, Any]] = {}       # key -> the row Rust has
-        self._sent_order: Optional[List[str]] = None
         self._sent_meta: Optional[Dict[str, Any]] = None
-        self._sent_on = None                              # the connection they went over
-        self._full = True
-        self._dirty: Dict[int, Any] = {}
-        self._lock = threading.Lock()
+        self._sent_on = None                              # the connection it went over
         self._wake = threading.Event()
         for sig in (self.modelReset, self.rowsInserted, self.rowsRemoved, self.groupsChanged, self.cleared,
                     self.countsChanged, self.failedCountChanged):
@@ -63,14 +58,7 @@ class RustQueueModel(QueueModel):
 
     # ── Changes go to Rust ────────────────────────────────────────────────────
 
-    def updateTask(self, task):
-        super().updateTask(task)
-        with self._lock:
-            self._dirty[id(task)] = task
-        self._wake.set()
-
     def _changed_all(self, *args):
-        self._full = True
         self._wake.set()
 
     def _flush_loop(self):
@@ -104,33 +92,12 @@ class RustQueueModel(QueueModel):
             return
         if self._sent_on is not link._sock:         # (a new connection: Rust has nothing yet)
             self._sent_on = link._sock
-            self._sent, self._sent_meta, self._sent_order = {}, None, None
-            self._full = True
-        with self._lock:
-            full, self._full = self._full, False
-            dirty, self._dirty = self._dirty, {}
-        tasks = list(self._tasks) if full else list(dirty.values())
-        rows = []
-        for t in tasks:
-            r = row_of(t)
-            if self._sent.get(r["key"]) != r:
-                self._sent[r["key"]] = r
-                rows.append(r)
-        order = None
-        if full:
-            order = [rust_queue._key(t) for t in tasks]
-            keep = set(order)
-            for k in [k for k in self._sent if k not in keep]:
-                del self._sent[k]
-            if order == self._sent_order:
-                order = None                        # (same files in the same order)
-            else:
-                self._sent_order = order
+            self._sent_meta = None
         meta = self._meta()
-        if not rows and order is None and meta == self._sent_meta:
+        if meta == self._sent_meta:
             return
         self._sent_meta = meta
-        link.send({"op": "view", "order": order, "rows": rows, "meta": meta})
+        link.send({"op": "view", "order": None, "rows": [], "meta": meta})
 
     # ── What the window asks (passed on by Rust) ──────────────────────────────
 

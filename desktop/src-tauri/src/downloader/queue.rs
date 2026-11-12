@@ -370,6 +370,19 @@ impl Queue {
         }
     }
 
+    /// A file the app downloads itself (a Telegram file): its progress, as the app reports it
+    pub fn set_progress(&self, key: &str, done: u64, size: i64, pct: u32, speed: &str, eta: &str) {
+        let Some(c) = self.find_key(key) else { return };
+        let mut it = c.lock().unwrap();
+        it.st.downloaded_bytes = done;
+        if size > 0 {
+            it.task.file_size = size;
+        }
+        it.st.progress_pct = pct;
+        it.st.speed_str = speed.into();
+        it.st.eta_str = eta.into();
+    }
+
     pub fn set_batch_paused(&self, batch: &str, paused: bool) {
         let mut b = self.ctl.paused_batches.lock().unwrap();
         if paused {

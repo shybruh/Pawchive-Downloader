@@ -824,14 +824,34 @@ class RustDownloader(FileDownloader):
             elif fn == "refresh_link":
                 value = self._refresh_pawchive_temp_url(task) or ""
             elif fn == "special":
-                # Embedded videos (yt-dlp) and Telegram files: the Python download as before
-                ok, text = FileDownloader._download_single_file(self, task, None, self._options_of(task))
+                # Telegram files (and embedded videos when yt-dlp runs here): the Python download as
+                # before, its progress sent to the engine's queue (the window shows that one)
+                stop = threading.Event()
+                threading.Thread(target=self._send_progress, args=(args[0], task, stop), daemon=True,
+                                 name="special-progress").start()
+                try:
+                    ok, text = FileDownloader._download_single_file(self, task, None, self._options_of(task))
+                finally:
+                    stop.set()
                 value = [bool(ok), str(text)]
         except Exception as e:
             logger.debug(f"Download engine question {fn} failed: {e}", category="downloader")
             if fn == "special":
                 value = [False, str(e)]
         self._link.send({"t": "reply", "id": msg.get("id"), "value": value})
+
+    def _send_progress(self, key: str, task, stop: threading.Event) -> None:
+        """A file the app downloads itself: its progress to the engine's queue while it runs."""
+        last = None
+        while True:
+            done = stop.wait(0.4)
+            now = {"downloaded_bytes": int(task.downloaded_bytes or 0), "file_size": int(task.file_size or 0),
+                   "progress_pct": int(task.progress_pct or 0), "speed_str": task.speed_str or "", "eta_str": task.eta_str or ""}
+            if now != last:
+                last = now
+                self._tell(dict(now, op="task_progress", key=key))
+            if done:
+                return
 
     def _options_of(self, task):
         from core.filter_engine import FilterOptions
