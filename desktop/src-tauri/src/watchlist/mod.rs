@@ -5,6 +5,7 @@
 
 pub mod check;
 pub mod entries;
+pub mod favorites;
 pub mod store;
 pub mod view;
 

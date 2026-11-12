@@ -304,6 +304,7 @@ class WatchlistManager:
         self._rust_ready = False              # (the engine has the whole list)
         self._rust_dirty: set = set()
         self._rust_deleted: set = set()
+        self._card_listeners: Dict[str, Any] = {}     # (the favorites window waiting for its cards)
         self._rust_order: Optional[list] = None
         self._rust_lock = threading.Lock()
         self._rust_saved = True
@@ -313,6 +314,7 @@ class WatchlistManager:
             from services import rust_queue
             if rust_queue.available():
                 rust_queue.shared_link().note_handlers["watchlist_changed"] = self._on_rust_changed
+                rust_queue.shared_link().note_handlers["favorite_cards"] = self._on_favorite_cards
         except ImportError:
             pass
 
@@ -803,6 +805,53 @@ class WatchlistManager:
                 return _NO
             return v
         return _NO
+
+    def favorites_in_rust(self, providers: List[str], site: Dict[str, str], mode: str = "list", on_cards=None,
+                          cancelled=None):
+        """The signed-in accounts' favorite creators fetched and added to the list in the engine
+        (src-tauri/src/watchlist/favorites.rs): {"cards", "checked"} ("list": the favorites window's
+        cards, on_cards called with them before the new posts are checked) or {"rids"} ("sync": the
+        creators to download), or _NO"""
+        from core import folder_naming
+        from services import rust_queue
+        import uuid
+        tag = uuid.uuid4().hex
+        link = None
+        for attempt in (1, 2):
+            if self._rust_call("sync") is _NO:
+                return _NO
+            link = self._rust_link()
+            if link is None:
+                return _NO
+            if on_cards is not None:
+                self._card_listeners[tag] = on_cards
+                link.note_handlers["favorite_cards"] = self._on_favorite_cards
+            try:
+                ok, v = link.call("watchlist_favorites", {
+                    "path": self.db_file, "providers": list(providers), "mode": mode, "tag": tag,
+                    "include_service": bool(folder_naming.include_service), "site": site,
+                }, cancelled=cancelled)
+            finally:
+                self._card_listeners.pop(tag, None)
+            if not ok and "not loaded" in str(v) and attempt == 1:
+                with self._lock:
+                    self._rust_ready = False
+                continue
+            if not ok:
+                logger.debug(f"The download engine couldn't fetch the favorites ({v}).", category="watchlist")
+                return _NO
+            return v
+        return _NO
+
+    def entries_by_rid(self, rids) -> List[WatchlistEntry]:
+        with self._lock:
+            by = {e.__dict__.get("_rid"): e for e in self.entries}
+        return [by[int(r)] for r in rids or [] if int(r) in by]
+
+    def _on_favorite_cards(self, v: Dict[str, Any]) -> None:
+        cb = self._card_listeners.get((v or {}).get("tag"))
+        if cb is not None:
+            cb(list(v.get("cards") or []))
 
     def _on_rust_changed(self, v: Dict[str, Any]) -> None:
         """The engine changed creators itself (a button in the window): copied here"""

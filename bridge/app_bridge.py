@@ -2173,6 +2173,10 @@ class AppBridge(QObject):
                     self.favoriteArtistsReady.emit([])
                     return
 
+                # Fetched, added to the watchlist and checked in the desktop shell's Rust engine when it's there
+                if self._favorites_in_rust(providers_to_sync, "list"):
+                    return
+
                 all_raw_artists = []
                 for p_domain, p_id in providers_to_sync:
                     if self._scan_cancel_event.is_set():
@@ -2278,6 +2282,49 @@ class AppBridge(QObject):
                 self.favoriteArtistsError.emit(str(ex))
 
         threading.Thread(target=_worker, daemon=True, name="FavoriteArtistsWorker").start()
+
+    def _favorites_in_rust(self, providers, mode: str):
+        """The favorites in the engine (core/watchlist_manager.py favorites_in_rust). "list": the
+        window is sent the cards (True), "sync": the creators to download; None when it can't answer"""
+        from services import rust_watchlist_check
+        from core import watchlist_manager as wm
+        if not hasattr(self.downloader, "tasks_from_plan"):
+            return None
+        shown = []
+
+        def show(c):
+            self._watchlist_model.refresh()
+            self._watchlist_model.countChanged.emit()
+            self.watchlistChanged.emit()
+            self._is_favorite_artists_loading = False
+            self.favoriteArtistsLoadingChanged.emit()
+            self.favoriteArtistsReady.emit(c)
+
+        def cards(c):
+            # (arrives on the engine link's message thread: shown from another)
+            t = threading.Thread(target=show, args=(c,), daemon=True)
+            shown.append(t)
+            t.start()
+
+        r = self._watchlist_manager.favorites_in_rust(
+            [d for d, _ in providers], rust_watchlist_check.site_args(self.api_client), mode,
+            on_cards=cards if mode == "list" else None, cancelled=self._scan_cancel_event.is_set)
+        if r is wm._NO:
+            return None
+        if mode == "sync":
+            if r.get("cancelled"):
+                return []
+            return self._watchlist_manager.entries_by_rid(r.get("rids"))
+        for t in shown:
+            t.join()
+        if not shown:
+            show(r.get("cards") or [])
+        elif r.get("checked"):
+            self._watchlist_model.update_new_counts()
+            self._watchlist_model.refresh()
+            self.watchlistChanged.emit()
+            self.favoriteArtistsReady.emit(r.get("cards") or [])
+        return True
 
     @Slot(str, str, str, str)
     @Slot(str, str, str)
@@ -3401,8 +3448,13 @@ class AppBridge(QObject):
                 self._creator_name = "Favorite Artists"
                 self.creatorNameChanged.emit()
 
-                fav_artists = []
-                for p_domain, p_id in providers_to_sync:
+                r = self._favorites_in_rust(providers_to_sync, "sync")
+                if r is not None:
+                    fav_artists = r
+                    entries_to_process = r
+                else:
+                    fav_artists, entries_to_process = [], None
+                for p_domain, p_id in (providers_to_sync if r is None else []):
                     if self._scan_cancel_event.is_set():
                         break
                     p_res = self.api_client.fetch_user_favorites(
@@ -3431,9 +3483,10 @@ class AppBridge(QObject):
                     logger.warning("No favorited artists found on connected accounts.", category="api")
                     return
 
-                logger.info(f"⭐ Favorite Mode: Found {len(fav_artists)} favorited creator(s). Starting incremental sync...", category="downloader")
-                entries_to_process = []
-                for a in fav_artists:
+                if entries_to_process is None:
+                    logger.info(f"⭐ Favorite Mode: Found {len(fav_artists)} favorited creator(s). Starting incremental sync...", category="downloader")
+                    entries_to_process = []
+                for a in (fav_artists if r is None else []):
                     uid = str(a.get("id") or "").strip()
                     svc = str(a.get("service") or "").strip()
                     name = a.get("name") or uid

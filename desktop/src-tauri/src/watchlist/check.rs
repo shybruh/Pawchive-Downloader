@@ -73,13 +73,13 @@ fn activity_day(e: &Rec) -> String {
 }
 
 /// One check: what it reads and changes
-struct Run {
-    path: String,
-    id: u64,
-    single: bool,
-    include_service: bool,
-    site_args: Value,
-    cancel: Arc<AtomicBool>,
+pub(super) struct Run {
+    pub(super) path: String,
+    pub(super) id: u64,
+    pub(super) single: bool,
+    pub(super) include_service: bool,
+    pub(super) site_args: Value,
+    pub(super) cancel: Arc<AtomicBool>,
 }
 
 /// Looking for a creator's files on disk / in the archive: one creator at a time (as in the app)
@@ -98,7 +98,7 @@ fn set(path: &str, rid: i64, fields: Value) {
 }
 
 impl Run {
-    fn cancelled(&self) -> bool {
+    pub(super) fn cancelled(&self) -> bool {
         self.cancel.load(Ordering::Relaxed)
     }
 
@@ -126,7 +126,7 @@ impl Run {
 
     /// get_posts_since: the creator's name put right, then its posts after the last download
     /// (kept as its updates found). Err when a page couldn't be fetched and `raise_on_error`.
-    fn posts_since(&self, c: &SiteClient, rid: i64, page_start: usize, page_end: usize, raise_on_error: bool) -> Result<Vec<Value>, String> {
+    pub(super) fn posts_since(&self, c: &SiteClient, rid: i64, page_start: usize, page_end: usize, raise_on_error: bool) -> Result<Vec<Value>, String> {
         let Some(e) = entries::snapshot(&self.path, rid) else { return Ok(Vec::new()) };
         let url = e.s("url");
         let parsed = links::parse(&url);

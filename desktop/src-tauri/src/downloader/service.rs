@@ -625,6 +625,7 @@ fn handle(msg: &Value) {
                 "watchlist" => crate::watchlist::entries::call(args),
                 "watchlist_check" => crate::watchlist::check::call(id, args),
                 "watchlist_download" => crate::watchlist::check::download(id, args),
+                "watchlist_favorites" => crate::watchlist::favorites::call(id, args),
                 "archive" => {
                     archive_at(link(), args["path"].as_str().unwrap_or(""));
                     crate::archive::call(args)
