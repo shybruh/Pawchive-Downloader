@@ -859,6 +859,7 @@ fn handle(msg: &Value) {
                 "link_scan" => super::scan::call(id, args),
                 "album_files" => super::albums::call(args),
                 "cloud_download" => super::cloud::call(id, args),
+                "vault" => crate::vault::call(id, args),
                 "selection_scan" => super::selection::scan(id, args),
                 "selection_plan" => super::selection::plan(id, args),
                 "watchlist_favorites" => crate::watchlist::favorites::call(id, args),

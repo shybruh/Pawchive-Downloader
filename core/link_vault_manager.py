@@ -133,6 +133,58 @@ class LinkVaultManager:
     def data(self) -> Dict[str, Any]:
         return self._data
 
+    # ── The Rust engine's vault (src-tauri/src/vault.rs) ─────────────────────
+    # When the engine can be asked it keeps the vault (the same database) and does every change;
+    # this copy is read again after each change, for the code reading .data. Without it (or with
+    # PAWCHIVE_PYTHON_VAULT=1) the vault is kept here, as before.
+
+    def _rust(self, op: str, progress=None, cancelled=None, **args):
+        """(True, answer) from the engine's vault, or (False, None) when it can't be asked"""
+        if os.environ.get("PAWCHIVE_PYTHON_VAULT", "") == "1":
+            return False, None
+        try:
+            from services import rust_queue
+            if not rust_queue.available():
+                return False, None
+            link = rust_queue.shared_link()
+            if not link.connect():
+                return False, None
+            if getattr(self, "_python_wrote", False) and op != "reload":
+                ok, _ = link.call("vault", {"op": "reload", "path": self.store.path})
+                if not ok:
+                    return False, None
+                self._python_wrote = False
+            ok, v = link.call("vault", json.loads(json.dumps(dict(args, op=op, path=self.store.path), default=str)),
+                              progress=progress, cancelled=cancelled)
+        except Exception as e:
+            logger.debug(f"The download engine couldn't do the link vault's {op} ({e}).", category="vault")
+            return False, None
+        if not ok or not isinstance(v, dict):
+            logger.debug(f"The download engine couldn't do the link vault's {op} ({v}); doing it here.", category="vault")
+            return False, None
+        rev = v.get("revision")
+        if rev is not None and rev != getattr(self, "_rust_revision", None):
+            self._rust_revision = rev
+            self._reload_copy()
+        return True, v.get("result")
+
+    def _reload_copy(self) -> None:
+        """This copy, as the engine's vault left the database"""
+        try:
+            data = self.store.load()
+        except Exception as e:
+            logger.debug(f"Couldn't read the link vault again: {e}", category="vault")
+            return
+        with self._lock:
+            self._data = self._validate_schema(data or {})
+            self._rebuild_indexes_unlocked()
+            for v in self._dirty.values():
+                v.clear()
+            for v in self._gone.values():
+                v.clear()
+            self._write_all = False
+            self.revision = getattr(self, "revision", 0) + 1
+
     @data.setter
     def data(self, value: Dict[str, Any]) -> None:
         """Replacing the whole vault: everything is written by the next save."""
@@ -278,6 +330,7 @@ class LinkVaultManager:
             v.clear()
         for v in self._gone.values():
             v.clear()
+        self._python_wrote = True       # (the engine reads the file again before its next change)
         return True
 
     @staticmethod
@@ -304,6 +357,10 @@ class LinkVaultManager:
         """
         if not harvested_posts:
             return 0
+        ok, n = self._rust("harvest", creator_name=creator_name, service=service, user_id=str(user_id),
+                           posts=list(harvested_posts))
+        if ok:
+            return int(n or 0)
 
         creator_name = creator_name.strip() or "Unknown Artist"
         service = service.strip() or "general"
@@ -442,6 +499,9 @@ class LinkVaultManager:
         Creator -> Posts -> Links.
         Applies live case-insensitive search and platform filtering.
         """
+        ok, tree = self._rust("tree", search=search_query or "", platform=platform_filter or "")
+        if ok:
+            return list(tree or [])
         search_lower = search_query.strip().lower()
         platform_filter = platform_filter.strip().lower()
 
@@ -532,6 +592,9 @@ class LinkVaultManager:
 
     def delete_link(self, link_id: str) -> bool:
         """Deletes a single link by ID."""
+        ok, r = self._rust("delete_link", id=link_id)
+        if ok:
+            return bool(r)
         with self._lock:
             lnk = self._link_by_id.get(link_id)
             if lnk is not None:
@@ -548,6 +611,9 @@ class LinkVaultManager:
         Updates the password list for a specific link.
         Deduplicates, strips whitespace, and saves atomically.
         """
+        ok, r = self._rust("passwords_set", id=link_id, passwords=[str(p) for p in (passwords or [])])
+        if ok:
+            return bool(r)
         clean_pws = []
         seen = set()
         for p in passwords:
@@ -569,6 +635,9 @@ class LinkVaultManager:
 
     def delete_post(self, post_id: str) -> bool:
         """Deletes a post and all its associated links."""
+        ok, r = self._rust("delete_post", id=post_id)
+        if ok:
+            return bool(r)
         with self._lock:
             removed = False
             affected = set()
@@ -592,6 +661,9 @@ class LinkVaultManager:
 
     def delete_creator(self, creator_key: str) -> bool:
         """Deletes an entire creator, all their posts, and all their links."""
+        ok, r = self._rust("delete_creator", key=creator_key)
+        if ok:
+            return bool(r)
         with self._lock:
             creator_key = creator_key.lower()
             if creator_key in self.data["creators"]:
@@ -617,6 +689,9 @@ class LinkVaultManager:
 
     def clean_dead_links(self) -> int:
         """Purges all links verified as dead (HTTP 404 or host dead)."""
+        ok, r = self._rust("clean_dead")
+        if ok:
+            return int(r or 0)
         with self._lock:
             dead = [lnk for lnk in self.data["links"] if lnk.get("health") == "dead"]
             purged = len(dead)
@@ -631,6 +706,9 @@ class LinkVaultManager:
 
     def update_link_health(self, link_id: str, health: str, save: bool = True):
         """Updates health status for a single link ('alive', 'dead', 'unknown')."""
+        ok, _ = self._rust("health", updates=[[link_id, health]])
+        if ok:
+            return
         with self._lock:
             lnk = self._link_by_id.get(link_id)       # (a walk through every link for each result)
             if lnk is not None:
@@ -705,6 +783,9 @@ class LinkVaultManager:
 
         if not target_dir:
             return 0
+        ok, n = self._rust("export", dir=target_dir)
+        if ok:
+            return int(n or 0)
         os.makedirs(target_dir, exist_ok=True)
 
         with self._lock:
@@ -842,8 +923,19 @@ class LinkVaultManager:
                 return
             self._probing_active = True     # set before the thread starts: two quick clicks ran two probes
 
+        def _in_rust() -> bool:
+            def _progress(v, *rest):
+                if isinstance(v, dict) and progress_callback:
+                    progress_callback(int(v.get("done") or 0), int(v.get("total") or 0), str(v.get("url") or ""))
+            ok, _ = self._rust("probe", progress=_progress,
+                               cancelled=(lambda: cancel_event.is_set()) if cancel_event is not None else None,
+                               creator=creator_key or "")
+            return ok
+
         def _worker():
             try:
+                if _in_rust():
+                    return
                 with self._lock:
                     if creator_key:
                         ck_lower = creator_key.lower()

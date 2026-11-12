@@ -1,0 +1,6003 @@
+{
+ "steps": [
+  {
+   "time": "2026-01-01T12:00:00",
+   "op": "harvest",
+   "args": {
+    "creator_name": "  Artist A ",
+    "service": "Patreon",
+    "user_id": " 123 ",
+    "posts": [
+     {
+      "post_id": "101",
+      "title": "  Pack <one>  ",
+      "published": "2026-01-05",
+      "content": "<p>Get it<br/>here &amp; now</p><li>a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw1",
+       "pw1",
+       "pw2"
+      ],
+      "links": [
+       "https://mega.nz/file/AAA#k/",
+       {
+        "url": "https://drive.google.com/x",
+        "platform": "gdrive",
+        "passwords": [
+         "dpw"
+        ],
+        "password_source": "near"
+       },
+       {
+        "url": "  ",
+        "platform": "other"
+       },
+       42,
+       {
+        "url": "https://gofile.io/d/zz",
+        "platform": "gofile"
+       }
+      ]
+     },
+     {
+      "title": "",
+      "date": "2026-02-01",
+      "description": "Plain text\n\n\n\nmore",
+      "url": "https://x/p2",
+      "links": [
+       {
+        "url": "https://pixeldrain.com/u/abc",
+        "platform": "pixeldrain",
+        "passwords": []
+       }
+      ]
+     }
+    ]
+   },
+   "result": 4,
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 2,
+      "link_count": 4,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-01T12:00:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-2-0000-0000-0000-000000000000",
+      "url": "https://drive.google.com/x",
+      "platform": "gdrive",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "dpw"
+      ],
+      "password_source": "near",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-02T08:00:00",
+   "op": "harvest",
+   "args": {
+    "creator_name": "Model B",
+    "service": "onlyfans",
+    "user_id": "77",
+    "posts": [
+     {
+      "post_id": "201",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "content": "",
+      "links": [
+       {
+        "url": "https://mega.nz/folder/BBB#k",
+        "platform": "mega",
+        "passwords": [
+         "m1"
+        ]
+       },
+       "https://dropbox.com/s/q"
+      ]
+     }
+    ]
+   },
+   "result": 2,
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 2,
+      "link_count": 4,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-01T12:00:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-2-0000-0000-0000-000000000000",
+      "url": "https://drive.google.com/x",
+      "platform": "gdrive",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "dpw"
+      ],
+      "password_source": "near",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-03T09:30:00",
+   "op": "harvest",
+   "args": {
+    "creator_name": "Artist A2",
+    "service": "patreon",
+    "user_id": "123",
+    "posts": [
+     {
+      "id": 103,
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "links": [
+       "https://mega.nz/file/AAA#k",
+       {
+        "url": "https://catbox.moe/c/f.zip",
+        "platform": "catbox",
+        "passwords": [
+         "zz",
+         "aa"
+        ]
+       }
+      ],
+      "passwords": [
+       "pwX"
+      ]
+     }
+    ]
+   },
+   "result": 1,
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 5,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-2-0000-0000-0000-000000000000",
+      "url": "https://drive.google.com/x",
+      "platform": "gdrive",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "dpw"
+      ],
+      "password_source": "near",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-03T09:31:00",
+   "op": "harvest",
+   "args": {
+    "creator_name": "",
+    "service": "",
+    "user_id": "",
+    "posts": [
+     {
+      "links": [
+       "https://x.y/z"
+      ]
+     }
+    ]
+   },
+   "result": 1,
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 5,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-2-0000-0000-0000-000000000000",
+      "url": "https://drive.google.com/x",
+      "platform": "gdrive",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "dpw"
+      ],
+      "password_source": "near",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-03T09:32:00",
+   "op": "harvest",
+   "args": {
+    "creator_name": "Nobody",
+    "service": "x",
+    "user_id": "1",
+    "posts": []
+   },
+   "result": 0,
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 5,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-2-0000-0000-0000-000000000000",
+      "url": "https://drive.google.com/x",
+      "platform": "gdrive",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "dpw"
+      ],
+      "password_source": "near",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-04T10:00:00",
+   "op": "tree",
+   "args": {
+    "search": "",
+    "platform": ""
+   },
+   "result": [
+    {
+     "creator_key": "general:unknown",
+     "creator_name": "Unknown Artist",
+     "service": "general",
+     "user_id": "unknown",
+     "post_count": 1,
+     "link_count": 1,
+     "updated_at": "2026-01-03T09:31:00",
+     "posts": [
+      {
+       "post_id": "id-9-000",
+       "title": "Untitled Post",
+       "published": "",
+       "full_text": "",
+       "post_url": "",
+       "passwords": [],
+       "links_count": 1,
+       "links": [
+        {
+         "id": "id-10-0000-0000-0000-000000000000",
+         "url": "https://x.y/z",
+         "platform": "other",
+         "post_id": "id-9-000",
+         "creator_key": "general:unknown",
+         "creator_name": "Unknown Artist",
+         "post_title": "Untitled Post",
+         "passwords": [],
+         "password_source": "post",
+         "health": "unknown",
+         "last_checked": null,
+         "added_at": "2026-01-03T09:31:00"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "creator_key": "patreon:123",
+     "creator_name": "Artist A2",
+     "service": "Patreon",
+     "user_id": "123",
+     "post_count": 3,
+     "link_count": 5,
+     "updated_at": "2026-01-03T09:30:00",
+     "posts": [
+      {
+       "post_id": "id-4-000",
+       "title": "Untitled Post",
+       "published": "2026-02-01",
+       "full_text": "Plain text\n\nmore",
+       "post_url": "https://x/p2",
+       "passwords": [],
+       "links_count": 1,
+       "links": [
+        {
+         "id": "id-5-0000-0000-0000-000000000000",
+         "url": "https://pixeldrain.com/u/abc",
+         "platform": "pixeldrain",
+         "post_id": "id-4-000",
+         "creator_key": "patreon:123",
+         "creator_name": "Artist A",
+         "post_title": "Untitled Post",
+         "passwords": [],
+         "password_source": "post",
+         "health": "unknown",
+         "last_checked": null,
+         "added_at": "2026-01-01T12:00:00"
+        }
+       ]
+      },
+      {
+       "post_id": "101",
+       "title": "Pack <one>",
+       "published": "2026-01-05",
+       "full_text": "Get it\nhere & now\n\n• a",
+       "post_url": "https://x/post/101",
+       "passwords": [
+        "pw2",
+        "pw1"
+       ],
+       "links_count": 3,
+       "links": [
+        {
+         "id": "id-1-0000-0000-0000-000000000000",
+         "url": "https://mega.nz/file/AAA#k",
+         "platform": "other",
+         "post_id": "101",
+         "creator_key": "patreon:123",
+         "creator_name": "Artist A",
+         "post_title": "Pack <one>",
+         "passwords": [
+          "pw1",
+          "pw2",
+          "pwX"
+         ],
+         "password_source": "post",
+         "health": "unknown",
+         "last_checked": null,
+         "added_at": "2026-01-01T12:00:00"
+        },
+        {
+         "id": "id-2-0000-0000-0000-000000000000",
+         "url": "https://drive.google.com/x",
+         "platform": "gdrive",
+         "post_id": "101",
+         "creator_key": "patreon:123",
+         "creator_name": "Artist A",
+         "post_title": "Pack <one>",
+         "passwords": [
+          "dpw"
+         ],
+         "password_source": "near",
+         "health": "unknown",
+         "last_checked": null,
+         "added_at": "2026-01-01T12:00:00"
+        },
+        {
+         "id": "id-3-0000-0000-0000-000000000000",
+         "url": "https://gofile.io/d/zz",
+         "platform": "gofile",
+         "post_id": "101",
+         "creator_key": "patreon:123",
+         "creator_name": "Artist A",
+         "post_title": "Pack <one>",
+         "passwords": [
+          "pw1",
+          "pw2"
+         ],
+         "password_source": "post",
+         "health": "unknown",
+         "last_checked": null,
+         "added_at": "2026-01-01T12:00:00"
+        }
+       ]
+      },
+      {
+       "post_id": "103",
+       "title": "Third",
+       "published": "2025-12-30",
+       "full_text": "Password: secret",
+       "post_url": "",
+       "passwords": [
+        "pwX"
+       ],
+       "links_count": 1,
+       "links": [
+        {
+         "id": "id-8-0000-0000-0000-000000000000",
+         "url": "https://catbox.moe/c/f.zip",
+         "platform": "catbox",
+         "post_id": "103",
+         "creator_key": "patreon:123",
+         "creator_name": "Artist A2",
+         "post_title": "Third",
+         "passwords": [
+          "aa",
+          "zz"
+         ],
+         "password_source": "post",
+         "health": "unknown",
+         "last_checked": null,
+         "added_at": "2026-01-03T09:30:00"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "creator_key": "onlyfans:77",
+     "creator_name": "Model B",
+     "service": "onlyfans",
+     "user_id": "77",
+     "post_count": 1,
+     "link_count": 2,
+     "updated_at": "2026-01-02T08:00:00",
+     "posts": [
+      {
+       "post_id": "201",
+       "title": "Other creator",
+       "published": "2026-03-01",
+       "full_text": "",
+       "post_url": "",
+       "passwords": [],
+       "links_count": 2,
+       "links": [
+        {
+         "id": "id-6-0000-0000-0000-000000000000",
+         "url": "https://mega.nz/folder/BBB#k",
+         "platform": "mega",
+         "post_id": "201",
+         "creator_key": "onlyfans:77",
+         "creator_name": "Model B",
+         "post_title": "Other creator",
+         "passwords": [
+          "m1"
+         ],
+         "password_source": "post",
+         "health": "unknown",
+         "last_checked": null,
+         "added_at": "2026-01-02T08:00:00"
+        },
+        {
+         "id": "id-7-0000-0000-0000-000000000000",
+         "url": "https://dropbox.com/s/q",
+         "platform": "other",
+         "post_id": "201",
+         "creator_key": "onlyfans:77",
+         "creator_name": "Model B",
+         "post_title": "Other creator",
+         "passwords": [],
+         "password_source": "post",
+         "health": "unknown",
+         "last_checked": null,
+         "added_at": "2026-01-02T08:00:00"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 5,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-2-0000-0000-0000-000000000000",
+      "url": "https://drive.google.com/x",
+      "platform": "gdrive",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "dpw"
+      ],
+      "password_source": "near",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-04T10:00:00",
+   "op": "tree",
+   "args": {
+    "search": "SECRET",
+    "platform": ""
+   },
+   "result": [
+    {
+     "creator_key": "patreon:123",
+     "creator_name": "Artist A2",
+     "service": "Patreon",
+     "user_id": "123",
+     "post_count": 1,
+     "link_count": 1,
+     "updated_at": "2026-01-03T09:30:00",
+     "posts": [
+      {
+       "post_id": "103",
+       "title": "Third",
+       "published": "2025-12-30",
+       "full_text": "Password: secret",
+       "post_url": "",
+       "passwords": [
+        "pwX"
+       ],
+       "links_count": 1,
+       "links": [
+        {
+         "id": "id-8-0000-0000-0000-000000000000",
+         "url": "https://catbox.moe/c/f.zip",
+         "platform": "catbox",
+         "post_id": "103",
+         "creator_key": "patreon:123",
+         "creator_name": "Artist A2",
+         "post_title": "Third",
+         "passwords": [
+          "aa",
+          "zz"
+         ],
+         "password_source": "post",
+         "health": "unknown",
+         "last_checked": null,
+         "added_at": "2026-01-03T09:30:00"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 5,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-2-0000-0000-0000-000000000000",
+      "url": "https://drive.google.com/x",
+      "platform": "gdrive",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "dpw"
+      ],
+      "password_source": "near",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-04T10:00:00",
+   "op": "tree",
+   "args": {
+    "search": "",
+    "platform": "MEGA"
+   },
+   "result": [
+    {
+     "creator_key": "general:unknown",
+     "creator_name": "Unknown Artist",
+     "service": "general",
+     "user_id": "unknown",
+     "post_count": 1,
+     "link_count": 0,
+     "updated_at": "2026-01-03T09:31:00",
+     "posts": [
+      {
+       "post_id": "id-9-000",
+       "title": "Untitled Post",
+       "published": "",
+       "full_text": "",
+       "post_url": "",
+       "passwords": [],
+       "links_count": 0,
+       "links": []
+      }
+     ]
+    },
+    {
+     "creator_key": "patreon:123",
+     "creator_name": "Artist A2",
+     "service": "Patreon",
+     "user_id": "123",
+     "post_count": 3,
+     "link_count": 0,
+     "updated_at": "2026-01-03T09:30:00",
+     "posts": [
+      {
+       "post_id": "id-4-000",
+       "title": "Untitled Post",
+       "published": "2026-02-01",
+       "full_text": "Plain text\n\nmore",
+       "post_url": "https://x/p2",
+       "passwords": [],
+       "links_count": 0,
+       "links": []
+      },
+      {
+       "post_id": "101",
+       "title": "Pack <one>",
+       "published": "2026-01-05",
+       "full_text": "Get it\nhere & now\n\n• a",
+       "post_url": "https://x/post/101",
+       "passwords": [
+        "pw2",
+        "pw1"
+       ],
+       "links_count": 0,
+       "links": []
+      },
+      {
+       "post_id": "103",
+       "title": "Third",
+       "published": "2025-12-30",
+       "full_text": "Password: secret",
+       "post_url": "",
+       "passwords": [
+        "pwX"
+       ],
+       "links_count": 0,
+       "links": []
+      }
+     ]
+    },
+    {
+     "creator_key": "onlyfans:77",
+     "creator_name": "Model B",
+     "service": "onlyfans",
+     "user_id": "77",
+     "post_count": 1,
+     "link_count": 1,
+     "updated_at": "2026-01-02T08:00:00",
+     "posts": [
+      {
+       "post_id": "201",
+       "title": "Other creator",
+       "published": "2026-03-01",
+       "full_text": "",
+       "post_url": "",
+       "passwords": [],
+       "links_count": 1,
+       "links": [
+        {
+         "id": "id-6-0000-0000-0000-000000000000",
+         "url": "https://mega.nz/folder/BBB#k",
+         "platform": "mega",
+         "post_id": "201",
+         "creator_key": "onlyfans:77",
+         "creator_name": "Model B",
+         "post_title": "Other creator",
+         "passwords": [
+          "m1"
+         ],
+         "password_source": "post",
+         "health": "unknown",
+         "last_checked": null,
+         "added_at": "2026-01-02T08:00:00"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 5,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-2-0000-0000-0000-000000000000",
+      "url": "https://drive.google.com/x",
+      "platform": "gdrive",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "dpw"
+      ],
+      "password_source": "near",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-04T10:00:00",
+   "op": "tree",
+   "args": {
+    "search": "model",
+    "platform": "mega"
+   },
+   "result": [
+    {
+     "creator_key": "onlyfans:77",
+     "creator_name": "Model B",
+     "service": "onlyfans",
+     "user_id": "77",
+     "post_count": 1,
+     "link_count": 1,
+     "updated_at": "2026-01-02T08:00:00",
+     "posts": [
+      {
+       "post_id": "201",
+       "title": "Other creator",
+       "published": "2026-03-01",
+       "full_text": "",
+       "post_url": "",
+       "passwords": [],
+       "links_count": 1,
+       "links": [
+        {
+         "id": "id-6-0000-0000-0000-000000000000",
+         "url": "https://mega.nz/folder/BBB#k",
+         "platform": "mega",
+         "post_id": "201",
+         "creator_key": "onlyfans:77",
+         "creator_name": "Model B",
+         "post_title": "Other creator",
+         "passwords": [
+          "m1"
+         ],
+         "password_source": "post",
+         "health": "unknown",
+         "last_checked": null,
+         "added_at": "2026-01-02T08:00:00"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 5,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-2-0000-0000-0000-000000000000",
+      "url": "https://drive.google.com/x",
+      "platform": "gdrive",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "dpw"
+      ],
+      "password_source": "near",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-04T10:00:00",
+   "op": "tree",
+   "args": {
+    "search": "dpw",
+    "platform": "all"
+   },
+   "result": [
+    {
+     "creator_key": "patreon:123",
+     "creator_name": "Artist A2",
+     "service": "Patreon",
+     "user_id": "123",
+     "post_count": 1,
+     "link_count": 1,
+     "updated_at": "2026-01-03T09:30:00",
+     "posts": [
+      {
+       "post_id": "101",
+       "title": "Pack <one>",
+       "published": "2026-01-05",
+       "full_text": "Get it\nhere & now\n\n• a",
+       "post_url": "https://x/post/101",
+       "passwords": [
+        "pw2",
+        "pw1"
+       ],
+       "links_count": 1,
+       "links": [
+        {
+         "id": "id-2-0000-0000-0000-000000000000",
+         "url": "https://drive.google.com/x",
+         "platform": "gdrive",
+         "post_id": "101",
+         "creator_key": "patreon:123",
+         "creator_name": "Artist A",
+         "post_title": "Pack <one>",
+         "passwords": [
+          "dpw"
+         ],
+         "password_source": "near",
+         "health": "unknown",
+         "last_checked": null,
+         "added_at": "2026-01-01T12:00:00"
+        }
+       ]
+      }
+     ]
+    }
+   ],
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 5,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-2-0000-0000-0000-000000000000",
+      "url": "https://drive.google.com/x",
+      "platform": "gdrive",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "dpw"
+      ],
+      "password_source": "near",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-04T10:00:00",
+   "op": "tree",
+   "args": {
+    "search": "zzzz",
+    "platform": ""
+   },
+   "result": [],
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 5,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-2-0000-0000-0000-000000000000",
+      "url": "https://drive.google.com/x",
+      "platform": "gdrive",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "dpw"
+      ],
+      "password_source": "near",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-05T10:00:00",
+   "op": "passwords_set",
+   "args": {
+    "id": "id-3-0000-0000-0000-000000000000",
+    "passwords": [
+     " b ",
+     "a",
+     "",
+     "b",
+     7
+    ]
+   },
+   "result": true,
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 5,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-2-0000-0000-0000-000000000000",
+      "url": "https://drive.google.com/x",
+      "platform": "gdrive",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "dpw"
+      ],
+      "password_source": "near",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "b",
+       "a",
+       "7"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-05T10:00:00",
+   "op": "passwords_set",
+   "args": {
+    "id": "nope",
+    "passwords": [
+     "x"
+    ]
+   },
+   "result": false,
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 5,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-2-0000-0000-0000-000000000000",
+      "url": "https://drive.google.com/x",
+      "platform": "gdrive",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "dpw"
+      ],
+      "password_source": "near",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "b",
+       "a",
+       "7"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-05T11:00:00",
+   "op": "health",
+   "args": {
+    "updates": [
+     [
+      "id-2-0000-0000-0000-000000000000",
+      "dead"
+     ],
+     [
+      "id-4-0000-0000-0000-000000000000",
+      "alive"
+     ],
+     [
+      "missing",
+      "dead"
+     ]
+    ]
+   },
+   "result": null,
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 5,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-2-0000-0000-0000-000000000000",
+      "url": "https://drive.google.com/x",
+      "platform": "gdrive",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "dpw"
+      ],
+      "password_source": "near",
+      "health": "dead",
+      "last_checked": "2026-01-05T11:00:00",
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "b",
+       "a",
+       "7"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-05T11:00:00",
+   "op": "all_passwords",
+   "args": {},
+   "result": [
+    "7",
+    "a",
+    "aa",
+    "b",
+    "dpw",
+    "m1",
+    "pw1",
+    "pw2",
+    "pwX",
+    "zz"
+   ],
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 5,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-2-0000-0000-0000-000000000000",
+      "url": "https://drive.google.com/x",
+      "platform": "gdrive",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "dpw"
+      ],
+      "password_source": "near",
+      "health": "dead",
+      "last_checked": "2026-01-05T11:00:00",
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "b",
+       "a",
+       "7"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-05T11:00:00",
+   "op": "urls",
+   "args": {
+    "creator": ""
+   },
+   "result": [
+    "https://mega.nz/file/AAA#k",
+    "https://drive.google.com/x",
+    "https://gofile.io/d/zz",
+    "https://pixeldrain.com/u/abc",
+    "https://mega.nz/folder/BBB#k",
+    "https://dropbox.com/s/q",
+    "https://catbox.moe/c/f.zip",
+    "https://x.y/z"
+   ],
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 5,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-2-0000-0000-0000-000000000000",
+      "url": "https://drive.google.com/x",
+      "platform": "gdrive",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "dpw"
+      ],
+      "password_source": "near",
+      "health": "dead",
+      "last_checked": "2026-01-05T11:00:00",
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "b",
+       "a",
+       "7"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-05T11:00:00",
+   "op": "urls",
+   "args": {
+    "creator": " ONLYFANS:77 "
+   },
+   "result": [
+    "https://mega.nz/folder/BBB#k",
+    "https://dropbox.com/s/q"
+   ],
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 5,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-2-0000-0000-0000-000000000000",
+      "url": "https://drive.google.com/x",
+      "platform": "gdrive",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "dpw"
+      ],
+      "password_source": "near",
+      "health": "dead",
+      "last_checked": "2026-01-05T11:00:00",
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "b",
+       "a",
+       "7"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-06T09:00:00",
+   "op": "export",
+   "args": {},
+   "result": {
+    "count": 3,
+    "files": {
+     "Artist A2 [Patreon].txt": "Creator: Artist A2 [Patreon]\nTotal Links: 5\nExported: 2026-01-06 09:00:00\n================================================================================\n\n📌 Untitled Post\n   Date: 2026-02-01\n   Links:\n     - https://pixeldrain.com/u/abc\n\n📌 Pack <one>\n   Date: 2026-01-05\n   Links:\n     - https://mega.nz/file/AAA#k (Passwords: pw1, pw2, pwX)\n     - https://drive.google.com/x (Passwords: dpw)\n     - https://gofile.io/d/zz (Passwords: b, a, 7)\n\n📌 Third\n   Date: 2025-12-30\n   Links:\n     - https://catbox.moe/c/f.zip (Passwords: aa, zz)\n",
+     "Model B [onlyfans].txt": "Creator: Model B [onlyfans]\nTotal Links: 2\nExported: 2026-01-06 09:00:00\n================================================================================\n\n📌 Other creator\n   Date: 2026-03-01\n   Links:\n     - https://mega.nz/folder/BBB#k (Passwords: m1)\n     - https://dropbox.com/s/q\n",
+     "Unknown Artist [general].txt": "Creator: Unknown Artist [general]\nTotal Links: 1\nExported: 2026-01-06 09:00:00\n================================================================================\n\n📌 Untitled Post\n   Links:\n     - https://x.y/z\n"
+    }
+   },
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 5,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-2-0000-0000-0000-000000000000",
+      "url": "https://drive.google.com/x",
+      "platform": "gdrive",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "dpw"
+      ],
+      "password_source": "near",
+      "health": "dead",
+      "last_checked": "2026-01-05T11:00:00",
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "b",
+       "a",
+       "7"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-06T10:00:00",
+   "op": "clean_dead",
+   "args": {},
+   "result": 1,
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 4,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "b",
+       "a",
+       "7"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-06T10:00:00",
+   "op": "clean_dead",
+   "args": {},
+   "result": 0,
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 4,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "b",
+       "a",
+       "7"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-06T10:00:00",
+   "op": "delete_link",
+   "args": {
+    "id": "id-4-0000-0000-0000-000000000000"
+   },
+   "result": false,
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 4,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "b",
+       "a",
+       "7"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-06T10:00:00",
+   "op": "delete_link",
+   "args": {
+    "id": "nope"
+   },
+   "result": false,
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 4,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 1,
+      "link_count": 2,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "201": {
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "title": "Other creator",
+      "published": "2026-03-01",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "b",
+       "a",
+       "7"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-6-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/folder/BBB#k",
+      "platform": "mega",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [
+       "m1"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-7-0000-0000-0000-000000000000",
+      "url": "https://dropbox.com/s/q",
+      "platform": "other",
+      "post_id": "201",
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "post_title": "Other creator",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-02T08:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-06T10:00:00",
+   "op": "delete_post",
+   "args": {
+    "id": "201"
+   },
+   "result": true,
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 4,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 0,
+      "link_count": 0,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "b",
+       "a",
+       "7"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-06T10:00:00",
+   "op": "delete_post",
+   "args": {
+    "id": "nope"
+   },
+   "result": false,
+   "data": {
+    "version": 1,
+    "creators": {
+     "patreon:123": {
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "service": "Patreon",
+      "user_id": "123",
+      "post_count": 3,
+      "link_count": 4,
+      "created_at": "2026-01-01T12:00:00",
+      "updated_at": "2026-01-03T09:30:00"
+     },
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 0,
+      "link_count": 0,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "101": {
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Pack <one>",
+      "published": "2026-01-05",
+      "full_text": "Get it\nhere & now\n\n• a",
+      "post_url": "https://x/post/101",
+      "passwords": [
+       "pw2",
+       "pw1"
+      ]
+     },
+     "id-4-000": {
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "title": "Untitled Post",
+      "published": "2026-02-01",
+      "full_text": "Plain text\n\nmore",
+      "post_url": "https://x/p2",
+      "passwords": []
+     },
+     "103": {
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "title": "Third",
+      "published": "2025-12-30",
+      "full_text": "Password: secret",
+      "post_url": "",
+      "passwords": [
+       "pwX"
+      ]
+     },
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-1-0000-0000-0000-000000000000",
+      "url": "https://mega.nz/file/AAA#k",
+      "platform": "other",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "pw1",
+       "pw2",
+       "pwX"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-3-0000-0000-0000-000000000000",
+      "url": "https://gofile.io/d/zz",
+      "platform": "gofile",
+      "post_id": "101",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Pack <one>",
+      "passwords": [
+       "b",
+       "a",
+       "7"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-5-0000-0000-0000-000000000000",
+      "url": "https://pixeldrain.com/u/abc",
+      "platform": "pixeldrain",
+      "post_id": "id-4-000",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-01T12:00:00"
+     },
+     {
+      "id": "id-8-0000-0000-0000-000000000000",
+      "url": "https://catbox.moe/c/f.zip",
+      "platform": "catbox",
+      "post_id": "103",
+      "creator_key": "patreon:123",
+      "creator_name": "Artist A2",
+      "post_title": "Third",
+      "passwords": [
+       "aa",
+       "zz"
+      ],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:30:00"
+     },
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-06T10:00:00",
+   "op": "delete_creator",
+   "args": {
+    "key": "PATREON:123"
+   },
+   "result": true,
+   "data": {
+    "version": 1,
+    "creators": {
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 0,
+      "link_count": 0,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-06T10:00:00",
+   "op": "delete_creator",
+   "args": {
+    "key": "nope"
+   },
+   "result": false,
+   "data": {
+    "version": 1,
+    "creators": {
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 0,
+      "link_count": 0,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  },
+  {
+   "time": "2026-01-06T10:00:00",
+   "op": "tree",
+   "args": {
+    "search": "",
+    "platform": ""
+   },
+   "result": [
+    {
+     "creator_key": "general:unknown",
+     "creator_name": "Unknown Artist",
+     "service": "general",
+     "user_id": "unknown",
+     "post_count": 1,
+     "link_count": 1,
+     "updated_at": "2026-01-03T09:31:00",
+     "posts": [
+      {
+       "post_id": "id-9-000",
+       "title": "Untitled Post",
+       "published": "",
+       "full_text": "",
+       "post_url": "",
+       "passwords": [],
+       "links_count": 1,
+       "links": [
+        {
+         "id": "id-10-0000-0000-0000-000000000000",
+         "url": "https://x.y/z",
+         "platform": "other",
+         "post_id": "id-9-000",
+         "creator_key": "general:unknown",
+         "creator_name": "Unknown Artist",
+         "post_title": "Untitled Post",
+         "passwords": [],
+         "password_source": "post",
+         "health": "unknown",
+         "last_checked": null,
+         "added_at": "2026-01-03T09:31:00"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "creator_key": "onlyfans:77",
+     "creator_name": "Model B",
+     "service": "onlyfans",
+     "user_id": "77",
+     "post_count": 0,
+     "link_count": 0,
+     "updated_at": "2026-01-02T08:00:00",
+     "posts": []
+    }
+   ],
+   "data": {
+    "version": 1,
+    "creators": {
+     "onlyfans:77": {
+      "creator_key": "onlyfans:77",
+      "creator_name": "Model B",
+      "service": "onlyfans",
+      "user_id": "77",
+      "post_count": 0,
+      "link_count": 0,
+      "created_at": "2026-01-02T08:00:00",
+      "updated_at": "2026-01-02T08:00:00"
+     },
+     "general:unknown": {
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "service": "general",
+      "user_id": "unknown",
+      "post_count": 1,
+      "link_count": 1,
+      "created_at": "2026-01-03T09:31:00",
+      "updated_at": "2026-01-03T09:31:00"
+     }
+    },
+    "posts": {
+     "id-9-000": {
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "title": "Untitled Post",
+      "published": "",
+      "full_text": "",
+      "post_url": "",
+      "passwords": []
+     }
+    },
+    "links": [
+     {
+      "id": "id-10-0000-0000-0000-000000000000",
+      "url": "https://x.y/z",
+      "platform": "other",
+      "post_id": "id-9-000",
+      "creator_key": "general:unknown",
+      "creator_name": "Unknown Artist",
+      "post_title": "Untitled Post",
+      "passwords": [],
+      "password_source": "post",
+      "health": "unknown",
+      "last_checked": null,
+      "added_at": "2026-01-03T09:31:00"
+     }
+    ]
+   }
+  }
+ ],
+ "rows": {
+  "creators": [
+   [
+    "general:unknown",
+    {
+     "creator_key": "general:unknown",
+     "creator_name": "Unknown Artist",
+     "service": "general",
+     "user_id": "unknown",
+     "post_count": 1,
+     "link_count": 1,
+     "created_at": "2026-01-03T09:31:00",
+     "updated_at": "2026-01-03T09:31:00"
+    }
+   ],
+   [
+    "onlyfans:77",
+    {
+     "creator_key": "onlyfans:77",
+     "creator_name": "Model B",
+     "service": "onlyfans",
+     "user_id": "77",
+     "post_count": 0,
+     "link_count": 0,
+     "created_at": "2026-01-02T08:00:00",
+     "updated_at": "2026-01-02T08:00:00"
+    }
+   ]
+  ],
+  "posts": [
+   [
+    "id-9-000",
+    12,
+    {
+     "post_id": "id-9-000",
+     "creator_key": "general:unknown",
+     "creator_name": "Unknown Artist",
+     "title": "Untitled Post",
+     "published": "",
+     "full_text": "",
+     "post_url": "",
+     "passwords": []
+    }
+   ]
+  ],
+  "links": [
+   [
+    "id-10-0000-0000-0000-000000000000",
+    13,
+    {
+     "id": "id-10-0000-0000-0000-000000000000",
+     "url": "https://x.y/z",
+     "platform": "other",
+     "post_id": "id-9-000",
+     "creator_key": "general:unknown",
+     "creator_name": "Unknown Artist",
+     "post_title": "Untitled Post",
+     "passwords": [],
+     "password_source": "post",
+     "health": "unknown",
+     "last_checked": null,
+     "added_at": "2026-01-03T09:31:00"
+    }
+   ]
+  ]
+ }
+}
