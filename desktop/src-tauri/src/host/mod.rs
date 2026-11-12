@@ -49,13 +49,14 @@ fn natives(app_version: &str, engine: &Arc<Engine>, events: &Events) -> Natives 
     let shell: Arc<dyn NativeObject> = Arc::new(Shell { version: app_version.to_string() });
     let accounts: Arc<dyn NativeObject> = Arc::new(crate::accounts::Accounts::new(engine.clone(), events.clone()));
     let mut objects = vec![("shell", shell), ("accounts", accounts)];
-    // The download queue's view, kept by the app's Rust queue model (not with the old Python downloader)
+    // The download queue's view: the engine's queue (with the old Python downloader, the app's list)
+    let q: Arc<dyn NativeObject> = Arc::new(queue::QueueModel);
+    let g: Arc<dyn NativeObject> = Arc::new(queue::GroupsModel);
+    objects.push((queue::QUEUE, q));
+    objects.push((queue::GROUPS, g));
+    queue::start_pump(events.clone());
+    // The watchlist's view, kept by the app's Rust watchlist model (not with the old Python downloader)
     if std::env::var("PAWCHIVE_PYTHON_DOWNLOADER").ok().as_deref() != Some("1") {
-        let q: Arc<dyn NativeObject> = Arc::new(queue::QueueModel);
-        let g: Arc<dyn NativeObject> = Arc::new(queue::GroupsModel);
-        objects.push((queue::QUEUE, q));
-        objects.push((queue::GROUPS, g));
-        queue::start_pump(events.clone());
         let w: Arc<dyn NativeObject> = Arc::new(watchlist::WatchlistModel);
         objects.push((watchlist::NAME, w));
         watchlist::start_pump(events.clone());

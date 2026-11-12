@@ -1,598 +1,73 @@
 """
-Download Queue Qt Model
-Exposes an observable QAbstractListModel for active, pending, completed, and failed tasks.
+The bridge's copy of the download queue: the files in order, with what the bridge's export,
+history, retry and session code reads from it, and the window's queue requests that are still
+answered here (services/rust_queue_view.py passes them on).
+
+The window doesn't read this list: its file list, filters, counts and per-post groups are the Rust
+queue view (desktop/src-tauri/src/downloader/queue_view.rs), served by the desktop shell's host.
 """
 
 import threading
-import time
-from bisect import bisect_left, insort
-from PySide6.QtCore import QAbstractListModel, QModelIndex, Qt, Signal, Slot, Property, QObject, QTimer, QThread
-from typing import List, Dict, Any, Optional
+from typing import Any, Dict, List, Optional
+
+from PySide6.QtCore import QObject, Qt, QThread, Signal, Slot
+
 from core.downloader import DownloadTask
 from core.logger import logger
 
-
-class _RowIndex:
-    """The row of each visible task, without renumbering the rows below a removed one (that cost
-    0.1 s per 300,000 rows for every batch of finished files).
-
-    Every task gets a slot number when it's added to the end of the list; slots never change. The
-    slots of removed tasks are kept in a sorted list, so a task's row is its slot minus the removed
-    slots before it (one binary search). The slots are numbered again from 0 once many are removed."""
-
-    COMPACT_AT = 50_000
-
-    def __init__(self, tasks=()):
-        self.reset(tasks)
-
-    def reset(self, tasks) -> None:
-        self._slot = {id(t): i for i, t in enumerate(tasks)}
-        self._next = len(self._slot)
-        self._dead: List[int] = []
-
-    def append(self, task) -> None:
-        self._slot[id(task)] = self._next
-        self._next += 1
-
-    def get(self, task_id, default=None):
-        s = self._slot.get(task_id)
-        return default if s is None else s - bisect_left(self._dead, s)
-
-    def __getitem__(self, task_id) -> int:
-        s = self._slot[task_id]
-        return s - bisect_left(self._dead, s)
-
-    def __contains__(self, task_id) -> bool:
-        return task_id in self._slot
-
-    def __len__(self) -> int:
-        return len(self._slot)
-
-    def remove(self, task_id) -> None:
-        s = self._slot.pop(task_id, None)
-        if s is not None:
-            insort(self._dead, s)
-
-    def remove_many(self, task_ids) -> None:
-        gone = [s for s in (self._slot.pop(t, None) for t in task_ids) if s is not None]
-        if len(gone) > 8:
-            self._dead = sorted(self._dead + gone)
-        else:
-            for s in gone:
-                insort(self._dead, s)
-
-    def needs_compacting(self) -> bool:
-        return len(self._dead) > self.COMPACT_AT
+_BUSY = ("pending", "downloading", "retrying")
 
 
-class QueueGroupsModel(QAbstractListModel):
-    BatchIdRole = Qt.UserRole + 1
-    CreatorNameRole = Qt.UserRole + 2
-    PostTitleRole = Qt.UserRole + 3
-    ServiceRole = Qt.UserRole + 4
-    PostIdRole = Qt.UserRole + 5
-    TotalFilesRole = Qt.UserRole + 6
-    CompletedFilesRole = Qt.UserRole + 7
-    FailedFilesRole = Qt.UserRole + 8
-    DownloadingFilesRole = Qt.UserRole + 9
-    PendingFilesRole = Qt.UserRole + 10
-    SkippedFilesRole = Qt.UserRole + 11
-    TotalBytesRole = Qt.UserRole + 12
-    DownloadedBytesRole = Qt.UserRole + 13
-    TotalBytesStrRole = Qt.UserRole + 14
-    DownloadedBytesStrRole = Qt.UserRole + 15
-    StatusRole = Qt.UserRole + 16
-    TotalProgressRole = Qt.UserRole + 17
-    ProgressRole = Qt.UserRole + 18
-    ActiveFileNameRole = Qt.UserRole + 19
-    ActiveFileProgressPctRole = Qt.UserRole + 20
-    ActiveFileSpeedRole = Qt.UserRole + 21
-    IsPausedRole = Qt.UserRole + 22
-    PausedFilesRole = Qt.UserRole + 23
-
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self._groups: List[Dict[str, Any]] = []
-        self._row_by_id: Dict[str, int] = {}
-        self._tasks_by_id: Dict[str, List[DownloadTask]] = {}
-        self._task_ids_by_group: Dict[str, set] = {}
-        self._task_last_group_status: Dict[int, str] = {}
-        self._last_progress_time: Dict[str, float] = {}
-        self._last_emitted_stats: Dict[str, tuple] = {}
-        self._paused_batch_ids: set = set()
-        # Groups whose numbers changed since the last refresh (refreshed together, a few times a second)
-        self._dirty_groups: set = set()
-        self._flush_timer = QTimer(self)
-        self._flush_timer.setSingleShot(True)
-        self._flush_timer.setInterval(120)
-        self._flush_timer.timeout.connect(self._flush_dirty_groups)
-        # Big queues: the groups are worked out on a background thread (seconds for hundreds of
-        # thousands of files) and swapped in; changes arriving meanwhile are replayed afterwards
-        self._rebuild_gen = 0
-        self._rebuilding = False
-        self._queued_adds: List[DownloadTask] = []
-        self._queued_updates: Dict[int, DownloadTask] = {}
-        self._rebuilt.connect(self._apply_rebuild, Qt.QueuedConnection)
-
-    _rebuilt = Signal(int, object)
-    BACKGROUND_REBUILD_AT = 20000
-
-    def pause_batch(self, batch_id: str):
-        if batch_id:
-            self._paused_batch_ids.add(batch_id)
-            if batch_id in self._row_by_id:
-                row = self._row_by_id[batch_id]
-                g = self._groups[row]
-                self._calc_group_stats(g, self._tasks_by_id.get(batch_id, []))
-                idx = self.index(row, 0)
-                self.dataChanged.emit(idx, idx)
-
-    def resume_batch(self, batch_id: str):
-        if batch_id:
-            self._paused_batch_ids.discard(batch_id)
-            if batch_id in self._row_by_id:
-                row = self._row_by_id[batch_id]
-                g = self._groups[row]
-                self._calc_group_stats(g, self._tasks_by_id.get(batch_id, []))
-                idx = self.index(row, 0)
-                self.dataChanged.emit(idx, idx)
-
-    def is_batch_paused(self, batch_id: str) -> bool:
-        return batch_id in self._paused_batch_ids
-
-    def rowCount(self, parent=QModelIndex()):
-        return len(self._groups)
-
-    def data(self, index, role=Qt.DisplayRole):
-        if not index.isValid() or index.row() >= len(self._groups):
-            return None
-        g = self._groups[index.row()]
-        role_map = {
-            self.BatchIdRole: "batchId",
-            self.CreatorNameRole: "creatorName",
-            self.PostTitleRole: "postTitle",
-            self.ServiceRole: "service",
-            self.PostIdRole: "postId",
-            self.TotalFilesRole: "totalFiles",
-            self.CompletedFilesRole: "completedFiles",
-            self.SkippedFilesRole: "skippedFiles",
-            self.FailedFilesRole: "failedFiles",
-            self.DownloadingFilesRole: "downloadingFiles",
-            self.PendingFilesRole: "pendingFiles",
-            self.TotalBytesRole: "totalBytes",
-            self.DownloadedBytesRole: "downloadedBytes",
-            self.TotalBytesStrRole: "totalBytesStr",
-            self.DownloadedBytesStrRole: "downloadedBytesStr",
-            self.StatusRole: "status",
-            self.TotalProgressRole: "totalProgress",
-            self.ProgressRole: "progress",
-            self.ActiveFileNameRole: "activeFileName",
-            self.ActiveFileProgressPctRole: "activeFileProgressPct",
-            self.ActiveFileSpeedRole: "activeFileSpeed",
-            self.IsPausedRole: "isPaused",
-            self.PausedFilesRole: "pausedFiles",
-        }
-        key = role_map.get(role)
-        if key:
-            return g.get(key)
-        return None
-
-    def roleNames(self):
-        return {
-            self.BatchIdRole: b"batchId",
-            self.CreatorNameRole: b"creatorName",
-            self.PostTitleRole: b"postTitle",
-            self.ServiceRole: b"service",
-            self.PostIdRole: b"postId",
-            self.TotalFilesRole: b"totalFiles",
-            self.CompletedFilesRole: b"completedFiles",
-            self.SkippedFilesRole: b"skippedFiles",
-            self.FailedFilesRole: b"failedFiles",
-            self.DownloadingFilesRole: b"downloadingFiles",
-            self.PendingFilesRole: b"pendingFiles",
-            self.TotalBytesRole: b"totalBytes",
-            self.DownloadedBytesRole: b"downloadedBytes",
-            self.TotalBytesStrRole: b"totalBytesStr",
-            self.DownloadedBytesStrRole: b"downloadedBytesStr",
-            self.StatusRole: b"status",
-            self.TotalProgressRole: b"totalProgress",
-            self.ProgressRole: b"progress",
-            self.ActiveFileNameRole: b"activeFileName",
-            self.ActiveFileProgressPctRole: b"activeFileProgressPct",
-            self.ActiveFileSpeedRole: b"activeFileSpeed",
-            self.IsPausedRole: b"isPaused",
-            self.PausedFilesRole: b"pausedFiles",
-        }
-
-    @staticmethod
-    def _format_size(b: int) -> str:
-        if b <= 0:
-            return "-"
-        if b >= 1024 * 1024 * 1024:
-            return f"{b / (1024 * 1024 * 1024):.2f} GB"
-        elif b >= 1024 * 1024:
-            return f"{b / (1024 * 1024):.1f} MB"
-        elif b >= 1024:
-            return f"{b / 1024:.1f} KB"
-        return f"{b} B"
-
-    def _calc_group_stats(self, g: Dict[str, Any], tasks: List[DownloadTask]):
-        completed_files = 0
-        skipped_files = 0
-        failed_files = 0
-        downloading_files = 0
-        pending_files = 0
-        paused_files = 0
-        total_files = len(tasks)
-        total_bytes = 0
-        downloaded_bytes = 0
-        active_task = None
-
-        for t in tasks:
-            eff_size = max(t.file_size, t.downloaded_bytes)
-            total_bytes += eff_size
-            downloaded_bytes += t.downloaded_bytes
-            if t.status == "completed":
-                completed_files += 1
-            elif t.status == "skipped":
-                skipped_files += 1
-            elif t.status == "failed":
-                failed_files += 1
-            elif t.status in ("downloading", "retrying"):
-                downloading_files += 1
-                if active_task is None:
-                    active_task = t
-            elif t.status == "cancelled":
-                pass
-            elif t.status == "paused":
-                paused_files += 1
-            else:
-                pending_files += 1
-
-        batch_id = g.get("batchId", "")
-        is_paused = (batch_id in self._paused_batch_ids) or (paused_files > 0 and downloading_files == 0)
-
-        if (completed_files + skipped_files) == total_files and total_files > 0:
-            status = "skipped" if (completed_files == 0 and skipped_files > 0) else "completed"
-        elif is_paused:
-            status = "paused"
-        elif downloading_files > 0:
-            status = "downloading"
-        elif failed_files > 0 and (completed_files + skipped_files + failed_files == total_files):
-            status = "failed"
-        elif completed_files > 0:
-            status = "partial"
-        elif skipped_files > 0 and (skipped_files + pending_files == total_files):
-            status = "skipped"
-        elif pending_files > 0:
-            status = "pending"
-        else:
-            status = "cancelled"
-
-        total_progress = ((completed_files + skipped_files) / total_files) if total_files > 0 else (1.0 if status in ("completed", "skipped") else 0.0)
-        progress = (downloaded_bytes / total_bytes) if total_bytes > 0 else (1.0 if status in ("completed", "skipped") else 0.0)
-
-        g["totalFiles"] = total_files
-        g["completedFiles"] = completed_files
-        g["skippedFiles"] = skipped_files
-        g["failedFiles"] = failed_files
-        g["downloadingFiles"] = downloading_files
-        g["pendingFiles"] = pending_files
-        g["pausedFiles"] = paused_files
-        g["isPaused"] = is_paused
-        g["totalBytes"] = total_bytes
-        g["downloadedBytes"] = downloaded_bytes
-        g["totalBytesStr"] = self._format_size(total_bytes)
-        g["downloadedBytesStr"] = self._format_size(downloaded_bytes)
-        g["status"] = status
-        g["totalProgress"] = total_progress
-        g["progress"] = progress
-
-        if active_task:
-            g["activeFileName"] = getattr(active_task, "filename", "") or ""
-            g["activeFileProgressPct"] = getattr(active_task, "progress_pct", 0)
-            g["activeFileSpeed"] = getattr(active_task, "speed_str", "0 KB/s") or "0 KB/s"
-        else:
-            g["activeFileName"] = ""
-            g["activeFileProgressPct"] = 0
-            g["activeFileSpeed"] = ""
-
-    def _compute_groups(self, all_tasks: List[DownloadTask]) -> Dict[str, Any]:
-        """The groups of a task list (no model changes: safe on a background thread)."""
-        groups: List[Dict[str, Any]] = []
-        row_by_id: Dict[str, int] = {}
-        tasks_by_id: Dict[str, List[DownloadTask]] = {}
-        ids_by_group: Dict[str, set] = {}
-        last_status: Dict[int, str] = {}
-        for t in all_tasks:
-            bid = getattr(t, "batch_id", "") or f"{t.service}_{t.creator_name}_{t.post_id}".strip("_")
-            if not bid:
-                bid = "batch_default"
-            lst = tasks_by_id.get(bid)
-            if lst is None:
-                lst = tasks_by_id[bid] = []
-                ids_by_group[bid] = set()
-                post_title = t.post_title or "Media Collection"
-                if bid.startswith("artist_") or bid.startswith("creator_"):
-                    post_title = "All Works / Posts"
-                row_by_id[bid] = len(groups)
-                groups.append({
-                    "batchId": bid,
-                    "creatorName": t.creator_name or "Unknown Creator",
-                    "postTitle": post_title,
-                    "service": t.service or "",
-                    "postId": t.post_id or "",
-                })
-            lst.append(t)
-            ids_by_group[bid].add(id(t))
-            last_status[id(t)] = t.status
-        emitted: Dict[str, tuple] = {}
-        for g in groups:
-            bid = g["batchId"]
-            self._calc_group_stats(g, tasks_by_id[bid])
-            emitted[bid] = (g["totalFiles"], g["completedFiles"], g["failedFiles"],
-                            g["downloadingFiles"], g["pendingFiles"], g["status"])
-        return {"groups": groups, "row_by_id": row_by_id, "tasks_by_id": tasks_by_id,
-                "ids_by_group": ids_by_group, "last_status": last_status, "emitted": emitted}
-
-    def rebuild(self, all_tasks: List[DownloadTask], background: bool = False):
-        self._rebuild_gen += 1
-        gen = self._rebuild_gen
-        self._queued_adds = []
-        self._queued_updates = {}
-        tasks = list(all_tasks)
-        if background and len(tasks) >= self.BACKGROUND_REBUILD_AT:
-            self._rebuilding = True
-
-            def _job():
-                try:
-                    built = self._compute_groups(tasks)
-                except Exception as e:
-                    logger.debug(f"Couldn't group the queue: {e}", category="queue")
-                    built = self._compute_groups([])
-                try:
-                    self._rebuilt.emit(gen, built)
-                except RuntimeError:
-                    pass
-            threading.Thread(target=_job, name="QueueGroups", daemon=True).start()
-            return
-        self._rebuilding = False
-        self._apply_rebuild(gen, self._compute_groups(tasks))
-
-    @Slot(int, object)
-    def _apply_rebuild(self, gen: int, built: Dict[str, Any]):
-        if gen != self._rebuild_gen:
-            return                    # a newer rebuild started meanwhile
-        self.beginResetModel()
-        self._groups = built["groups"]
-        self._row_by_id = built["row_by_id"]
-        self._tasks_by_id = built["tasks_by_id"]
-        self._task_ids_by_group = built["ids_by_group"]
-        self._task_last_group_status = built["last_status"]
-        self._last_progress_time.clear()
-        self._last_emitted_stats = built["emitted"]
-        self._dirty_groups = set()
-        self.endResetModel()
-        if self._rebuilding:
-            self._rebuilding = False
-            adds, updates = self._queued_adds, self._queued_updates
-            self._queued_adds, self._queued_updates = [], {}
-            if adds:
-                self.add_tasks_batch(adds)
-            for t in updates.values():
-                self.update_task(t)
-
-    def add_tasks_batch(self, new_tasks: List[DownloadTask]):
-        """Fast incremental batch insertion of newly queued tasks without wiping all existing groups."""
-        if not new_tasks:
-            return
-        if self._rebuilding:
-            self._queued_adds.extend(new_tasks)
-            return
-        if not self._groups:
-            self.rebuild(new_tasks)
-            return
-
-        tasks_by_batch: Dict[str, List[DownloadTask]] = {}
-        for t in new_tasks:
-            bid = getattr(t, "batch_id", "") or f"{t.service}_{t.creator_name}_{t.post_id}".strip("_") or "batch_default"
-            tasks_by_batch.setdefault(bid, []).append(t)
-
-        new_groups_to_insert = []
-        for bid, b_tasks in tasks_by_batch.items():
-            if bid not in self._row_by_id:
-                sample_t = b_tasks[0]
-                post_title = sample_t.post_title or "Media Collection"
-                if bid.startswith("artist_") or bid.startswith("creator_"):
-                    post_title = "All Works / Posts"
-                g = {
-                    "batchId": bid,
-                    "creatorName": sample_t.creator_name or "Unknown Creator",
-                    "postTitle": post_title,
-                    "service": sample_t.service or "",
-                    "postId": sample_t.post_id or "",
-                }
-                new_groups_to_insert.append((bid, g, b_tasks))
-            else:
-                group_task_ids = self._task_ids_by_group.setdefault(bid, set())
-                t_list = self._tasks_by_id.setdefault(bid, [])
-                for t in b_tasks:
-                    tid = id(t)
-                    if tid not in group_task_ids:
-                        group_task_ids.add(tid)
-                        t_list.append(t)
-                    self._task_last_group_status[tid] = getattr(t, "status", "")
-                self._dirty_groups.add(bid)
-
-        if new_groups_to_insert:
-            start_row = len(self._groups)
-            end_row = start_row + len(new_groups_to_insert) - 1
-            self.beginInsertRows(QModelIndex(), start_row, end_row)
-            for idx, (bid, g, b_tasks) in enumerate(new_groups_to_insert):
-                row = start_row + idx
-                self._row_by_id[bid] = row
-                self._tasks_by_id[bid] = list(b_tasks)
-                self._task_ids_by_group[bid] = {id(t) for t in b_tasks}
-                for t in b_tasks:
-                    self._task_last_group_status[id(t)] = getattr(t, "status", "")
-                self._calc_group_stats(g, b_tasks)
-                self._groups.append(g)
-                self._last_emitted_stats[bid] = (
-                    g["totalFiles"], g["completedFiles"], g["skippedFiles"], g["failedFiles"],
-                    g["downloadingFiles"], g["pendingFiles"], g["status"], g.get("isPaused", False)
-                )
-            self.endInsertRows()
-
-        if self._dirty_groups and not self._flush_timer.isActive():
-            self._flush_timer.start()
-
-    def update_task(self, task: DownloadTask):
-        if self._rebuilding:
-            self._queued_updates[id(task)] = task
-            return
-        bid = getattr(task, "batch_id", "") or f"{task.service}_{task.creator_name}_{task.post_id}".strip("_")
-        if not bid:
-            bid = "batch_default"
-
-        tid = id(task)
-        new_status = getattr(task, "status", "")
-
-        if bid not in self._row_by_id:
-            row = len(self._groups)
-            self.beginInsertRows(QModelIndex(), row, row)
-            self._tasks_by_id[bid] = [task]
-            self._task_ids_by_group[bid] = {tid}
-            self._task_last_group_status[tid] = new_status
-            self._row_by_id[bid] = row
-            post_title = task.post_title or "Media Collection"
-            if bid.startswith("artist_") or bid.startswith("creator_"):
-                post_title = "All Works / Posts"
-            g = {
-                "batchId": bid,
-                "creatorName": task.creator_name or "Unknown Creator",
-                "postTitle": post_title,
-                "service": task.service or "",
-                "postId": task.post_id or "",
-            }
-            self._calc_group_stats(g, self._tasks_by_id[bid])
-            self._groups.append(g)
-            self._last_emitted_stats[bid] = (
-                g["totalFiles"], g["completedFiles"], g["skippedFiles"], g["failedFiles"],
-                g["downloadingFiles"], g["pendingFiles"], g["status"], g.get("isPaused", False)
-            )
-            self.endInsertRows()
-        else:
-            row = self._row_by_id[bid]
-            g = self._groups[row]
-            tasks = self._tasks_by_id.get(bid, [])
-            group_task_ids = self._task_ids_by_group.setdefault(bid, set())
-
-            is_new_task = (tid not in group_task_ids)
-            if is_new_task:
-                group_task_ids.add(tid)
-                tasks.append(task)
-
-            self._task_last_group_status[tid] = new_status
-
-            # Recalculate this group with the next batched refresh instead of right now
-            self._dirty_groups.add(bid)
-            if not self._flush_timer.isActive():
-                self._flush_timer.start()
-
-    def _flush_dirty_groups(self):
-        """Recalculate every group that changed since the last refresh, once each."""
-        dirty, self._dirty_groups = self._dirty_groups, set()
-        for bid in dirty:
-            row = self._row_by_id.get(bid)
-            if row is None or row >= len(self._groups):
-                continue
-            g = self._groups[row]
-            self._calc_group_stats(g, self._tasks_by_id.get(bid, []))
-            old_stats = self._last_emitted_stats.get(bid)
-            new_stats = (
-                g["totalFiles"], g["completedFiles"], g["skippedFiles"], g["failedFiles"],
-                g["downloadingFiles"], g["pendingFiles"], g["status"], g.get("isPaused", False)
-            )
-            idx = self.index(row, 0)
-            # If structural stats (counts, status) changed, emit full dataChanged
-            if old_stats != new_stats:
-                self._last_emitted_stats[bid] = new_stats
-                self.dataChanged.emit(idx, idx)
-            else:
-                self.dataChanged.emit(idx, idx, [
-                    self.ProgressRole,
-                    self.TotalProgressRole,
-                    self.DownloadedBytesRole,
-                    self.DownloadedBytesStrRole,
-                    self.ActiveFileNameRole,
-                    self.ActiveFileProgressPctRole,
-                    self.ActiveFileSpeedRole
-                ])
-
-    def remove_batch(self, batch_id: str):
-        if batch_id in self._row_by_id:
-            self._paused_batch_ids.discard(batch_id)
-            row = self._row_by_id[batch_id]
-            self.beginRemoveRows(QModelIndex(), row, row)
-            self._groups.pop(row)
-            if batch_id in self._tasks_by_id:
-                for t in self._tasks_by_id[batch_id]:
-                    self._task_last_group_status.pop(id(t), None)
-                del self._tasks_by_id[batch_id]
-            if batch_id in self._task_ids_by_group:
-                del self._task_ids_by_group[batch_id]
-            if batch_id in self._last_progress_time:
-                del self._last_progress_time[batch_id]
-            if batch_id in self._last_emitted_stats:
-                del self._last_emitted_stats[batch_id]
-            self._row_by_id = {g["batchId"]: i for i, g in enumerate(self._groups)}
-            self.endRemoveRows()
-
-    def clear(self):
-        self._paused_batch_ids.clear()
-        self.beginResetModel()
-        self._groups.clear()
-        self._row_by_id.clear()
-        self._tasks_by_id.clear()
-        self._task_ids_by_group.clear()
-        self._task_last_group_status.clear()
-        self._last_progress_time.clear()
-        self._last_emitted_stats.clear()
-        self.endResetModel()
-
-    def to_dict_list(self) -> List[Dict[str, Any]]:
-        return list(self._groups)
+def format_size(b: int) -> str:
+    if b <= 0:
+        return "-"
+    if b >= 1024 * 1024 * 1024:
+        return f"{b / (1024 * 1024 * 1024):.2f} GB"
+    if b >= 1024 * 1024:
+        return f"{b / (1024 * 1024):.1f} MB"
+    if b >= 1024:
+        return f"{b / 1024:.1f} KB"
+    return f"{b} B"
 
 
-class QueueModel(QAbstractListModel):
-    FilenameRole = Qt.UserRole + 1
-    PostTitleRole = Qt.UserRole + 2
-    CreatorNameRole = Qt.UserRole + 3
-    ServiceRole = Qt.UserRole + 4
-    StatusRole = Qt.UserRole + 5
-    ProgressRole = Qt.UserRole + 6
-    FileSizeRole = Qt.UserRole + 7
-    DownloadedBytesRole = Qt.UserRole + 8
-    ErrorMsgRole = Qt.UserRole + 9
-    UrlRole = Qt.UserRole + 10
-    SpeedRole = Qt.UserRole + 11
-    EtaRole = Qt.UserRole + 12
-    PercentageRole = Qt.UserRole + 13
-    OriginalIndexRole = Qt.UserRole + 14
-    FileIdRole = Qt.UserRole + 15
-    RetryCountRole = Qt.UserRole + 16
-    BatchIdRole = Qt.UserRole + 17
-    TargetPathRole = Qt.UserRole + 18
+def batch_of(t) -> str:
+    return getattr(t, "batch_id", "") or f"{t.service}_{t.creator_name}_{t.post_id}".strip("_")
 
-    countChanged = Signal()
-    filterStatusChanged = Signal()
-    minFileSizeChanged = Signal()
-    countsChanged = Signal()
+
+def _is_404(t) -> bool:
+    return "404" in str(getattr(t, "error_msg", "") or "").lower() or getattr(t, "http_status", 0) == 404
+
+
+def _stopped(t, status: str) -> None:
+    t.status = status
+    t.speed_bps = 0
+    t.speed_str = "0 KB/s"
+    t.eta_str = "--"
+
+
+def _cancelled(t) -> None:
+    _stopped(t, "cancelled")
+    t.error_msg = "Download cancelled by user"
+    t.progress_pct = 0
+
+
+def _for_retry(t) -> None:
+    t.retry_count = getattr(t, "retry_count", 0) + 1
+    t.retry_capped = False
+    t.status = "pending"
+    t.error_msg = ""
+    t.progress_pct = 0
+
+
+def _was_retried(t) -> bool:
+    return t.status == "pending" and (getattr(t, "retry_count", 0) > 0 or bool(getattr(t, "error_msg", "")))
+
+
+class QueueModel(QObject):
+    # Something about the list changed (files added / removed, a status, a paused post)
+    changed = Signal()
     failedCountChanged = Signal()
     failedListReady = Signal(str, int)
-    groupsChanged = Signal()
-    selectedBatchIdChanged = Signal()
-    viewModeChanged = Signal()
     retryRequested = Signal()
     singleRetryRequested = Signal(str)
     retrySelectedRequested = Signal(list)
@@ -605,388 +80,74 @@ class QueueModel(QAbstractListModel):
     taskResumeRequested = Signal(str)    # file_id
     cleared = Signal()
     _guiCall = Signal(object)
-    IMMEDIATE_REMOVAL_ROWS = 2000
-    RESET_AFTER_RUNS = 150         # more separate runs of rows leaving the filter: the list is rebuilt   # above this, rows leaving the filter are removed in batches
 
-    def __init__(self, parent=None, enable_groups: bool = True):
+    def __init__(self, parent=None):
         super().__init__(parent)
-        self._enable_groups = enable_groups
         self._guiCall.connect(self._run_gui_call, Qt.QueuedConnection)
         self._tasks: List[DownloadTask] = []
-        self._filter_status: str = "all" # "all", "downloading", "completed", "failed", "pending"
-        self._min_file_size: int = 0
-        self._selected_batch_id: str = ""
-        self._view_mode: str = "grouped" # "grouped" or "flat"
-        self._visible_tasks: List[DownloadTask] = []
-        self._visible_task_row = _RowIndex()
-        self._groups_model = QueueGroupsModel(self) if enable_groups else None
-        self._last_counts: Optional[tuple] = None
-        self._pending_count: int = 0
-        self._downloading_count: int = 0
-        self._completed_count: int = 0
-        self._skipped_count: int = 0
-        self._failed_count: int = 0
         self._paused_batch_ids: set = set()
         self._task_last_status: Dict[int, str] = {}
-        self._task_last_emit: Dict[int, float] = {}
-        self._failed_404: dict = {}      # id(task) of failed tasks whose error is a 404
         # (url, path) and file ids already in the queue, kept between appends (rebuilding them from
         # the whole queue on every append made adding to a big queue slow)
         self._signatures: set = set()
         self._signatures_dirty = False
-        # Rows that left the current filter, removed together a few times a second (removing one
-        # renumbered every row below it: with a big filtered list, every status change stalled)
-        self._pending_removals: set = set()
-        self._removal_timer = QTimer(self)
-        self._removal_timer.setSingleShot(True)
-        self._removal_timer.setInterval(250)
-        self._removal_timer.timeout.connect(self._flush_removals)
-        self._counts_timer = QTimer(self)
-        self._counts_timer.setSingleShot(True)
-        self._counts_timer.setInterval(60)
-        self._counts_timer.timeout.connect(self._flush_counts_changed)
-
-    def _flush_counts_changed(self):
-        curr_counts = (self._pending_count, self._downloading_count, self._completed_count, self._skipped_count, self._failed_count)
-        if self._last_counts != curr_counts:
-            prev_failed = self._last_counts[4] if (self._last_counts and len(self._last_counts) > 4) else None
-            self._last_counts = curr_counts
-            self.countsChanged.emit()
-            if prev_failed is None or prev_failed != curr_counts[4]:
-                self.failedCountChanged.emit()
-
-    def _recalculate_counts(self):
-        pending = 0
-        downloading = 0
-        completed = 0
-        skipped = 0
-        failed = 0
-        failed_404 = {}
-        for t in self._tasks:
-            st = getattr(t, "status", "")
-            if st in ("downloading", "retrying"):
-                downloading += 1
-            elif st == "completed":
-                completed += 1
-            elif st == "skipped":
-                skipped += 1
-            elif st in ("failed", "cancelled"):
-                failed += 1
-                if self._is_404(t):
-                    failed_404[id(t)] = True
-            elif st in ("pending", "paused"):
-                pending += 1
-        self._pending_count = pending
-        self._downloading_count = downloading
-        self._completed_count = completed
-        self._skipped_count = skipped
-        self._failed_count = failed
-        self._failed_404 = failed_404
-
-    @staticmethod
-    def _is_404(t) -> bool:
-        return "404" in str(getattr(t, "error_msg", "") or "").lower() or getattr(t, "http_status", 0) == 404
+        self._failed_rows: List[Dict[str, Any]] = []
+        self._active_failed_request: Optional[str] = None
 
     @staticmethod
     def _format_size(b: int) -> str:
-        return QueueGroupsModel._format_size(b)
+        return format_size(b)
 
-    def _matches_filter(self, task: DownloadTask) -> bool:
-        if self._selected_batch_id:
-            task_batch = getattr(task, "batch_id", "") or f"{task.service}_{task.creator_name}_{task.post_id}"
-            if task_batch != self._selected_batch_id:
-                return False
-
-        if self._min_file_size > 0:
-            effective_size = max(task.file_size, task.downloaded_bytes)
-            if effective_size < self._min_file_size:
-                return False
-
-        if self._filter_status == "all":
-            return True
-        elif self._filter_status == "downloading":
-            return task.status in ("downloading", "retrying")
-        elif self._filter_status == "completed":
-            return task.status == "completed"
-        elif self._filter_status == "skipped":
-            return task.status == "skipped"
-        elif self._filter_status == "failed":
-            return task.status in ("failed", "cancelled")
-        elif self._filter_status == "pending":
-            return task.status in ("pending", "paused")
-        return True
-
-    def _flush_removals(self):
-        """Removes the rows that left the filter: each run of neighbouring rows in one step (the
-        rows below don't need renumbering, see _RowIndex)."""
-        gone = self._pending_removals
-        self._pending_removals = set()
-        rows = sorted((self._visible_task_row[tid] for tid in gone if tid in self._visible_task_row), reverse=True)
-        if not rows:
-            return
-        runs = 1 + sum(1 for a, b in zip(rows, rows[1:]) if a - b != 1)
-        if runs > self.RESET_AFTER_RUNS or self._visible_task_row.needs_compacting():
-            # Thousands of scattered rows (files skipped quickly): each removal moved the whole rest
-            # of the list (20,000 of them took 9 s on a 300,000-row list). The list is rebuilt once.
-            self.beginResetModel()
-            self._visible_tasks = [t for t in self._visible_tasks if id(t) not in gone]
-            self._visible_task_row.reset(self._visible_tasks)
-            self.endResetModel()
-            self.countChanged.emit()
-            return
-        i = 0
-        while i < len(rows):
-            hi = rows[i]
-            lo = hi
-            while i + 1 < len(rows) and rows[i + 1] == lo - 1:
-                i += 1
-                lo = rows[i]
-            self.beginRemoveRows(QModelIndex(), lo, hi)
-            del self._visible_tasks[lo:hi + 1]
-            self.endRemoveRows()
-            i += 1
-        self._visible_task_row.remove_many(gone)
-        self.countChanged.emit()
-
-    _STATUS_FILTERS = {"downloading": ("downloading", "retrying"), "completed": ("completed",),
-                       "skipped": ("skipped",), "failed": ("failed", "cancelled"), "pending": ("pending", "paused")}
-
-    def _rebuild_visible(self):
-        self._pending_removals = set()
-        wanted = self._STATUS_FILTERS.get(self._filter_status)
-        if self._selected_batch_id or self._min_file_size > 0 or (wanted is None and self._filter_status != "all"):
-            self._visible_tasks = [t for t in self._tasks if self._matches_filter(t)]
-        elif wanted is None:
-            self._visible_tasks = list(self._tasks)          # everything: no check per task (big queues)
-        else:
-            self._visible_tasks = [t for t in self._tasks if t.status in wanted]
-        self._visible_task_row.reset(self._visible_tasks)
-
-    # ── Properties ────────────────────────────────────────────────────────────
-    @Property(int, notify=minFileSizeChanged)
-    def minFileSize(self) -> int:
-        return self._min_file_size
-
-    @minFileSize.setter
-    def minFileSize(self, val: int):
-        val = max(0, int(val))
-        if self._min_file_size != val:
-            self.beginResetModel()
-            self._min_file_size = val
-            self._rebuild_visible()
-            self.endResetModel()
-            self.minFileSizeChanged.emit()
-            self.countChanged.emit()
-    @Property(str, notify=filterStatusChanged)
-    def filterStatus(self) -> str:
-        return self._filter_status
-
-    @filterStatus.setter
-    def filterStatus(self, val: str):
-        if self._filter_status != val:
-            self.beginResetModel()
-            self._filter_status = val
-            self._rebuild_visible()
-            self.endResetModel()
-            self.filterStatusChanged.emit()
-            self.countChanged.emit()
-
-    @Property(int, notify=countsChanged)
-    def totalCount(self) -> int:
-        return len(self._tasks)
-
-    @Property(int, notify=countsChanged)
-    def downloadingCount(self) -> int:
-        return self._downloading_count
-
-    @Property(int, notify=countsChanged)
-    def completedCount(self) -> int:
-        return self._completed_count
-
-    @Property(int, notify=countsChanged)
-    def skippedCount(self) -> int:
-        return self._skipped_count
-
-    @Property(int, notify=failedCountChanged)
-    def failedCount(self) -> int:
+    def _skip_404(self) -> bool:
         p = self.parent()
-        skip_404 = bool(getattr(p, "skipRetry404", False)) if p else False
+        return bool(getattr(p, "skipRetry404", False)) if p else False
 
-        # Counted as tasks change, and the saved failed files come from memory: this is read every
-        # time the button redraws, so it must never loop over the queue or read the file (it stalled
-        # the window with big queues / failed lists)
-        if self._failed_count > 0:
-            return max(0, self._failed_count - len(self._failed_404)) if skip_404 else self._failed_count
-
-        rm = getattr(p, "recovery_manager", None) if p else None
-        if rm is not None and hasattr(rm, "retry_counts"):
-            try:
-                counts = rm.retry_counts(wait=False) or rm.retry_counts_cached()
-                return counts[1] if skip_404 else counts[0]
-            except Exception:
-                pass
-        return 0
-
-    @Property(int, notify=countsChanged)
-    def pendingCount(self) -> int:
-        return self._pending_count
-
-    @Property(int, notify=countChanged)
-    def count(self) -> int:
-        return len(self._visible_tasks)
-
-    # ── QAbstractListModel methods ────────────────────────────────────────────
-    def rowCount(self, parent=QModelIndex()):
-        return len(self._visible_tasks)
-
-    def data(self, index, role=Qt.DisplayRole):
-        if not index.isValid() or index.row() >= len(self._visible_tasks):
-            return None
-
-        task = self._visible_tasks[index.row()]
-
-        if role == self.FilenameRole:
-            return task.filename
-        elif role == self.PostTitleRole:
-            return task.post_title
-        elif role == self.CreatorNameRole:
-            return task.creator_name
-        elif role == self.ServiceRole:
-            return task.service
-        elif role == self.StatusRole:
-            return task.status
-        elif role == self.ProgressRole:
-            if task.file_size > 0:
-                return min(1.0, max(0.0, task.downloaded_bytes / task.file_size))
-            return 1.0 if task.status in ("completed", "skipped") else 0.0
-        elif role == self.FileSizeRole:
-            return self._format_size(task.file_size)
-        elif role == self.DownloadedBytesRole:
-            return self._format_size(task.downloaded_bytes)
-        elif role == self.ErrorMsgRole:
-            return task.error_msg
-        elif role == self.UrlRole:
-            return task.url
-        elif role == self.SpeedRole:
-            return task.speed_str
-        elif role == self.EtaRole:
-            return task.eta_str
-        elif role == self.PercentageRole:
-            return task.progress_pct
-        elif role == self.OriginalIndexRole:
-            try:
-                return self._tasks.index(task)
-            except ValueError:
-                return index.row()
-        elif role == self.FileIdRole:
-            return task.file_id
-        elif role == self.RetryCountRole:
-            return getattr(task, "retry_count", 0)
-        elif role == self.BatchIdRole:
-            return getattr(task, "batch_id", "") or f"{task.service}_{task.creator_name}_{task.post_id}"
-        elif role == self.TargetPathRole:
-            return getattr(task, "target_path", "") or ""
-
-        return None
-
-    def roleNames(self):
-        return {
-            self.FilenameRole: b"filename",
-            self.PostTitleRole: b"postTitle",
-            self.CreatorNameRole: b"creatorName",
-            self.ServiceRole: b"service",
-            self.StatusRole: b"status",
-            self.ProgressRole: b"progress",
-            self.FileSizeRole: b"fileSize",
-            self.DownloadedBytesRole: b"downloadedBytes",
-            self.ErrorMsgRole: b"errorMsg",
-            self.UrlRole: b"url",
-            self.SpeedRole: b"speed",
-            self.EtaRole: b"eta",
-            self.PercentageRole: b"percentage",
-            self.OriginalIndexRole: b"originalIndex",
-            self.FileIdRole: b"fileId",
-            self.RetryCountRole: b"retryCount",
-            self.BatchIdRole: b"batchId",
-            self.TargetPathRole: b"targetPath"
-        }
-
-    # ── Grouping & Batch View Properties ──────────────────────────────────────
-    @Property(str, notify=selectedBatchIdChanged)
-    def selectedBatchId(self) -> str:
-        return self._selected_batch_id
-
-    @selectedBatchId.setter
-    def selectedBatchId(self, val: str):
-        if self._selected_batch_id != val:
-            self.beginResetModel()
-            self._selected_batch_id = val
-            self._rebuild_visible()
-            self.endResetModel()
-            self.selectedBatchIdChanged.emit()
-            self.countChanged.emit()
-
-    @Property(str, notify=viewModeChanged)
-    def viewMode(self) -> str:
-        return self._view_mode
-
-    @viewMode.setter
-    def viewMode(self, val: str):
-        if self._view_mode != val:
-            self._view_mode = val
-            self.viewModeChanged.emit()
-
-    @Property(QObject, constant=True)
-    def groupsModel(self) -> Optional[QAbstractListModel]:
-        return self._groups_model
-
-    @Property(int, notify=groupsChanged)
-    def groupsCount(self) -> int:
-        return self._groups_model.rowCount() if self._groups_model else 0
-
-    @Property("QVariantList", notify=groupsChanged)
-    def groups(self) -> List[Dict[str, Any]]:
-        return self._groups_model.to_dict_list() if self._groups_model else []
-
-    @groups.setter
-    def groups(self, val):
-        pass
-
+    def _changed(self, failed: bool = False) -> None:
+        self.changed.emit()
+        if failed:
+            self.failedCountChanged.emit()
 
     @Slot(object)
     def _run_gui_call(self, fn):
         fn()
 
     def _off_gui_thread(self, fn) -> bool:
-        """Models may only change on the GUI thread (a reset from a worker thread can crash the
-        app). Called from another thread, fn is queued for the GUI thread and True is returned."""
+        """The list changes on the window thread. Called from another thread, fn is queued for it and
+        True is returned."""
         if QThread.currentThread() is not self.thread():
             self._guiCall.emit(fn)
             return True
         return False
 
+    # ── The list ──────────────────────────────────────────────────────────────
+
+    def getTasks(self) -> List[DownloadTask]:
+        return list(self._tasks)
+
+    @property
+    def tasks(self) -> List[DownloadTask]:
+        return list(self._tasks)
+
+    def size(self) -> int:
+        return len(self._tasks)
+
+    @property
+    def pendingCount(self) -> int:
+        return sum(1 for t in self._tasks if t.status in ("pending", "paused"))
+
+    @property
+    def groups(self) -> List[Dict[str, Any]]:
+        """The per-post groups as the window shows them (saved with the session and the export)."""
+        return []
+
     def setTasks(self, tasks: List[DownloadTask]):
         tasks = list(tasks)
         if self._off_gui_thread(lambda: self.setTasks(tasks)):
             return
-        self.beginResetModel()
-        self._counts_timer.stop()
-        self._removal_timer.stop()
-        self._pending_removals = set()
         self._tasks = tasks
-        self._task_last_emit.clear()
         self._task_last_status = {id(t): t.status for t in tasks}
-        self._recalculate_counts()
-        self._last_counts = (self._pending_count, self._downloading_count, self._completed_count, self._skipped_count, self._failed_count)
-        self._rebuild_visible()
         self._signatures_dirty = True
-        self.endResetModel()
-        self.countChanged.emit()
-        self.countsChanged.emit()
-        self.failedCountChanged.emit()
-        if self._groups_model:
-            self._groups_model.rebuild(self._tasks, background=True)
-            self.groupsChanged.emit()
+        self._changed(True)
 
     def _ensure_signatures(self):
         if self._signatures_dirty:
@@ -1005,56 +166,21 @@ class QueueModel(QAbstractListModel):
         if self._off_gui_thread(lambda: self.appendTasks(tasks)):
             return len(tasks)
         self._ensure_signatures()
-        existing_signatures = self._signatures
-
-        deduped = []
+        sigs = self._signatures
+        added = []
         for t in tasks:
-            sig1 = (t.url, t.target_path)
-            sig2 = t.file_id
-            if sig1 in existing_signatures or (sig2 and sig2 in existing_signatures):
+            sig1, sig2 = (t.url, t.target_path), t.file_id
+            if sig1 in sigs or (sig2 and sig2 in sigs):
                 continue
-            existing_signatures.add(sig1)
+            sigs.add(sig1)
             if sig2:
-                existing_signatures.add(sig2)
-            t._last_model_status = getattr(t, "status", "")
-            deduped.append(t)
-
-        if not deduped:
-            return 0
-
-        # Counted and shown incrementally: only the new tasks are looked at
-        self._tasks.extend(deduped)
-        for t in deduped:
-            st = t.status
-            self._task_last_status[id(t)] = st
-            if st in ("downloading", "retrying"):
-                self._downloading_count += 1
-            elif st == "completed":
-                self._completed_count += 1
-            elif st == "skipped":
-                self._skipped_count += 1
-            elif st in ("failed", "cancelled"):
-                self._failed_count += 1
-                if self._is_404(t):
-                    self._failed_404[id(t)] = True
-            elif st == "pending":
-                self._pending_count += 1
-        self._last_counts = (self._pending_count, self._downloading_count, self._completed_count, self._skipped_count, self._failed_count)
-        shown = [t for t in deduped if self._matches_filter(t)]
-        if shown:
-            first = len(self._visible_tasks)
-            self.beginInsertRows(QModelIndex(), first, first + len(shown) - 1)
-            for t in shown:
-                self._visible_task_row.append(t)
-            self._visible_tasks.extend(shown)
-            self.endInsertRows()
-        self.countChanged.emit()
-        self.countsChanged.emit()
-        self.failedCountChanged.emit()
-        if self._groups_model:
-            self._groups_model.add_tasks_batch(deduped)
-            self.groupsChanged.emit()
-        return len(deduped)
+                sigs.add(sig2)
+            self._task_last_status[id(t)] = t.status
+            added.append(t)
+        if added:
+            self._tasks.extend(added)
+            self._changed(True)
+        return len(added)
 
     def addTasks(self, tasks: List[DownloadTask]):
         self.appendTasks(tasks)
@@ -1062,548 +188,238 @@ class QueueModel(QAbstractListModel):
     def add_tasks(self, tasks: List[DownloadTask]):
         return self.appendTasks(tasks)
 
-    @Slot(str)
-    def removeBatch(self, batch_id: str):
-        if not batch_id:
+    def updateTask(self, task: DownloadTask):
+        """A file changed (progress or status)."""
+        old = self._task_last_status.get(id(task))
+        if old != task.status:
+            self._task_last_status[id(task)] = task.status
+            self._changed(old in ("failed", "cancelled") or task.status in ("failed", "cancelled"))
+
+    def clear(self):
+        if self._off_gui_thread(self.clear):
             return
-        self._paused_batch_ids.discard(batch_id)
-        if self._groups_model:
-            self._groups_model.resume_batch(batch_id)
-        self.beginResetModel()
-        self._counts_timer.stop()
-        self._tasks = [t for t in self._tasks if (getattr(t, "batch_id", "") or f"{t.service}_{t.creator_name}_{t.post_id}".strip("_")) != batch_id or t.status == "downloading"]
+        self._paused_batch_ids.clear()
+        self._tasks = []
+        self._task_last_status.clear()
         self._signatures_dirty = True
-        self._recalculate_counts()
-        self._last_counts = (self._pending_count, self._downloading_count, self._completed_count, self._skipped_count, self._failed_count)
-        if self._selected_batch_id == batch_id:
-            self._selected_batch_id = ""
-            self.selectedBatchIdChanged.emit()
-        self._rebuild_visible()
-        self.endResetModel()
-        self.countChanged.emit()
-        self.countsChanged.emit()
-        self.failedCountChanged.emit()
-        if self._groups_model:
-            self._groups_model.remove_batch(batch_id)
-            self.groupsChanged.emit()
-        self.batchRemoveRequested.emit(batch_id)
+        self._changed(True)
+        self.cleared.emit()
 
-    @Slot()
-    def cancel_all_pending(self):
-        """Cancels all pending, downloading, and retrying tasks in a single fast batch operation."""
-        self.beginResetModel()
-        self._counts_timer.stop()
-        for t in self._tasks:
-            if t.status in ("pending", "downloading", "retrying"):
-                t.status = "cancelled"
-                t.error_msg = "Download cancelled by user"
-                t.progress_pct = 0
-                t.speed_bps = 0
-                t.speed_str = "0 KB/s"
-                t.eta_str = "--"
-                self._task_last_status[id(t)] = "cancelled"
-        self._recalculate_counts()
-        self._last_counts = (self._pending_count, self._downloading_count, self._completed_count, self._skipped_count, self._failed_count)
-        self._rebuild_visible()
-        self.endResetModel()
-        self.countChanged.emit()
-        self.countsChanged.emit()
-        self.failedCountChanged.emit()
-        if self._groups_model:
-            self._groups_model.rebuild(self._tasks)
-            self.groupsChanged.emit()
+    def _set_status(self, tasks) -> None:
+        for t in tasks:
+            self._task_last_status[id(t)] = t.status
 
-    @Slot(str)
-    def cancelBatch(self, batch_id: str):
-        if not batch_id:
-            return
-        self._paused_batch_ids.discard(batch_id)
-        if self._groups_model:
-            self._groups_model.resume_batch(batch_id)
-        self.beginResetModel()
-        self._counts_timer.stop()
-        for t in self._tasks:
-            bid = getattr(t, "batch_id", "") or f"{t.service}_{t.creator_name}_{t.post_id}".strip("_")
-            if bid == batch_id and t.status in ("pending", "downloading", "retrying", "paused"):
-                t.status = "cancelled"
-                t.error_msg = "Download cancelled by user"
-                t.progress_pct = 0
-                t.speed_bps = 0
-                t.speed_str = "0 KB/s"
-                t.eta_str = "--"
-                self._task_last_status[id(t)] = "cancelled"
-        self._recalculate_counts()
-        self._last_counts = (self._pending_count, self._downloading_count, self._completed_count, self._skipped_count, self._failed_count)
-        self._rebuild_visible()
-        self.endResetModel()
-        self.countChanged.emit()
-        self.countsChanged.emit()
-        self.failedCountChanged.emit()
-        if self._groups_model:
-            self._groups_model.rebuild(self._tasks)
-            self.groupsChanged.emit()
-        self.batchCancelRequested.emit(batch_id)
+    # ── A post ────────────────────────────────────────────────────────────────
 
-    @Slot(str)
-    def pauseBatch(self, batch_id: str):
-        if not batch_id:
-            return
-        self._paused_batch_ids.add(batch_id)
-        if self._groups_model:
-            self._groups_model.pause_batch(batch_id)
-        self.beginResetModel()
-        self._counts_timer.stop()
-        for t in self._tasks:
-            bid = getattr(t, "batch_id", "") or f"{t.service}_{t.creator_name}_{t.post_id}".strip("_")
-            if bid == batch_id and t.status in ("pending", "downloading", "retrying"):
-                t.status = "paused"
-                t.speed_bps = 0
-                t.speed_str = "0 KB/s"
-                t.eta_str = "--"
-                self._task_last_status[id(t)] = "paused"
-        self._recalculate_counts()
-        self._last_counts = (self._pending_count, self._downloading_count, self._completed_count, self._skipped_count, self._failed_count)
-        self._rebuild_visible()
-        self.endResetModel()
-        self.countChanged.emit()
-        self.countsChanged.emit()
-        if self._groups_model:
-            self._groups_model.rebuild(self._tasks)
-            self.groupsChanged.emit()
-        self.batchPauseRequested.emit(batch_id)
-
-    @Slot(str)
-    def resumeBatch(self, batch_id: str):
-        if not batch_id:
-            return
-        self._paused_batch_ids.discard(batch_id)
-        if self._groups_model:
-            self._groups_model.resume_batch(batch_id)
-        self.beginResetModel()
-        self._counts_timer.stop()
-        for t in self._tasks:
-            bid = getattr(t, "batch_id", "") or f"{t.service}_{t.creator_name}_{t.post_id}".strip("_")
-            if bid == batch_id and t.status == "paused":
-                t.status = "pending"
-                t.error_msg = ""
-                self._task_last_status[id(t)] = "pending"
-        self._recalculate_counts()
-        self._last_counts = (self._pending_count, self._downloading_count, self._completed_count, self._skipped_count, self._failed_count)
-        self._rebuild_visible()
-        self.endResetModel()
-        self.countChanged.emit()
-        self.countsChanged.emit()
-        if self._groups_model:
-            self._groups_model.rebuild(self._tasks)
-            self.groupsChanged.emit()
-        self.batchResumeRequested.emit(batch_id)
-
-    def _set_task_status(self, file_id: str, from_states: tuple, to_state: str) -> bool:
-        """Moves one file between states (pause / resume) and refreshes the views."""
-        target = next((t for t in self._tasks if str(getattr(t, "file_id", "")) == str(file_id)), None)
-        if target is None or target.status not in from_states:
-            return False
-        self.beginResetModel()
-        self._counts_timer.stop()
-        target.status = to_state
-        if to_state == "paused":
-            target.speed_bps = 0
-            target.speed_str = "0 KB/s"
-            target.eta_str = "--"
-        else:
-            target.error_msg = ""
-        self._task_last_status[id(target)] = to_state
-        self._recalculate_counts()
-        self._last_counts = (self._pending_count, self._downloading_count, self._completed_count, self._skipped_count, self._failed_count)
-        self._rebuild_visible()
-        self.endResetModel()
-        self.countChanged.emit()
-        self.countsChanged.emit()
-        if self._groups_model:
-            self._groups_model.rebuild(self._tasks)
-            self.groupsChanged.emit()
-        return True
-
-    @Slot(str)
-    def pauseTask(self, file_id: str):
-        """Pauses a single file; a file mid-download stops and keeps what it has so far."""
-        if self._set_task_status(file_id, ("pending", "downloading", "retrying"), "paused"):
-            self.taskPauseRequested.emit(file_id)
-
-    @Slot(str)
-    def resumeTask(self, file_id: str):
-        if self._set_task_status(file_id, ("paused",), "pending"):
-            self.taskResumeRequested.emit(file_id)
-
-    @Slot(str, result=bool)
     def isBatchPaused(self, batch_id: str) -> bool:
-        if not batch_id:
-            return False
-        return batch_id in self._paused_batch_ids
+        return bool(batch_id) and batch_id in self._paused_batch_ids
 
-    @Slot(str)
     def toggleBatchPause(self, batch_id: str):
         if self.isBatchPaused(batch_id):
             self.resumeBatch(batch_id)
         else:
             self.pauseBatch(batch_id)
 
-    @Slot(str)
+    def removeBatch(self, batch_id: str):
+        if not batch_id:
+            return
+        self._paused_batch_ids.discard(batch_id)
+        self._tasks = [t for t in self._tasks if batch_of(t) != batch_id or t.status == "downloading"]
+        self._signatures_dirty = True
+        self._changed(True)
+        self.batchRemoveRequested.emit(batch_id)
+
+    def cancelBatch(self, batch_id: str):
+        if not batch_id:
+            return
+        self._paused_batch_ids.discard(batch_id)
+        hit = [t for t in self._tasks if batch_of(t) == batch_id and t.status in _BUSY + ("paused",)]
+        for t in hit:
+            _cancelled(t)
+        self._set_status(hit)
+        self._changed(True)
+        self.batchCancelRequested.emit(batch_id)
+
+    def pauseBatch(self, batch_id: str):
+        if not batch_id:
+            return
+        self._paused_batch_ids.add(batch_id)
+        hit = [t for t in self._tasks if batch_of(t) == batch_id and t.status in _BUSY]
+        for t in hit:
+            _stopped(t, "paused")
+        self._set_status(hit)
+        self._changed()
+        self.batchPauseRequested.emit(batch_id)
+
+    def resumeBatch(self, batch_id: str):
+        if not batch_id:
+            return
+        self._paused_batch_ids.discard(batch_id)
+        hit = [t for t in self._tasks if batch_of(t) == batch_id and t.status == "paused"]
+        for t in hit:
+            t.status = "pending"
+            t.error_msg = ""
+        self._set_status(hit)
+        self._changed()
+        self.batchResumeRequested.emit(batch_id)
+
     def retryBatch(self, batch_id: str):
         if not batch_id:
             return
         self._paused_batch_ids.discard(batch_id)
-        if self._groups_model:
-            self._groups_model.resume_batch(batch_id)
-        p = self.parent()
-        skip_404 = bool(getattr(p, "skipRetry404", False)) if p else False
-        self.beginResetModel()
-        self._counts_timer.stop()
-        for t in self._tasks:
-            bid = getattr(t, "batch_id", "") or f"{t.service}_{t.creator_name}_{t.post_id}".strip("_")
-            if bid == batch_id and (t.status in ("failed", "cancelled") or t.status == "pending"):
-                if skip_404 and self._is_404(t):
-                    continue
-                t.status = "pending"
-                t.error_msg = ""
-                t.retry_count = getattr(t, "retry_count", 0) + 1
-                self._task_last_status[id(t)] = "pending"
-        self._recalculate_counts()
-        self._last_counts = (self._pending_count, self._downloading_count, self._completed_count, self._skipped_count, self._failed_count)
-        self._rebuild_visible()
-        self.endResetModel()
-        self.countChanged.emit()
-        self.countsChanged.emit()
-        self.failedCountChanged.emit()
-        if self._groups_model:
-            self._groups_model.rebuild(self._tasks)
-            self.groupsChanged.emit()
+        skip_404 = self._skip_404()
+        hit = [t for t in self._tasks if batch_of(t) == batch_id and t.status in ("failed", "cancelled", "pending")
+               and not (skip_404 and _is_404(t))]
+        for t in hit:
+            t.status = "pending"
+            t.error_msg = ""
+            t.retry_count = getattr(t, "retry_count", 0) + 1
+        self._set_status(hit)
+        self._changed(True)
         self.batchRetryRequested.emit(batch_id)
 
-    def updateTask(self, task: DownloadTask):
-        try:
-            task_id = id(task)
-            row = self._visible_task_row.get(task_id)
-            is_visible = (row is not None)
-            matches = self._matches_filter(task)
-            old_status = self._task_last_status.get(task_id)
-            new_status = getattr(task, "status", "")
+    def cancel_all_pending(self):
+        """Cancels every waiting and running file at once."""
+        hit = [t for t in self._tasks if t.status in _BUSY]
+        for t in hit:
+            _cancelled(t)
+        self._set_status(hit)
+        self._changed(True)
 
-            # If this model does not track groups (e.g. active downloads panel) and the task
-            # is not visible and does not match the active filter, skip work immediately.
-            if not self._enable_groups and not is_visible and not matches:
-                return
+    # ── A file ────────────────────────────────────────────────────────────────
 
-            # Throttle progress updates if the task's status hasn't changed
-            now = time.time()
-            last_emit = self._task_last_emit.get(task_id, 0.0)
-            status_changed = (old_status != new_status)
-            if not status_changed and (now - last_emit < 0.08):
-                return
-            self._task_last_emit[task_id] = now
-
-            if is_visible:
-                if matches:
-                    self._pending_removals.discard(task_id)     # back in the filter before it was removed
-                    idx = self.index(row, 0)
-                    self.dataChanged.emit(idx, idx, [
-                        self.ProgressRole,
-                        self.PercentageRole,
-                        self.DownloadedBytesRole,
-                        self.SpeedRole,
-                        self.EtaRole,
-                        self.StatusRole,
-                        self.ErrorMsgRole
-                    ])
-                elif len(self._visible_tasks) <= self.IMMEDIATE_REMOVAL_ROWS:
-                    # Short lists: the row goes at once
-                    self.beginRemoveRows(QModelIndex(), row, row)
-                    self._visible_tasks.pop(row)
-                    self._visible_task_row.remove(task_id)
-                    if self._visible_task_row.needs_compacting():
-                        self._visible_task_row.reset(self._visible_tasks)
-                    self.endRemoveRows()
-                    self.countChanged.emit()
-                else:
-                    self._pending_removals.add(task_id)
-                    if not self._removal_timer.isActive():
-                        self._removal_timer.start()
-            else:
-                if matches and task_id in self._pending_removals:
-                    self._pending_removals.discard(task_id)      # back in the filter before it left
-                elif matches:
-                    row = len(self._visible_tasks)
-                    self.beginInsertRows(QModelIndex(), row, row)
-                    self._visible_tasks.append(task)
-                    self._visible_task_row.append(task)
-                    self.endInsertRows()
-                    self.countChanged.emit()
-
-            if status_changed:
-                self._task_last_status[task_id] = new_status
-                # O(1) incremental counter delta updates
-                if old_status in ("downloading", "retrying"):
-                    self._downloading_count = max(0, self._downloading_count - 1)
-                elif old_status == "completed":
-                    self._completed_count = max(0, self._completed_count - 1)
-                elif old_status == "skipped":
-                    self._skipped_count = max(0, self._skipped_count - 1)
-                elif old_status in ("failed", "cancelled"):
-                    self._failed_count = max(0, self._failed_count - 1)
-                    self._failed_404.pop(task_id, None)
-                elif old_status in ("pending", "paused"):
-                    self._pending_count = max(0, self._pending_count - 1)
-
-                if new_status in ("downloading", "retrying"):
-                    self._downloading_count += 1
-                elif new_status == "completed":
-                    self._completed_count += 1
-                elif new_status == "skipped":
-                    self._skipped_count += 1
-                elif new_status in ("failed", "cancelled"):
-                    self._failed_count += 1
-                    if self._is_404(task):
-                        self._failed_404[task_id] = True
-                elif new_status in ("pending", "paused"):
-                    self._pending_count += 1
-
-                curr_counts = (self._pending_count, self._downloading_count, self._completed_count, self._skipped_count, self._failed_count)
-                if self._last_counts != curr_counts:
-                    if not self._counts_timer.isActive():
-                        self._counts_timer.start()
-
-            if self._groups_model:
-                self._groups_model.update_task(task)
-        except (ValueError, RuntimeError):
-            pass
-
-    @Slot()
-    def clear(self):
-        if self._off_gui_thread(self.clear):
-            return
-        self._paused_batch_ids.clear()
-        self.beginResetModel()
-        self._counts_timer.stop()
-        self._tasks.clear()
-        self._visible_tasks.clear()
-        self._visible_task_row.reset(())
-        self._task_last_status.clear()
-        self._task_last_emit.clear()
-        self._last_counts = (0, 0, 0, 0, 0)
-        self._pending_count = 0
-        self._downloading_count = 0
-        self._completed_count = 0
-        self._skipped_count = 0
-        self._failed_count = 0
-        self._failed_404 = {}
-        self.endResetModel()
-        self.countChanged.emit()
-        self.countsChanged.emit()
-        self.failedCountChanged.emit()
-        if self._groups_model:
-            self._groups_model.clear()
-            self.groupsChanged.emit()
-        self.cleared.emit()
-
-    @Slot()
-    @Slot("QVariantList")
-    def clearFailedTasks(self, selected_file_ids: Optional[List[str]] = None):
-        """Removes failed and cancelled tasks from the queue (all if selected_file_ids is empty/None)."""
-        selected_set = set(selected_file_ids) if selected_file_ids else None
-
-        self.beginResetModel()
-        self._counts_timer.stop()
-        if selected_set:
-            self._tasks = [
-                t for t in self._tasks
-                if not (t.status in ("failed", "cancelled") and ((t.file_id or t.url or t.filename) in selected_set))
-            ]
+    def _set_task_status(self, file_id: str, from_states: tuple, to_state: str) -> bool:
+        t = next((t for t in self._tasks if str(getattr(t, "file_id", "")) == str(file_id)), None)
+        if t is None or t.status not in from_states:
+            return False
+        if to_state == "paused":
+            _stopped(t, "paused")
         else:
-            self._tasks = [t for t in self._tasks if t.status not in ("failed", "cancelled")]
+            t.status = to_state
+            t.error_msg = ""
+        self._set_status([t])
+        self._changed()
+        return True
 
+    def pauseTask(self, file_id: str):
+        """Pauses a single file; a file mid-download stops and keeps what it has so far."""
+        if self._set_task_status(file_id, _BUSY, "paused"):
+            self.taskPauseRequested.emit(file_id)
+
+    def resumeTask(self, file_id: str):
+        if self._set_task_status(file_id, ("paused",), "pending"):
+            self.taskResumeRequested.emit(file_id)
+
+    def retryTaskById(self, file_id: str):
+        t = next((t for t in self._tasks if str(t.file_id) == str(file_id)), None)
+        if t is None:
+            return
+        _for_retry(t)
+        self.updateTask(t)
+        self.singleRetryRequested.emit(t.file_id)
+
+    # ── Failed files ──────────────────────────────────────────────────────────
+
+    def clearFailedTasks(self, selected_file_ids: Optional[List[str]] = None):
+        """Removes failed and cancelled files (all, or the ones picked)."""
+        picked = set(selected_file_ids) if selected_file_ids else None
+        self._tasks = [t for t in self._tasks if not (t.status in ("failed", "cancelled")
+                                                       and (picked is None or (t.file_id or t.url or t.filename) in picked))]
         self._signatures_dirty = True
-        self._recalculate_counts()
-        self._last_counts = (self._pending_count, self._downloading_count, self._completed_count, self._skipped_count, self._failed_count)
-        self._rebuild_visible()
-        self.endResetModel()
+        self._changed(True)
 
-        self.countChanged.emit()
-        self.countsChanged.emit()
-        self.failedCountChanged.emit()
-        if self._groups_model:
-            self._groups_model.rebuild(self._tasks)
-            self.groupsChanged.emit()
-
-    @Slot()
     def retryFailed(self):
-        """Flags all failed and cancelled tasks as pending and emits retryRequested."""
-        p = self.parent()
-        skip_404 = bool(getattr(p, "skipRetry404", False)) if p else False
-        failed = [
-            t for t in self._tasks
-            if (t.status in ("failed", "cancelled")
-                or (t.status == "pending" and (getattr(t, "retry_count", 0) > 0 or getattr(t, "error_msg", ""))))
-            and not (skip_404 and self._is_404(t))
-        ]
+        """Every failed and cancelled file back to waiting; retryRequested follows."""
+        skip_404 = self._skip_404()
+        failed = [t for t in self._tasks if (t.status in ("failed", "cancelled") or _was_retried(t))
+                  and not (skip_404 and _is_404(t))]
         if not failed:
             return
-        self.beginResetModel()
-        self._counts_timer.stop()
         for t in failed:
-            t.retry_count = getattr(t, "retry_count", 0) + 1
-            t.retry_capped = False
-            t.status = "pending"
-            t.error_msg = ""
-            t.progress_pct = 0
-            self._task_last_status[id(t)] = "pending"
-        self._recalculate_counts()
-        self._last_counts = (self._pending_count, self._downloading_count, self._completed_count, self._skipped_count, self._failed_count)
-        self._rebuild_visible()
-        self.endResetModel()
-        self.countChanged.emit()
-        self.countsChanged.emit()
-        self.failedCountChanged.emit()
-        if self._groups_model:
-            self._groups_model.rebuild(self._tasks)
-            self.groupsChanged.emit()
-
+            _for_retry(t)
+        self._set_status(failed)
+        self._changed(True)
         self.retryRequested.emit()
 
-    @Slot(int)
-    def retryTaskAt(self, visible_index: int):
-        """Flags a single task at visible_index as pending and triggers single retry."""
-        if 0 <= visible_index < len(self._visible_tasks):
-            t = self._visible_tasks[visible_index]
-            t.retry_count = getattr(t, "retry_count", 0) + 1
-            t.retry_capped = False
-            t.status = "pending"
-            t.error_msg = ""
-            t.progress_pct = 0
-            self.updateTask(t)
-            self.singleRetryRequested.emit(t.file_id)
+    def retrySelected(self, selected_file_ids: List[str]):
+        """Only the picked failed / cancelled files back to waiting."""
+        skip_404 = self._skip_404()
+        picked = set(selected_file_ids)
+        for t in self._tasks:
+            if t.status in ("failed", "cancelled", "pending") and (t.file_id or t.url or t.filename) in picked:
+                if skip_404 and _is_404(t):
+                    continue
+                _for_retry(t)
+                self.updateTask(t)
+        self.retrySelectedRequested.emit(selected_file_ids)
 
-    @Slot(result="QVariantList")
     def getFailedTasksList(self):
-        """Returns detailed failed and cancelled task metadata for the Retry Modal dialog."""
-        p = self.parent()
-        skip_404 = bool(getattr(p, "skipRetry404", False)) if p else False
-        return self._build_failed_list(list(self._tasks), skip_404, p)
+        """The Retry dialog's rows."""
+        return self._build_failed_list(list(self._tasks), self._skip_404(), self.parent())
 
-    @Slot(str)
     def prepareFailedTasksAsync(self, request_id: str):
         """Builds the Retry dialog's list in the background (it stalled the window with big queues and
         failed lists); failedListReady(request_id, count) follows, then the dialog takes it a page at a
         time with getFailedTasksPage."""
-        p = self.parent()
-        skip_404 = bool(getattr(p, "skipRetry404", False)) if p else False
-        tasks = list(self._tasks)
+        p, skip_404, tasks = self.parent(), self._skip_404(), list(self._tasks)
         self._active_failed_request = request_id
 
-        def _job(req_id, req_tasks, req_skip):
+        def _job():
             try:
-                rows = self._build_failed_list(req_tasks, req_skip, p)
+                rows = self._build_failed_list(tasks, skip_404, p)
             except Exception as e:
                 logger.debug(f"Couldn't list the failed files: {e}", category="queue")
                 rows = []
-            if getattr(self, "_active_failed_request", None) != req_id:
+            if self._active_failed_request != request_id:
                 return
             self._failed_rows = rows
             try:
-                self.failedListReady.emit(req_id, len(rows))
+                self.failedListReady.emit(request_id, len(rows))
             except RuntimeError:
                 pass
-        threading.Thread(target=_job, args=(request_id, tasks, skip_404), name="FailedList", daemon=True).start()
+        threading.Thread(target=_job, name="FailedList", daemon=True).start()
 
-    @Slot(int, int, result="QVariantList")
     def getFailedTasksPage(self, offset: int, limit: int):
-        rows = getattr(self, "_failed_rows", []) or []
+        rows = self._failed_rows or []
         return rows[max(0, offset):max(0, offset) + max(0, limit)]
 
+    @staticmethod
+    def _failed_row(d: Dict[str, Any], err_msg: str) -> Dict[str, Any]:
+        p_url = d.get("post_url") or ""
+        if not p_url and d.get("service") and d.get("post_id"):
+            p_url = f"https://pawchive.pw/{d.get('service')}/user/{d.get('creator_name')}/post/{d.get('post_id')}"
+        retries = d.get("retry_count") or 0
+        return {
+            "fileId": d.get("file_id", ""), "filename": d.get("filename", ""), "postTitle": d.get("post_title", ""),
+            "creatorName": d.get("creator_name", ""), "service": d.get("service", ""), "postId": d.get("post_id", ""),
+            "postUrl": p_url, "url": d.get("url", ""), "errorMsg": err_msg,
+            "fileSize": format_size(d.get("file_size") or 0), "retryCount": retries,
+            "retryCapped": bool(d.get("retry_capped")) or retries >= 5,
+        }
+
     def _build_failed_list(self, tasks, skip_404: bool, p):
-        """The Retry dialog's rows: failed / cancelled tasks of the queue, else the saved failed files."""
+        """The Retry dialog's rows: failed / cancelled files of the queue, else the saved failed files."""
         failed = []
-        has_failed_in_queue = False
+        in_queue = False
         for t in tasks:
-            if t.status in ("failed", "cancelled") or (t.status == "pending" and (getattr(t, "retry_count", 0) > 0 or getattr(t, "error_msg", ""))):
-                has_failed_in_queue = True
-                err_msg = t.error_msg or ("Download cancelled by user" if t.status == "cancelled" else "Download failed")
-                if skip_404 and ("404" in str(err_msg).lower() or getattr(t, "http_status", 0) == 404):
+            if not (t.status in ("failed", "cancelled") or _was_retried(t)):
+                continue
+            in_queue = True
+            err_msg = t.error_msg or ("Download cancelled by user" if t.status == "cancelled" else "Download failed")
+            if skip_404 and ("404" in str(err_msg).lower() or getattr(t, "http_status", 0) == 404):
+                continue
+            d = {k: getattr(t, k, "") for k in ("file_id", "filename", "post_title", "creator_name", "service",
+                                                 "post_id", "post_url", "url", "file_size", "retry_count", "retry_capped")}
+            failed.append(self._failed_row(d, err_msg))
+        if in_queue:
+            return failed
+        try:
+            for item in (p.recovery_manager.load_retries() if p and hasattr(p, "recovery_manager") else None) or []:
+                d = item.to_dict() if hasattr(item, "to_dict") else (item if isinstance(item, dict) else vars(item))
+                err_msg = d.get("error_msg") or "Download failed"
+                if skip_404 and ("404" in str(err_msg).lower() or d.get("http_status") == 404):
                     continue
-
-                p_url = getattr(t, "post_url", "") or ""
-                if not p_url and t.service and t.post_id:
-                    p_url = f"https://pawchive.pw/{t.service}/user/{t.creator_name}/post/{t.post_id}"
-
-                failed.append({
-                    "fileId": t.file_id,
-                    "filename": t.filename,
-                    "postTitle": t.post_title,
-                    "creatorName": t.creator_name,
-                    "service": t.service,
-                    "postId": t.post_id,
-                    "postUrl": p_url,
-                    "url": t.url,
-                    "errorMsg": err_msg,
-                    "fileSize": self._format_size(t.file_size),
-                    "retryCount": getattr(t, "retry_count", 0),
-                    "retryCapped": getattr(t, "retry_capped", False) or getattr(t, "retry_count", 0) >= 5
-                })
-
-        if not has_failed_in_queue:
-            try:
-                if p and hasattr(p, "recovery_manager"):
-                    spilled = p.recovery_manager.load_retries()
-                    if spilled:
-                        for item in spilled:
-                            d = item.to_dict() if hasattr(item, "to_dict") else (item if isinstance(item, dict) else vars(item))
-                            err_msg = d.get("error_msg") or "Download failed"
-                            if skip_404 and ("404" in str(err_msg).lower() or d.get("http_status") == 404):
-                                continue
-
-                            p_url = d.get("post_url") or ""
-                            if not p_url and d.get("service") and d.get("post_id"):
-                                p_url = f"https://pawchive.pw/{d.get('service')}/user/{d.get('creator_name')}/post/{d.get('post_id')}"
-                            failed.append({
-                                "fileId": d.get("file_id", ""),
-                                "filename": d.get("filename", ""),
-                                "postTitle": d.get("post_title", ""),
-                                "creatorName": d.get("creator_name", ""),
-                                "service": d.get("service", ""),
-                                "postId": d.get("post_id", ""),
-                                "postUrl": p_url,
-                                "url": d.get("url", ""),
-                                "errorMsg": err_msg,
-                                "fileSize": self._format_size(d.get("file_size", 0)),
-                                "retryCount": d.get("retry_count", 0),
-                                "retryCapped": d.get("retry_capped", False) or d.get("retry_count", 0) >= 5
-                            })
-            except Exception as e:
-                logger.debug(f"Error loading retries from recovery_manager in getFailedTasksList: {e}")
-
+                failed.append(self._failed_row(d, err_msg))
+        except Exception as e:
+            logger.debug(f"Error loading retries from recovery_manager in getFailedTasksList: {e}")
         return failed
-
-    @Slot("QVariantList")
-    def retrySelected(self, selected_file_ids: List[str]):
-        """Flags only the user-selected failed/cancelled tasks for retry."""
-        p = self.parent()
-        skip_404 = bool(getattr(p, "skipRetry404", False)) if p else False
-        selected_set = set(selected_file_ids)
-        for t in self._tasks:
-            if (t.status in ("failed", "cancelled") or t.status == "pending") and ((t.file_id or t.url or t.filename) in selected_set):
-                if skip_404 and self._is_404(t):
-                    continue
-                t.retry_count = getattr(t, "retry_count", 0) + 1
-                t.retry_capped = False
-                t.status = "pending"
-                t.error_msg = ""
-                t.progress_pct = 0
-                self.updateTask(t)
-
-        self.retrySelectedRequested.emit(selected_file_ids)
-
-    def getTasks(self) -> List[DownloadTask]:
-        return list(self._tasks)
-
-    @property
-    def tasks(self) -> List[DownloadTask]:
-        return list(self._tasks)

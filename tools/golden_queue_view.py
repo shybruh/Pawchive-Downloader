@@ -1,5 +1,6 @@
-"""Writes the reference answers of the Python queue model (bridge/queue_model.py) for the Rust
-port's test (src-tauri/src/downloader/queue_view.rs).
+"""Writes the reference answers of the Python queue model (bridge/queue_model.py's Qt list and
+groups models, removed once ported) for the Rust port's test (src-tauri/src/downloader/queue_view.rs).
+It ran against the commit before their removal.
 
     python tools/golden_queue_view.py
 

@@ -1683,7 +1683,7 @@ class AppBridge(QObject):
                 self._start_favorites_download_worker()
                 return
 
-            if self._queue_model.rowCount() > 0:
+            if self._queue_model.size() > 0:
                 logger.info("All tasks in queue are already completed. Use 'Retry Failed' to re-download failed items.", category="downloader")
             else:
                 logger.warning("Please enter a URL to start download or add to queue.", category="parser")
@@ -1728,7 +1728,7 @@ class AppBridge(QObject):
         if current and all(t.status in ("completed", "skipped") for t in current):
             self._queue_model.clear()
             self.downloader.reset_state()
-        if self._has_recovery_session and not self.downloader.tasks and self._queue_model.rowCount() == 0:
+        if self._has_recovery_session and not self.downloader.tasks and self._queue_model.size() == 0:
             recovered = self._load_recovery_tasks()
             if recovered:
                 self._queue_model.setTasks(recovered)
@@ -1738,7 +1738,7 @@ class AppBridge(QObject):
             self._has_recovery_session = False
             self._recovery_summary = {}
             self.hasRecoverySessionChanged.emit()
-        if not self.downloader.tasks and self._queue_model.rowCount() > 0:
+        if not self.downloader.tasks and self._queue_model.size() > 0:
             self.downloader.tasks = list(self._queue_model.tasks)
 
 
@@ -3170,7 +3170,7 @@ class AppBridge(QObject):
                     except Exception as err:
                         logger.error(f"Error syncing favorite artist {entry.creator_name!r}: {err}", category="downloader")
 
-                if not self.downloader.tasks and not self._queue_model.rowCount():
+                if not self.downloader.tasks and not self._queue_model.size():
                     self._is_downloading = False
                     self._status_text = "Favorites: All artists are up to date"
                     self.isDownloadingChanged.emit()
@@ -3244,10 +3244,6 @@ class AppBridge(QObject):
         # Populate models
         self._queue_model.setTasks(loaded_tasks)
         self.downloader.tasks = list(loaded_tasks)
-
-        batches = checkpoint.get("batches", [])
-        if batches:
-            self._queue_model.groups = batches
 
         options = self._get_filter_options()
 
@@ -4377,10 +4373,7 @@ class AppBridge(QObject):
             if method in ("pauseBatch", "resumeBatch", "cancelBatch", "retryBatch"):
                 paused = method == "pauseBatch"
                 (qm._paused_batch_ids.add if paused else qm._paused_batch_ids.discard)(key)
-                g = qm._groups_model
-                if g is not None:
-                    (g.pause_batch if paused else g.resume_batch)(key)
-                    qm.groupsChanged.emit()
+                qm.changed.emit()
                 with d._paused_batches_lock:
                     (d._paused_batches.add if paused else d._paused_batches.discard)(key)
             elif method == "removeBatch":

@@ -382,7 +382,8 @@ fn site_call(id: u64, a: &Value) -> Result<Value, String> {
 /// waiting and nothing runs). None when the engine doesn't have those files (the app does it).
 pub fn queue_window(method: &str, args: &[Value]) -> Option<Value> {
     let _touch = Touch;
-    if link().out.lock().unwrap().is_none() {
+    // (the app's own list: the old Python downloader, the engine's queue isn't used)
+    if link().out.lock().unwrap().is_none() || super::queue_view::global().lock().unwrap().from_app {
         return None;
     }
     let q = queue();
@@ -834,6 +835,8 @@ fn handle(msg: &Value) {
                 "vault" => crate::vault::call(id, args),
                 "decompress" => crate::decompress::call(id, args),
                 "ytdlp" => super::ytdlp::call(args),
+                // The per-post groups as the window shows them (saved with the session and the export)
+                "view_groups" => Ok(json!(super::queue_view::global().lock().unwrap().groups())),
                 "selection_scan" => super::selection::scan(id, args),
                 "selection_plan" => super::selection::plan(id, args),
                 "watchlist_favorites" => crate::watchlist::favorites::call(id, args),

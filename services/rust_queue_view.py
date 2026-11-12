@@ -2,14 +2,14 @@
 The window's queue view (file list, counts, per-post groups) answered by the desktop shell's Rust
 port (desktop/src-tauri/src/downloader/queue_view.rs, served by src-tauri/src/host/queue.rs).
 
-RustQueueModel is the app's QueueModel; the bridge still keeps its task list here. The window reads
-"appBridge.queueModel" and its groupsModel from Rust, whose rows are the engine's own queue
-(queue_view.rs follow); what goes over from here is what the view needs from the app: the paused
-posts, "don't retry 404s" and the failed files saved for Retry Failed. Pausing, resuming, cancelling and removing a post or a file are done by
-Rust's queue (the bridge follows: AppBridge._rust_queue_action); the rest of what the window asks
-(retries, clearing…) is passed back here and runs on this model, so the bridge's handlers don't change.
+The view's rows are the engine's own queue (queue_view.rs follow); what goes over from here is what
+the view needs from the app: the paused posts, "don't retry 404s" and the failed files saved for
+Retry Failed. With the old Python downloader (PAWCHIVE_PYTHON_DOWNLOADER=1) the engine's queue isn't
+used, so the bridge's list (bridge/queue_model.py) is sent over too, file by file as it changes.
 
-Without the desktop shell, the Python model is what the window reads (as before).
+Pausing, resuming, cancelling, removing and retrying a post or a file are done by Rust's queue (the
+bridge follows: AppBridge._rust_queue_action); the rest of what the window asks (the Retry list
+saved on disk…) is passed back here and runs on this list, so the bridge's handlers don't change.
 """
 
 import threading
@@ -22,7 +22,8 @@ from services import rust_queue
 
 
 def available() -> bool:
-    return rust_queue.available()
+    """The desktop shell is there to show the view."""
+    return bool(rust_queue._URL and rust_queue._TOKEN)
 
 
 def row_of(t) -> Dict[str, Any]:
@@ -39,14 +40,20 @@ def row_of(t) -> Dict[str, Any]:
 
 
 class RustQueueModel(QueueModel):
-    def __init__(self, parent=None, enable_groups: bool = True):
-        super().__init__(parent, enable_groups)
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        # The old Python downloader: Rust's view takes the files from here
+        self._send_rows = not rust_queue.available()
+        self._sent: Dict[str, Dict[str, Any]] = {}       # key -> the row Rust has
+        self._sent_order: Optional[List[str]] = None
         self._sent_meta: Optional[Dict[str, Any]] = None
-        self._sent_on = None                              # the connection it went over
+        self._sent_on = None                              # the connection they went over
+        self._full = True
+        self._dirty: Dict[int, Any] = {}
+        self._lock = threading.Lock()
         self._wake = threading.Event()
-        for sig in (self.modelReset, self.rowsInserted, self.rowsRemoved, self.groupsChanged, self.cleared,
-                    self.countsChanged, self.failedCountChanged):
-            sig.connect(self._changed_all)
+        self.changed.connect(self._changed_all)
+        self.failedCountChanged.connect(self._changed_all)
         changed_404 = getattr(parent, "skipRetry404Changed", None)
         if changed_404 is not None:
             changed_404.connect(self._changed_all)
@@ -56,9 +63,26 @@ class RustQueueModel(QueueModel):
         threading.Thread(target=self._flush_loop, name="rust-queue-view", daemon=True).start()
         self._wake.set()
 
+    @property
+    def groups(self) -> List[Dict[str, Any]]:
+        link = rust_queue.shared_link()
+        ok, value = link.call("view_groups", {}) if link.connect() else (False, "not connected")
+        if not ok:
+            logger.debug(f"Couldn't read the queue's groups: {value}", category="queue")
+            return []
+        return list(value or [])
+
     # ── Changes go to Rust ────────────────────────────────────────────────────
 
+    def updateTask(self, task):
+        super().updateTask(task)
+        if self._send_rows:
+            with self._lock:
+                self._dirty[id(task)] = task
+            self._wake.set()
+
     def _changed_all(self, *args):
+        self._full = True
         self._wake.set()
 
     def _flush_loop(self):
@@ -73,46 +97,58 @@ class RustQueueModel(QueueModel):
 
     def _meta(self) -> Dict[str, Any]:
         p = self.parent()
-        saved = [0, 0]
-        if self._failed_count == 0:
-            rm = getattr(p, "recovery_manager", None) if p else None
-            if rm is not None and hasattr(rm, "retry_counts"):
-                try:
-                    counts = rm.retry_counts(wait=False) or rm.retry_counts_cached()
-                    saved = [int(counts[0]), int(counts[1])]
-                except Exception:
-                    pass
-        paused = self._groups_model._paused_batch_ids if self._groups_model else self._paused_batch_ids
-        return {"paused": sorted(paused), "skip_404": bool(getattr(p, "skipRetry404", False)) if p else False,
-                "saved_failed": saved}
+        saved = [0, 0]           # (Rust shows them only when its queue has no failed files)
+        rm = getattr(p, "recovery_manager", None) if p else None
+        if rm is not None and hasattr(rm, "retry_counts"):
+            try:
+                counts = rm.retry_counts(wait=False) or rm.retry_counts_cached()
+                saved = [int(counts[0]), int(counts[1])]
+            except Exception:
+                pass
+        return {"paused": sorted(self._paused_batch_ids), "skip_404": self._skip_404(), "saved_failed": saved}
+
+    def _rows(self, new_link: bool):
+        """The old Python downloader: the files Rust's view doesn't have yet, and the order when it changed."""
+        if new_link:
+            self._sent, self._sent_order, self._full = {}, None, True
+        with self._lock:
+            full, self._full = self._full, False
+            dirty, self._dirty = self._dirty, {}
+        tasks = list(self._tasks) if full else list(dirty.values())
+        rows = []
+        for t in tasks:
+            r = row_of(t)
+            if self._sent.get(r["key"]) != r:
+                self._sent[r["key"]] = r
+                rows.append(r)
+        order = None
+        if full:
+            order = [rust_queue._key(t) for t in tasks]
+            keep = set(order)
+            for k in [k for k in self._sent if k not in keep]:
+                del self._sent[k]
+            if order == self._sent_order:
+                order = None                        # (same files in the same order)
+            else:
+                self._sent_order = order
+        return order, rows
 
     def _push(self):
         link = rust_queue.shared_link()
         if not link.connect():
             return
-        if self._sent_on is not link._sock:         # (a new connection: Rust has nothing yet)
+        new_link = self._sent_on is not link._sock  # (a new connection: Rust has nothing yet)
+        if new_link:
             self._sent_on = link._sock
             self._sent_meta = None
+        order, rows = self._rows(new_link) if self._send_rows else (None, [])
         meta = self._meta()
-        if meta == self._sent_meta:
+        if not rows and order is None and meta == self._sent_meta:
             return
         self._sent_meta = meta
-        link.send({"op": "view", "order": None, "rows": [], "meta": meta})
+        link.send({"op": "view", "order": order, "rows": rows, "meta": meta})
 
     # ── What the window asks (passed on by Rust) ──────────────────────────────
-
-    def retryTaskById(self, file_id: str):
-        """retryTaskAt for the window's rows (they are numbered in Rust)."""
-        t = next((t for t in self._tasks if str(t.file_id) == str(file_id)), None)
-        if t is None:
-            return
-        t.retry_count = getattr(t, "retry_count", 0) + 1
-        t.retry_capped = False
-        t.status = "pending"
-        t.error_msg = ""
-        t.progress_pct = 0
-        self.updateTask(t)
-        self.singleRetryRequested.emit(t.file_id)
 
     _WINDOW_METHODS = {
         "removeBatch", "cancel_all_pending", "cancelBatch", "pauseBatch", "resumeBatch", "pauseTask", "resumeTask",
