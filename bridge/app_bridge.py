@@ -429,6 +429,9 @@ class AppBridge(QObject):
             rust_queue.shared_link().handlers["app_button"] = self._app_button
             # (the engine's watchlist check asks for a creator's download settings and folder)
             rust_queue.shared_link().handlers["watch_plan_args"] = self._watch_plan_args
+        if rust_queue.available():
+            # (the engine's link scan asks for a creator's folder: src-tauri/src/downloader/scan.rs)
+            rust_queue.shared_link().handlers["link_artist_dir"] = self._link_artist_dir_ask
         self._archive_creators_model = ArchiveCreatorsModel(self)
         # Watchlist downloads: new posts that needed no files (already saved or filtered out),
         # counted as done when the download finishes
@@ -3153,6 +3156,14 @@ class AppBridge(QObject):
                 self._creator_name = creator_name
                 self.creatorNameChanged.emit()
 
+            elif (scanned := self._scan_link_in_rust(parsed, options)) is not None:
+                # ── Archive sites, scanned and planned by the engine ────────
+                if scanned == "stop":
+                    return
+                creator_name, posts, tasks, artist_dir = scanned
+                self.link_vault.auto_harvest_posts(posts=posts, creator_name=creator_name, domain=parsed.domain,
+                                                   service=parsed.service, user_id=parsed.user_id)
+
             else:
                 # ── Archive sites (Pawchive / cum.st) ───────────────
                 # 1. Fetch profile
@@ -3264,25 +3275,7 @@ class AppBridge(QObject):
                     artist_dir = None
                 else:
                     batch_id = f"artist_{parsed.service}_{parsed.user_id}"
-                    existing_entry = self._watchlist_manager._find(parsed.user_id, parsed.service) if (not parsed.is_external_provider and parsed.user_id) else None
-                    artist_dir = None
-                    if existing_entry and existing_entry.download_dir:
-                        from core.filter_engine import FilterEngine
-                        clean_c = FilterEngine.clean_filesystem_text(creator_name or parsed.user_id, max_len=80, fallback="creator")
-                        norm_existing = os.path.normpath(existing_entry.download_dir)
-                        norm_base = os.path.normpath(self._download_dir) if self._download_dir else ""
-                        # If old folder does not exist on disk, or if user changed self._download_dir:
-                        # re-anchor to active self._download_dir so user changes are 100% respected!
-                        if getattr(existing_entry, "custom_folder", False):
-                            artist_dir = norm_existing           # chosen by the user: used as it is
-                        elif not os.path.exists(norm_existing) or (norm_base and not norm_existing.startswith(norm_base)):
-                            new_artist_dir = pick_creator_folder(norm_base, clean_c, parsed.service) if norm_base else norm_existing
-                            existing_entry.download_dir = new_artist_dir
-                            self._watchlist_manager.save()
-                            artist_dir = new_artist_dir
-                            logger.info(f"Download location updated to active download folder: '{new_artist_dir}'", category="downloader")
-                        else:
-                            artist_dir = norm_existing
+                    artist_dir = self._link_artist_dir(parsed.service, parsed.user_id, creator_name) if parsed.user_id else None
 
                 tasks = self.downloader.build_tasks_from_posts(
                     posts=posts,
@@ -3409,6 +3402,87 @@ class AppBridge(QObject):
             self.isDownloadingChanged.emit()
             self.hasErrorChanged.emit()
             self.lastErrorMessageChanged.emit()
+
+    def _link_artist_dir(self, service: str, user_id: str, creator_name: str) -> Optional[str]:
+        """A creator's download folder when the watchlist has one for them (moved into the download
+        folder chosen now, unless the user picked it), else None (the plan picks it)"""
+        existing_entry = self._watchlist_manager._find(user_id, service)
+        if not (existing_entry and existing_entry.download_dir):
+            return None
+        from core.filter_engine import FilterEngine
+        clean_c = FilterEngine.clean_filesystem_text(creator_name or user_id, max_len=80, fallback="creator")
+        norm_existing = os.path.normpath(existing_entry.download_dir)
+        norm_base = os.path.normpath(self._download_dir) if self._download_dir else ""
+        # If old folder does not exist on disk, or if user changed self._download_dir:
+        # re-anchor to active self._download_dir so user changes are 100% respected!
+        if getattr(existing_entry, "custom_folder", False):
+            return norm_existing           # chosen by the user: used as it is
+        if not os.path.exists(norm_existing) or (norm_base and not norm_existing.startswith(norm_base)):
+            new_artist_dir = pick_creator_folder(norm_base, clean_c, service) if norm_base else norm_existing
+            existing_entry.download_dir = new_artist_dir
+            self._watchlist_manager.save()
+            logger.info(f"Download location updated to active download folder: '{new_artist_dir}'", category="downloader")
+            return new_artist_dir
+        return norm_existing
+
+    def _link_artist_dir_ask(self, args: List[Any]) -> Any:
+        """The engine's link scan asks for the creator's folder: [service, user_id, creator name]"""
+        a = (list(args or []) + ["", "", ""])[:3]
+        return self._link_artist_dir(str(a[0]), str(a[1]), str(a[2])) or ""
+
+    def _scan_link_in_rust(self, parsed: URLParseResult, options):
+        """An archive-site link's scan and plan in the engine (src-tauri/src/downloader/scan.rs):
+        (creator name, posts, tasks, artist folder), "stop" when it was cancelled or found no posts
+        (the status line set), or None when the engine can't do it (then it's done here)."""
+        from services import rust_sites
+        d = self.downloader
+        if (not isinstance(self.api_client, rust_sites.RustApiClient) or not hasattr(d, "tasks_from_plan")
+                or os.environ.get("PAWCHIVE_PYTHON_PLANNER", "") == "1" or not d._link.connect()):
+            return None
+        page_end = self._page_end
+        if self._date_auto_scan_pages and (self._date_after or self._date_before):
+            page_end = 999999       # (the client stops once it passes the date range)
+        domain = (parsed.domain or "").lower()
+        favorites = False
+        if options.favorite_mode:
+            from core.auth_manager import auth_manager
+            prov_id = self.get_provider_for_domain(parsed.domain)
+            if auth_manager.is_logged_in(prov_id):
+                favorites = True
+            else:
+                from core.providers import PROVIDER_NAMES
+                pname = PROVIDER_NAMES.get(prov_id, prov_id.capitalize())
+                logger.warning(f"⭐ Favorite Mode active but not logged into {pname}. Showing auth prompt.", category="auth")
+                self.favoriteAuthRequired.emit(pname)
+        am = getattr(d, "archive_manager", None)
+        api = self.api_client
+        d.last_build_cancelled = False
+        ok, r = d._link.call("link_scan", {
+            "link": rust_sites._parsed(parsed),
+            "site": {"cookie": api.cookie_string or "", "user_agent": api.user_agent or "", "proxy": api.proxy_url or ""},
+            "page_start": int(self._page_start or 1), "page_end": int(page_end or 999999),
+            "date_after": self._date_after or "", "date_before": self._date_before or "",
+            "dms": bool((getattr(options, "download_dms", False) or self._download_dms) and ("cum.st" in domain or "pawchive" in domain)),
+            "favorites": favorites,
+            "comments": options.character_scope in ("comments", "all"),
+            "options": options.to_dict(), "archive": bool(am and am.is_enabled), "archive_db": d._archive_db(),
+            "base_dir": self._download_dir or "", "include_service": bool(folder_naming.include_service),
+        }, cancelled=lambda: self._scan_cancel_event.is_set())
+        if not ok:
+            logger.debug(f"The download engine couldn't scan this link ({r}); scanning it the old way.", category="downloader")
+            return None
+        status, creator_name = r.get("status"), r.get("creator_name") or parsed.user_id
+        self._creator_name = creator_name
+        self.creatorNameChanged.emit()
+        if status != "plan":
+            self._is_downloading = bool(d._is_running)
+            self._status_text = "Progress: Cancelled" if status == "cancelled" else "Progress: Idle (0 posts found)"
+            self.isDownloadingChanged.emit()
+            self.statusTextChanged.emit()
+            return "stop"
+        posts = r.get("posts") or []
+        tasks = d.tasks_from_plan(r.get("plan") or {}, options)
+        return creator_name, posts, tasks, (r.get("artist_dir") or None)
 
     def _start_favorites_download_worker(self, page_start: int = 1, page_end: int = 999999, download_dir: str = ""):
         """Worker thread to incrementally sync all favorited artists from connected providers."""

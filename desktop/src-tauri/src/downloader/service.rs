@@ -334,7 +334,7 @@ fn call_flags() -> &'static Mutex<HashMap<u64, Arc<AtomicBool>>> {
     F.get_or_init(Default::default)
 }
 
-fn parsed_link(v: &Value) -> ParsedLink {
+pub fn parsed_link(v: &Value) -> ParsedLink {
     let s = |k: &str| v.get(k).and_then(Value::as_str).unwrap_or("").to_string();
     let b = |k: &str| v.get(k).and_then(Value::as_bool).unwrap_or(false);
     ParsedLink {
@@ -783,6 +783,7 @@ fn handle(msg: &Value) {
                 "watchlist" => crate::watchlist::entries::call(args),
                 "watchlist_check" => crate::watchlist::check::call(id, args),
                 "watchlist_download" => crate::watchlist::check::download(id, args),
+                "link_scan" => super::scan::call(id, args),
                 "watchlist_favorites" => crate::watchlist::favorites::call(id, args),
                 "archive" => {
                     archive_at(link(), args["path"].as_str().unwrap_or(""));

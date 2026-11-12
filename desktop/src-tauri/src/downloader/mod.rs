@@ -15,6 +15,7 @@ pub mod plan;
 pub mod queue;
 pub mod queue_view;
 pub mod service;
+pub mod scan;
 pub mod sites;
 pub(crate) mod py;
 
