@@ -404,7 +404,6 @@ def build_engine():
 
     # Sub-bridges first, so they keep their short names when appBridge's properties reach them again
     objects = {
-        "decompressorBridge": app_bridge.decompressorBridge,
         "telegramBridge": app_bridge.telegramBridge,
         "appBridge": app_bridge,
         "linkVault": app_bridge.link_vault,

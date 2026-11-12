@@ -118,7 +118,18 @@ impl Bank {
         }
         let tmp = format!("{path}.tmp");
         std::fs::write(&tmp, serde_json::to_string_pretty(v).unwrap_or_default())?;
-        std::fs::rename(&tmp, path)
+        // (the app's copy reads the file after each change: while it's open, Windows refuses to
+        // replace it, so the change is tried again for a moment)
+        let mut tries = 0;
+        loop {
+            match std::fs::rename(&tmp, path) {
+                Err(e) if tries < 40 && e.kind() == std::io::ErrorKind::PermissionDenied => {
+                    tries += 1;
+                    std::thread::sleep(std::time::Duration::from_millis(25));
+                }
+                r => return r,
+            }
+        }
     }
 
     fn save_passwords(&self) {
@@ -488,6 +499,9 @@ pub fn call(a: &Value) -> Result<Value, String> {
     let mut all = banks().lock().unwrap();
     let b = all.entry(dir.clone()).or_insert_with(|| Bank::load(&dir, Box::new(|l: &str, m: &str| crate::downloader::service::log_app(l, m, "decompressor", ""))));
     let st = |k: &str| a[k].as_str().unwrap_or("").to_string();
+    if matches!(a["do"].as_str(), Some("reload" | "add" | "add_many" | "remove" | "clear" | "record" | "sync")) {
+        crate::bridge::decompressor::bank_touched();
+    }
     Ok(match a["do"].as_str().unwrap_or("") {
         "reload" => {
             let fresh = Bank::load(&dir, Box::new(|l: &str, m: &str| crate::downloader::service::log_app(l, m, "decompressor", "")));

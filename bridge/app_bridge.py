@@ -1430,10 +1430,6 @@ class AppBridge(QObject):
             self.saveSettings()
 
     @Property(QObject, constant=True)
-    def decompressorBridge(self) -> DecompressorBridge:
-        return self._decompressor_bridge
-
-    @Property(QObject, constant=True)
     def telegramBridge(self) -> TelegramBridge:
         return self._telegram_bridge
 

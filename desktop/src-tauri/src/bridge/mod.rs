@@ -4,6 +4,7 @@
 //! are answered in Rust (the host sends them here, see host/native.rs `Overlay`). Each part
 //! is checked against the Python version before it moves.
 
+pub mod decompressor;
 pub mod gallery;
 pub mod gallery_tools;
 
