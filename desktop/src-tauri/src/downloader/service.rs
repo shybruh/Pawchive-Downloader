@@ -762,6 +762,8 @@ fn handle(msg: &Value) {
         "batch" => q.set_batch_paused(&s("batch"), msg["paused"].as_bool().unwrap_or(false)),
         // A file changed on disk (a download finished, files moved): the Gallery's folder totals above it
         "gallery_stale" => crate::bridge::gallery::mark_stale(&s("path")),
+        // settings.json's "windows_drive_mount": where Windows drives are on Linux
+        "mount_pattern" => crate::path_translation::set_mount_pattern(&s("pattern")),
         "task_progress" => q.set_progress(
             &s("key"),
             msg["downloaded_bytes"].as_u64().unwrap_or(0),

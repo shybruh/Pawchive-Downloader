@@ -252,6 +252,15 @@ class AppBridge(QObject):
             # The Rust part of the bridge (src-tauri/src/bridge/) asks for the download folder
             rust_queue.shared_link().handlers["download_dir"] = lambda args: self._download_dir or ""
 
+            # Where Windows drives are on Linux (settings.json's "windows_drive_mount"), for the
+            # engine's translation of paths saved on the other system (src-tauri/src/path_translation.rs)
+            def _mount_pattern():
+                from core import path_translation
+                rust_queue.shared_link().send({"op": "mount_pattern", "pattern": path_translation.mount_pattern})
+            rust_queue.shared_link().on_connect.append(_mount_pattern)
+            if rust_queue.shared_link()._sock is not None:
+                _mount_pattern()
+
         # Settings defaults
         self._current_url = ""
         self._page_start = 1

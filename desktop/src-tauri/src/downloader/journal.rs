@@ -321,7 +321,7 @@ pub fn remember(journal_path: &str) {
     }
 }
 
-/// A path as this system names it (the app translates other systems' paths: those are left to it)
+/// A path as this system names it
 fn native(p: &str) -> bool {
     if cfg!(windows) {
         let b = p.as_bytes();
@@ -331,8 +331,8 @@ fn native(p: &str) -> bool {
     }
 }
 
-/// A file of the saved list (DownloadTask.from_dict) as a queue file: None when its save path
-/// names another system's folder
+/// A file of the saved list (DownloadTask.from_dict) as a queue file, its save path in this
+/// system's form (saved on the other one: D:\ ↔ /mnt/d); None when it can't be named here
 pub fn task_from_dict(d: &Value) -> Option<(Task, State, Option<Arc<Options>>)> {
     let s = |k: &str| {
         d.get(k)
@@ -349,7 +349,7 @@ pub fn task_from_dict(d: &Value) -> Option<(Task, State, Option<Arc<Options>>)> 
             .unwrap_or(0)
     };
     let b = |k: &str| d.get(k).is_some_and(super::filters::truthy);
-    let target = s("target_path");
+    let target = crate::path_translation::localize_path(&s("target_path"));
     if !native(&target) {
         return None;
     }
@@ -643,5 +643,24 @@ mod tests {
         assert!(!std::path::Path::new(&path).exists());
         assert_eq!(save(&path, &cells, &json!({}), &json!([]), "in_progress", 1).unwrap(), Some(cells.len()));
         let _ = std::fs::remove_dir_all(&dir);
+    }
+}
+
+#[cfg(test)]
+mod translation_tests {
+    use super::task_from_dict;
+    use serde_json::json;
+
+    /// A file saved on the other system keeps its place, named this system's way
+    #[test]
+    fn other_systems_paths() {
+        let t = |p: &str| task_from_dict(&json!({"url": "https://x/a.jpg", "target_path": p})).map(|(t, _, _)| t.target_path);
+        if cfg!(windows) {
+            assert_eq!(t("/mnt/c/dl/Alice/a.jpg").as_deref(), Some(r"C:\dl\Alice\a.jpg"));
+            assert_eq!(t(r"D:\dl\a.jpg").as_deref(), Some(r"D:\dl\a.jpg"));
+            assert_eq!(t("/home/me/a.jpg"), None);
+        } else {
+            assert_eq!(t(r"C:\dl\a.jpg").as_deref().map(|p| p.ends_with("/dl/a.jpg")), Some(true));
+        }
     }
 }
