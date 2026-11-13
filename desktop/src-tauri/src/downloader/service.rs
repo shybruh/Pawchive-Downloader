@@ -835,6 +835,7 @@ fn handle(msg: &Value) {
                 "watchlist_download" => crate::watchlist::check::download(id, args),
                 "link_scan" => super::scan::call(id, args),
                 "album_files" => super::albums::call(args),
+                "album_tasks" => super::albums::tasks_call(args),
                 "cloud_download" => super::cloud::call(id, args),
                 "vault" => crate::vault::call(id, args),
                 "decompress" => crate::decompress::call(id, args),

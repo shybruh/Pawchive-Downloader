@@ -49,3 +49,19 @@ def fetch_nhentai_gallery(gallery_id_or_url: str, headers: Optional[dict] = None
         if r is not None:
             return r
     return _py_nhentai(gallery_id_or_url, headers=headers, timeout=timeout)
+
+
+def album_tasks(provider: str, url: str, post_id: str, download_dir: str):
+    """(creator name, task fields) of an album link's files, read and named by the engine
+    (src-tauri/src/downloader/scan.rs album_tasks), or None when it can't be asked."""
+    if os.environ.get("PAWCHIVE_PYTHON_ALBUMS", "") == "1" or not rust_queue.available():
+        return None
+    link = rust_queue.shared_link()
+    if not link.connect():
+        return None
+    ok, v = link.call("album_tasks", {"kind": provider, "url": str(url or ""), "post_id": str(post_id or ""),
+                                      "base_dir": str(download_dir or "")})
+    if not ok or not isinstance(v, dict):
+        logger.debug(f"The download engine couldn't read the {provider} link ({v}); reading it the old way.", category="api")
+        return None
+    return str(v.get("creator_name") or ""), list(v.get("tasks") or [])

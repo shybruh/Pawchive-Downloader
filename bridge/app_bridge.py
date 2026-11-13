@@ -80,6 +80,42 @@ from core.path_utils import unique_name_in_batch
 
 
 
+# The album sites: their files as the queue's files, one folder per album
+ALBUM_SITES = {
+    # provider: (the name when the album has none, the folder's prefix)
+    "bunkr": ("Bunkr Album", "Bunkr"),
+    "erome": ("Erome Album", "Erome"),
+    "nhentai": (None, "nHentai"),
+}
+
+
+def album_tasks(provider: str, title, files, download_dir: str, post_id: str):
+    """(creator name, task fields) of an album's files (bunkr / erome / nhentai). An album can hold
+    different files with the same name: later ones become "name (2).ext"…"""
+    fallback, prefix = ALBUM_SITES[provider]
+    if fallback is None:
+        fallback = f"Gallery {post_id}"
+    creator_name = clean_text(title) or fallback
+    folder = os.path.join(download_dir, f"{prefix} - {sanitize_filesystem_name(creator_name, fallback=fallback)}")
+    taken = set()
+    out = []
+    for f in files:
+        t = {
+            "url": f["url"],
+            "target_path": unique_name_in_batch(folder, f["filename"], taken),
+            "post_title": creator_name,
+            "creator_name": creator_name,
+            "service": provider,
+            "post_id": post_id or provider,
+            "file_id": f["url"],
+            "batch_id": f"{provider}_{post_id or creator_name or provider}",
+        }
+        if provider == "bunkr":
+            t["file_size"] = f.get("size", 0)
+        out.append(t)
+    return creator_name, out
+
+
 class AppBridge(QObject):
     # Signals for properties
     currentUrlChanged = Signal()
@@ -2609,66 +2645,8 @@ class AppBridge(QObject):
                 creator_name = parsed.domain
                 tasks = []
 
-                if parsed.provider == "bunkr":
-                    album_title, files = fetch_bunkr_album(parsed.raw_url, resolve_files=True)
-                    creator_name = clean_text(album_title) or "Bunkr Album"
-                    folder_name = sanitize_filesystem_name(creator_name, fallback="Bunkr Album")
-                    folder = os.path.join(self._download_dir, f"Bunkr - {folder_name}")
-                    taken = set()      # an album can hold different files with the same name
-                    for f in files:
-                        t = DownloadTask(
-                            url=f["url"],
-                            target_path=unique_name_in_batch(folder, f["filename"], taken),
-                            post_title=creator_name,
-                            creator_name=creator_name,
-                            service="bunkr",
-                            post_id=parsed.post_id or "bunkr",
-                            file_id=f["url"],
-                            file_size=f.get("size", 0),
-                            batch_id=f"bunkr_{parsed.post_id or creator_name or 'bunkr'}"
-                        )
-                        t.options = options
-                        tasks.append(t)
-
-                elif parsed.provider == "erome":
-                    album_title, files = fetch_erome_album(parsed.raw_url)
-                    creator_name = clean_text(album_title) or "Erome Album"
-                    folder_name = sanitize_filesystem_name(creator_name, fallback="Erome Album")
-                    folder = os.path.join(self._download_dir, f"Erome - {folder_name}")
-                    taken = set()      # an album can hold different files with the same name
-                    for f in files:
-                        t = DownloadTask(
-                            url=f["url"],
-                            target_path=unique_name_in_batch(folder, f["filename"], taken),
-                            post_title=creator_name,
-                            creator_name=creator_name,
-                            service="erome",
-                            post_id=parsed.post_id or "erome",
-                            file_id=f["url"],
-                            batch_id=f"erome_{parsed.post_id or creator_name or 'erome'}"
-                        )
-                        t.options = options
-                        tasks.append(t)
-
-                elif parsed.provider == "nhentai":
-                    gallery_title, files = fetch_nhentai_gallery(parsed.post_id or parsed.raw_url)
-                    creator_name = clean_text(gallery_title) or f"Gallery {parsed.post_id}"
-                    folder_name = sanitize_filesystem_name(creator_name, fallback=f"Gallery {parsed.post_id}")
-                    folder = os.path.join(self._download_dir, f"nHentai - {folder_name}")
-                    taken = set()      # an album can hold different files with the same name
-                    for f in files:
-                        t = DownloadTask(
-                            url=f["url"],
-                            target_path=unique_name_in_batch(folder, f["filename"], taken),
-                            post_title=creator_name,
-                            creator_name=creator_name,
-                            service="nhentai",
-                            post_id=parsed.post_id or "nhentai",
-                            file_id=f["url"],
-                            batch_id=f"nhentai_{parsed.post_id or creator_name or 'nhentai'}"
-                        )
-                        t.options = options
-                        tasks.append(t)
+                if parsed.provider in ALBUM_SITES:
+                    creator_name, tasks = self._album_tasks(parsed, options)
 
                 elif parsed.provider == "telegram":
                     self._telegram_pending_action = "download"
@@ -2962,6 +2940,27 @@ class AppBridge(QObject):
             self.isDownloadingChanged.emit()
             self.hasErrorChanged.emit()
             self.lastErrorMessageChanged.emit()
+
+    def _album_tasks(self, parsed: URLParseResult, options):
+        """An album link's files for the queue: the engine reads the album and names the files
+        (src-tauri/src/downloader/scan.rs), else they're read and named here."""
+        from services import rust_albums
+        got = rust_albums.album_tasks(parsed.provider, parsed.raw_url, parsed.post_id or "", self._download_dir)
+        if got is None:
+            if parsed.provider == "bunkr":
+                title, files = fetch_bunkr_album(parsed.raw_url, resolve_files=True)
+            elif parsed.provider == "erome":
+                title, files = fetch_erome_album(parsed.raw_url)
+            else:
+                title, files = fetch_nhentai_gallery(parsed.post_id or parsed.raw_url)
+            got = album_tasks(parsed.provider, title, files, self._download_dir, parsed.post_id)
+        creator_name, fields = got
+        tasks = []
+        for f in fields:
+            t = DownloadTask(**f)
+            t.options = options
+            tasks.append(t)
+        return creator_name, tasks
 
     def _link_artist_dir(self, service: str, user_id: str, creator_name: str) -> Optional[str]:
         """A creator's download folder when the watchlist has one for them (moved into the download

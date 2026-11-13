@@ -1,0 +1,2793 @@
+{
+ "files": [
+  {
+   "url": "https://cdn.example/a1.jpg",
+   "filename": "a.jpg",
+   "size": 1200
+  },
+  {
+   "url": "https://cdn.example/a2.jpg",
+   "filename": "a.jpg",
+   "size": 1300
+  },
+  {
+   "url": "https://cdn.example/a3.jpg",
+   "filename": "A.JPG"
+  },
+  {
+   "url": "https://cdn.example/b.mp4",
+   "filename": "clip.final.mp4",
+   "size": 0
+  },
+  {
+   "url": "https://cdn.example/c",
+   "filename": "noext"
+  },
+  {
+   "url": "https://cdn.example/c2",
+   "filename": "noext"
+  },
+  {
+   "url": "https://cdn.example/d.png",
+   "filename": "a (2).jpg",
+   "size": 5
+  },
+  {
+   "url": "https://cdn.example/e.gif",
+   "filename": "日本語 ファイル.gif",
+   "size": 77
+  }
+ ],
+ "cases": [
+  {
+   "provider": "bunkr",
+   "title": "My Album",
+   "base_dir": "C:\\Users\\me\\Downloads\\Kemono",
+   "post_id": "",
+   "creator_name": "My Album",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - My Album\\a.jpg",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "bunkr_My Album",
+     "file_size": 1200
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - My Album\\a (2).jpg",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "bunkr_My Album",
+     "file_size": 1300
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - My Album\\A (3).JPG",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "bunkr_My Album",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - My Album\\clip.final.mp4",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "bunkr_My Album",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - My Album\\noext",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "bunkr_My Album",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - My Album\\noext (2)",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "bunkr_My Album",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - My Album\\a (2) (2).jpg",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "bunkr_My Album",
+     "file_size": 5
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - My Album\\日本語 ファイル.gif",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "bunkr_My Album",
+     "file_size": 77
+    }
+   ]
+  },
+  {
+   "provider": "bunkr",
+   "title": "Tom &amp; Jerry&#39;s &quot;best&quot;",
+   "base_dir": "C:\\dl\\",
+   "post_id": "abc123",
+   "creator_name": "Tom & Jerry's \"best\"",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "C:\\dl\\Bunkr - Tom & Jerry's _best\\a.jpg",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "bunkr_abc123",
+     "file_size": 1200
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "C:\\dl\\Bunkr - Tom & Jerry's _best\\a (2).jpg",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "bunkr_abc123",
+     "file_size": 1300
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "C:\\dl\\Bunkr - Tom & Jerry's _best\\A (3).JPG",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "bunkr_abc123",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "C:\\dl\\Bunkr - Tom & Jerry's _best\\clip.final.mp4",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "bunkr_abc123",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "C:\\dl\\Bunkr - Tom & Jerry's _best\\noext",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "bunkr_abc123",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "C:\\dl\\Bunkr - Tom & Jerry's _best\\noext (2)",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "bunkr_abc123",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "C:\\dl\\Bunkr - Tom & Jerry's _best\\a (2) (2).jpg",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "bunkr_abc123",
+     "file_size": 5
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "C:\\dl\\Bunkr - Tom & Jerry's _best\\日本語 ファイル.gif",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "bunkr_abc123",
+     "file_size": 77
+    }
+   ]
+  },
+  {
+   "provider": "bunkr",
+   "title": "bad:name/with\\chars*?",
+   "base_dir": "D:/mixed/slashes",
+   "post_id": "556677",
+   "creator_name": "bad:name/with\\chars*?",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "D:/mixed/slashes\\Bunkr - bad_name_with_chars\\a.jpg",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "bunkr_556677",
+     "file_size": 1200
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "D:/mixed/slashes\\Bunkr - bad_name_with_chars\\a (2).jpg",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "bunkr_556677",
+     "file_size": 1300
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "D:/mixed/slashes\\Bunkr - bad_name_with_chars\\A (3).JPG",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "bunkr_556677",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "D:/mixed/slashes\\Bunkr - bad_name_with_chars\\clip.final.mp4",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "bunkr_556677",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "D:/mixed/slashes\\Bunkr - bad_name_with_chars\\noext",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "bunkr_556677",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "D:/mixed/slashes\\Bunkr - bad_name_with_chars\\noext (2)",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "bunkr_556677",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "D:/mixed/slashes\\Bunkr - bad_name_with_chars\\a (2) (2).jpg",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "bunkr_556677",
+     "file_size": 5
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "D:/mixed/slashes\\Bunkr - bad_name_with_chars\\日本語 ファイル.gif",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "bunkr_556677",
+     "file_size": 77
+    }
+   ]
+  },
+  {
+   "provider": "bunkr",
+   "title": "",
+   "base_dir": "",
+   "post_id": "",
+   "creator_name": "Bunkr Album",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "Bunkr - Bunkr Album\\a.jpg",
+     "post_title": "Bunkr Album",
+     "creator_name": "Bunkr Album",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "bunkr_Bunkr Album",
+     "file_size": 1200
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "Bunkr - Bunkr Album\\a (2).jpg",
+     "post_title": "Bunkr Album",
+     "creator_name": "Bunkr Album",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "bunkr_Bunkr Album",
+     "file_size": 1300
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "Bunkr - Bunkr Album\\A (3).JPG",
+     "post_title": "Bunkr Album",
+     "creator_name": "Bunkr Album",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "bunkr_Bunkr Album",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "Bunkr - Bunkr Album\\clip.final.mp4",
+     "post_title": "Bunkr Album",
+     "creator_name": "Bunkr Album",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "bunkr_Bunkr Album",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "Bunkr - Bunkr Album\\noext",
+     "post_title": "Bunkr Album",
+     "creator_name": "Bunkr Album",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "bunkr_Bunkr Album",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "Bunkr - Bunkr Album\\noext (2)",
+     "post_title": "Bunkr Album",
+     "creator_name": "Bunkr Album",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "bunkr_Bunkr Album",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "Bunkr - Bunkr Album\\a (2) (2).jpg",
+     "post_title": "Bunkr Album",
+     "creator_name": "Bunkr Album",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "bunkr_Bunkr Album",
+     "file_size": 5
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "Bunkr - Bunkr Album\\日本語 ファイル.gif",
+     "post_title": "Bunkr Album",
+     "creator_name": "Bunkr Album",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "bunkr_Bunkr Album",
+     "file_size": 77
+    }
+   ]
+  },
+  {
+   "provider": "bunkr",
+   "title": null,
+   "base_dir": "C:\\Users\\me\\Downloads\\Kemono",
+   "post_id": "abc123",
+   "creator_name": "Bunkr Album",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - Bunkr Album\\a.jpg",
+     "post_title": "Bunkr Album",
+     "creator_name": "Bunkr Album",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "bunkr_abc123",
+     "file_size": 1200
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - Bunkr Album\\a (2).jpg",
+     "post_title": "Bunkr Album",
+     "creator_name": "Bunkr Album",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "bunkr_abc123",
+     "file_size": 1300
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - Bunkr Album\\A (3).JPG",
+     "post_title": "Bunkr Album",
+     "creator_name": "Bunkr Album",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "bunkr_abc123",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - Bunkr Album\\clip.final.mp4",
+     "post_title": "Bunkr Album",
+     "creator_name": "Bunkr Album",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "bunkr_abc123",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - Bunkr Album\\noext",
+     "post_title": "Bunkr Album",
+     "creator_name": "Bunkr Album",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "bunkr_abc123",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - Bunkr Album\\noext (2)",
+     "post_title": "Bunkr Album",
+     "creator_name": "Bunkr Album",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "bunkr_abc123",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - Bunkr Album\\a (2) (2).jpg",
+     "post_title": "Bunkr Album",
+     "creator_name": "Bunkr Album",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "bunkr_abc123",
+     "file_size": 5
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - Bunkr Album\\日本語 ファイル.gif",
+     "post_title": "Bunkr Album",
+     "creator_name": "Bunkr Album",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "bunkr_abc123",
+     "file_size": 77
+    }
+   ]
+  },
+  {
+   "provider": "bunkr",
+   "title": "  spaced  out  ",
+   "base_dir": "C:\\dl\\",
+   "post_id": "556677",
+   "creator_name": "spaced out",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "C:\\dl\\Bunkr - spaced out\\a.jpg",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "bunkr_556677",
+     "file_size": 1200
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "C:\\dl\\Bunkr - spaced out\\a (2).jpg",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "bunkr_556677",
+     "file_size": 1300
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "C:\\dl\\Bunkr - spaced out\\A (3).JPG",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "bunkr_556677",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "C:\\dl\\Bunkr - spaced out\\clip.final.mp4",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "bunkr_556677",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "C:\\dl\\Bunkr - spaced out\\noext",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "bunkr_556677",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "C:\\dl\\Bunkr - spaced out\\noext (2)",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "bunkr_556677",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "C:\\dl\\Bunkr - spaced out\\a (2) (2).jpg",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "bunkr_556677",
+     "file_size": 5
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "C:\\dl\\Bunkr - spaced out\\日本語 ファイル.gif",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "bunkr_556677",
+     "file_size": 77
+    }
+   ]
+  },
+  {
+   "provider": "bunkr",
+   "title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "base_dir": "D:/mixed/slashes",
+   "post_id": "",
+   "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "D:/mixed/slashes\\Bunkr - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\a.jpg",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "bunkr_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "file_size": 1200
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "D:/mixed/slashes\\Bunkr - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\a (2).jpg",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "bunkr_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "file_size": 1300
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "D:/mixed/slashes\\Bunkr - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\A (3).JPG",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "bunkr_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "D:/mixed/slashes\\Bunkr - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\clip.final.mp4",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "bunkr_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "D:/mixed/slashes\\Bunkr - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\noext",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "bunkr_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "D:/mixed/slashes\\Bunkr - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\noext (2)",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "bunkr_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "D:/mixed/slashes\\Bunkr - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\a (2) (2).jpg",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "bunkr_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "file_size": 5
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "D:/mixed/slashes\\Bunkr - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\日本語 ファイル.gif",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "bunkr_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "file_size": 77
+    }
+   ]
+  },
+  {
+   "provider": "bunkr",
+   "title": "CON",
+   "base_dir": "",
+   "post_id": "abc123",
+   "creator_name": "CON",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "Bunkr - CON\\a.jpg",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "bunkr_abc123",
+     "file_size": 1200
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "Bunkr - CON\\a (2).jpg",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "bunkr_abc123",
+     "file_size": 1300
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "Bunkr - CON\\A (3).JPG",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "bunkr_abc123",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "Bunkr - CON\\clip.final.mp4",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "bunkr_abc123",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "Bunkr - CON\\noext",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "bunkr_abc123",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "Bunkr - CON\\noext (2)",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "bunkr_abc123",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "Bunkr - CON\\a (2) (2).jpg",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "bunkr_abc123",
+     "file_size": 5
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "Bunkr - CON\\日本語 ファイル.gif",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "bunkr",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "bunkr_abc123",
+     "file_size": 77
+    }
+   ]
+  },
+  {
+   "provider": "bunkr",
+   "title": "trailing dots...",
+   "base_dir": "C:\\Users\\me\\Downloads\\Kemono",
+   "post_id": "556677",
+   "creator_name": "trailing dots...",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - trailing dots\\a.jpg",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "bunkr_556677",
+     "file_size": 1200
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - trailing dots\\a (2).jpg",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "bunkr_556677",
+     "file_size": 1300
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - trailing dots\\A (3).JPG",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "bunkr_556677",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - trailing dots\\clip.final.mp4",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "bunkr_556677",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - trailing dots\\noext",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "bunkr_556677",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - trailing dots\\noext (2)",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "bunkr_556677",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - trailing dots\\a (2) (2).jpg",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "bunkr_556677",
+     "file_size": 5
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Bunkr - trailing dots\\日本語 ファイル.gif",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "bunkr",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "bunkr_556677",
+     "file_size": 77
+    }
+   ]
+  },
+  {
+   "provider": "bunkr",
+   "title": "Ã©mojis ✨ and Ã¼mlauts",
+   "base_dir": "C:\\dl\\",
+   "post_id": "",
+   "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "C:\\dl\\Bunkr - Ã©mojis ✨ and Ã¼mlauts\\a.jpg",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "bunkr_Ã©mojis ✨ and Ã¼mlauts",
+     "file_size": 1200
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "C:\\dl\\Bunkr - Ã©mojis ✨ and Ã¼mlauts\\a (2).jpg",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "bunkr_Ã©mojis ✨ and Ã¼mlauts",
+     "file_size": 1300
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "C:\\dl\\Bunkr - Ã©mojis ✨ and Ã¼mlauts\\A (3).JPG",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "bunkr_Ã©mojis ✨ and Ã¼mlauts",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "C:\\dl\\Bunkr - Ã©mojis ✨ and Ã¼mlauts\\clip.final.mp4",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "bunkr_Ã©mojis ✨ and Ã¼mlauts",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "C:\\dl\\Bunkr - Ã©mojis ✨ and Ã¼mlauts\\noext",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "bunkr_Ã©mojis ✨ and Ã¼mlauts",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "C:\\dl\\Bunkr - Ã©mojis ✨ and Ã¼mlauts\\noext (2)",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "bunkr_Ã©mojis ✨ and Ã¼mlauts",
+     "file_size": 0
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "C:\\dl\\Bunkr - Ã©mojis ✨ and Ã¼mlauts\\a (2) (2).jpg",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "bunkr_Ã©mojis ✨ and Ã¼mlauts",
+     "file_size": 5
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "C:\\dl\\Bunkr - Ã©mojis ✨ and Ã¼mlauts\\日本語 ファイル.gif",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "bunkr",
+     "post_id": "bunkr",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "bunkr_Ã©mojis ✨ and Ã¼mlauts",
+     "file_size": 77
+    }
+   ]
+  },
+  {
+   "provider": "erome",
+   "title": "My Album",
+   "base_dir": "C:\\Users\\me\\Downloads\\Kemono",
+   "post_id": "",
+   "creator_name": "My Album",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - My Album\\a.jpg",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "erome_My Album"
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - My Album\\a (2).jpg",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "erome_My Album"
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - My Album\\A (3).JPG",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "erome_My Album"
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - My Album\\clip.final.mp4",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "erome_My Album"
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - My Album\\noext",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "erome_My Album"
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - My Album\\noext (2)",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "erome_My Album"
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - My Album\\a (2) (2).jpg",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "erome_My Album"
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - My Album\\日本語 ファイル.gif",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "erome_My Album"
+    }
+   ]
+  },
+  {
+   "provider": "erome",
+   "title": "Tom &amp; Jerry&#39;s &quot;best&quot;",
+   "base_dir": "C:\\dl\\",
+   "post_id": "abc123",
+   "creator_name": "Tom & Jerry's \"best\"",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "C:\\dl\\Erome - Tom & Jerry's _best\\a.jpg",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "C:\\dl\\Erome - Tom & Jerry's _best\\a (2).jpg",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "C:\\dl\\Erome - Tom & Jerry's _best\\A (3).JPG",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "C:\\dl\\Erome - Tom & Jerry's _best\\clip.final.mp4",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "C:\\dl\\Erome - Tom & Jerry's _best\\noext",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "C:\\dl\\Erome - Tom & Jerry's _best\\noext (2)",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "C:\\dl\\Erome - Tom & Jerry's _best\\a (2) (2).jpg",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "C:\\dl\\Erome - Tom & Jerry's _best\\日本語 ファイル.gif",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "erome_abc123"
+    }
+   ]
+  },
+  {
+   "provider": "erome",
+   "title": "bad:name/with\\chars*?",
+   "base_dir": "D:/mixed/slashes",
+   "post_id": "556677",
+   "creator_name": "bad:name/with\\chars*?",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "D:/mixed/slashes\\Erome - bad_name_with_chars\\a.jpg",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "D:/mixed/slashes\\Erome - bad_name_with_chars\\a (2).jpg",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "D:/mixed/slashes\\Erome - bad_name_with_chars\\A (3).JPG",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "D:/mixed/slashes\\Erome - bad_name_with_chars\\clip.final.mp4",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "D:/mixed/slashes\\Erome - bad_name_with_chars\\noext",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "D:/mixed/slashes\\Erome - bad_name_with_chars\\noext (2)",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "D:/mixed/slashes\\Erome - bad_name_with_chars\\a (2) (2).jpg",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "D:/mixed/slashes\\Erome - bad_name_with_chars\\日本語 ファイル.gif",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "erome_556677"
+    }
+   ]
+  },
+  {
+   "provider": "erome",
+   "title": "",
+   "base_dir": "",
+   "post_id": "",
+   "creator_name": "Erome Album",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "Erome - Erome Album\\a.jpg",
+     "post_title": "Erome Album",
+     "creator_name": "Erome Album",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "erome_Erome Album"
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "Erome - Erome Album\\a (2).jpg",
+     "post_title": "Erome Album",
+     "creator_name": "Erome Album",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "erome_Erome Album"
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "Erome - Erome Album\\A (3).JPG",
+     "post_title": "Erome Album",
+     "creator_name": "Erome Album",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "erome_Erome Album"
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "Erome - Erome Album\\clip.final.mp4",
+     "post_title": "Erome Album",
+     "creator_name": "Erome Album",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "erome_Erome Album"
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "Erome - Erome Album\\noext",
+     "post_title": "Erome Album",
+     "creator_name": "Erome Album",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "erome_Erome Album"
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "Erome - Erome Album\\noext (2)",
+     "post_title": "Erome Album",
+     "creator_name": "Erome Album",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "erome_Erome Album"
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "Erome - Erome Album\\a (2) (2).jpg",
+     "post_title": "Erome Album",
+     "creator_name": "Erome Album",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "erome_Erome Album"
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "Erome - Erome Album\\日本語 ファイル.gif",
+     "post_title": "Erome Album",
+     "creator_name": "Erome Album",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "erome_Erome Album"
+    }
+   ]
+  },
+  {
+   "provider": "erome",
+   "title": null,
+   "base_dir": "C:\\Users\\me\\Downloads\\Kemono",
+   "post_id": "abc123",
+   "creator_name": "Erome Album",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - Erome Album\\a.jpg",
+     "post_title": "Erome Album",
+     "creator_name": "Erome Album",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - Erome Album\\a (2).jpg",
+     "post_title": "Erome Album",
+     "creator_name": "Erome Album",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - Erome Album\\A (3).JPG",
+     "post_title": "Erome Album",
+     "creator_name": "Erome Album",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - Erome Album\\clip.final.mp4",
+     "post_title": "Erome Album",
+     "creator_name": "Erome Album",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - Erome Album\\noext",
+     "post_title": "Erome Album",
+     "creator_name": "Erome Album",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - Erome Album\\noext (2)",
+     "post_title": "Erome Album",
+     "creator_name": "Erome Album",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - Erome Album\\a (2) (2).jpg",
+     "post_title": "Erome Album",
+     "creator_name": "Erome Album",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - Erome Album\\日本語 ファイル.gif",
+     "post_title": "Erome Album",
+     "creator_name": "Erome Album",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "erome_abc123"
+    }
+   ]
+  },
+  {
+   "provider": "erome",
+   "title": "  spaced  out  ",
+   "base_dir": "C:\\dl\\",
+   "post_id": "556677",
+   "creator_name": "spaced out",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "C:\\dl\\Erome - spaced out\\a.jpg",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "C:\\dl\\Erome - spaced out\\a (2).jpg",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "C:\\dl\\Erome - spaced out\\A (3).JPG",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "C:\\dl\\Erome - spaced out\\clip.final.mp4",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "C:\\dl\\Erome - spaced out\\noext",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "C:\\dl\\Erome - spaced out\\noext (2)",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "C:\\dl\\Erome - spaced out\\a (2) (2).jpg",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "C:\\dl\\Erome - spaced out\\日本語 ファイル.gif",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "erome_556677"
+    }
+   ]
+  },
+  {
+   "provider": "erome",
+   "title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "base_dir": "D:/mixed/slashes",
+   "post_id": "",
+   "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "D:/mixed/slashes\\Erome - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\a.jpg",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "erome_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "D:/mixed/slashes\\Erome - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\a (2).jpg",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "erome_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "D:/mixed/slashes\\Erome - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\A (3).JPG",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "erome_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "D:/mixed/slashes\\Erome - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\clip.final.mp4",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "erome_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "D:/mixed/slashes\\Erome - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\noext",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "erome_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "D:/mixed/slashes\\Erome - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\noext (2)",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "erome_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "D:/mixed/slashes\\Erome - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\a (2) (2).jpg",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "erome_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "D:/mixed/slashes\\Erome - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\日本語 ファイル.gif",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "erome_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    }
+   ]
+  },
+  {
+   "provider": "erome",
+   "title": "CON",
+   "base_dir": "",
+   "post_id": "abc123",
+   "creator_name": "CON",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "Erome - CON\\a.jpg",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "Erome - CON\\a (2).jpg",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "Erome - CON\\A (3).JPG",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "Erome - CON\\clip.final.mp4",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "Erome - CON\\noext",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "Erome - CON\\noext (2)",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "Erome - CON\\a (2) (2).jpg",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "erome_abc123"
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "Erome - CON\\日本語 ファイル.gif",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "erome",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "erome_abc123"
+    }
+   ]
+  },
+  {
+   "provider": "erome",
+   "title": "trailing dots...",
+   "base_dir": "C:\\Users\\me\\Downloads\\Kemono",
+   "post_id": "556677",
+   "creator_name": "trailing dots...",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - trailing dots\\a.jpg",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - trailing dots\\a (2).jpg",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - trailing dots\\A (3).JPG",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - trailing dots\\clip.final.mp4",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - trailing dots\\noext",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - trailing dots\\noext (2)",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - trailing dots\\a (2) (2).jpg",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "erome_556677"
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\Erome - trailing dots\\日本語 ファイル.gif",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "erome",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "erome_556677"
+    }
+   ]
+  },
+  {
+   "provider": "erome",
+   "title": "Ã©mojis ✨ and Ã¼mlauts",
+   "base_dir": "C:\\dl\\",
+   "post_id": "",
+   "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "C:\\dl\\Erome - Ã©mojis ✨ and Ã¼mlauts\\a.jpg",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "erome_Ã©mojis ✨ and Ã¼mlauts"
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "C:\\dl\\Erome - Ã©mojis ✨ and Ã¼mlauts\\a (2).jpg",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "erome_Ã©mojis ✨ and Ã¼mlauts"
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "C:\\dl\\Erome - Ã©mojis ✨ and Ã¼mlauts\\A (3).JPG",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "erome_Ã©mojis ✨ and Ã¼mlauts"
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "C:\\dl\\Erome - Ã©mojis ✨ and Ã¼mlauts\\clip.final.mp4",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "erome_Ã©mojis ✨ and Ã¼mlauts"
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "C:\\dl\\Erome - Ã©mojis ✨ and Ã¼mlauts\\noext",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "erome_Ã©mojis ✨ and Ã¼mlauts"
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "C:\\dl\\Erome - Ã©mojis ✨ and Ã¼mlauts\\noext (2)",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "erome_Ã©mojis ✨ and Ã¼mlauts"
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "C:\\dl\\Erome - Ã©mojis ✨ and Ã¼mlauts\\a (2) (2).jpg",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "erome_Ã©mojis ✨ and Ã¼mlauts"
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "C:\\dl\\Erome - Ã©mojis ✨ and Ã¼mlauts\\日本語 ファイル.gif",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "erome",
+     "post_id": "erome",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "erome_Ã©mojis ✨ and Ã¼mlauts"
+    }
+   ]
+  },
+  {
+   "provider": "nhentai",
+   "title": "My Album",
+   "base_dir": "C:\\Users\\me\\Downloads\\Kemono",
+   "post_id": "",
+   "creator_name": "My Album",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - My Album\\a.jpg",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "nhentai_My Album"
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - My Album\\a (2).jpg",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "nhentai_My Album"
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - My Album\\A (3).JPG",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "nhentai_My Album"
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - My Album\\clip.final.mp4",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "nhentai_My Album"
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - My Album\\noext",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "nhentai_My Album"
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - My Album\\noext (2)",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "nhentai_My Album"
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - My Album\\a (2) (2).jpg",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "nhentai_My Album"
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - My Album\\日本語 ファイル.gif",
+     "post_title": "My Album",
+     "creator_name": "My Album",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "nhentai_My Album"
+    }
+   ]
+  },
+  {
+   "provider": "nhentai",
+   "title": "Tom &amp; Jerry&#39;s &quot;best&quot;",
+   "base_dir": "C:\\dl\\",
+   "post_id": "abc123",
+   "creator_name": "Tom & Jerry's \"best\"",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "C:\\dl\\nHentai - Tom & Jerry's _best\\a.jpg",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "C:\\dl\\nHentai - Tom & Jerry's _best\\a (2).jpg",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "C:\\dl\\nHentai - Tom & Jerry's _best\\A (3).JPG",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "C:\\dl\\nHentai - Tom & Jerry's _best\\clip.final.mp4",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "C:\\dl\\nHentai - Tom & Jerry's _best\\noext",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "C:\\dl\\nHentai - Tom & Jerry's _best\\noext (2)",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "C:\\dl\\nHentai - Tom & Jerry's _best\\a (2) (2).jpg",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "C:\\dl\\nHentai - Tom & Jerry's _best\\日本語 ファイル.gif",
+     "post_title": "Tom & Jerry's \"best\"",
+     "creator_name": "Tom & Jerry's \"best\"",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "nhentai_abc123"
+    }
+   ]
+  },
+  {
+   "provider": "nhentai",
+   "title": "bad:name/with\\chars*?",
+   "base_dir": "D:/mixed/slashes",
+   "post_id": "556677",
+   "creator_name": "bad:name/with\\chars*?",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "D:/mixed/slashes\\nHentai - bad_name_with_chars\\a.jpg",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "D:/mixed/slashes\\nHentai - bad_name_with_chars\\a (2).jpg",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "D:/mixed/slashes\\nHentai - bad_name_with_chars\\A (3).JPG",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "D:/mixed/slashes\\nHentai - bad_name_with_chars\\clip.final.mp4",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "D:/mixed/slashes\\nHentai - bad_name_with_chars\\noext",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "D:/mixed/slashes\\nHentai - bad_name_with_chars\\noext (2)",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "D:/mixed/slashes\\nHentai - bad_name_with_chars\\a (2) (2).jpg",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "D:/mixed/slashes\\nHentai - bad_name_with_chars\\日本語 ファイル.gif",
+     "post_title": "bad:name/with\\chars*?",
+     "creator_name": "bad:name/with\\chars*?",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "nhentai_556677"
+    }
+   ]
+  },
+  {
+   "provider": "nhentai",
+   "title": "",
+   "base_dir": "",
+   "post_id": "",
+   "creator_name": "Gallery ",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "nHentai - Gallery\\a.jpg",
+     "post_title": "Gallery ",
+     "creator_name": "Gallery ",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "nhentai_Gallery "
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "nHentai - Gallery\\a (2).jpg",
+     "post_title": "Gallery ",
+     "creator_name": "Gallery ",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "nhentai_Gallery "
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "nHentai - Gallery\\A (3).JPG",
+     "post_title": "Gallery ",
+     "creator_name": "Gallery ",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "nhentai_Gallery "
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "nHentai - Gallery\\clip.final.mp4",
+     "post_title": "Gallery ",
+     "creator_name": "Gallery ",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "nhentai_Gallery "
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "nHentai - Gallery\\noext",
+     "post_title": "Gallery ",
+     "creator_name": "Gallery ",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "nhentai_Gallery "
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "nHentai - Gallery\\noext (2)",
+     "post_title": "Gallery ",
+     "creator_name": "Gallery ",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "nhentai_Gallery "
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "nHentai - Gallery\\a (2) (2).jpg",
+     "post_title": "Gallery ",
+     "creator_name": "Gallery ",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "nhentai_Gallery "
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "nHentai - Gallery\\日本語 ファイル.gif",
+     "post_title": "Gallery ",
+     "creator_name": "Gallery ",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "nhentai_Gallery "
+    }
+   ]
+  },
+  {
+   "provider": "nhentai",
+   "title": null,
+   "base_dir": "C:\\Users\\me\\Downloads\\Kemono",
+   "post_id": "abc123",
+   "creator_name": "Gallery abc123",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - Gallery abc123\\a.jpg",
+     "post_title": "Gallery abc123",
+     "creator_name": "Gallery abc123",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - Gallery abc123\\a (2).jpg",
+     "post_title": "Gallery abc123",
+     "creator_name": "Gallery abc123",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - Gallery abc123\\A (3).JPG",
+     "post_title": "Gallery abc123",
+     "creator_name": "Gallery abc123",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - Gallery abc123\\clip.final.mp4",
+     "post_title": "Gallery abc123",
+     "creator_name": "Gallery abc123",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - Gallery abc123\\noext",
+     "post_title": "Gallery abc123",
+     "creator_name": "Gallery abc123",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - Gallery abc123\\noext (2)",
+     "post_title": "Gallery abc123",
+     "creator_name": "Gallery abc123",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - Gallery abc123\\a (2) (2).jpg",
+     "post_title": "Gallery abc123",
+     "creator_name": "Gallery abc123",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - Gallery abc123\\日本語 ファイル.gif",
+     "post_title": "Gallery abc123",
+     "creator_name": "Gallery abc123",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "nhentai_abc123"
+    }
+   ]
+  },
+  {
+   "provider": "nhentai",
+   "title": "  spaced  out  ",
+   "base_dir": "C:\\dl\\",
+   "post_id": "556677",
+   "creator_name": "spaced out",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "C:\\dl\\nHentai - spaced out\\a.jpg",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "C:\\dl\\nHentai - spaced out\\a (2).jpg",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "C:\\dl\\nHentai - spaced out\\A (3).JPG",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "C:\\dl\\nHentai - spaced out\\clip.final.mp4",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "C:\\dl\\nHentai - spaced out\\noext",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "C:\\dl\\nHentai - spaced out\\noext (2)",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "C:\\dl\\nHentai - spaced out\\a (2) (2).jpg",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "C:\\dl\\nHentai - spaced out\\日本語 ファイル.gif",
+     "post_title": "spaced out",
+     "creator_name": "spaced out",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "nhentai_556677"
+    }
+   ]
+  },
+  {
+   "provider": "nhentai",
+   "title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "base_dir": "D:/mixed/slashes",
+   "post_id": "",
+   "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "D:/mixed/slashes\\nHentai - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\a.jpg",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "nhentai_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "D:/mixed/slashes\\nHentai - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\a (2).jpg",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "nhentai_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "D:/mixed/slashes\\nHentai - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\A (3).JPG",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "nhentai_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "D:/mixed/slashes\\nHentai - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\clip.final.mp4",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "nhentai_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "D:/mixed/slashes\\nHentai - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\noext",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "nhentai_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "D:/mixed/slashes\\nHentai - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\noext (2)",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "nhentai_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "D:/mixed/slashes\\nHentai - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\a (2) (2).jpg",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "nhentai_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "D:/mixed/slashes\\nHentai - xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\\日本語 ファイル.gif",
+     "post_title": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "creator_name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "nhentai_xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+    }
+   ]
+  },
+  {
+   "provider": "nhentai",
+   "title": "CON",
+   "base_dir": "",
+   "post_id": "abc123",
+   "creator_name": "CON",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "nHentai - CON\\a.jpg",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "nHentai - CON\\a (2).jpg",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "nHentai - CON\\A (3).JPG",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "nHentai - CON\\clip.final.mp4",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "nHentai - CON\\noext",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "nHentai - CON\\noext (2)",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "nHentai - CON\\a (2) (2).jpg",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "nhentai_abc123"
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "nHentai - CON\\日本語 ファイル.gif",
+     "post_title": "CON",
+     "creator_name": "CON",
+     "service": "nhentai",
+     "post_id": "abc123",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "nhentai_abc123"
+    }
+   ]
+  },
+  {
+   "provider": "nhentai",
+   "title": "trailing dots...",
+   "base_dir": "C:\\Users\\me\\Downloads\\Kemono",
+   "post_id": "556677",
+   "creator_name": "trailing dots...",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - trailing dots\\a.jpg",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - trailing dots\\a (2).jpg",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - trailing dots\\A (3).JPG",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - trailing dots\\clip.final.mp4",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - trailing dots\\noext",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - trailing dots\\noext (2)",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - trailing dots\\a (2) (2).jpg",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "nhentai_556677"
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "C:\\Users\\me\\Downloads\\Kemono\\nHentai - trailing dots\\日本語 ファイル.gif",
+     "post_title": "trailing dots...",
+     "creator_name": "trailing dots...",
+     "service": "nhentai",
+     "post_id": "556677",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "nhentai_556677"
+    }
+   ]
+  },
+  {
+   "provider": "nhentai",
+   "title": "Ã©mojis ✨ and Ã¼mlauts",
+   "base_dir": "C:\\dl\\",
+   "post_id": "",
+   "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+   "tasks": [
+    {
+     "url": "https://cdn.example/a1.jpg",
+     "target_path": "C:\\dl\\nHentai - Ã©mojis ✨ and Ã¼mlauts\\a.jpg",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/a1.jpg",
+     "batch_id": "nhentai_Ã©mojis ✨ and Ã¼mlauts"
+    },
+    {
+     "url": "https://cdn.example/a2.jpg",
+     "target_path": "C:\\dl\\nHentai - Ã©mojis ✨ and Ã¼mlauts\\a (2).jpg",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/a2.jpg",
+     "batch_id": "nhentai_Ã©mojis ✨ and Ã¼mlauts"
+    },
+    {
+     "url": "https://cdn.example/a3.jpg",
+     "target_path": "C:\\dl\\nHentai - Ã©mojis ✨ and Ã¼mlauts\\A (3).JPG",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/a3.jpg",
+     "batch_id": "nhentai_Ã©mojis ✨ and Ã¼mlauts"
+    },
+    {
+     "url": "https://cdn.example/b.mp4",
+     "target_path": "C:\\dl\\nHentai - Ã©mojis ✨ and Ã¼mlauts\\clip.final.mp4",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/b.mp4",
+     "batch_id": "nhentai_Ã©mojis ✨ and Ã¼mlauts"
+    },
+    {
+     "url": "https://cdn.example/c",
+     "target_path": "C:\\dl\\nHentai - Ã©mojis ✨ and Ã¼mlauts\\noext",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/c",
+     "batch_id": "nhentai_Ã©mojis ✨ and Ã¼mlauts"
+    },
+    {
+     "url": "https://cdn.example/c2",
+     "target_path": "C:\\dl\\nHentai - Ã©mojis ✨ and Ã¼mlauts\\noext (2)",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/c2",
+     "batch_id": "nhentai_Ã©mojis ✨ and Ã¼mlauts"
+    },
+    {
+     "url": "https://cdn.example/d.png",
+     "target_path": "C:\\dl\\nHentai - Ã©mojis ✨ and Ã¼mlauts\\a (2) (2).jpg",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/d.png",
+     "batch_id": "nhentai_Ã©mojis ✨ and Ã¼mlauts"
+    },
+    {
+     "url": "https://cdn.example/e.gif",
+     "target_path": "C:\\dl\\nHentai - Ã©mojis ✨ and Ã¼mlauts\\日本語 ファイル.gif",
+     "post_title": "Ã©mojis ✨ and Ã¼mlauts",
+     "creator_name": "Ã©mojis ✨ and Ã¼mlauts",
+     "service": "nhentai",
+     "post_id": "nhentai",
+     "file_id": "https://cdn.example/e.gif",
+     "batch_id": "nhentai_Ã©mojis ✨ and Ã¼mlauts"
+    }
+   ]
+  }
+ ]
+}

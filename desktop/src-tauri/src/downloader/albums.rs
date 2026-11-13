@@ -676,6 +676,64 @@ pub fn nhentai(w: &dyn Web, id_or_url: &str) -> (Option<String>, Vec<Value>) {
     (Some(format!("[{id}] {title}")), files)
 }
 
+/// unique_name_in_batch: the path for `name` in `folder` no other file of the batch uses yet
+/// ("name (2).ext", "name (3).ext"…); `taken` holds normcase'd paths and is updated
+pub fn unique_name_in_batch(folder: &str, name: &str, taken: &mut std::collections::HashSet<String>) -> String {
+    use super::py::{join, normcase, splitext};
+    let (stem, ext) = splitext(name);
+    let mut path = join(&[folder, name]);
+    let mut n = 2;
+    while taken.contains(&normcase(&path)) {
+        path = join(&[folder, &format!("{stem} ({n}){ext}")]);
+        n += 1;
+    }
+    taken.insert(normcase(&path));
+    path
+}
+
+/// An album's files as queue files (bridge/app_bridge.py album_tasks): (creator name, task fields),
+/// one folder per album ("Bunkr - <title>"…); the same name twice becomes "name (2).ext"…
+pub fn album_tasks(provider: &str, title: Option<&str>, files: &[Value], base_dir: &str, post_id: &str) -> Result<(String, Vec<Value>), String> {
+    let (fallback, prefix) = match provider {
+        "bunkr" => ("Bunkr Album".to_string(), "Bunkr"),
+        "erome" => ("Erome Album".to_string(), "Erome"),
+        "nhentai" => (format!("Gallery {post_id}"), "nHentai"),
+        other => return Err(format!("unknown album site {other}")),
+    };
+    let name = { let c = clean_text(title.unwrap_or("")); if c.is_empty() { fallback.clone() } else { c } };
+    let folder = super::py::join(&[base_dir, &format!("{prefix} - {}", sanitize_filesystem_name(&name, &fallback, 180))]);
+    let pid = if post_id.is_empty() { provider.to_string() } else { post_id.to_string() };
+    let batch = format!("{provider}_{}", if !post_id.is_empty() { post_id } else if !name.is_empty() { &name } else { provider });
+    let mut taken = std::collections::HashSet::new();
+    let tasks = files.iter().map(|f| {
+        let url = f["url"].as_str().unwrap_or("").to_string();
+        let mut t = json!({
+            "url": url, "target_path": unique_name_in_batch(&folder, f["filename"].as_str().unwrap_or(""), &mut taken),
+            "post_title": name, "creator_name": name, "service": provider, "post_id": pid, "file_id": url, "batch_id": batch,
+        });
+        if provider == "bunkr" {
+            t["file_size"] = f.get("size").cloned().unwrap_or(json!(0));
+        }
+        t
+    }).collect();
+    Ok((name, tasks))
+}
+
+/// Call "album_tasks": {"kind", "url", "post_id", "base_dir"} → {"creator_name", "tasks"}: an album
+/// link read and its files named for the queue
+pub fn tasks_call(a: &Value) -> Result<Value, String> {
+    let (kind, url, post_id) = (a["kind"].as_str().unwrap_or(""), a["url"].as_str().unwrap_or(""), a["post_id"].as_str().unwrap_or(""));
+    let net = Net::new();
+    let (title, files) = match kind {
+        "bunkr" => bunkr(&net, url),
+        "erome" => erome(&net, url),
+        "nhentai" => nhentai(&net, if post_id.is_empty() { url } else { post_id }),
+        other => return Err(format!("unknown album site {other}")),
+    };
+    let (name, tasks) = album_tasks(kind, title.as_deref(), &files, a["base_dir"].as_str().unwrap_or(""), post_id)?;
+    Ok(json!({"creator_name": name, "tasks": tasks}))
+}
+
 /// Call "album_files": {"kind": "bunkr" | "erome" | "nhentai", "url"} → {"title", "files"}
 pub fn call(a: &Value) -> Result<Value, String> {
     let url = a["url"].as_str().unwrap_or("");
@@ -746,5 +804,23 @@ mod tests {
         assert_eq!(unquote("a%20b%zz%C3%A9%"), "a b%zzé%");
         assert_eq!(safe_file_name("..\\..\\CON.txt", "f"), "_CON.txt");
         assert_eq!(safe_file_name("com1", "f"), "_com1");
+    }
+}
+
+#[cfg(test)]
+mod album_tasks_tests {
+    use super::album_tasks;
+    use serde_json::Value;
+
+    #[test]
+    fn matches_python() {
+        let fx: Value = serde_json::from_str(include_str!("../../tests/fixtures/album_tasks.json")).unwrap();
+        let files = fx["files"].as_array().unwrap();
+        for c in fx["cases"].as_array().unwrap() {
+            let s = |k: &str| c[k].as_str().unwrap_or("").to_string();
+            let (name, tasks) = album_tasks(&s("provider"), c["title"].as_str(), files, &s("base_dir"), &s("post_id")).unwrap();
+            assert_eq!(name, s("creator_name"), "{} {:?}", s("provider"), c["title"]);
+            assert_eq!(Value::Array(tasks), c["tasks"], "{} {:?}", s("provider"), c["title"]);
+        }
     }
 }
