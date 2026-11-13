@@ -733,6 +733,7 @@ class RustDownloader(FileDownloader):
             self.adaptive_state = info.get("adaptive_state", self.adaptive_state)
             self.adaptive_status_text = info.get("adaptive_status_text", self.adaptive_status_text)
             if self.on_progress_update:
+                info["_engine"] = True          # (its live numbers are shown by the engine: bridge/live.rs)
                 self.on_progress_update(info)
         elif t == "finished":
             self._result = (bool(msg.get("ok")), str(msg.get("summary") or ""))

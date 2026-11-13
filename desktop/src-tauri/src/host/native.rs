@@ -109,6 +109,14 @@ pub struct Natives(Arc<HashMap<String, Arc<dyn NativeObject>>>, Arc<HashMap<Stri
 pub trait Overlay: Send + Sync {
     fn handles(&self, method: &str) -> bool;
     fn call(&self, method: &str, args: Vec<Value>) -> Result<Value, String>;
+    /// Properties answered here too: (name, Qt-style type); read-only, their changes sent as the
+    /// object's "props" events by the Rust part
+    fn props(&self) -> Vec<(&'static str, &'static str)> {
+        Vec::new()
+    }
+    fn get(&self, _prop: &str) -> Option<Value> {
+        None
+    }
 }
 
 impl Natives {
@@ -130,6 +138,33 @@ impl Natives {
 
     pub fn describe_all(&self) -> Map<String, Value> {
         self.0.iter().map(|(n, o)| (n.clone(), o.describe())).collect()
+    }
+
+    /// The Rust part of a Python object that answers this property
+    pub fn overlay_prop(&self, obj: &str, prop: &str) -> Option<Arc<dyn Overlay>> {
+        self.1.get(obj).filter(|o| o.props().iter().any(|(p, _)| *p == prop)).cloned()
+    }
+
+    /// Python's describe of the objects with Rust parts, with the properties answered in Rust
+    pub fn patch_describe(&self, result: &mut Map<String, Value>) {
+        for (name, ov) in self.1.iter() {
+            let Some(props) = result.get_mut(name).and_then(|o| o.get_mut("props")).and_then(Value::as_object_mut) else { continue };
+            for (p, kind) in ov.props() {
+                props.insert(p.to_string(), json!({"type": kind, "writable": false, "value": ov.get(p).unwrap_or(Value::Null), "lazy": false}));
+            }
+        }
+    }
+
+    /// Python's "props" event for an object with Rust parts, without the properties Rust answers
+    /// (None: nothing left of it)
+    pub fn strip_props_event(&self, msg: &mut Value) -> Option<()> {
+        let obj = msg.get("obj")?.as_str()?.to_string();
+        let ov = self.1.get(&obj)?;
+        let values = msg.get_mut("values")?.as_object_mut()?;
+        for (p, _) in ov.props() {
+            values.remove(p);
+        }
+        (!values.is_empty()).then_some(())
     }
 
     /// Answers one request for a native object.

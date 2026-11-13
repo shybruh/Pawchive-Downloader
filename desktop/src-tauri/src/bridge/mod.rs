@@ -6,6 +6,7 @@
 
 pub mod decompressor;
 pub mod gallery;
+pub mod live;
 pub mod link_vault;
 pub mod gallery_tools;
 
@@ -83,6 +84,15 @@ fn arg_list(args: &[Value], i: usize) -> Vec<String> {
 impl Overlay for AppBridge {
     fn handles(&self, method: &str) -> bool {
         METHODS.contains(&method)
+    }
+
+    // (the download's live numbers: live.rs)
+    fn props(&self) -> Vec<(&'static str, &'static str)> {
+        live::PROPS.to_vec()
+    }
+
+    fn get(&self, prop: &str) -> Option<Value> {
+        live::get(prop)
     }
 
     fn call(&self, method: &str, args: Vec<Value>) -> Result<Value, String> {

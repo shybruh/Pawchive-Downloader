@@ -296,6 +296,23 @@ class AppBridge(QObject):
                 # (and where the download history is: the engine records to it, src-tauri/src/history.rs)
                 rust_queue.shared_link().send({"op": "history_path", "path": self.session_manager.history_store.path})
             rust_queue.shared_link().on_connect.append(_mount_pattern)
+
+            # The download's live numbers are shown from Rust (src-tauri/src/bridge/live.rs): what
+            # this bridge changes (Stop, Pause, the end of a download, the old downloader's
+            # progress) goes over
+            def _live(name, attr):
+                def send(*_):
+                    link = rust_queue.shared_link()
+                    if link._sock is not None:
+                        link.send({"op": "live", "fields": {name: getattr(self, attr)}})
+                return send
+            for name, attr, sig in (("overallProgress", "_overall_progress", self.overallProgressChanged),
+                                    ("speedText", "_current_speed", self.currentSpeedChanged),
+                                    ("etaText", "_eta_text", self.etaTextChanged),
+                                    ("savedBytesText", "_saved_bytes_text", self.savedBytesTextChanged),
+                                    ("elapsedTimeText", "_elapsed_time_text", self.elapsedTimeTextChanged),
+                                    ("filesCountText", "_files_count_text", self.filesCountTextChanged)):
+                sig.connect(_live(name, attr))
             if rust_queue.shared_link()._sock is not None:
                 _mount_pattern()
 
@@ -4209,6 +4226,9 @@ class AppBridge(QObject):
         if self.downloader._is_running and not self._is_downloading:
             self._is_downloading = True
             self.isDownloadingChanged.emit()
+        # The engine's own report: its live numbers are shown by it (src-tauri/src/bridge/live.rs);
+        # this copy follows quietly
+        engine_numbers = bool(info.get("_engine")) if isinstance(info, dict) else False
 
         completed = info.get("completed", 0)
         total     = info.get("total", 0)
@@ -4217,12 +4237,14 @@ class AppBridge(QObject):
         new_progress = info.get("percent", info.get("progress", 0))
         if self._overall_progress != new_progress:
             self._overall_progress = new_progress
-            self.overallProgressChanged.emit()
+            if not engine_numbers:
+                self.overallProgressChanged.emit()
 
         new_saved = info.get("saved_str", "0 MB")
         if self._saved_bytes_text != new_saved:
             self._saved_bytes_text = new_saved
-            self.savedBytesTextChanged.emit()
+            if not engine_numbers:
+                self.savedBytesTextChanged.emit()
 
         if self.downloader._pause_event.is_set():
             new_status = "Progress: Paused"
@@ -4235,11 +4257,13 @@ class AppBridge(QObject):
 
         if self._current_speed != new_speed:
             self._current_speed = new_speed
-            self.currentSpeedChanged.emit()
+            if not engine_numbers:
+                self.currentSpeedChanged.emit()
 
         if self._eta_text != new_eta:
             self._eta_text = new_eta
-            self.etaTextChanged.emit()
+            if not engine_numbers:
+                self.etaTextChanged.emit()
 
         if self._status_text != new_status:
             self._status_text = new_status
@@ -4248,7 +4272,8 @@ class AppBridge(QObject):
         new_files_count = info.get("files_count_text") if info.get("files_count_text") else (f"{completed}/{total}" if total > 0 else "")
         if self._files_count_text != new_files_count:
             self._files_count_text = new_files_count
-            self.filesCountTextChanged.emit()
+            if not engine_numbers:
+                self.filesCountTextChanged.emit()
 
         new_adaptive_state = info.get("adaptive_state", "optimal")
         if self._adaptive_state != new_adaptive_state:
@@ -4263,7 +4288,8 @@ class AppBridge(QObject):
         new_elapsed = info.get("elapsed_str", "0s")
         if self._elapsed_time_text != new_elapsed:
             self._elapsed_time_text = new_elapsed
-            self.elapsedTimeTextChanged.emit()
+            if not engine_numbers:
+                self.elapsedTimeTextChanged.emit()
 
     @Slot(object)
     def _handle_task_status(self, task: DownloadTask):

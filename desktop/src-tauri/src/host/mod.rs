@@ -62,6 +62,7 @@ fn natives(app_version: &str, engine: &Arc<Engine>, events: &Events) -> Natives 
         watchlist::start_pump(events.clone());
     }
     let app_bridge = crate::bridge::AppBridge::new(events.clone());
+    crate::bridge::live::set_events(events.clone());
     // The Gallery's search inside subfolders, new folders and undo
     let tools: Arc<dyn NativeObject> = Arc::new(crate::bridge::gallery_tools::Object(
         crate::bridge::gallery_tools::GalleryTools::new(app_bridge.gallery(), Some(events.clone()))));
@@ -211,6 +212,11 @@ async fn serve(
             if hidden_event(&text, &py_natives) {
                 continue;
             }
+            let text = match strip_overlay_props(&text, &py_natives) {
+                None => text,
+                Some(Some(t)) => t,
+                Some(None) => continue,
+            };
             let patched = patch_answer(&text, &py_patches, &py_natives, &media);
             if py_out.send(patched.unwrap_or(text)).is_err() {
                 break;
@@ -234,6 +240,13 @@ async fn serve(
                 // them; a big folder or a slow drive doesn't hold up the requests Python answers)
                 let args = req.get("args").and_then(Value::as_array).cloned().unwrap_or_default();
                 let _ = rust_calls.send((ov, method.to_string(), args, id));
+                continue;
+            }
+        }
+        if op == "get" {
+            let prop = req.get("prop").and_then(Value::as_str).unwrap_or("");
+            if let Some(ov) = natives.overlay_prop(target, prop) {
+                let _ = out_tx.send(json!({"id": id, "ok": true, "result": ov.get(prop).unwrap_or(Value::Null)}).to_string());
                 continue;
             }
         }
@@ -277,6 +290,22 @@ fn hidden_event(text: &str, natives: &Natives) -> bool {
     msg.get("obj").and_then(Value::as_str).is_some_and(|o| natives.get(o).is_some())
 }
 
+/// A Python "props" event naming properties Rust answers for that object: those taken out
+/// (None: leave the event as it is; Some(None): drop it)
+fn strip_overlay_props(text: &str, natives: &Natives) -> Option<Option<String>> {
+    if !text.starts_with("{\"event\": \"props\"") {
+        return None;
+    }
+    let mut msg: Value = serde_json::from_str(text).ok()?;
+    let before = msg.get("values")?.as_object()?.len();
+    let kept = natives.strip_props_event(&mut msg);
+    let after = msg.get("values").and_then(Value::as_object).map_or(0, |v| v.len());
+    if after == before {
+        return None;
+    }
+    Some(kept.map(|_| msg.to_string()))
+}
+
 /// Adds what the host knows to Python's answers to `describe` and `info`.
 fn patch_answer(text: &str, patches: &Mutex<HashMap<i64, Patch>>, natives: &Natives, media: &MediaInfo) -> Option<String> {
     // Answers start with {"id": …; events don't. Only parse what may need patching.
@@ -289,6 +318,7 @@ fn patch_answer(text: &str, patches: &Mutex<HashMap<i64, Patch>>, natives: &Nati
     let result = msg.get_mut("result")?.as_object_mut()?;
     match patch {
         Patch::Describe => {
+            natives.patch_describe(result);
             for (name, entry) in natives.describe_all() {
                 result.insert(name, entry);
             }

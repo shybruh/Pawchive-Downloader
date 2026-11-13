@@ -161,6 +161,7 @@ impl Hooks for Remote {
 
 impl QueueHooks for Remote {
     fn progress(&self, info: &Value) {
+        crate::bridge::live::set(&crate::bridge::live::from_progress(info, queue().is_paused()));
         self.0.send(json!({"t": "progress", "info": info}));
     }
     fn finished(&self, ok: bool, summary: &str) {
@@ -774,6 +775,12 @@ fn handle(msg: &Value) {
         // The app's download history (history.db), and writing what's waiting (the app closes)
         "history_path" => crate::history::set_path(&s("path")),
         "history_flush" => crate::history::flush(),
+        // The app's changes to the download's live numbers (bridge/live.rs)
+        "live" => {
+            if let Some(f) = msg["fields"].as_object() {
+                crate::bridge::live::set(f);
+            }
+        }
         "task_progress" => q.set_progress(
             &s("key"),
             msg["downloaded_bytes"].as_u64().unwrap_or(0),
