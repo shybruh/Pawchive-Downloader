@@ -51,6 +51,8 @@ const METHODS: &[&str] = &[
     "listDirectory", "getLastListingTotal", "getBreadcrumbs", "getSystemDrives", "openPathInSystem", "moveItems", "renameItem",
     "scanDuplicates", "scanDuplicatesAsync", "getPathSafetyInfo", "revealFileInExplorer",
     "deleteItems", "getDownloadDir", "openFolder", "showDownloadsInGallery",
+    // (the History tab: history.rs)
+    "getDownloadHistory",
     // (the watchlist: watchlist/entries.rs)
     "removeFromWatchlist", "setWatchlistAutoCheck", "setAllWatchlistAutoCheck", "disableAllWatchlistAutoCheck", "ignoreWatchlistPost",
     // (the queue's retries: downloader/service.rs queue_window)
@@ -117,6 +119,7 @@ impl Overlay for AppBridge {
             "getPathSafetyInfo" => g.path_safety(&arg_str(&args, 0)),
             "revealFileInExplorer" => json!(g.reveal(&arg_str(&args, 0))),
             "deleteItems" => g.delete_items(&arg_list(&args, 0)),
+            "getDownloadHistory" => json!(crate::history::recent()),
             "getDownloadDir" => json!(g.download_dir_or_home()),
             "openFolder" => {
                 g.open_folder(&arg_str(&args, 0));

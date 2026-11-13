@@ -134,3 +134,76 @@ fn id_text(v: &Value) -> String {
         other => other.to_string(),
     }
 }
+
+// ── After a link's files are planned ──────────────────────────────────────────────────────────
+
+/// The folder a link's creator is added to the Watchlist with: the creator folder above the first
+/// file (under either name, or "<name> [<any site>]"), else theirs in the download folder (the
+/// bridge's extract_artist_folder_from_path and its caller)
+pub fn watchlist_folder(name: &str, service: &str, artist_dir: &str, first_target: &str, download_dir: &str, include_service: bool) -> String {
+    use super::naming::{clean_filesystem_text, is_creator_folder, pick_creator_folder};
+    use super::py::{abspath, basename, dirname};
+    if !artist_dir.is_empty() {
+        return artist_dir.to_string();
+    }
+    let clean = clean_filesystem_text(name, 80, "creator");
+    let low = clean.to_lowercase();
+    let pick = |parent: &str| pick_creator_folder(std::path::Path::new(parent), &clean, service, include_service).to_string_lossy().into_owned();
+    if first_target.is_empty() {
+        return pick(download_dir);
+    }
+    let mut cur = dirname(&abspath(first_target));
+    while !cur.is_empty() && cur != dirname(&cur) {
+        let base = basename(&cur);
+        if is_creator_folder(base, &clean, service, include_service) || (!service.is_empty() && base.to_lowercase().starts_with(&format!("{low} ["))) {
+            return cur;
+        }
+        cur = dirname(&cur);
+    }
+    if !download_dir.is_empty() { pick(download_dir) } else { dirname(first_target) }
+}
+
+/// Call "link_queued": a link's files are going in the queue. The History tab's session is
+/// recorded, and (a creator's link) the creator added to the Watchlist with their folder.
+/// {"creator_name", "user_id", "url", "watchlist_url", "service", "domain", "files", "track", "artist_dir",
+/// "first_target", "download_dir", "include_service", "options"} → {"history", "watchlist"}
+pub fn queued(a: &Value) -> Result<Value, String> {
+    let s = |k: &str| a[k].as_str().unwrap_or("").to_string();
+    let name = { let n = s("creator_name"); if n.is_empty() { s("user_id") } else { n } };
+    let recorded = crate::history::record_session(&s("creator_name"), &s("url"), &s("service"), a["files"].as_u64().unwrap_or(0) as usize);
+    let mut added = Value::Null;
+    if a["track"].as_bool().unwrap_or(false) && !s("user_id").is_empty() {
+        let inc = a["include_service"].as_bool().unwrap_or(true);
+        let folder = watchlist_folder(&name, &s("service"), &s("artist_dir"), &s("first_target"), &s("download_dir"), inc);
+        let opts = if a["options"].is_object() { a["options"].clone() } else { json!({}) };
+        added = crate::watchlist::entries::change_app_list("add_entry", |w| {
+            w.add_entry(&{ let u = s("watchlist_url"); if u.is_empty() { s("url") } else { u } }, &name, &s("user_id"), &s("service"), &s("domain"), "", "", true, &folder, &opts, false, inc)
+        }).map_or(Value::Null, |b| json!(b));
+    }
+    Ok(json!({"history": recorded, "watchlist": added}))
+}
+
+#[cfg(test)]
+mod queued_tests {
+    use super::watchlist_folder;
+    use serde_json::Value;
+
+    #[test]
+    fn folders_match_python() {
+        let fx: Value = serde_json::from_str(include_str!("../../tests/fixtures/history.json")).unwrap();
+        let d = std::env::temp_dir().join(format!("pawchive_qfolders_{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&d);
+        std::fs::create_dir_all(&d).unwrap();
+        let base = super::super::py::normpath(&std::fs::canonicalize(&d).unwrap().to_string_lossy().replace(r"\\?\", ""));
+        for sub in ["Alice [patreon]", "bob", "Carol [fanbox]/2026 post/sub", "Dave", "dave [fantia]", "Eve [x]/a", "deep/nest/Frank [fanbox]/p"] {
+            std::fs::create_dir_all(std::path::Path::new(&base).join("dl").join(sub.replace('/', "\\"))).unwrap();
+        }
+        for c in fx["folders"].as_array().unwrap() {
+            let s = |k: &str| c[k].as_str().unwrap_or("").replace("<B>", &base);
+            let name = { let n = s("creator_name"); if n.is_empty() { s("user_id") } else { n } };
+            let got = watchlist_folder(&name, &s("service"), &s("artist_dir"), &s("first_target"), &s("download_dir"), c["include_service"].as_bool().unwrap());
+            assert_eq!(got, s("folder"), "{:?} {} include={}", c["creator_name"], s("service"), c["include_service"]);
+        }
+        let _ = std::fs::remove_dir_all(&d);
+    }
+}

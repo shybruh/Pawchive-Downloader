@@ -293,6 +293,8 @@ class AppBridge(QObject):
             def _mount_pattern():
                 from core import path_translation
                 rust_queue.shared_link().send({"op": "mount_pattern", "pattern": path_translation.mount_pattern})
+                # (and where the download history is: the engine records to it, src-tauri/src/history.rs)
+                rust_queue.shared_link().send({"op": "history_path", "path": self.session_manager.history_store.path})
             rust_queue.shared_link().on_connect.append(_mount_pattern)
             if rust_queue.shared_link()._sock is not None:
                 _mount_pattern()
@@ -2865,22 +2867,25 @@ class AppBridge(QObject):
                 self.statusTextChanged.emit()
                 return
 
-            # Record to history for History tab
-            self.session_manager.record_download_session(
-                creator_name=creator_name,
-                url=getattr(parsed, "raw_url", self._current_url),
-                service=parsed.service,
-                file_count=len(tasks)
-            )
+            # The History tab's session, and (a creator's link) the creator in the Watchlist with their
+            # folder: done by the engine (src-tauri/src/downloader/scan.rs queued); what it couldn't do is
+            # done here. Nothing is recorded as downloaded yet: that happens when the download finishes,
+            # from the posts that actually downloaded (recording the newest post here marked posts
+            # excluded by filters, failed or cancelled as downloaded, so the Watchlist never offered them).
+            track = not parsed.is_single_post and not parsed.is_external_provider and bool(parsed.user_id)
+            canonical_url = getattr(parsed, "raw_url", "") or f"https://{parsed.domain}/{parsed.service}/user/{parsed.user_id}"
+            done = self._link_queued_in_rust(parsed, creator_name, tasks, track, canonical_url, artist_dir, options)
+            if "history" not in done:
+                self.session_manager.record_download_session(
+                    creator_name=creator_name,
+                    url=getattr(parsed, "raw_url", self._current_url),
+                    service=parsed.service,
+                    file_count=len(tasks)
+                )
             self.downloadHistoryChanged.emit()
 
-            # Auto-track artist in watchlist immediately if not a single post / external provider.
-            # Nothing is recorded as downloaded yet: that happens when the download finishes, from the
-            # posts that actually downloaded (recording the newest post here marked posts excluded by
-            # filters, failed or cancelled as downloaded, so the Watchlist never offered them).
-            if not parsed.is_single_post and not parsed.is_external_provider and parsed.user_id:
+            if track and "watchlist" not in done:
                 try:
-                    canonical_url = getattr(parsed, "raw_url", "") or f"https://{parsed.domain}/{parsed.service}/user/{parsed.user_id}"
                     target_download_dir = ""
                     if artist_dir:
                         target_download_dir = artist_dir
@@ -2905,11 +2910,11 @@ class AppBridge(QObject):
                         download_dir=target_download_dir,
                         options=options.to_dict() if hasattr(options, "to_dict") else {},
                     )
-                    self._watchlist_model.refresh()
-                    self.watchlistChanged.emit()
                 except Exception as e:
                     logger.debug(f"Watchlist auto-track error: {e}", category="watchlist")
-
+            if track:
+                self._watchlist_model.refresh()
+                self.watchlistChanged.emit()
 
             if auto_start:
                 if self.downloader._is_running or self.downloader.tasks:
@@ -2961,6 +2966,28 @@ class AppBridge(QObject):
             t.options = options
             tasks.append(t)
         return creator_name, tasks
+
+    def _link_queued_in_rust(self, parsed, creator_name, tasks, track, canonical_url, artist_dir, options) -> set:
+        """The engine records the link's session and adds its creator to the Watchlist: what it did
+        ({"history", "watchlist"}; nothing when it can't be asked)."""
+        from services import rust_queue
+        if not rust_queue.available():
+            return set()
+        link = rust_queue.shared_link()
+        if not link.connect():
+            return set()
+        ok, r = link.call("link_queued", {
+            "creator_name": creator_name or "", "user_id": parsed.user_id or "",
+            "url": getattr(parsed, "raw_url", self._current_url) or "", "watchlist_url": canonical_url,
+            "service": parsed.service or "", "domain": parsed.domain or "", "files": len(tasks), "track": bool(track),
+            "artist_dir": artist_dir or "", "first_target": tasks[0].target_path if tasks else "",
+            "download_dir": self._download_dir or "", "include_service": bool(folder_naming.include_service),
+            "options": options.to_dict() if hasattr(options, "to_dict") else {},
+        })
+        if not ok or not isinstance(r, dict):
+            logger.debug(f"The download engine couldn't record this link ({r}); recording it here.", category="session")
+            return set()
+        return ({"history"} if r.get("history") else set()) | ({"watchlist"} if r.get("watchlist") is not None else set())
 
     def _link_artist_dir(self, service: str, user_id: str, creator_name: str) -> Optional[str]:
         """A creator's download folder when the watchlist has one for them (moved into the download
@@ -3299,6 +3326,12 @@ class AppBridge(QObject):
         def _persist():
             try:
                 self.session_manager.flush_history()
+            except Exception:
+                pass
+            try:
+                from services import rust_queue
+                if rust_queue.available() and rust_queue.shared_link()._sock is not None:
+                    rust_queue.shared_link().send({"op": "history_flush"})
             except Exception:
                 pass
             try:

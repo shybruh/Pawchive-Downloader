@@ -724,6 +724,16 @@ pub fn change<R>(path: &str, method: &str, f: impl FnOnce(&mut Entries) -> R) ->
     Some(r)
 }
 
+/// `change` on the app's own watchlist (None: the engine hasn't been given it, or the Rust
+/// watchlist is turned off)
+pub fn change_app_list<R>(method: &str, f: impl FnOnce(&mut Entries) -> R) -> Option<R> {
+    if std::env::var("PAWCHIVE_PYTHON_WATCHLIST").ok().as_deref() == Some("1") {
+        return None;
+    }
+    let path = main_path().lock().unwrap_or_else(|e| e.into_inner()).clone()?;
+    change(&path, method, f)
+}
+
 /// The app's own watchlist (the one the window shows)
 fn main_path() -> &'static Mutex<Option<String>> {
     static P: OnceLock<Mutex<Option<String>>> = OnceLock::new();

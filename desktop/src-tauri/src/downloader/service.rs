@@ -145,6 +145,13 @@ impl Hooks for Remote {
     }
     fn changed(&self, c: &Cell) {
         view_changed();
+        {
+            // (a finished file goes in the download history)
+            let it = c.lock().unwrap();
+            if it.st.status == "completed" {
+                crate::history::record_file(&it.task.file_id);
+            }
+        }
         self.0.send(task_event(c));
     }
     fn limit_bps(&self) -> f64 {
@@ -764,6 +771,9 @@ fn handle(msg: &Value) {
         "gallery_stale" => crate::bridge::gallery::mark_stale(&s("path")),
         // settings.json's "windows_drive_mount": where Windows drives are on Linux
         "mount_pattern" => crate::path_translation::set_mount_pattern(&s("pattern")),
+        // The app's download history (history.db), and writing what's waiting (the app closes)
+        "history_path" => crate::history::set_path(&s("path")),
+        "history_flush" => crate::history::flush(),
         "task_progress" => q.set_progress(
             &s("key"),
             msg["downloaded_bytes"].as_u64().unwrap_or(0),
@@ -836,6 +846,7 @@ fn handle(msg: &Value) {
                 "link_scan" => super::scan::call(id, args),
                 "album_files" => super::albums::call(args),
                 "album_tasks" => super::albums::tasks_call(args),
+                "link_queued" => super::scan::queued(args),
                 "cloud_download" => super::cloud::call(id, args),
                 "vault" => crate::vault::call(id, args),
                 "decompress" => crate::decompress::call(id, args),

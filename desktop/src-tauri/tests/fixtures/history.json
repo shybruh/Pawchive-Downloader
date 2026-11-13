@@ -1,0 +1,937 @@
+{
+ "history": [
+  {
+   "op": "recent",
+   "args": {
+    "limit": 500
+   },
+   "result": [],
+   "rows": null
+  },
+  {
+   "op": "file_count",
+   "args": {},
+   "result": 0,
+   "rows": null
+  },
+  {
+   "op": "add_files",
+   "args": {
+    "ids": [
+     "f1",
+     "f2",
+     "f1",
+     "",
+     "f3"
+    ]
+   },
+   "result": null,
+   "rows": {
+    "files": [
+     [
+      "f1"
+     ],
+     [
+      "f2"
+     ],
+     [
+      "f3"
+     ]
+    ],
+    "sessions": []
+   }
+  },
+  {
+   "op": "add_files",
+   "args": {
+    "ids": []
+   },
+   "result": null,
+   "rows": {
+    "files": [
+     [
+      "f1"
+     ],
+     [
+      "f2"
+     ],
+     [
+      "f3"
+     ]
+    ],
+    "sessions": []
+   }
+  },
+  {
+   "op": "add_files",
+   "args": {
+    "ids": [
+     "f2",
+     "日本語"
+    ]
+   },
+   "result": null,
+   "rows": {
+    "files": [
+     [
+      "f1"
+     ],
+     [
+      "f2"
+     ],
+     [
+      "f3"
+     ],
+     [
+      "日本語"
+     ]
+    ],
+    "sessions": []
+   }
+  },
+  {
+   "op": "add_sessions",
+   "args": {
+    "entries": [
+     {
+      "creator": "Alice",
+      "url": "https://x/a",
+      "service": "patreon",
+      "files": 12,
+      "date": "2026-11-01 10:00"
+     }
+    ]
+   },
+   "result": null,
+   "rows": {
+    "files": [
+     [
+      "f1"
+     ],
+     [
+      "f2"
+     ],
+     [
+      "f3"
+     ],
+     [
+      "日本語"
+     ]
+    ],
+    "sessions": [
+     [
+      1,
+      "Alice",
+      "https://x/a",
+      "patreon",
+      12,
+      "2026-11-01 10:00"
+     ]
+    ]
+   }
+  },
+  {
+   "op": "add_sessions",
+   "args": {
+    "entries": [
+     {
+      "creator": "Bob",
+      "url": "",
+      "service": "",
+      "files": "7",
+      "date": ""
+     },
+     {
+      "creator": "Céline",
+      "url": "https://x/c",
+      "service": "fanbox",
+      "files": null,
+      "date": "2026-11-02 09:30"
+     }
+    ]
+   },
+   "result": null,
+   "rows": {
+    "files": [
+     [
+      "f1"
+     ],
+     [
+      "f2"
+     ],
+     [
+      "f3"
+     ],
+     [
+      "日本語"
+     ]
+    ],
+    "sessions": [
+     [
+      1,
+      "Alice",
+      "https://x/a",
+      "patreon",
+      12,
+      "2026-11-01 10:00"
+     ],
+     [
+      2,
+      "Bob",
+      "",
+      "",
+      7,
+      ""
+     ],
+     [
+      3,
+      "Céline",
+      "https://x/c",
+      "fanbox",
+      0,
+      "2026-11-02 09:30"
+     ]
+    ]
+   }
+  },
+  {
+   "op": "add_sessions",
+   "args": {
+    "entries": [
+     {}
+    ]
+   },
+   "result": null,
+   "rows": {
+    "files": [
+     [
+      "f1"
+     ],
+     [
+      "f2"
+     ],
+     [
+      "f3"
+     ],
+     [
+      "日本語"
+     ]
+    ],
+    "sessions": [
+     [
+      1,
+      "Alice",
+      "https://x/a",
+      "patreon",
+      12,
+      "2026-11-01 10:00"
+     ],
+     [
+      2,
+      "Bob",
+      "",
+      "",
+      7,
+      ""
+     ],
+     [
+      3,
+      "Céline",
+      "https://x/c",
+      "fanbox",
+      0,
+      "2026-11-02 09:30"
+     ],
+     [
+      4,
+      "",
+      "",
+      "",
+      0,
+      ""
+     ]
+    ]
+   }
+  },
+  {
+   "op": "recent",
+   "args": {
+    "limit": 500
+   },
+   "result": [
+    {
+     "creator": "",
+     "url": "",
+     "service": "",
+     "files": 0,
+     "date": ""
+    },
+    {
+     "creator": "Céline",
+     "url": "https://x/c",
+     "service": "fanbox",
+     "files": 0,
+     "date": "2026-11-02 09:30"
+    },
+    {
+     "creator": "Bob",
+     "url": "",
+     "service": "",
+     "files": 7,
+     "date": ""
+    },
+    {
+     "creator": "Alice",
+     "url": "https://x/a",
+     "service": "patreon",
+     "files": 12,
+     "date": "2026-11-01 10:00"
+    }
+   ],
+   "rows": {
+    "files": [
+     [
+      "f1"
+     ],
+     [
+      "f2"
+     ],
+     [
+      "f3"
+     ],
+     [
+      "日本語"
+     ]
+    ],
+    "sessions": [
+     [
+      1,
+      "Alice",
+      "https://x/a",
+      "patreon",
+      12,
+      "2026-11-01 10:00"
+     ],
+     [
+      2,
+      "Bob",
+      "",
+      "",
+      7,
+      ""
+     ],
+     [
+      3,
+      "Céline",
+      "https://x/c",
+      "fanbox",
+      0,
+      "2026-11-02 09:30"
+     ],
+     [
+      4,
+      "",
+      "",
+      "",
+      0,
+      ""
+     ]
+    ]
+   }
+  },
+  {
+   "op": "recent",
+   "args": {
+    "limit": 2
+   },
+   "result": [
+    {
+     "creator": "",
+     "url": "",
+     "service": "",
+     "files": 0,
+     "date": ""
+    },
+    {
+     "creator": "Céline",
+     "url": "https://x/c",
+     "service": "fanbox",
+     "files": 0,
+     "date": "2026-11-02 09:30"
+    }
+   ],
+   "rows": {
+    "files": [
+     [
+      "f1"
+     ],
+     [
+      "f2"
+     ],
+     [
+      "f3"
+     ],
+     [
+      "日本語"
+     ]
+    ],
+    "sessions": [
+     [
+      1,
+      "Alice",
+      "https://x/a",
+      "patreon",
+      12,
+      "2026-11-01 10:00"
+     ],
+     [
+      2,
+      "Bob",
+      "",
+      "",
+      7,
+      ""
+     ],
+     [
+      3,
+      "Céline",
+      "https://x/c",
+      "fanbox",
+      0,
+      "2026-11-02 09:30"
+     ],
+     [
+      4,
+      "",
+      "",
+      "",
+      0,
+      ""
+     ]
+    ]
+   }
+  },
+  {
+   "op": "file_count",
+   "args": {},
+   "result": 4,
+   "rows": {
+    "files": [
+     [
+      "f1"
+     ],
+     [
+      "f2"
+     ],
+     [
+      "f3"
+     ],
+     [
+      "日本語"
+     ]
+    ],
+    "sessions": [
+     [
+      1,
+      "Alice",
+      "https://x/a",
+      "patreon",
+      12,
+      "2026-11-01 10:00"
+     ],
+     [
+      2,
+      "Bob",
+      "",
+      "",
+      7,
+      ""
+     ],
+     [
+      3,
+      "Céline",
+      "https://x/c",
+      "fanbox",
+      0,
+      "2026-11-02 09:30"
+     ],
+     [
+      4,
+      "",
+      "",
+      "",
+      0,
+      ""
+     ]
+    ]
+   }
+  },
+  {
+   "op": "import_legacy",
+   "args": {
+    "data": {
+     "downloaded_files": [
+      "old1",
+      "f1",
+      5,
+      null,
+      "old2"
+     ],
+     "download_history": [
+      {
+       "creator": "New",
+       "url": "u2",
+       "service": "s",
+       "files": 3,
+       "date": "2025-02-02 00:00"
+      },
+      {
+       "creator": "Old",
+       "url": "u1",
+       "service": "s",
+       "files": 1,
+       "date": "2025-01-01 00:00"
+      },
+      "not a session"
+     ]
+    }
+   },
+   "result": 5,
+   "rows": {
+    "files": [
+     [
+      "f1"
+     ],
+     [
+      "f2"
+     ],
+     [
+      "f3"
+     ],
+     [
+      "old1"
+     ],
+     [
+      "old2"
+     ],
+     [
+      "日本語"
+     ]
+    ],
+    "sessions": [
+     [
+      1,
+      "Alice",
+      "https://x/a",
+      "patreon",
+      12,
+      "2026-11-01 10:00"
+     ],
+     [
+      2,
+      "Bob",
+      "",
+      "",
+      7,
+      ""
+     ],
+     [
+      3,
+      "Céline",
+      "https://x/c",
+      "fanbox",
+      0,
+      "2026-11-02 09:30"
+     ],
+     [
+      4,
+      "",
+      "",
+      "",
+      0,
+      ""
+     ],
+     [
+      5,
+      "Old",
+      "u1",
+      "s",
+      1,
+      "2025-01-01 00:00"
+     ],
+     [
+      6,
+      "New",
+      "u2",
+      "s",
+      3,
+      "2025-02-02 00:00"
+     ]
+    ]
+   }
+  },
+  {
+   "op": "recent",
+   "args": {
+    "limit": 3
+   },
+   "result": [
+    {
+     "creator": "New",
+     "url": "u2",
+     "service": "s",
+     "files": 3,
+     "date": "2025-02-02 00:00"
+    },
+    {
+     "creator": "Old",
+     "url": "u1",
+     "service": "s",
+     "files": 1,
+     "date": "2025-01-01 00:00"
+    },
+    {
+     "creator": "",
+     "url": "",
+     "service": "",
+     "files": 0,
+     "date": ""
+    }
+   ],
+   "rows": {
+    "files": [
+     [
+      "f1"
+     ],
+     [
+      "f2"
+     ],
+     [
+      "f3"
+     ],
+     [
+      "old1"
+     ],
+     [
+      "old2"
+     ],
+     [
+      "日本語"
+     ]
+    ],
+    "sessions": [
+     [
+      1,
+      "Alice",
+      "https://x/a",
+      "patreon",
+      12,
+      "2026-11-01 10:00"
+     ],
+     [
+      2,
+      "Bob",
+      "",
+      "",
+      7,
+      ""
+     ],
+     [
+      3,
+      "Céline",
+      "https://x/c",
+      "fanbox",
+      0,
+      "2026-11-02 09:30"
+     ],
+     [
+      4,
+      "",
+      "",
+      "",
+      0,
+      ""
+     ],
+     [
+      5,
+      "Old",
+      "u1",
+      "s",
+      1,
+      "2025-01-01 00:00"
+     ],
+     [
+      6,
+      "New",
+      "u2",
+      "s",
+      3,
+      "2025-02-02 00:00"
+     ]
+    ]
+   }
+  }
+ ],
+ "folders": [
+  {
+   "creator_name": "Alice",
+   "user_id": "uid1",
+   "service": "patreon",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\Alice [patreon]\\post 1\\a.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": true,
+   "folder": "<B>\\dl\\Alice [patreon]"
+  },
+  {
+   "creator_name": "Alice",
+   "user_id": "uid1",
+   "service": "patreon",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\Alice [patreon]\\post 1\\a.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": false,
+   "folder": "<B>\\dl\\Alice [patreon]"
+  },
+  {
+   "creator_name": "Alice",
+   "user_id": "uid1",
+   "service": "patreon",
+   "artist_dir": "<B>\\chosen",
+   "first_target": "<B>\\dl\\x.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": true,
+   "folder": "<B>\\chosen"
+  },
+  {
+   "creator_name": "Alice",
+   "user_id": "uid1",
+   "service": "patreon",
+   "artist_dir": "<B>\\chosen",
+   "first_target": "<B>\\dl\\x.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": false,
+   "folder": "<B>\\chosen"
+  },
+  {
+   "creator_name": "bob",
+   "user_id": "uid1",
+   "service": "",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\bob\\p\\b.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": true,
+   "folder": "<B>\\dl\\bob"
+  },
+  {
+   "creator_name": "bob",
+   "user_id": "uid1",
+   "service": "",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\bob\\p\\b.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": false,
+   "folder": "<B>\\dl\\bob"
+  },
+  {
+   "creator_name": "Carol",
+   "user_id": "uid1",
+   "service": "fanbox",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\Carol [fanbox]\\2026 post\\sub\\c.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": true,
+   "folder": "<B>\\dl\\Carol [fanbox]"
+  },
+  {
+   "creator_name": "Carol",
+   "user_id": "uid1",
+   "service": "fanbox",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\Carol [fanbox]\\2026 post\\sub\\c.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": false,
+   "folder": "<B>\\dl\\Carol [fanbox]"
+  },
+  {
+   "creator_name": "carol",
+   "user_id": "uid1",
+   "service": "fanbox",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\CAROL [FANBOX]\\c.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": true,
+   "folder": "<B>\\dl\\CAROL [FANBOX]"
+  },
+  {
+   "creator_name": "carol",
+   "user_id": "uid1",
+   "service": "fanbox",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\CAROL [FANBOX]\\c.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": false,
+   "folder": "<B>\\dl\\CAROL [FANBOX]"
+  },
+  {
+   "creator_name": "Dave",
+   "user_id": "uid1",
+   "service": "fantia",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\elsewhere\\d.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": true,
+   "folder": "<B>\\dl\\Dave [fantia]"
+  },
+  {
+   "creator_name": "Dave",
+   "user_id": "uid1",
+   "service": "fantia",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\elsewhere\\d.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": false,
+   "folder": "<B>\\dl\\Dave"
+  },
+  {
+   "creator_name": "Eve",
+   "user_id": "uid1",
+   "service": "x",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\Eve [x]\\a\\e.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": true,
+   "folder": "<B>\\dl\\Eve [x]"
+  },
+  {
+   "creator_name": "Eve",
+   "user_id": "uid1",
+   "service": "x",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\Eve [x]\\a\\e.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": false,
+   "folder": "<B>\\dl\\Eve [x]"
+  },
+  {
+   "creator_name": "Eve",
+   "user_id": "uid1",
+   "service": "patreon",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\Eve [x]\\a\\e.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": true,
+   "folder": "<B>\\dl\\Eve [x]"
+  },
+  {
+   "creator_name": "Eve",
+   "user_id": "uid1",
+   "service": "patreon",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\Eve [x]\\a\\e.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": false,
+   "folder": "<B>\\dl\\Eve [x]"
+  },
+  {
+   "creator_name": "Frank",
+   "user_id": "uid1",
+   "service": "fanbox",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\deep\\nest\\Frank [fanbox]\\p\\f.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": true,
+   "folder": "<B>\\dl\\deep\\nest\\Frank [fanbox]"
+  },
+  {
+   "creator_name": "Frank",
+   "user_id": "uid1",
+   "service": "fanbox",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\deep\\nest\\Frank [fanbox]\\p\\f.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": false,
+   "folder": "<B>\\dl\\deep\\nest\\Frank [fanbox]"
+  },
+  {
+   "creator_name": "Ghost/Name: bad*",
+   "user_id": "uid1",
+   "service": "patreon",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\Ghost_Name_ bad [patreon]\\g.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": true,
+   "folder": "<B>\\dl\\Ghost_Name_ bad [patreon]"
+  },
+  {
+   "creator_name": "Ghost/Name: bad*",
+   "user_id": "uid1",
+   "service": "patreon",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\Ghost_Name_ bad [patreon]\\g.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": false,
+   "folder": "<B>\\dl\\Ghost_Name_ bad [patreon]"
+  },
+  {
+   "creator_name": "Nobody",
+   "user_id": "uid1",
+   "service": "patreon",
+   "artist_dir": "",
+   "first_target": "",
+   "download_dir": "<B>\\dl",
+   "include_service": true,
+   "folder": "<B>\\dl\\Nobody [patreon]"
+  },
+  {
+   "creator_name": "Nobody",
+   "user_id": "uid1",
+   "service": "patreon",
+   "artist_dir": "",
+   "first_target": "",
+   "download_dir": "<B>\\dl",
+   "include_service": false,
+   "folder": "<B>\\dl\\Nobody"
+  },
+  {
+   "creator_name": "",
+   "user_id": "uid1",
+   "service": "patreon",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\z.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": true,
+   "folder": "<B>\\dl\\uid1 [patreon]"
+  },
+  {
+   "creator_name": "",
+   "user_id": "uid1",
+   "service": "patreon",
+   "artist_dir": "",
+   "first_target": "<B>\\dl\\z.jpg",
+   "download_dir": "<B>\\dl",
+   "include_service": false,
+   "folder": "<B>\\dl\\uid1"
+  },
+  {
+   "creator_name": "Dave",
+   "user_id": "uid1",
+   "service": "fantia",
+   "artist_dir": "",
+   "first_target": "",
+   "download_dir": "<B>\\dl",
+   "include_service": true,
+   "folder": "<B>\\dl\\Dave [fantia]"
+  },
+  {
+   "creator_name": "Dave",
+   "user_id": "uid1",
+   "service": "fantia",
+   "artist_dir": "",
+   "first_target": "",
+   "download_dir": "<B>\\dl",
+   "include_service": false,
+   "folder": "<B>\\dl\\Dave"
+  }
+ ]
+}

@@ -752,7 +752,10 @@ class RustDownloader(FileDownloader):
         elif t == "discard_recovery":
             rec = getattr(self.session_manager, "recovery_manager", None)
             if rec:
-                rec.discard_recovery()
+                # (not on this reading thread: discarding waits for the journal's lock, and whoever
+                # holds it may be waiting for an answer only this thread can deliver; Stop froze the
+                # app that way)
+                threading.Thread(target=rec.discard_recovery, name="discard-recovery", daemon=True).start()
         elif t == "ask":
             if msg.get("fn") in _QUICK_ASKS:
                 self._answer(msg)
@@ -790,10 +793,7 @@ class RustDownloader(FileDownloader):
             _applying.on = False
         if new != old:
             if new == "completed":
-                try:
-                    self.session_manager.record_downloaded_file(task.file_id)
-                except Exception:
-                    pass
+                # (the engine puts it in the download history: src-tauri/src/history.rs)
                 self._write_pending_post_info(task)
             elif new == "skipped":
                 self._write_pending_post_info(task)

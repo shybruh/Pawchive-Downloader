@@ -16,6 +16,7 @@ mod transfer;
 mod proc_group;
 mod site_login;
 mod path_translation;
+mod history;
 
 use engine::Engine;
 use host::{Host, HostInfo};
