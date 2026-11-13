@@ -854,6 +854,7 @@ fn handle(msg: &Value) {
                 "album_files" => super::albums::call(args),
                 "album_tasks" => super::albums::tasks_call(args),
                 "link_queued" => super::scan::queued(args),
+                "settings" => crate::settings::call(args),
                 "cloud_download" => super::cloud::call(id, args),
                 "vault" => crate::vault::call(id, args),
                 "decompress" => crate::decompress::call(id, args),

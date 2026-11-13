@@ -68,6 +68,11 @@ impl Translator {
         Self { mount_pattern: "/mnt/{drive}".into(), sys, found: HashMap::new() }
     }
 
+    /// A translator of this computer's paths with its own cache (the app's is `localize_path`)
+    pub fn here() -> Self {
+        Self::new(Box::new(Here))
+    }
+
     pub fn clear_cache(&mut self) {
         self.found.clear();
     }

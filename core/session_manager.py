@@ -190,7 +190,37 @@ class SessionManager:
                 logger.error(f"Could not discard session: {e}", category="session")
         return False
 
+    # ── The settings file: read and written by the engine (src-tauri/src/settings.rs), here when it
+    # can't be asked ──
+
+    def _engine_settings(self, op: str, **args):
+        """(True, answer) from the engine's settings file, or (False, None)"""
+        try:
+            from services import rust_queue
+            if not rust_queue.available():
+                return False, None
+            link = rust_queue.shared_link()
+            if not link.connect():
+                return False, None
+            ok, v = link.call("settings", dict(args, op=op, path=self.settings_file))
+        except Exception as e:
+            logger.debug(f"The download engine couldn't {op} the settings ({e}).", category="session")
+            return False, None
+        if not ok:
+            logger.debug(f"The download engine couldn't {op} the settings ({v}); doing it here.", category="session")
+        return ok, v
+
     def load_settings(self) -> Dict[str, Any]:
+        ok, v = self._engine_settings("load")
+        if ok and isinstance(v, dict) and isinstance(v.get("settings"), dict):
+            pattern = v.get("mount_pattern")
+            if isinstance(pattern, str) and "{drive}" in pattern:
+                from core import path_translation
+                path_translation.mount_pattern = pattern
+            return v["settings"]
+        return self._py_load_settings()
+
+    def _py_load_settings(self) -> Dict[str, Any]:
         default_settings = {
             "download_dir": os.path.join(os.path.expanduser("~"), "Downloads", "Pawchive"),
             "threads": 4,
@@ -275,6 +305,12 @@ class SessionManager:
     def save_settings(self, settings_data: Dict[str, Any], silent: bool = False):
         """Writes settings.json crash-safely (a crash mid-write used to reset all settings).
         The login cookie is never written here: it is kept in the encrypted credentials vault."""
+        with self._settings_lock:
+            ok, _ = self._engine_settings("save", settings=json.loads(json.dumps(settings_data, default=str)))
+        if ok:
+            if not silent:
+                logger.info("Application settings saved.", category="session")
+            return
         data = {k: v for k, v in settings_data.items() if k not in _NEVER_SAVED_SETTINGS}
         try:
             with self._settings_lock:
