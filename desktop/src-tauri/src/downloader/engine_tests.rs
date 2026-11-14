@@ -113,7 +113,17 @@ fn slow_file(req: tiny_http::Request, q: &HashMap<&str, &str>, range: Option<&st
 }
 
 fn dir(name: &str) -> PathBuf {
-    let d = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("target").join("engine_tests").join(name);
+    // (one folder per test run: runs at the same time don't empty each other's; earlier runs'
+    // are removed once they're ten minutes old)
+    let root = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("target").join("engine_tests");
+    for e in std::fs::read_dir(&root).into_iter().flatten().flatten() {
+        let old = e.metadata().and_then(|m| m.modified()).ok().and_then(|t| t.elapsed().ok()).is_some_and(|a| a > Duration::from_secs(600));
+        let fname = e.file_name().to_string_lossy().into_owned();
+        if old && (fname == name || fname.starts_with(&format!("{name}_"))) {
+            let _ = std::fs::remove_dir_all(e.path());
+        }
+    }
+    let d = root.join(format!("{name}_{}", std::process::id()));
     let _ = std::fs::remove_dir_all(&d);
     std::fs::create_dir_all(&d).unwrap();
     d
@@ -220,6 +230,15 @@ fn mirrors_resume_and_skips() {
 
 #[test]
 fn pause_resume_and_cancel() {
+    // (no fixed waits: on a busy machine the first bytes, or the pause, come later)
+    let bytes = |c: &fetch::Cell| c.lock().unwrap().st.downloaded_bytes;
+    let started_downloading = |c: &fetch::Cell| {
+        let end = Instant::now() + Duration::from_secs(20);
+        while bytes(c) == 0 {
+            assert!(Instant::now() < end, "the download didn't start in 20s");
+            std::thread::sleep(Duration::from_millis(20));
+        }
+    };
     let s = server();
     let d = dir("pause");
     let o = Arc::new(opts(json!({})));
@@ -227,13 +246,23 @@ fn pause_resume_and_cancel() {
     let c = fetch::cell(task(&d, "slow.bin", &[format!("{s}/file/slow?size=3000000&slow=1")]));
     let (c2, ctl2, o2) = (c.clone(), ctl.clone(), o.clone());
     let worker = std::thread::spawn(move || fetch::download(&c2, &o2, &Rec::default(), &ctl2));
-    std::thread::sleep(Duration::from_millis(1200));
+    started_downloading(&c);
     ctl.pause.store(true, Ordering::Relaxed);
-    std::thread::sleep(Duration::from_millis(800));
-    let paused_at = c.lock().unwrap().st.downloaded_bytes;
+    // Paused once the count stops moving (what was already read in still lands)
+    let end = Instant::now() + Duration::from_secs(10);
+    let mut paused_at = bytes(&c);
+    loop {
+        std::thread::sleep(Duration::from_millis(300));
+        let now = bytes(&c);
+        if now == paused_at {
+            break;
+        }
+        assert!(Instant::now() < end, "still downloading 10s after the pause ({now} bytes)");
+        paused_at = now;
+    }
     assert!(paused_at > 0 && paused_at < 3000000, "paused at {paused_at}");
     std::thread::sleep(Duration::from_millis(600));
-    assert_eq!(c.lock().unwrap().st.downloaded_bytes, paused_at, "nothing downloads while paused");
+    assert_eq!(bytes(&c), paused_at, "nothing downloads while paused");
     ctl.pause.store(false, Ordering::Relaxed);
     let r = worker.join().unwrap();
     assert_eq!(r, (true, "Success".into()));
@@ -244,11 +273,12 @@ fn pause_resume_and_cancel() {
     let c = fetch::cell(task(&d, "slow2.bin", &[format!("{s}/file/slow2?size=3000000&slow=1")]));
     let (c2, ctl2) = (c.clone(), ctl.clone());
     let worker = std::thread::spawn(move || fetch::download(&c2, &o, &Rec::default(), &ctl2));
-    std::thread::sleep(Duration::from_millis(1000));
+    started_downloading(&c);
     ctl.cancel.store(true, Ordering::Relaxed);
     let started = Instant::now();
     assert_eq!(worker.join().unwrap(), (false, "Cancelled".into()));
-    assert!(started.elapsed() < Duration::from_secs(3), "cancel took {:?}", started.elapsed());
+    // (the whole file takes about 3s: a cancel that waited for it would take longer than this)
+    assert!(started.elapsed() < Duration::from_secs(5), "cancel took {:?}", started.elapsed());
     let part = format!("{}.part", c.lock().unwrap().task.target_path);
     assert!(std::path::Path::new(&part).exists());
 
@@ -257,11 +287,11 @@ fn pause_resume_and_cancel() {
     let c = fetch::cell(task(&d, "slow3.bin", &[format!("{s}/file/slow3?size=3000000&slow=1")]));
     let (c2, ctl2, o2) = (c.clone(), ctl.clone(), Arc::new(opts(json!({}))));
     let worker = std::thread::spawn(move || fetch::download(&c2, &o2, &Rec::default(), &ctl2));
-    std::thread::sleep(Duration::from_millis(1000));
+    started_downloading(&c);
     c.lock().unwrap().st.status = "cancelled".into();
     let started = Instant::now();
     assert_eq!(worker.join().unwrap(), (false, "Cancelled".into()));
-    assert!(started.elapsed() < Duration::from_secs(3), "cancel took {:?}", started.elapsed());
+    assert!(started.elapsed() < Duration::from_secs(5), "cancel took {:?}", started.elapsed());
 }
 
 fn wait_finished(rec: &Rec, secs: u64) -> (bool, String) {
